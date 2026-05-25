@@ -1,0 +1,2549 @@
+{RMK: Ferna~o de Oliveira.}
+{RMK: Gramatica da lingua portuguesa.}
+{RMK: Lisboa | Germa~o Galharde | 1536-01-27.}
+{RMK: Lisboa | Biblioteca Nacional | Res. 274V.}
+{RMK: Michael J. Ferreira | Georgetown University | USA.}
+[fol. 1r]
+{CB1.
+{ILL.
+{MIN.}
+{RUB. % Grammatica da
+lingoagem por-
+tuguesa.}}}
+[fol. 1v]
+{CB1.
+{RUB. % Esta he a primeyra anotac'a~o que Ferna~o d[ ]o-
+liueyra fez da lingua Portuguesa. Dirigida ao mui
+manifico senhor: & nobre fidalgo o senhor dom
+fernando D[ ]almada. Filho herdeyro do
+muy prudente & animoso Senhor
+Dom Anta~o. Capita~o geral
+de Portugal : . &c<etera> : .}
+{RUB. Muy manifico senhor.}
+{IN8.} COntendia~o em mi dous parec'eres
+diuersos. Hum me dezia q<ue> na~o acu-
+passe a gra~deza de seu ente~der co esta
+minha peq<ue>na obra. E outro me amo-
+estou na~o fosse buscar mais longe os
+fauores de meus princ'ipios poys a
+muyta nobreza & antiga d<e> seu sangue
+me chamaua. A qual nam se conten-
+tando com os altos princ'ipios D[ ]almada: ajuntou con-
+sigo a gloria immortal & vitoria D[ ]abra~ches: & sobre tudo
+me prendeo a virtude mais que hu~mana de sua merc'e.
+Estas cousas me obriga~o & fazem julgar q<ue> elle abasta na~o
+so pera meu intento q<ue> so hum home~ bayxo: & estendesse
+a pouco meu animo: mas tambe~ a lingua de tam nobre
+gente & terra como he Portugal viuera conte~te & folga-
+ra de se estender pollo mundo se leuar nestes primeyros
+encontros por seu escudo o nome de ta~o bo~s exerc'ic'ios
+como sa~o os de sua merc'e o qual na paz & quietac'a~o em q<ue>
+viuemos na~o despende mal: mas aproueita seu tempo le~-
+do bos liuros para sy & no regimento de sua casa primey-ro}
+[fol. 2r]
+{CB1.
+cria com muyto cuydado dom Anta~o seu filho quem
+deos guarde & prospere: para cuja doutrina com muyta
+despesa me trouxe a sua casa & grac'iosa & co~pridame~te me
+conserua nella: poys quanto carrego tem de sua ge~te ser
+bem ensinada: & a fazenda milhor repartida & mays ma-
+nifesto a todo o mundo do q<ue> o eu posso dizer. A fim ta~to
+resplandec'e em sua merc'e o lume da prude~c'ia do senhor
+Capita~o seu pay. & a sua louuada velhic'e afremosenta em
+todos seus filhos a noua idade tanto com saber que com
+muita firmeza quero q<ue> minhas obras se pubriquem so o
+titolo de seu nome: & dellas seja a primeyra esta como pro-
+logo das outras a notac'a~o em alghu~as cousas do falar:
+Portugues: na qual: ou nas quaes eu na~o presumo ensi-
+nar aos q<ue> mays sabem: mas notarey o seu bo costume pa-
+ra q<ue> outros muitos aprenda~o & sayba~o quanto prima e a
+natureza dos nossos home~s porq<ue> ella por sua vo~tade bus-
+ca & tem de seu a perfeyc'a~o da arte q<ue> outras nac'o~es aqui-
+rem com muyto trabalho: & nestas cousas se acabara esta
+primeira anotac'a~o em dizer na~o tudo mas apontar al-
+ghu~as partes nec'essarias da ortografia: ac'ento: ethimo-
+logia: & analogia da nossa linguagem em comuu~ & parti-
+curizando nada de cada dic'a~o: porq<ue> isto ficara para ou-
+tro tempo & obra. E porem agora primeiro diremos que
+cousa he linguage~ & da nossa como & princ'ipal antre mui-
+tas. O q<ue> pec'o a sua merc'e ouc'a com muyta atenc'a~o & vo~-
+tade porque nisso fauorec'era o partido de meu trabalho.}
+[fol. 2v]
+{CB1.
+{RUB. % Primeyro capitulo.}
+{IN6.} A Lingoagem e figura do entendimento: &
+assi e verdade q<ue> a boca diz q<u><<a>>nto lhe man-
+da o corac'a~o & na~o outra cousa: antes na~o
+deuia a natureza criar outro mais disfor-
+me monstro do q<ue> sa~o aq<ue>lles que fala~o o q<ue>
+na~o tem na vontade. Porq<ue> se as obras sa~o
+proua do home~. Como diz a suma verdade Jesu xp<ist>o nos-
+so d<eo>s: & as palauras sa~o ymagem das obras: segu~do dio-
+genes laerc'io: escreue q<ue> dezia Solon sabedor de Grec'ia
+Cada hu~ fala como que~ e: os bos fala~o virtudes & os mali-
+c'iosos maldades: os religiosos p<re>ga~o d<e>sprezos do mu~do
+& os caualeiros blasona~o suas fac'anhas: & esses sabe~ falar
+os q<ue> e~te~de~ as cousas: porq<ue> das cousas nac'e~ as palauras &
+na~o das palauras as cousas: diz miso~ filosofo: & outra vez
+c'ic'ero a bruto & qui~tiliano no oitauo liuro o~de ta~be~ disse
+que falar e p<ro>nu~ciar o q<ue> ente~demos: este so e hu~ meyo q<ue> d<eo>s
+quis dar as almas rac'ionaes para se podere~ comunicar
+antre si: & com o q<u><<a>>l sendo spirituaes sa~o sentidas dos cor-
+pos. Porq<ue> na~ e ta~ espiritual a lingua q<ue> na~o seja obrigada
+as leys do corpo. Mas segundo a disposic'a~o da lingua
+corporal assi vemos formar diuersas as vozes hu~as c'ec'io-
+sas / outras tartaras: & muitas co~ muitos defeitos & ta~be~
+co~ suas perfeic'o~es Porq<ue> como este orga~o da lingua & bo-
+ca he mais & milhor disposto assi cumpre milhor seu ofi-
+c'io: be~ ou mal disposto pode ser em calidades & feic'a~o: cali-
+dades como seco ou humedo: feic'a~o como de~tes gra~des
+ou desuiados: & tambem muitos fala~ muito mal: so com
+mao costume na~o mais. E e muito de culpar este defey-
+to das calidades serem diuersas: nas quaes tem domi-
+nio as condic'o~es do c'eo & terra em que viuem os ho-
+me~s vem que hu~as gentes forma~o suas vozes mays no}
+[fol. 3r]
+{CB1.
+papo como caldeus & arabigos / & outras nac'o~es corta~o
+vozes ap<re>ssandosse mays em seu falar: mas nos falamos
+com grande repouso como home~s assentados: & na~o so-
+mente em cada voz per sy mas tambem no ajuntamento
+& no som da lingoagem pode auer primor ou falta antre
+nos: nam somente nestas / mas q<ue> muitas outras cousas
+tem a[ ]nossa lingoa auantage~: porque ella e antiga ensina-
+da / prospera, & be~ co~uersada: & tambe~ exercitada em bos
+tratos & oficios.
+{RUB. % Segundo capitolo.}
+{IN4.} A Antiga nobreza & saber da nossa gente & terra
+da Espanha: cuja sempre milhor parte foi Por-
+tugal: ainda q<ue> agora nam e mayor depoys do di-
+luuio geral q<ue> e o mais antigo tempo de q<ue> se os
+home~s lembra~o. Naceo de noe & de Tubal / diz Beroso
+estoreador de Babilonia & noe edificou e~ esta terra noela
+& noegla c'idades & da primeira destas faz Plinio menc'a~
+aos vinte capitolos do quarto liuro da sua estoria natu-
+ral: poys nam menos de tubal seu neto afirma po~poneo
+mela que fu~dou gibaltar. E estes ja enta~o ordenara~o bo-
+as leys & ensinara~o letras nesta terra co~ muitas outras
+nobrezas & bos costumes que nela deixara~o: despoys des-
+tes Hercoles lybio filho de osiris rey do egipto veo mor-
+rer em esta terra deseja~do de viuer sua velhice desca~sada
+em ella por a virtude q<ue> della conhec'ia: & os soc'essores des-
+te edificara~o em memoria & honrra do nome de seu capi-
+ta~o. Libisona. Libisosa. Libunca. Libura. & Libisoca / ci-
+dades desta derradeira chamada Libisoca / apo~ta some~te
+Plinio no terc'eiro liuro aos tres capitolos: & Ptole-
+meu na tavoa da espanha po~e Libisoca & Libura: & esta
+derradeira libura po~e junto do rio tejo abaixo de toledo
+da parte do sul / quasi mostrando ser Euora q<ue> agora cha-mamos.}
+{CW. A iij}
+[fol. 3v]
+{CB1.
+E se tambe~ quiseremos mais antiguar a edifi-
+cac'a~o da nossa Lixboa podemos dizer q<ue> e aquella das
+c'inco c'idades ja ditas a que elles chamara~o Libisona.
+Luso que tambe~ ennobreceo esta terra na~o foy Grego:
+mas de portugal nacido & criado filho de Lic'eleu: & este
+recebeo em seu reyno a el Rey Dionisio ou Dinis: com
+festas de sacrific'ios & deuac'o~es porq<ue> ja desdenta~o os por-
+tugueses sabem conhecer & seruir & louuar a d<eo>s. E deste
+Rey Luso se chamou a terra em q<ue> viuemos Lusitania a q<u><<a>>l
+despoys chamara~ Turdugal: & agora muda~do alghu~as le-
+tras Portugal / na~ do porto de gaya como quer Duarte
+galua~o na estoria del rey do~ Afonso anrriquez: mas dos
+Turdolos & Galos / duas nac'o~es d[ ]home~s q<ue> viera~ morar
+em esta terra: segundo conta Estraba~o no terceyro liuro
+da sua geografia. E assi desta feyc'a~o ja tambe~ este nome d<e>
+Portugal e antigo & agora com a virtude da gente muy-
+to e~nobrecido & co~ muitos bos tratos & co~uersac'o~es assi
+em armas como em letras engrandec'ido.
+{RUB. % Terc'eyro capitolo.}
+{IN4.} E tanta a nobreza de nossa terra & gente q<ue> so ella
+com seu capita~o viriato pode lanc'ar os Roma-
+nos da espanha & seguilos ate a sua ytalia. E so
+esta nossa terra Portugal na espanha qua~do os
+godos com seus costumes barbaros & vic'iosos perdera~o
+a Espanha teue sempre ba~deyra nu~ca sogeyta a mouros
+Mas muytas vezes contrelles vitoriosa: como foy a do
+sancto Abade dom Joam de Mo~te mor: o qual confessa~o
+todos q<ue> corria a terra dos mouros como d<e> imigos & na~o
+como de senhores. E esta e a verdade q<ue> em Portugal se~-
+pre ouue lugares / & terras proprias dos christa~os porq<ue>
+se assi nam fora q<ue> na estremadura na~o ouuera lugares de
+christa~os na~o se atreuera o abade Joam q<ue> era home~ pru-dente}
+[fol. 4r]
+{CB1.
+a sayr tras seus imigos por suas terras desses imi-
+gos por espac'o de jornadas com pouca gente. E os luga-
+res de portugueses que ficara~o em Portugal / posto q<ue> as
+vezes fossem vencidos como tambe as vezes era~o vence-
+dores: porq<ue> assi passa onde ha continoa guerra. Todauia
+sempre teuera~o capita~o christa~o ate o Conde dom Anrri-
+que & el rey dom Afonso Anrriquez seu filho: o qual por
+autoridade apostolica foy feyto rey nam deuendo nada a
+alguem: como com muyta verdade afirma Ruy de pina
+na estorea del rey dom Sancho o[ ]primeiro deste nome.
+Apontey isto para que desta nossa propria & natural no-
+breza nos prezemos & nam fabulizemos ou mintamos
+patranhas estrangeyras: & muyto menos nos louuemos
+dos godos porque elles perdera~o o a virtude desta ter-
+ra ensinou gaynhar aos nossos. {RUB. % Quarto capitolo.}
+{IN4.} O [*E]stado da fortuna pode co~c'eder ou tirar fauor
+aos estudos liberaes: & esses estudos faze~ mais
+durar a gloria da terra em q<ue> florecem. Porque
+Grec'ia & Roma so por isto ainda viue~: porq<ue> qua~-
+do senhoreaua~o o mundo mandara~o a todas as gentes
+a elles sogeytas aprender suas linguas: & em ellas escre-
+uia~o muytas bo~as doutrinas & na~o some~te o que enten-
+dia~o escreuia~o nellas: mas tambem trasladauam parel-
+las todo o bo que lia~o em outras. E desta feyc'a~o nos o-
+brigara~o a que ainda agora trabalhemos em aprender &
+apurar o seu esquec'endo nos do nosso na~o fac'amos assy
+mas tornemos sobre nos agora que he tempo & somos
+senhores porque milhor he que ensinemos a Guine ca
+que sejamos ensinados de Roma: ainda que ella agora
+teuera toda sua valia & prec'o. E na~o desconfiemos da
+nossa lingua porque os home~s fazem a lingua / & na~o a
+lingoa os homes. E e manifesto que as linguas Gre-ga}
+{CW. A iiij}
+[fol. 4v]
+{CB1.
+& Latina primeiro fora~o grosseiras: & os home~s as
+posera~o na perfeic'a~o q<ue> agora tem. Antes se quiserdes ou-
+uir as fabulas q<ue> elles conta~o eu vos farey parec'er q<ue> pri-
+meiro soubera~o falar os home~s da nossa terra: porq<ue> vitru-
+uio diz no segundo liuro dos seus edific'ios q<ue> ajunta~do
+se os home~s a hum c'erto fogo o qual por ac'erto co~ gra~-
+de vento se ac'endeo em matos & ali conuersando hu~s co~
+outros soubera~o formar vozes & falar. E na~ dizendo elle
+onde foy este fogo. Conta diodoro siculo no seisto liuro
+da sua bliblioteca q<ue> foy nos montes pireneus os q<u><<a>>es sa~o
+antre Franc'a & Espanha. E pois gramatica & arte q<ue> ensi-
+na a bem ler & falar: saybamos quem primeiro a ensinou
+& onde & como: porq<ue> tambe agora a possamos v[*sar] na nos-
+sa antigua & nobre lingua.
+{RUB. % Quinto capitolo.}
+{IN4.} MErcurio primeiro em Egipto ensinou a ler & fa-
+lar diz diodoro siculo. E despoys tambe~ em gre-
+cia onde lhe chamara~o Hermes que quer dizer
+interpretador: & isto confirma marc'iano capella
+no terceiro liuro nomeando o rey & terra q<ue> diodoro diz
+ainda q<ue> esse Diodoro no quarto liuro torna a dizer cad-
+mo & na~o o primeiro dos q<ue> po~e xenophonte ser o q<ue> pri-
+meiro trouxe letras a grec'ia: & pode ser que dambos seja
+verdade em diuersas tempos antremetendosse alghu~a
+aduersidade q<ue> a terra padec'eo: na qual os estudos do pri-
+meiro por ventura perec'era~o: ou q<ue> diuersas terras como
+ve~ a saber Mercurio em Atenas & Cadmo em Thebas.
+Homero diz q<ue> Archiloco foy o primeyro q<ue> despois da
+q<ue>lles emendou as escreturas & letras em grec'ia: & xeno-
+phonte diz q<ue> nessa terra palamedes & simonides ajuda-
+ra~o os princ'ipios desta nossa arte. plinio diz q<ue> apolodoro
+florec'eo em ella. E podemos ente~der q<ue> antre os primey-ros}
+[fol. 5r]
+{CB1.
+em Jtalia: diz Beroso comero gallo ensinou letras &
+leys: & muyto despoys Nicostrata & Euandro seu filho
+porq<ue> ja a primeira doutrina nessa terra esquec'ia: ainda
+pore~ q<ue> diz mersilo q<ue> de Hetruria tem a Italia as letras
+& doutrinas dando a ente~der q<ue> sempre alli perseuerara~o
+onde noe morreo: mas ao co~trairo diz Cata~o nos liuros
+dos nac'ime~tos antigos q<ue> os hetruscos apre~dera~o as le-
+tras latinas: & co~ tudo como quer q<ue> seja Salustio ainda
+em te~po de Eneas troyano: & despois acha a Italia muy
+grosseyra & mal mesturada. E muito despoys veo o pri-
+meiro gra~matico Crates melotes segu~do diz Suetonio
+tranquilo no liuro dos gra~matigos antigos.
+% Na~o seria nada se estas terras Grec'ia & Jtalia de que
+falamos some~te soubessem pouco em seus comec'os: mas
+com isso achamolas q<ue> desfauorec'em o bo saber q<ue> e pior.
+Porq<ue> diz Suetonio tra~quillo no liuro dos gra~maticos
+antigos q<ue> lanc'aua~o dantre si os philosophos & oradores
+& assi o afirma aulo gelio no quinto decimo liuro & c'ic'e-
+ro quasi o mesmo q<ue>r sentir no prologo do primeiro liuro
+da inuenc'a~o oratoria: & na primeyra tosculana & outras
+vezes se pode nelle bem sentir. E na~o e muito seguir Jta-
+lia o q<ue> ja Grec'ia a~tes teue por ley na republica d<e> socrates
+% Jsto nu~ca fez a nossa terra: mas se co~ a necessidade dos
+tempos alghu~a ora se nam acupou tanto em letras por se
+defender de seus imigos: logo como teue paz em te~po do
+mui nobre rey do~ Dinis tornou aos estudos para q<ue> cria
+os milhores juyzos q<ue> todas as terras nossas vezinhas.
+% Estes no tempo do poderoso nosso senhor & rey dom
+Joha~o o terc'eiro deste nome: a que~ deos quis dar aq<ue>lla
+bemauenturanc'a de viuer & senhorear sem sangue: q<ue> diz
+chilo philosopho de Lac'edemonia. Estes digo estudos
+neste tempo deste nosso glorioso principe muyto mays}
+[fol. 5v]
+{CB1.
+fauorec'idos q<ue> em nenhum outro tempo nem terra auiue-
+mos nos com gloria de nossos tempos porque ja os pre-
+guic'osos na~o tem escusa nem se podem chamar remissos
+por falta de premio: & com tudo apliquemos nosso traba-
+lho a nossa lingua & gente & ficara com mayor eternidad<e>
+a memoria delle: & nam trabalhemos em lingua estrangei-
+ra / mas apuremos tanto a nossa com bo~as doutrinas q<ue> a
+possamos ensinar a muytas outras gentes & sempre sere-
+mos dellas louuados & amados porq<ue> a semelhanc'a & cau-
+sa do amor e mays em as linguas. E ao contrayro vemos
+em Africa / Guine / Brasil & India na~o amare~ muyto os
+Portugueses q<ue> antrelles nac'em so polla diferenc'a da
+lingua: & os de la nacidos quere~ bem aos seus portugue-
+ses & chamanlhes seus porq<ue> fala~o assi como elles.
+% Agora ja poys notemos o falar dos nossos home~s &
+da hi ajuntaremos prec'eitos pera aprenderem os q<ue> vie-
+rem & tambem os ausentes. A primeyra partic'a~o que
+fazemos em qualquer lingua & sua gra~matica seja esta em
+estas tres partes. Letras Sylabas & Vozes: que tambe~
+ha na nossa de Portugal com suas considerac'o~es co~for-
+mes a propria melodia.
+{RUB. % Capitolo seysto.}
+{IN4.} LEtra he figura de voz estas diuidimos em co~soan-
+tes & vogaes. as vogaes tem em sy voz: & as con-
+soantes na~o se na~o junto co~ as vogaes. Como .a
+que he vogal: & .b. que he co~soante: & nam te~ voz
+ao menos ta~o perfeyta como .a. vogal. % As figuras de-
+stas letras chama~o os Gregos caracteres: & os latinos
+notas: & nos lhe podemos chamar sinaes. Os quaes ha~o
+de ser tantos como as pronu~c'iac'o~es a q<ue> os latinos cha-
+ma~o elementos: & nos as podemos interpretar fundame~-
+tos das vozes & escritura.}
+[fol. 6r]
+{CB1.
+% Diz Antonio de nebrissa q<ue> temos na espanha some~te
+as letras latinas: mas porq<ue> e verdade q<ue> sa~o tantas & taes
+as letras como as vozes: nos diremos q<ue> de nos aos
+latinos ha hi muita difere~c'a nas letras: porq<ue> tambe~ a te-
+mos nas vozes: & na~o he muyto poys somos be~ aparta-
+dos em tempos & terras: & na~o some~te isto: mas hu~a mes-
+ma nac'a~o & gente de hu~ tempo a outro muda as vozes &
+tambe~ as letras. Porq<ue> doutra maneira pronunc'iaua~o
+os nossos antigos este verbo tanger: & doutra o pronun-
+c'iamos nos: & os latinos na~o podem dizer q<ue> a[ ]mesma le-
+tra era .c. quando tinha sempre hu~a so forc'a com todas as
+vogaes: como diz Quintiliano. E agora quando a cada
+vogal quasi muda sua voz: na~o diremos logo que temos
+as mesmas letras: nem tantas como os latinos: mas te-
+mos ta~tas figuras comelles: & quasi as mesmas ou imita-
+c'a~o dellas. E com tudo nam deixa d[ ]auer falta nesta par-
+te porq<ue> as nossas vozes requerem q<ue> tenhamos trinta &
+duas: ou trinta & tres letras: como se mostrara a diante.
+% Ja confessamos ser verdade o q<ue> diz Marco varra~o nos
+liuros da Etymologia q<ue> se muda~o as vozes & com ellas
+e tambem nec'essario q<ue> se mude~ as letras: mas na~o com
+ta~o pouco respeito como agora alghu~s faze~: os q<u><<a>>es como
+chega~o a Toledo: logo se na~o le~bra~o de sua terra a q<ue> mui-
+to deuem. E em vez de apurare~ sua lingoa corrompe~na
+com emprestilhos: nos quaes na~o podem ser perfeitos.
+Tenhamos poys muito resguardo nesta parte: porq<ue> a lin-
+gua e escritura & fiel tisoureyra do bem de nossa soc'essa~o
+& sa~o diz Quintiliano as letras para e~tregar aos que vie-
+rem as cousas passadas.
+{RUB. % Capitolo seytimo.}
+{IN1.} EXaminemos a melodia da nossa li~gua & essa guarde-
+mos como fezera~o outras ge~tes: & isto desdas mais peq<ue>nas}
+[fol. 6v]
+{CB1.
+partes tomando todas as vozes & cada hu~a por si & ven-
+do em ellas quantos diuersos mouimentos faz a[ ]boca co~
+tambe~ diuersidade do som & em q<ue> parte da boca se faz ca-
+da mouimento porq<ue> nisto se pode discutir mais destinta-
+mente o proprio de cada lingua. E assi e verdade que os
+gregos com os latinos: & os ebraycos co~ os arabigos: &
+nos com os castellanos q<ue> somos mais vezinhos co~corre-
+mos muitas vezes em hu~as mesmas vozes & letras: & co~
+tudo na~o tanto q<ue> na~o fique algu~a particularidade a cada
+hu~ por si hu~a so voz & com as mesmas letras & a nos & aos
+castelhanos guerra & papel: & no pronunc'iar que~ na~o sin-
+tira a diferenc'a q<ue> temos porq<ue> elles esconde~se & nos abri-
+mos mais a boca: & quasi podemos dizer q<ue> o que da a en-
+tender horac'io na arte poetica dos gregos & latinos te-
+mos antre nos & os castellanos: porq<ue> a elles deu a natu-
+reza afeyc'oar o que querem dizer: & nos falamos boqui-
+cheos com mays magestade & firmeza. {RUB. % Capitolo .viij.}
+{IN2.} NA nossa li~gua podemos diuidir a~tes e nec'essario q<ue>
+diuidamos as letras vogaes e~ gra~des & peq<ue>nas co-
+mo os gregos mas na~ ja todas porq<ue> e verdade q<ue> temos a
+grande & a pequeno: & E grande & e pequeno: & tambe~ O
+gra~de & o pequeno. Mas na~ temos assi diuersidade e~ .i.
+nem .y. Temos a gra~de como almada & a pequeno como
+alemanha: temos E grande como festa & e pequeno como
+festo: & temos o grande como fermosos & o pequeno co-
+mo fermoso. E conhecendo esta verdade auemos de co~-
+fessar q<ue> temos oyto vogaes na nossa li~goa mas na~ temos
+mais de cinco figuras: porq<ue> na~o queremos saber mays
+de nos q<ue> quanto nos ensina~o os latinos: aos quaes diz
+Plinio que e pouco saber escoldrinhar as cousas alheas
+na~o nos entendendo a nos mesmos.
+% Tem tanto poder o costume & tambem a natureza que}
+[fol. 7r]
+{CB1.
+em que nos pes nos faz conhec'er esta diuersidade de vo-
+zes & faz que muitos em lugar destas vogaes grandes
+escreuem duas como quer q<ue> a voz seja mais q<ue> hu~a &
+outros po~e lhe aspirac'a~o: mas tambe~ estes erra~o porque
+lha nam podem por em todos lugares. O remedio q<ue> eu
+a isto posso dar he este que nas vogaes grandes dobre-
+mos as letras: mas de tal feyc'a~o que o dobrar dellas se
+fac'a em hu~ mesmo lugar & figura o .a nesta forma a: & E ne-
+sta E & O tambe~ nestoutra: O & os pequenos nas formas a-
+costumadas. E isto porq<ue> nos na~o podemos saluar co~ os
+latinos dizendo q<ue> a consoa~te ou consoa~tes & letras q<ue> va~o
+a diante fazem grande ou peq<ue>na a letra vogal q<ue> fica: mas
+vemos q<ue> co~ hu~as mesmas letras soa hu~a vogal grande as
+vezes & as vezes pequena: segundo o costume quis & na~
+mays. {RUB. % Capitolo .nono.}
+{IN4.} ACostuma~o os grammaticos repartir as letras
+co~soantes em mudas & semiuogaes em qualq<ue>r
+lingua: & e esta a principal causa de sua reparti-
+c'a~o: q<ue> as semiuogaes pode~ estar em fim das vo-
+zes como as vogaes. E portanto se chama~o semiuogaes
+que quer dizer quasi vogaes. E as mudas cujo nome e be~
+claro na~o podem dar cabo as vozes: & deyxadas outras
+rezo~es desta diuisa~o por esta q<ue> me a[ ]mi milhor parec'e na~o
+ha hi antre nos mays letras semiuogaes q<ue> somente estas
+l. r. s. &. z. Tambem escreuemos .m. em fim das nossas syl-
+labas ou vozes / mas na~ muyto ac'erta~do.
+% Disse q<ue> esta letra .m. na~o e semiuogal nem pode~ fenecer
+em ella as nossas vozes: porq<ue> isto e verdade q<ue> nesses ca-
+bos onde a escreuemos & tambe~ no mexo das dic'o~es em
+cabo de muitas syllabas soa hu~a letra muy branda q<ue> nem
+he .m. nem .n. como nos escreuemos ora hu~a dellas: ora
+outra imitando os latinos. Mas a[ ]meu ver de nec'essidad<e>}
+[fol. 7v]
+{CB1.
+escreuamos nos taes lugares esta letra que chamamos
+til ainda q<ue> a alghu~s parec'era sobeja & q<ue> na~o serue mais q<ue>
+de soprir por outras. Aos quaes eu pregunto se nas di-
+c'o~es que acaba~o em a~o: & a~es: & o~es: & a~os: escreueremos
+m. ou .n. & o poseremos antre aquellas duas vogaes que
+soara: ou se o poseremos no cabo que parec'era: por ond<e>
+me parece teremos nec'esidade de hu~a letra q<ue> este sobre a-
+quellas duas vogaes juntamente: a qual seja til.
+As letras mudas sa~o estas .b. c. d. f. g. m. n. p. q. t . x. chama~o
+se mudas: porq<ue> em si na~o tem voz alghu~a nem offic'io ou
+lugar O lha de: tiramos dantras nossas letras .k. porq<ue> sem
+duuida elle antre nos na~o faz nada: nem eu nunca vi em
+escritura de Portugal esta letra .k. escrita ora poys as
+dic'o~es gregas quando vem ter antre nos ta~ longe de sua
+terra: ja lhes na~o lembra a sua ortografia: & nos as faze-
+mos conformar com a melodia das nossas vozes: & co~ as
+nossas letras lhes podemos seruir. Por tanto .k. ne~ .ph.
+nem .ps. nunca as ouuimos na nossa linguagem: nem nas
+auemos mester. {RUB. % Capitolo dec'imo.}
+{IN4.} ALem destas letras acostumadas: porq<ue> as vo-
+zes da nossa lingua o[ ]querem assi. Temos estas
+letras .c'. j. rr. ss. V. y. ch. lh. nh. As quaes por to-
+das faze~ numero de trinta & tres: & co~ .h. sinal
+de aspirac'a~o trinta & quatro. E co~ tudo a estas duas .til. &
+h. na~o metemos em conto de letras perfeytas: porq<ue> de
+feito a forc'a dellas e mui diminuyda & tanto q<ue> quasi a na~o
+sentimos sem aju~tame~to doutras letras: ne~ lhe podemos
+dar nome proprio que a pronu~nc'iac'a~o dellas mostre: & assi
+fica~o as nossas letras e~ trinta & duas: & tambe~ esta letra
+til sente em lugar doutras alghu~as letras / em muytas a-
+breuiac'o~es. O que mostra na~o ter ella virtude muy pro-
+pria: mas[ ]todauia he nec'essaria .c'. C. j. & .rr. dobrado & .ss. do-brado.}
+[fol. 8r]
+{CB1.
+& v & .y. & ch. lh. nh. aspiradas estas tres derradey-
+ras: logo veremos quanta nec'essidade temos de todas el-
+las quando dixeremos a propriedade de cada hu~a. E pos-
+to que chamasemos a estas menos acostumadas: ne~ por
+ysso sa~o nouas: mas antes a nec'essidade as pos ja em vso
+muyto ha. {RUB. % Capitolo vndec'imo.}
+{IN4.} Despoys q<ue> vimos as diuiso~es das letras & suas
+partes: saberemos agora o proprio de cada hu~a
+dellas & a semelha~c'a Dou parentesco comu~ q<ue> tem
+antre si: como nos manda quintiliano no primei-
+ro liuro. E porque as letras liquidas nas partes das di-
+uiso~es ja fezemos sna~o tem lugar nem faze~ genero ou
+espec'ia de letras por si. Mas somente sa~o letras semiuo-
+gaes deminuidas de sua forc'a. Por tanto aqui juntame~-
+te falaremos dellas.
+% O proprio de cada letra entendemos a particular pro-
+nunc'iac'a~o de cada hu~a: & o comu~ chamamos aquela par-
+te da pronu~c'iac'a~o & forc'a em que se hu~a parec'e co~ a outra
+E isto nos manda quintiliano bem ver: porq<ue> nisto co~siste
+o saber ler: & mais q<ue> saber ler: & he verdade q<ue> se na~o teue-
+remos c'erta ley no pronu~c'iar das letras na~o pode auer
+c'erteza de prec'eitos: nem arte na lingua: & cada dia acha-
+remos nella mudanc'a na~o somente no som da melodia:
+mas ta~be~ nos sinificados das vozes: porq<ue> so mudar hu~a
+letra: hu~ ac'ento ou som e mudar hu~a quantidade de vo-
+gal grande a pequena: ou de pequena a grande: & assi ta~-
+bem de hu~a co~soante dobrada em singela: ou ao co~trairo
+de singela em dobrada: faz ou desfaz muito no sinificado
+da lingua na~o menos das figuras das letras nos ma~da
+quitiliano ter muito carrego: porq<ue> ellas sam como instru-
+mento: o qual se for duuidoso pora tambe~ em duuida o ef-
+feito: & na~o imitemos os desuairos de tantas confuso~es}
+[fol. 8v]
+{CB1.
+q<ue> assi lhe q<ue>ro chamar d<e> letras como se acostuma~o: mas siga-
+mos hu~a c'erta regra d<e>[ ]screuer / e a mais fac'il. {RUB. % Cap<ito>lo .xij.}
+{IN4.} ESta letra .a. peq<ue>no te~ figura d[ ]ouo co~ hu~[ ]escudete
+dia~te & a po~ta do escudo em bayxo ca~bada para
+c'ima: a sua pronu~c'iac'a~o e co~ a boca mais aberta
+q<ue> das outras vogaes & toda a boca igual: a gra~de
+te~ figura de dous oouos ou duas figuras d[ ]ouo hu~a pega-
+da co~ a outra co~ hu~ so escudo dia~te: a pronu~c'iac'a~o e co~ a
+mesma forma da boca se na~o quanto traz mais espirito.
+% Esta letra .e. pequeno te~ figura d[ ]arco de besta co~ a pol-
+gueira de c'ima de todo em si dobrada ainda q<ue> na~o amassa-
+da: a sua voz na~o abre ja ta~to a boca & descobre mais os de~-
+tes. A figura do .E. gra~de parec'e hu~a boca be~ aberta com
+sua lingua no mexo & ta~o pouco na~o te~ outra difere~c'a da
+forc'a de .e. peq<ue>no se na~o qua~to enforma mais seu espirito.
+Desta letra .i. vogal sua figura he hu~a aste peq<ue>na aleua~-
+tada co~ hu~ ponto peq<ue>no redo~do em c'ima: pronu~c'iasse co~
+os dentes quasi fechados: & os beic'os assi abertos como
+no .e. & a lingua apertada co~ as ge~gibas de bayxo: & o es-
+pirito lanc'ado co~ mais impeto. A figura desta letra .o. pe-
+q<ue>no e redonda toda por inteiro como hu~ arco de pipa & a
+sua pronu~c'iac'a~o faz isso mesmo a boca redonda dentro &
+os beic'os encolhidos em redo~do. E a figura de oo gra~de
+parec'e duas fac'es co~ hu~ nariz pello meyo ou e dous oos
+juntos ambos & tem a mesma pronu~c'iac'a~o co~ mais forc'a
+& espirito: & todauia estas letras vogaes grandes faze~ al-
+ghu~ tanto mays mouime~to na boca que as pequenas.
+Esta letra .u. vogal aperta as queixadas & prega os bei-
+c'os na~o deixando antreles mais so hu~ canudo por o~de
+sae hu~m som escuro o qual he a sua voz . A sua figura e du-
+as astes aleuantadas dereitas mas em baixo sa~o atadas
+com hu~a linha q<ue> sae dhu~a dellas.}
+[fol. 9r]
+{CB1.
+{RUB. % Capitolo treze.}
+{IN4.} PRonu~c'iasse a letra .b. antros beyc'os ap<ar>tados lanc'a~-
+do para fora o bafo com impeto: & quasi com baba.
+% c. Pronu~c'iasse dobra~do a lingua sobre os dentes
+queyxaes: fazendo hu~ c'erto lombo no meyo della diante
+do papo: casi chegando co~ esse lo~bo da lingua o c'eo da bo-
+ca & empedindo o espirito: o qual per forc'a fac'a apartar a
+lingua & fac'es & quebre nos beyc'os com impeto.
+% A pronu~c'iac'a~o da letra .d. deita a lingua dos dentes d<e>
+c'ima com hu~ pouco de espirito.
+% A pronu~c'iac'a~o do .f . fecha os de~tes de c'ima sobre o bei-
+c'o de bayxo & na~o he ta~o inhumana a~tre nos como a q<u><<i>>nti-
+liano pinta aos latinos: mas todauia assopra como ele diz.
+A pronu~c'iac'a~o do .g. e como a do .c. co~ menos forc'a do
+spirito. A pronu~c'iac'a~o do .l. lambe as ge~gibas de c'ima
+co as costas da lingua achega~do as bordas della os de~tes
+q<ue>yxays. A pronu~c'iac'a~o do .m. muge antre os beyc'os a-
+pertados apanhando para dentro.
+% A pronunc'iac'a~o do .n. tine / diz Quintiliano toca~do co~
+a po~ta da lingua as gingibas de c'ima. A forc'a ou virtu-
+de do .p. e a[ ]mesma q<ue> a do .b. se na~o que traz mays espirito.
+Diz diomedes q<ue> a pronunc'iac'a~o do .q. se faz de .c. & .u.
+& elle quer q<ue> ou seja sobeja: ou semp<re> tenha .u. liquido des-
+poys d<e>[ ]si. Verdade e ja quintiliano quasi deu a ente~der
+que esta letra era sobeja porq<ue> na~o faz mais do q<ue> pode fa-
+zer .c. & os mais antigos todos os lugares q<ue> agora se es-
+creue~ co~ .q . elles os escreuia~o co~ .c. cujo testemunho e este
+nome anticu~ cornelio fro~to escreue co~ .c . mas como q<ue>r
+q<ue> seja nola auemos mester na nossa lingua assi para em al-
+ghu~as dic'o~es q<ue> de nec'essidade tem .u. liquido como quasi.
+qua~do. qua~to. qual. & outras semelha~tes como tambe~ p<er>a
+q<u><<a>>ndo se segue~ .i. ou .e. por tirar a duuida q<ue> pode auer a~tre
+.c. & .c'.}
+{CW. B}
+[fol. 9v]
+{CB1.
+% Pronu~c'iase o .r. singelo co~ a lingoa pegada nos de~tes
+q<ue>yxaes de c'ima & sae o bafo tremendo na po~ta da lingua
+Do .rr. dobrado a pronu~c'iac'a~o e a mesma q<ue> a do .r. singelo
+se na~o q<ue> este dobrado arranha mays as ge~gibas de c'ima:
+& o singelo na~o treme ta~to: mas ta~ mala ves he semelha~te
+ao .l. % O .s. singelo diz quitiliano e letra mimosa & q<u><<a>>ndo
+a pronu~c'iamos aleua~tamos a po~ta da lingua pera o c'eo
+da boca & o espirito assouia pellas ilhargas da lingua.
+% O .ss. dobrado pronu~c'iasse como o outro prega~do mais
+a lingua no c'eo da boca. O .t. te~ a mesma virtude do .d.
+com mays espirito toda via tira o .t. pera fora.
+% Ao .x. nos lhe chamamos c'is mas eu lhe chamaria an-
+tes xi porq<ue> assi o pro(u)[n]unc'iamos na escritura: pronunc'ias-
+se co as queixadas apertadas no meyo da boca / os de~tes
+ju~tos a lingua ancha dentro na boca & o espirito ferue na
+humidade da lingua. A pronu~c'iac'a~o do .z. zine antros
+dentes c'errados com a lingua chegada a elles & os bey-
+c'os apartados hu~ do outro: & e nossa propria esta letra.
+{RUB. % Capitolo quatorze.}
+{IN2.} ESta letra .c. co~ outro .c. de bayxo de si virado para
+tras nesta forma .c'. te~ a mesma p<ro>nu~c'iac'a~o q<ue> .z. se na~o
+que aperta mais a lingoa nos de~tes. .j. co~soante te~ a aste
+mais longa q<ue> o vogal: & te~ enc'ima hu~ pedac'o q<ue>brado para
+tras: & em bayxo a ponta do cabo virada tambe~ para tras
+a sua p<ro>nu~c'iac'a~o e semelhante a do .xi. co~ menos forc'a & esta
+mesma virtude damos ao .g. q<u><<a>>ndo se segue despoys delle
+e. ou .i. mas a mi me parec'e q<ue> co~ o .i. consoa~te o podemos
+escusar. A forc'a de .v consoante e como a do .f . mas co~
+menos espirito. E a sua figura sa~o duas costas d<e> tria~golo
+co~ o ca~to p<er>a bayxo. Esta letra .y q<ue> chamamos grego te~ a fi-
+gura como .v. consoante se na~o q<ue> estende hu~a perna para
+bayxo ficandolhe a boca para c'ima todavia: da q<u><<a>>l alghu~s
+podera~o dizer q<ue> na~o e nossa: mas eu lhe darey offic'io na}
+[fol. 10r]
+{CB1.
+escriptura das nossas dic'o~es proprias: & e este q<ue> as mais
+das vezes q<u><<a>>ndo vem hu~a vogal logo tras outra nos p<ro>nu~-
+c'iamos a~trellas hu~a letra como e~ meyo. seyo. moyo. joyo
+& outras muitas a q<u><<a>>l letra a mi me parec'e ser .y. & na~o .i. vo-
+gal porq<ue> ella na~o faz syllaba por si: ne~ ta~ pouco .j. co~soa~te
+na forc'a q<ue> lhe nos demos / mas e~ outra q<u><<a>>si semelha~te aq<ue>lla
+muito e~xuta se~ nenhu~a mestura de cospinho & nestes taes
+lugares podera seruir esta figura de .y. & se na~ he oc'iosa.
+O til he hu~a linha dereita la~c'ada sobre as outras letras
+sua forc'a e ta~o bra~da q<ue> a na~o sentimos se na~o mesturada
+co~ outras: & por ta~to na~o te~ nome apropriado mais de q<u><<a>>n-
+to lhe o costume quis dar. & eu digo q<ue> e nec'essareo todas
+as vezes q<ue> despoys de vogal em hu~a mesma syllaba escre-
+uemos .m. ou . n . & muito mais sobre os dito~gos.
+h. se e letra co~soante como alghu~s quisera~o: & o traz dio-
+medes gra~matico ha mester propria forc'a & se a te~ ou na~o
+ou se e bo~a a[ ]pronu~c'iac'a~o que lhe da~o alghu~s latinos elles
+o veja~o: nos portugueses na~o lhe damos mais q<ue> hu~ pou-
+co de esprito: o qual esforc'a mais as vogaes co~ que se mes-
+tura: & dize~ os latinos q<ue> se pode mesturar co~ todas as vo-
+gaes: mas antre nos eu na~o vejo alghu~a vogal aspirada
+se na~o e nestas inter jeyc'o~es yha & aha & nestoutras de ri-
+so ha ha he. ai~da q<ue> na~o me parec'e este bo riso portugues
+posto q<ue> o assi escreua Gil vic'ente nos seus autos: tambe~
+achamos alghu~as poucas vogaes co~ sinal d<e> aspirac'a~o na
+escritura & na~o na voz: & me parec'e q<ue> se na~o faz mais q<ue> so
+p<er>a mais certo conhecime~to de que~ sa~o como home~ o q<u><<a>>l
+segue ai~da a escritura latina: hauer outro ta~to: mas hu~ &
+alghu~ hi & ahi averbios de lugar: honrra. ho~rrado so de
+nosso costume os escreuemos se~ mais outra nec'essidad<e>.
+Das co~soa~tes temos tres aspiradas para as q<u><<a>>es posto
+que na~o temos proprias figuras mais que so aspirac'a~o}
+{CW. B ij}
+[fol. 10v]
+{CB1.
+co ellas mesturada: toda via as vozes sa~o bem assinadas
+per si & diferentes das outras na~o aspiradas sa~o estas as
+letras. ch. lh. nh. seja logo este o nosso .a. b. c.
+{SYMB.} .a. a. b. c. c'. d. e. E. f. g. h. i. j. l. m. n. o. oo. p. q. r.
+rr. s. ss. t. v. u. x. z. y~. ch. lh. nh.
+% Abreuiaturas temos muitas: & escusadas: as mays del-
+las co esta letra til. Neste nosso .a. b. c. ha hi tri~ta & tres le-
+tras todas nossas & nec'essarias para nossa lingua: das
+quaes oito sa~o vogaes. & chama~ose. a. a. e. E. i. o. oo. u. & vin-
+ta quatro consoantes & chama~o se .h. c. c'e. de. ef. gue. je.
+el. em. en. pe. qu. er. err. es. e. te. ve. xi. ze. ye. ao sinal d[ ]as-
+pirac'a~o chamamos aha: & ao sinal das abreuiaturas cha-
+mamos til. O qual a diante diremos como e muito nosso
+& serue em mays que abreuiar. {RUB. % Capitolo .xv.}
+{IN4.} ALgu~as letras se fazem liquidas. Quer dizer li-
+quido aqui brando / ou diminuido de sua forc'a
+das vogaes nos fazemos .u. liquido alghu~s ve-
+zes despoys de .g. & .q. como quando: & lingua
+mas se o meu sentir he ac'ertado eu sinto nos taes luga-
+res .o. pequeno & na~o ja .u. & assi o escreueria se me atreues-
+se desta maneyra lingoa .qoando. porque assi me soa a mi
+nas minhas orelhas: & se outra cousa fazem por imitar a-
+os latinos na~o e nosso o q<ue> segue~. Verdade e q<ue> despois de
+.g. qua~do logo ve~ .e. ou .i. escreuemos no meyo .u. porq<ue> na~o
+fac'amos voz d<e> .i. co~soa~te: como guine guerra. Mas aq<ue>lle .u.
+na~o te~ ali voz alghu~a porq<ue> na~o some~te e diminuido: mas d<e>
+todo desfeyto alghu~s ta~be~ despoys de .q. fazem o mesmo
+escreue~do semp<re> .u. o qual elle te~ ja d<e> seu: & eu na~o no escre-
+ueria se na~o so onde soa & ainda a hi escreueria .o. como ja
+disse: pode auer alguem q<ue> diga aq<ue>le .y. a~tre duas vogaes
+de q<ue> falamos ser .i. vogal liq<u><<i>>do: mas a mi me parec'e estou-
+tro que digo: mayormente porque elle fere sobre a vogal}
+[fol. 11r]
+{CB1.
+seguinte com hu~a c'erta forc'a como letra consoante: pois
+elle .j. co~soante liquido na~o pode ser: porq<ue> na~o tem a tras
+outra consoante muda q<ue> caya sobrele q<ue> e proprio da con-
+soante liquida: como logo diremos: mas antes sempre se
+acha antre duas vogaes como fica dito.
+As consoantes liquidas antre nos sa~o .l. & . r . como flo-
+res. claro. gloria. grac'a. fraco. fresco. primo. Liquida sera
+a letra semiuogal. Diz Probo gra~matico se em hu~a mes-
+ma syllaba vier depoys doutra letra consoante & dize~do
+outra: entende q<ue> essa outra seja doutro genero de letras
+consoantes: conue~ a saber muda: porque logo a baixo diz
+que se na~o podem ajuntar duas letras liquidas em hu~a
+sillaba sendo de diuersa natura como .l. & .r. nem .r s. porq<ue>
+dous .ll. ou dous .rr. bem se ajunta~o. E porque se na~o po-
+dem ajuntar se chama~o diz elle liquidas / q<ue> quer dizer der-
+ritidas: ai~da pore~ q<ue> a interpretac'a~o q<ue> ja demos deste no-
+me liquido e milhor. E esse probo gramatico a po~e pouco
+antes destoutra: dizendo q<ue> o som das letras fazendose li-
+quidas se adelgac'a & diminuy: mas de tal feyc'a~o auemos
+d[ ]entender agora nestas consoantes a diminuic'a~o que a
+letra muda que fica a tras per c'ima da liquida caya na vo-
+gal que vay a diante: & todas soem na mesma syllaba.
+Porq<ue> dissemos q<ue> .l. e letra liquida: saberemos q<ue> a for-
+ma & melodia da nossa li~ngua foy mays amiga de por sem-
+pre .r. onde agora escreuemos as vezes .l. & as vezes .r. co-
+mo gloria & flores: onde dizia~ grorea & froles: & tambe~ ou-
+tras partes comentas. Algu~as letras posto se escreua~o
+na~o se pronu~c'ia~o como dissemos q<ue> fazia .u. alghu~as vezes
+despoys de .g. & .q. esta & outras desta q<ue> isto teuere~; pode~
+se chamar liquidas em hu~ outro c'erta modo de liquic'er /
+ou deminujr. E porq<ue> aqui ve~ a ma~o quero dizer q<ue> tambe~
+so de costume: sem mays outra nec'essidade se acrec'enta~o}
+{CW. B iij}
+[fol. 11v]
+{CB1.
+alghu~as outras letras em algu~as partes como per en-
+cheo q<ue> se compo~e de per & mays cheo. As letras liqui-
+das na~o tem outras figuras nomes ne~ pronunc'iac'o~es di-
+uersas do q<ue> soya~o quando na~o era~o liquidas: mas sa~o as
+mesmas co~ menos forc'a. {RUB. % Capitolo .xvj.}
+{IN2.} AS letras consoantes aspiradas q<ue> sa~o .ch. lh. nh. na~o
+tem propria figura ainda ategora: os nomes dellas
+sa~o .che. lhe. nhe. os q<u><<a>>es sabidos sa~o sabidas as pronu~c'ia-
+c'o~es: mas q<ue> seria se dissessemos na~o auer antre nos aspi-
+rac'a~o: das vogaes na~o ha hi duuida se na~o q<ue> nenhu~a e aspi-
+rada antre nos / tira~do alghu~as interjeic'o~es: das co~soa~tes
+eu diria q<ue> sem aspirac'a~o faze~ alghu~a mudanc'a cujo sinal
+e aq<ue>lla figura de letra .h. q<ue> lhe mesturamos assi como faze-
+mos do til nas vogaes quando tambe~ muda~o sua voz: di-
+go q<ue> muda~o a voz porq<ue> na~o he a mesma voz vila & vila~:
+mas o til q<ue> lhe posemos muda a calidade do .a. d<e> clara voz
+em escura & meteo mais pelos narizes: outro tanto: nas
+outras vogaes como .e. & .e~ / i & im .o. & .o~. u. & .u~. onde o[ ]til
+faz alghu~a cousa & tem poder alghu~: o qual sintem as ore-
+lhas: mas a boca o acha ta~o sotil toma~doo por si soo que
+o na~o sabe formar: ne~ lhe da nome natural como diz mar-
+c'iano capella q<ue> as outras letras tem: conue~ a saber nome
+conforme a sua natureza e p<ro>u~c'iac'a~o: da muda~c'a q<ue> aq<ue>las
+tres co~soantes faze~ em sua forc'a & virtude: outro ta~to dize-
+mos q<ue> o sentimos naq<ue>lle aju~tamento q<ue> faz co as taes le-
+tras: mas na~o lhe podemos a elle so formar nome ne~ pro-
+nu~ciac'a~o proprios: verdade e q<ue> de costume lhe chamamos
+aq<ue>lle til: & a este aha: mas a~tre nos claro esta q<ue> na~o temos
+voz a q<u><<a>>l se forme co este eleme~to ou f undame~to til. ne~ ta~o
+pouco co estoutro aha q<ue> e proprio d<e> aspirac'a~o: posto q<ue> al-
+gu~hu~as nac'o~es lhe chame~ ache & na~o ac'erta~o: mas antes
+dahi nac'eo o erro de mal pronu~c'iar mihi & nihil: & outras}
+[fol. 12r]
+{CB1.
+muitas partes: & do mao pronu~c'iar veo o pior escreuer d<e>s-
+sas dic'o~es co~ .ch. Mas nos somos ta~o gra~des bogios dos
+latinos q<ue> tomamos suas cousas sem muito sentir dellas
+q<u><<a>>nto nos sa~o nec'essarias: & por nossa vo~tade damos nos-
+sas auantage~s aos latinos & gregos q<ue> ta~o pouco sabe~ as
+vezes o q<ue> ha~o mester como os q<ue> antre nos pouco sintem.
+Isto digo porq<ue> ta~o pouco te~ os latinos vozes aspiradas
+como nos: & os gregos poucas mais: porq<ue> as ge~tes da eu-
+ropa fala~o todas cos beic'os de~tes & po~ta da lingua co~ a
+q<u><<a>>l po~cioa em diuersas partes da boca forma~o diuersas le-
+tras: & nos mais q<ue> todos co~ a[ ]boca mais aberta & as nossas
+vozes sa~o mais fora da boca: o q<ue> na~o te~ os hebre<<os>> & arabi-
+gos cuja p<ro>pria e aspirac'a~o. porq<ue> elles forma~o suas vozes
+de~tro q<u><<a>>si na fresura do~de fala~do la~c'a~o muito espirito. E
+pois nos as letras q<ue> mais de~tro formamos q<ue> sa~o .c. & .g. na~o
+chamamos aspiradas: ta~o pouco o chamemos a essoutras
+q<ue> traze~ menos esperito do .c. q<u><<a>>ndo lhe probo gra~matico
+chamou dobrado / cuido eu q<ue> sentio isto q<ue> eu sinto: pois o
+g . que~ na~o ve q<u><<a>>nto e seu chegado? se alghu~ p<or>fioso q<u><<i>>ser p<er>a
+la~c'ar da~tre os latinos esta aspirac'a~o mais proua q<ue> a esp<er>ie~-
+c'ia. Damoslhe quintiliano o q<u><<a>>l diz no primeiro liuro assi
+Olhe be~ o gra~matico diz se a~tre os latinos sobeja~o mais
+letras q<ue> a nota d[ ]aspirac'a~o a q<u><<a>>l se fosse nec'essaria ta~be~ te-
+riamos nota ou sinal de na~o aspirac'a~o: & aulo gellio q<u><<a>>si o
+mesmo sinte aos tres capitolos do segu~do liuro: co~ os q<u><<a>>es
+ne~ eu q<ue>ro dar mais valia ao costume de muitos gra~maticos:
+ne~ quero deixar a esperie~cia q<ue> me mostra na~o auer as-
+pirac'a~o nestas terras: se na~o se elles chama~o aspirac'a~o a
+qualq<ue>r spirito: o q<u><<a>>l todas as letras te~ ou pouco ou muito
+& hu~as sa~o diferentes das outras e~ diminuyc'a~o / acrec'e~ta-
+me~to ou q<u><<a>>lq<ue>r muda~c'a d<e> spirito. Como .b. & p. f. & v. d. & t. &
+outras como logo diremos: o q<ue> na~o chamamos aspirac'a~o}
+{CW. B iiij}
+[fol. 12v]
+{CB1.
+porq<ue> desta feyc'a~o todas as letras sa~o aspiradas: mas e
+aspirac'a~o hu~ grande espirito / grande digo eu em co~para-
+c'a~o do acostumado nas letras & vozes: & esse grande espi-
+rito arrancado do estamago: do qual zomba Catullo con-
+tra arrio: & testemunha disso quintiliano no primeiro &
+o mesmo ente~do eu q<ue> plinio faz no comec'o do liuro deste
+mesmo numero. {RUB. % Capitulo .xvij.}
+{IN4.} POrque nos ja dissemos q<ue> antre nos & os latinos
+tambe~ era sobeja esta letra .k. agora o queremos
+repetir porq<ue> de feyto desta letra e do vso della
+duuida~o a mayor parte dos gra~maticos latinos
+posto Diomedes diga q<ue> serue semp<re> seguindose .a. breue
+Ao qual ajuda Marc'iano capella: mas na~o se estende tan-
+to: & comtudo co~tra estes & muitos mais & milhores val
+so a autoridade de Quintiliano & muito mais a esperien-
+c'ia da nossa li~gua o~de ella na~o serue da q<u><<a>>l nos aq<u><<i>> falamos.
+Desta letra .q. parec'e Quintiliano duuidar antre os la-
+tinos: a quem segue Diomedes / mas porem Marc'iano
+diz outra cousa: & com tudo os latinos aperfiem consigo
+nos da nossa lingua sentimos isto que estas syllabas .ca &
+coa & coe cu. Bem pode escusar essa letra .q. como cadey-
+ra. coando comec'o. cuberto: & tambe~ estoutras .ce & ci. co-
+mo ceyxume & cina: se na~o q<ue> aos vulgares sera trabalho-
+so: & por tanto em quando com liquida & em queyxume &
+quina escreuamos .q. ainda que o meu parec'er era que ne-
+stes derradeiros pois na~o soa letra liquida na~o se escre-
+uesse se na~o assi: qeixume & qina / & assi outros semelhan-
+tes. E porem o costume val muito / sem o qual a escritura
+por ventura ficaria duuidosa. {RUB. % Capitolo .xviij.}
+{IN3.} ATe aqui dissemos do proprio genero & particu-
+lar d<e> cada letra / agora vejamos da comunicac'a~o
+que alghu~as tem / ou dalghu~a partic'ipac'a~o q<ue> to-das}
+[fol. 13r]
+{CB1.
+tem antre si: das vogaes antre u & o pequeno ha tan-
+ta vezinhenc'a q<ue> quasi nos confundimos dizendo hu~s so-
+mir & outros sumir: & dormir ou durmir / & bolir ou bulir
+& outras muitas partes semelhantes. E outro tanto an-
+tre .i. & e. pequeno como memoria ou memorea / gloria: ou
+glorea. Ainda que eu diria que quando escreuemos .i. na
+penultima sempre ponhamos o acc'ento nessa penultima
+seguindose logo a vltima sem antreposic'a~o de consoante /
+como / arauia / & se a tal penultima assi d<e> vogaes puras na~o
+teuer o ac'e~to na~o na escreueremos co~ .i. se na~o co~ .e. como
+glorea / & memorea. antre as consoantes .b. & .p. sa~o muy se-
+melhantes / & .c. com .g. tem muita vezinhenc'a, / & .d. com .t.
+f. com .v / l. com .r. singelo .c'. com .z / & .s. ou .ss. j. & .x. tambe~:
+as vogaes hu~as co~ outras em ter voz: & as co~soantes an-
+tre si em ferir sobre as vogaes. E as letras semi vogaes e~
+seu ofic'io: & as liquidas na sua valia todas tem hu~as com
+outras alghu~ parec'er: & com tudo quaesquer q<ue> se parec'e~
+ainda que muito consigo trazem alghu~a c'erta maneyra d<e>
+mouer a boca / lingua / dentes & beyc'os / ou formar o espi-
+rito por onde temos nec'essidade de as particularizar.
+Tambe~ em se mudar hu~as em outras tem as letras comu-
+nicac'a~o & guarda~o a reza~o de seu pare~tesco ou vizinhe~c'a
+Como todoudia / por todo o dia: & isto assi antre as vo-
+gaes / como antre as consoantes das vogaes se troca~o.
+o. & oo. E. & .e. a. & .a. E assi outras como fermoso & fermoo-
+sos & fermosa / & alegre & alegria amara~o & amara~o:
+poys as consoantes antre si tambe~ se muda~o hu~as em ou-
+tras / como amarano seu d<eo>s / por amara~o o seu d<eo>s: no amor
+de d<eo>s por em o amor de d<eo>s: pollo conselho de meus ami-
+gos / em lugar de por o conselho de meus amigos. Pula
+ma~o / por pus a ma~o. Das letras por si ja dissemos q<u><<a>>n-
+to esta pequena obra pode consentir: agora saybamos co-mo}
+[fol. 13v]
+{CB1.
+se aju~ta~o em syllabas: onde fala~do primeiro dos dito~-
+gos faremos na~o os mesmos ne~ todos os da lingua lati-
+na: mas ta~be~ alghu~s outros & mais e~ numero: porq<ue> as vo-
+zes da nossa lingua os te~: & quintiliano assi ma~da escreuer
+q<u><<a>>lq<ue>r li~gua como soa: & na~o some~te a ortografia e diuersa e~
+diuersas linguas mas ta~be~ em hu~a mesma lingua se muda
+co~ o costume. {RUB. % Capitolo .xix . Das syllabas.}
+{IN4.} SYllaba dize~ os gra~maticos e vocabulo grego &
+quer dizer aju~tame~to de letras: mas nos deixa-
+da a interpretac'a~o do vocabulo seja cujo for po-
+demos dizer q<ue> syllaba he hu~a so voz formada co~
+letra ou letras: a q<u><<a>>l pode sinificar por si ou ser parte de di-
+c'a~o: & assi as vogaes ai~da q<ue> seja~o e~ dito~go pode fazer syl-
+laba se~ outra ajuda: & as co~soa~tes na~o se na~o mesturadas
+co as vogaes. Dito~go dize~ ta~be~ ser dic'a~o grega & q<ue>r di-
+zer ou sinifica & diz dobrado so~: aueis d[ ]e~tender e~ hu~a voz
+co~ hu~ so spirito ou e~ sillaba na q<u><<a>>l sa~o duas vogaes porq<ue> isto
+q<ue>remos ente~der da syllaba q<ue> seja~o e~ ella todas as letras
+q<ue> teuer unidas co~ hu~ so espirito & destes temos muitos na
+nossa lingua: mais cuido eu q<ue> em qualq<ue>r outra pode auer
+ao menos das q<ue> eu conhec'o. & esta he hu~a das particulari-
+dades da nossa p<ro>pria armonia. Os dito~gos q<ue> eu achey
+antre nos portugueses sa~o estes .ae. como tomae .a~e. como
+pa~es .ao. como pao .a~o. como pa~o .a~y. como ma~y .ei. como
+tomei .eo. como c'eo .eo. como d<eo>s .eu. como meu .io. como
+fugio .oe. como soe .oi. como caracois .o~e. como po~e .oi. co-
+mo boi .ou. como dou .ui. como fuy. nos q<u><<a>>es .a. gra~de & .a.
+peq<ue>no. & assi .e. gra~de & w gra~de sempre se prepo~e & todas
+as outras as vezes se po~e a~tes & as vezes d<e>spois hu~as das
+outras q<ue>remos aq<u><<i>> repetir q<u><<a>>nto e nec'essaria esta letra ou
+sinal til pera os dito~gos porq<ue> se em c'idada~o & escriua~o &
+outros desta voz & outras escreuemos .m. ou .n. no meyo}
+[fol. 14r]
+{CB1.
+dira vilamo ou vilano: & se no cabo fica sobre a letra o so-
+me~te q<ue> e a derradeira: & se fosse .m. morderia a voz & aper-
+talia antros beyc'os: & o .n. na~o e nosso / porq<ue> a nossa li~gua
+e mui chea & .n. corta muito: somos co~trairos a[ ]esta letre .n
+como diz quintiliano dos latinos: & e propria aos caste-
+llanos como elle diz dos gregos. E nos aq<u><<i>> vemos & sen-
+timos co as orelhas q<ue> soa ali hu~ til sobre ambas as letras
+vogaes do ditongo: como escriua~o escriua~es: o qual co a
+boca & beic'os muy soltos tambe~ soa na mesma forma em
+todas as syllabas em cujos cabos nos escreuemos .m. ou
+n. errando co~ o costume: porq<ue> as letras mudas de cujo nu-
+mero sa~o .m. & .n. a~tre nos nu~ca da~o fim a dic'a~o alghu~a ne~
+syllaba: e isto a esperienc'ia & propriadade das nossas vo-
+zes no lo ensina~o: & por tanto na~o escreueremos ensinar
+com .n. na primeira syllaba nem embargar co~ .m. a imita-
+c'a~o dos latinos poys nos taes lugares antre nos na~o
+sentimos essas letras: mas nessas & outras muitas partes
+escreuamos til. {RUB. % Capitolo .xx.}
+{IN5.} POys ja comec'amos a falar das letras em que
+as nossas syllabas podem acabar vamos por
+diante co ellas. Das consoantes digo: porque
+das vogaes qualquer dellas pode dar cabo as
+syllabas. As nossas vozes acaba~o sempre em
+voz perfeita & desempedida o q<ue> na~o co~sinte~ as letras mu-
+das: mas ao contrairo ata~o a boca & corta~o as dic'o~es que
+he proprio de mudos & grosseiros como vemos quasi nas
+gentes de terras frias: os quaes Didovirgiliana re(f)[s]pon-
+de~do a ilioneu: quer entender q<ue> pela pouca partic'ipac'a~o
+do sol sa~o menos perfeytas & assi vemos que os latinos
+poucas vezes & os Gregos mais poucas ou nunca fa-
+zem o fim das suas dic'o~es em letra muda: seja logo esta
+hu~a condic'a~o da nossa lingua & na~o de pouco primor}
+[fol. 14v]
+{CB1.
+que os vocabulos nem syllabas delles antre nos nunca
+acabe~ em letra alghu~a das q<ue> por essa & na~ outra reza~o cha-
+mamos mudas as letras co~soa~tes em q<ue> as nossas dic'o~es
+ou suas syllabas podem acabar sa~o estas .l. r. s. & .z. as q<u><<a>>es
+ja chamamos semivogaes ou quasi vogaes: porq<ue> nisto sa~
+soltas como vogaes & goza~o d<e> seu offic'io em dar fim a di-
+c'o~es ou sylbas como vogaes: pode acabar dic'a~o ou sylla-
+ba nesta letra .l. como peytoral / papel / barril / caracol / azul
+& .r: como lagar / comer / dormir / senhor / artur. E .s. como
+entras / reues / dormis / retros .us / na~o temos em cabo de
+dic'a~o: mas temolo em cabo de sylba. Como buscar & cus-
+tar: Em .z. tambe~ acaba~o dic'o~es ou syllabas. Como cabaz
+pez . juyz . arroz . alcatruz. Os ditongos recebem despoys
+de si til. ou .s. ou a~bas: como tabalia~o. escreueys. cidada~os
+capita~es lic'o~es. {RUB. % Capitolo .xxj.}
+{IN5.} ANtes de si todas as vogaes em ditongos &
+fora delles rec'ebem qualquer letra consoa~te
+Como .ba. ca. c'a. da. das. dei: & dou. dous. da~o
+& do~es. Antes de letra liquida estaca sempre
+letra muda. Como / brauo / drago / cra~guejo /
+franga / grosso. as mays letras q<ue> se ajunta~o em hu~a sylla-
+ba sa~o quatro / a primeyra muda: & a segunda liquida & a
+terc'eyra vogal ou ditongo: & a quarta semi vogal ou til /
+como frasco ou franco na primeira syllaba se co~ta~o .f. & .r.
+& .a. s. ou til. Ta~be~ ha hi syllabas de tres letras. como tra-
+zer: & outras de duas como cana: & outras d<e> hu~a so como
+era auarento. Conta~ose em hu~a mesma syllaba todas as
+letras q<ue> soa~o em hu~a so voz. como em tardou .t. & .a. & .r.
+se conta~o na primeyra syllaba. & .d. & .o. & .u. na segunda.
+{RUB. % Capitolo .xxij.}
+{IN2.} E Assi tambe~ as nossas syllabas nunca se comec'a~o e~
+duas letras de diuersa natureza como spera~c'a: mas}
+[fol. 15r]
+{CB1.
+sempre lhe daremos nos comec'os das taes vozes hu~a vo-
+gal q<ue> soe coa primeira letra. Como espera~c'a. estrado. por
+q<ue> ja dissemos que a nossa lingua he muy co~prida no pro-
+nunc'iar das letras & sylbas.
+% Duas letras de hu~a mesma natureza em hu~a syllaba
+juntas ambas em hu~a parte antes ou despois na~o sa~o ne-
+c'essarias na nossa lingua como offic'io & peccado. as q<u><<a>>es
+cada hu~a de sua parte bem pode~ estar: como .sesta. sostra.
+Ainda pore~ q<ue> cuido q<ue> este priuilegio te~ esta letra .s. some~-
+te: duas vogaes de hu~a mesma natureza na~o se ajunta~o e~
+hu~a syllaba: & as q<ue> faze~ ditongo sera~o sempre diuersas.
+{RUB. % Capitulo vinte tres.}
+{IN4.} DUas syllabas de vogaes puras sem mestura ou
+antreposic'a~o de consoa~te be~ se pode~ co~tinoar:
+como fazia. ia. comia. Ainda nos pela mayor
+parte lhe metemos no meyo hu~ .y. consoante co-
+mo Mayo. seyo. saya. ayo. mas na~o sempre: & se isto falta q<ue>
+na~o metemos este .y. antrellas & as maus das vezes nas
+partes onde alghu~a destas duas vogaes ou syllabas assi
+continoadas tem estas vozes ou alghu~a dellas .i. ou .u. co-
+mo .duas. rua. macia. & tambe~ .o. pequeno como zamboa:
+& co~ tudo ainda aqui na~o sempre mas ta~be~ .u. .i. ou .o. se te-
+uere~ despoys de si outra vogal ta~be~ soa antrelles muitas
+vezes este .y. consoa~te como marroyo. tiyo. arguyo. tiya.
+{RUB. % Capitolo .xxiiij.}
+{IN5.} AS dic'o~es que trazemos doutras linguas es-
+creuelas emos co as nossas letras q<ue> nellas
+soa~o como dito~go filosofo. gramatica: porq<ue>
+todo o mais e empedimento aos q<ue> na~o sabe~
+essas lingoas donde ellas viera~o: se na~o q<u><<a>>n-
+do ainda forem ta~o nouas antre nos que seja nec'essareo
+pronunc'ialas co a melodia de seu nac'imento: mas nos}
+[fol. 15v]
+{CB1.
+trabalhemos q<u><<a>>nto poderemos de as ama~sar & co~formar
+co a nossa .auctor rector & outras comestas na~o nas escre-
+ueremos co~ .c. a~tes de .t. como os latinos faze~: porq<ue> a nos-
+sa lingua na~o co~sinte acabar as nossas syllabas em .c. nem
+em outra alghu~a letra muda: como .ac. ab. & .ad. & mays
+poys nos taes lugares soa antre nos .u. ou .i. mesturado
+em ditongo coa vogal q<ue> antes estaua assi o escreuamos.
+{RUB. % Capitolo .xxv.}
+{IN3.} QUando hu~a dic'a~o acaba em vogal & outra dic'a~o
+logo comec'a tambe~ em vogal se sa~o ambas dhu~
+mesmo genero mesturanse ambas & faze~ hu~a vo-
+gal: & as vezes gra~de d<e> seu genero de q<ue> ellas era~o como d<e>s-
+creuer: por de escreuer: e por estaua assi: & comos
+latinos por como os latinos: & se sa~o diuersos generos
+a primeira desse & a segu~da em q<ue> comec'a a segu~da dic'a~o
+fica & muitas vezes e~ mayor ca~tidade como mestura~sa~bas
+por mestura~se a~bas: & comeste por como este. Ainda pore~
+q<ue> as vezes fica~o a~bas e~teyras mayorme~te se sa~o diuersas
+como acaba e~ a vogal: & comec'a a segu~da. {RUB. % Cap<ito>lo .xxvj.}
+{IN4.} As consoantes q<ue> se muda~o hu~a em outra sa~o til.
+em .n. & .r. e~ . l . qua~do despois desses til ou .r. esta
+alghu~ artigo como .o. ou .a. ou .os. ou .as. assi co-
+mo polo .no. por .em. o. & por .o. & fezera~no por fe-
+zera~o .o. & assi tambe~ no plural fezera~nos por fezera~o os.
+E isto se faz de necessidade em nos o custume ja pos &
+para se conhecer se em fezera~nos aquele nos e artigo co~-
+posto ou plural deste nome eu: enta~o quando for plural
+de eu. escreueremos cada hu~ por si & o cabo da primeira
+parte enteiro como fezera~o .nos. bem as letras. q<ue> quer di-
+zer fezera~o a nos be~ as letras: ou lhe acrec'e~tamos .a nos.
+dizendo fezera~o nos a nos: mas isto e ja quasi pregunta.
+Tambem somos amigos de cortar as vozes: onde se es-creuem}
+[fol. 16r]
+{CB1.
+.l. ou .r. quando despoys destas letras se auia d[ ]es-
+creuer vogal como sylba por syllaba: & fezerdes por feze-
+redes: & nos verbos nas derradeyras syllabas das segu~-
+das pessoas do plural que acabaua~o em des agora muda-
+mos o .des em .is: & ajuntamolo em ditongo co a vogal
+que ficaua antes: como fazeys por fazedes: & amais por
+amades. % Tambem nesses verbos qua~do despoys das
+pessoas que acaba~o em .s. vem logo artigo mudamolo .s.
+em .l. como mudamolo por mudamos o: & amaylo vosso
+deos: por amays o vosso deos. % Todos estes sa~o costu-
+mes proprios assi como outros q<ue> ja dissemos & particu-
+lares da nossa lingua; & alghu~ tanto parec'em compostos
+ainda que na~o de todos afirmarey ser composic'a~o se na~o
+que estas syllabas se muda~o ou corta~o para milhor me-
+lodia. Como neste vocabolo conuem a saber. Ao qual
+podemos diuidir & dizer. Como vem a saber. Porque
+assi o ouui pronu~ciar poucos dias ha no palpito ao muy-
+to reuerendo padre mestre Baltasar da ordem do Car-
+mo: cuja lingua eu na~o tenho em pouco antros portu-
+gueses. {RUB. % Capitolo .xxvij.}
+{IN5.} A Quantidade das sylbas da nossa lingua e
+muy fac'il de conhec'er: porque as vogaes
+em si da~o c'erta voz destinta as grandes das
+pequenas / & as pequenas das grandes: com
+tudo as grandes podem gastar mais ou me-
+nos tempo hu~as que outras: & as pequenas outro tan-
+to antre si / segundo as consoantes que se seguem a di-
+ante as quaes tambem ajuda~o acrec'entar ou demenu-
+yr nas vozes. Porque de nec'essidade mais tempo gas-
+ta~o duas consoantes que hu~a: as quaes tambem tem
+espirito & ajuda~o a soar & ter voz: mays tempo tem
+esta letra .vogal. a grande. em gasto. que em gato.}
+[fol. 16v]
+{CB1.
+& mais tem esta letra .e. e~ presto q<ue> em perto. & na~o mais
+que por as mais consoantes q<ue> trazem por cuja considera-
+c'a~o os latinos julga~o a qua~tidade de todas as suas sylla-
+bas porq<ue> as vogaes antrelles na~o te~ diferenc'a como an-
+tre nos & os gregos. .i. & .u. letras vogaes tambe~ segun-
+do mais ou menos consoantes de q<ue> viere~ aco~panhadas
+assi gastara~o mais ou menos tempo: mas ellas em .si. sem-
+pre sa~o de hu~a mesma quantidade & a[ ]mi me parec'e q<ue> sem-
+pre sa~o grandes como ouuido .escudo. & em lugar de .i. pe-
+queno serue .e. peque~no como memorea / hostea / nec'essareo
+reuere~c'ea: nas penultimos: das quaes partes & outras se-
+melhantes eu nu~ca escreueria .i. se na~o .e. porq<ue> eu tenho q<ue>
+a penultima pura ou vltima q<u><<a>>lq<ue>r q<ue> se escreue co~ .i. sempre
+tem o ac'ento da dic'a~o como .Maria. ouuir & as q<ue> nam te~
+esse ac'ento da dic'a~o escreuense com .e. pequeno & na~o co~
+.i. como ja dissemos . Outro tanto dizemos de .u. vogal
+como dissemos do .i. o qual .u. vogal sempre e gra~de: como
+gorgulho. arguyo: & em lugar de .u. pequeno escreuemos
+.o. pequeno: como argoyr continoar. onde se esteuera .u.
+poseramos o ac'ento na penultima como concluyo.
+% Na~o parec'a a alguem q<ue> nos confundimos .i. peq<ue>no co~
+.e. pequeno: nem .o. pequeno com .u. pequeno: porq<ue> ellas
+na~o sa~o diuersas vozes & tam pouco na~o temos ha hi ne-
+cessidade de diuersas letras: mas e desta maneira que an-
+tre .i. & .I. e letra delgada aguda e viua e antre .E. grande soa
+na nossa lingua hu~a outra voz mais escura: e na~o mais q<ue>
+hu~a: & a este chamamos .e. pequeno / o qual em hu~as par-
+tes soa mays e em outras menos como fazem as outras
+vogaes: e o~de soa mais podemos dizer q<ue> e mais vezinho
+do .e. grande: onde tombe~ menos soa sera isso mesmo ma-
+ys vezinho de .i. mas na~o por isso dizemos q<ue> sa~o duas le-
+tras porque na~o muda a voz se na~o por respeito das con-soantes}
+[fol. 17r]
+{CB1.
+mais ou menos: ou por qualq<ue>r outra vezinhe~c'a
+de letras q<ue> se coelle aju~ta~o gasta mais ou menos tempo
+& aparec'e mais ou menos a sua voz como: escreueste: me-
+morea: mais soa .e. pequeno na penultima de escreueste.
+q<ue> de memorea porque em escreueste tem a diante na mes-
+ma silba hu~a letra consoante .s. e em memorea tem logo
+outra vogal em outra syllaba a qual lhe tira parte da voz
+porq<ue> do<<us>> c'apateiros vezinhos abate~ a ve~da hu~ oo outro:
+e os estados baixos ju~to co~ os poderosos parece~ muito
+menos: & esta .E. a causa porq<ue> ainda em memorea e outras
+semelha~tes partes a penultima parec'e mais peq<ue>na porq<ue>
+antes de .si: tem hu~a syllaba grande com ac'ento: ta~ peq<ue>no
+fiqua este .e. nestas partes q<ue> muitos se engana~o e escreue~
+em seu lugar .i. o qual nos a hi na~o sentimos. & porq<ue> disse
+que o ajudaua a ser pequeno a grande voz logo sua vezi-
+nha que fiqua atras na~o sespantem porq<ue> assi estimamos
+em muyto mais pouco as cousas peq<ue>nas despois que vi-
+mos muitas grandezas e os escudeiros da beira em sua
+terra tinha~o em muito pelote frisado o qual na~o tem
+em conta despois q<ue> fartam os olhos de ver sedas & ouro
+de cortesa~os: e bem vemos como em la~preya e correya &
+em outras partes comestas esta letra .e. peq<ue>no q<ue> esta na
+penultima soa mais que em memorea e nec'essareo . e na~
+some~te soa mais mas ta~bem em si te~ o ac'ento e princ'ipal
+to~ da dic'a~o assi porei antes na~o te~ outra vogal mayor co-
+mo ta~bem porq<ue> despois de si na~o se continoa logo outra
+vogal mas metesse no meyo hu~ .y. consoa~te. Mas q<ue> dire-
+mos destes nomes femeninos: capitoa: e viloa: e outros
+comestes q<ue> tem .o. pequeno na penultima co~tinoa~dose lo-
+go vogal sem antreposic'a~o de alghu~a co~soante e mais na
+antepenultima tem .i. o qual nos dissemos que sempre .E.
+grande . Estes nomes eu nam nos pronu~ciaria nesta for-ma}
+{CW. C}
+[fol. 17v]
+{CB1.
+c'idadoa. capitoa: viloa: rascoa: aldeoa. mas pron(n)[u]n-
+c'ialosia assi aldea~ vila~ c'idada~. verdade e que rasca~ nem
+capita~ na~o sa~o mui vsados: e com tudo zamboa e padoa
+& quaesq<ue>r que o costume consentir: na~o vejo outra reza~o
+para os escusar se na~o a que dey de correya e lampreya
+& assi e de feito que zamboa e padoa e bayoa: zaruatoa:
+te~ a antepenultima peq<ue>na. O numero das sillabas quin-
+tiliano o na~o quer determinar: mas nos podemos saber
+onde ellas podem chegar desta feic'a~o: tomando cada vo-
+gal por si ella pode fazer syllaba e com letra semiuogal
+tras si e com muda antes e mais com muda mesturada
+co~ letra liquida assi .a. as: ba bas: bras: e .es. te tes tres.
+e com ditongo como .o. ou. do dou: dos. e eu: se. seu: seus
+a. ao. a~o. ga: grao. grao~. e assi de todas as vogaes .
+% Agora e necessareo que digamos que cousa e syllaba
+vitima e penultima: e ante penultima cujos nomes ja tra-
+tamos e auemos de repetir.vltima quer dizer derradei-
+ra e e claro penultima q<u><<a>>si derradeira: e ante penultima
+outra antes dessa quasi derradeira: em hu~a qualquer de-
+stas se pode assentar o ac'e~to das dic'o~es da nossa lingua.
+{RUB. % Do ac'ento. Capitolo .xxviij.}
+{IN4.} ACe~to quer dizer principal voz. ou tom da[ ]dic'a~o
+o q<u><<a>>l acaba de dar sua forma e melodia as dic'o~es
+de qualquer lingua / digo as dic'o~es some~te por-
+que a linguajem ainda no ajuntamento das di-
+c'o~es e no estilo e modo de proceder tem suas particula-
+ridades ou p<ro>priedades: como a seu te~po em outra obra
+mayor q<ue> desta materea espero de fazer direi: e na~o e mal
+ordenado que neste lugar despois falamos das partes
+& materea das dic'o~es agora tratemos da forma dellas &
+despois diremos das suas co~dic'o~es e estados. Esta for-
+ma das dic'o~es a chamamos ac'e~to sem a qual se mal co-nhec'em}
+[fol. 18r]
+{CB1.
+hu~s vocabolos dos outros e nec'essarea em cada
+parte ou dic'a~o e em cada hu~a na~o mais q<ue> so hu~ ac'ento
+ainda q<ue> aos gregos pareceo outra cousa os quaes dera~o
+e~ hu~a dic'a~o dos ac'e~tos e ao co~trairo a duas dic'o~es hu~
+ac'ento: e nisto derradeiro os seguira~o ta~bem os latinos
+nas partes onde se mestura~o as dic'o~es q<ue> elles chama~o
+encleticas as quaes pronuncia~o de baixo de hu~ ac'ento
+coa dic'a~ precedente e se disto para q<ue> seja ente~dido pode-
+mos dar alghu~ exemplo na nossa lingua seja nas par-
+tes em cujos cabosse mestura~o os artigos como fezera~-
+no por fezera~o: e quere~no bem por quero be~: onde o ar-
+tigo se mete debaixo do ac'ento da dic'a~o precede~te: mas
+a[ ]my~ o[ ]co~trairo me parec'e: e e verdade na nossa li~gua que
+na~o ha dous ac'e~tos se na~o onde ha duas dic'o~es e na~o
+compostas ou juntas em hu~a: .
+% Os lugares deste ac'ento de que falamos sa~o antre
+nos a vltima syllaba ou penultima: ou antepenultima:
+daqui para tras o nosso esprito nem orelhas na~o consin-
+tem auer ac'ento e a nac'a~o ou gente que outra cousa po-
+de sentir e co~sentir na~o se co~forma com nosco ne~ a musi-
+ca do nosso ouuido e do seu e hu~a e conforme: isto digo
+porq<ue> na lingua grega as dic'o~es q<ue> despois de si te~ partes
+encleticas ou atratiuas te~ asinado hu~ ac'ento sobre apar-
+te encletica e outro seu proprio sobre si o q<u><<a>>l as vezes fica
+antes da penultima e isto aco~tec'e q<u><<a>>ndo a pri~cipal dic'a~o
+tinha o seu ac'e~to na antepenultima porq<ue> enta~o em res-
+peito de todo o ajuntamento fiqua antes da antepenulti-
+ma. & assi cumo os gregos tem isto pode ser que ta~bem
+outras gentes o tem comelles e com tudo se pronunc'ia~o
+ambos aquelles ac'entos ou qual delles elles o saiba~o:
+eu na~o dou conta mais q<ue> escasame~te da minha lingua a
+qual na~o tem mais nem outra cousa que o dito.}
+{CW. C ij}
+[fol. 18v]
+{CB1.
+{RUB. Capitolo .xxix.}
+NA vltima syllaba estara o ac'ento das nossas di-
+c'o~es qua~do ellas acaba~o em .r. como pomar al-
+cac'er quer doutor. e artur. tira~do alcac'er por ca-
+stelo o qual tem a penultima grande ainda q<ue> al-
+ghu~s o pronu~cia~o alcac'ere . co~ .e. no cabo & enta~o fiqua o
+ac'ento na antepenultima. Tambe~ tem o ac'ento na vlti-
+ma as partes acabadas em . z . como rapaz. perdiz: arroz.
+arcabuz. e qua~do acaba~o em .l. como bancal. pichel. couil
+c'erol. azul. e outro ta~to as acabadas em .s. como tomas.
+nome proprio dhome~. inues. retros. tirando marcos. lu-
+cas. e domingos. nomes proprios. e tira~do os verbos os
+quaes nas partes de suas co~jugac'o~es como te~pos & pes-
+soas na~o guarda~o esta regra mas va~o por outro caminho
+como logo diremos. ne~ auemos d[ ]ente~der q<ue> estas regras
+tem verdade nas partes ou lugares declinados: se nam
+se particularmente se podere~ co~prender nellas. e porque
+os nomes e verbos nisto podem ter mais duuida sabere-
+mos q<ue> estas regras fala~o dos nomes no singular & dos
+verbos na primeira pessoa do p<re>sente do indicativo & no
+infinitiuo. As dic'o~es acabadas em til. tem o ac'ento na
+vltima como escriua~o. c'idada~o. c'idada~. aldea~o. aldea~. tira~-
+do raba~o. orfa~o orga~o. coua~o. taua~o mosca. ourega~o. pin-
+ta~o. e fara~o nome de lugar e zimba~o cousa de frades ver-
+dade e q<ue> estes todos te~ a premeira ou penultima gra~de
+mas franga~o tem vogal peq<ue>na nessa premeira silba nem
+por isso deixa de entrar nesta eic'eic'am por que na~o tem
+tam pouco o ac'ento na vltima.Tambem as lic'o~es aca-
+badas nesta terminac'a~o: em. na~o tem muitas vezes o a-
+c'ento na vitima como linhajem. menajem.mas vintem
+pore~ ta~be~. ninguem alguem. arreuem. almazem. desdem
+e outras tem o ac'ento na vitima como diz a regra e al-ghu~as}
+[fol. 19r]
+{CB1.
+pessoas dos verbos como dissemos tambe~ se na~o
+comprende~ nesta regra: como ama~o / amaua~o e amara~o /
+preterito. % As dic'o~es q<ue> tem vogal grande no cabo tem
+o ac'ento nessa[ ]vogal grande como aluara. eyxoo. chaminE
+guadamec'i. peru. calecu. c'egu. ja dissemos q<ue> .i. e .u. se con-
+ta~o por vogaes grandes. % As dic'o~es acabadas em dito~-
+go tem o ac'ento na vitima syllaba ainda q<ue> com esse diton-
+go tenham .s. ou til: como amei. amareis. amara~o. futuro.
+Co~ tudo resaluando nesta parte derradeira alghu~as pes-
+soas dos verbos como ja dissemos.
+% He tam proprio a nos daremos o ac'ento na vltima q<ue>
+muitas vezes corrompemos a melodia das linguas estra~-
+geiras que aprendemos querendo as conformar co a nos-
+sa: e se assi o fazem tambe~ outras gentes elles o veja~o eu
+falo cos home~s da minha terra.
+% Na penultima syllaba tem seu ac'ento as dic'o~es q<ue> na~o
+tendo a vltima grande ou co~ alghu~a das co~dic'o~es ja ditas
+tem essa penultima grande como estudaste. estudauas. Ti-
+ra~do este nome q<ue> na~o he nosso proprio.vltimo & vltima &
+assi se se tirare~ outros na~o sera~o nossos comeste. os verbos
+tambe~ em alghu~as partes tem o ac'ento na penultima po-
+sto que a vitima tenha as co~dic'o~es que dissemos q<ue> auia
+de ter pera ter o ac'ento em si: e as partes dos verbos q<ue>
+a isso na~o tem respeito sa~o como estas. amas. andas. ames
+andes: & tambe~ apanhas. apanhes. acolhas. recolhas. E
+porem na~o tem o ac'ento na penultima: as partes q<ue> tendo
+a ante penultima longa tem as outras duas seguintes
+peq<ue>nas: como amauamos. faziamos ainda q<ue> isto falta nas
+segu~das pessoas do plural: assi no presente futuro e prete-
+rito do indicatiuo como ta~be~ no presente do soju~tiuo assi
+como dizemos estudamos. riremos. e digamos onde o
+ac'ento esta na penultima na~o embargando q<ue> essa penulti-ma}
+{CW. iij}
+[fol. 19v]
+{CB1.
+seja pena e antepenultima grande: a q<u><<a>>l se forma co~
+u. ou .j. vogaes gra~des. % As dic'o~es q<ue> na~o te~ nenhu~a des-
+tas tres sylbas de q<ue> falamos gra~de vitima ne~ penultima
+ne~ antepenultima pela mayor parte te~ o ac'e~to na penulti-
+ma como ca~dea za~boa. e~toa. atroa. % As dic'o~es ei te~ ou to-
+das tres estas syllabas grandes: ou a vitima com alghu~a
+q<u><<a>>lq<ue>r das outras escolhe antre as outras o nosso costu-
+me para lugar do acc'e~to e som princ'ipal da dic'a~o ou par-
+te a vltima como lugar / rosalgar. E com tudo da penulti-
+ma e antepenultima antes escolhe a penultima tam gra~-
+de amigo e de chegar o ac'ento ao cabo da dic'a~o: e poe~no
+antes na penultima. como linguajem. giesta trouxera~o.
+% Na penultima syllaba tem o acc'e~to as dic'o~es q<ue> te~ essa
+antepenultima gra~de te~doas outras seguintes vitima &
+penultima pequenas: como amauamos. andauamos. ar-
+dego. etego. aspero. colera. e isto na~o sempre: mas pella
+mayor parte / porque as segundas pessoas dos verbos
+no plural dos tempos q<ue> disse seguem outra cousa.
+% O plural dos nomes segue as regras do ac'ento do seu
+singular: ainda q<ue> mude ou acrec'e~te as letras ou as sylbas
+ou a[ ]ca~tidad<e> dellas. Como moc'o. moc'os: e mouc'o. mouc'os
+fermoso: fermosos. papel. papeis. arnes. arneses. lic'a~o. li-
+c'o~es. Nos verbos o thema ou princ'ipio sa~o o presente
+do indicatiuo: e o infinitiuo: mas na~o sempre as outras
+partes do verbo seguem as formas destas primeiras po-
+sic'o~es: nem nos ac'entos nem na ortografia: posto q<ue> se for-
+me~ dellas e como se tira~o as eic'eic'o~es quasi se pode en-
+tender do que fica dito: porq<ue> nesta pequena obra na~o ha
+lugar para falar mais particularidades e na~o some~te nos
+verbos / mas tambe~ nos nomes e em outras partes ha hi
+eic'eic'o~es: das quaes tambe~ assi nesta parte dos ac'entos
+como de qualquer outra parte da grammatica aqui abas-ta}
+[fol. 20r]
+{CB1.
+amoestar o que nos assi fazemos.
+% Porq<ue> ja dissemos das syllabas e suas co~dic'o~es / ou ca-
+lidades o q<ue> podemos alcanc'ar e a breuidade da obra req<ue>-
+ria agora falaremos das dic'o~es. Primevro de seu nac'i-
+me~to a q<ue> chama~o os gregos etimologia e despois da ana-
+logia q<ue> quer dizer proporc'a~o: ou semelhanc'a co~ a qual se
+mestura tambe~ a difere~c'ia q<ue> te~ antre si as vozes: e por der-
+radeiro diremos hu~ pouco do conc'erto q<ue> te~ as partes da
+orac'a~o hu~as co~ outras. {RUB. Capitolo . xxx. das dic'o~es.}
+{IN4.} DJc'a~o vocabolo: ou palaura: tudo q<ue>r dizer hu~a
+cousa: e podemos assi dar sua definc'a~. Palaura
+e voz que senifica cousa ou auto ou modo: cousa
+como artigo e nome auto como verbo modo co-
+mo qualq<ue>r outra parte da orac'a~o as quaes como sinifica~o
+& q<ue> cousas: autos ou modos sa~o estes q<ue> sinifica~o diloemos
+e~ outra parte onde falaremos das partes da orac'a~o. Ago-
+ra aqui na~o falamos das palauras se na~o em q<u><<a>>nto sa~o vo-
+zes: e por ta~to so dizemos das co~dic'o~es da voz e escritura
+dessas palauras: as q<u><<a>>es ha~o de ter e~ si aju~tame~to de sylla-
+bas assi como as syllabas se aju~ta~o de letras. Mas co~ tu-
+do ta~be~ pode ser a palaura d<e> hu~a so syllaba ou letra: como
+pa~o hu~a so sillaba e. e. terc'eira pessoa do verbo susta~tiuo
+hu~a so letra: O q<ue> primeiro nestas auemos d[ ]olhar: e o seu fu~-
+dame~to e do~de viera~o a q<ue> os gregos chama~o como disse-
+mos etimologia: e esta diuidimos e~ nossa . alhea . e comu~.
+porq<ue> as lic'o~es cuja etimologia aq<u><<i>> buscamos ou sa~o nos-
+sas proprias: como castic'al. janela. panela. ou alheas como
+dito~go ac'e~to picote. alq<ue>c'e: ou comu~s como mesa. c'apato:
+e cada hu~a destas ou sa~o apartadas como fazer ou ju~tas
+como co~trafazer ou sa~o velhas como rua~o / co~pe~gar / c'icais
+ou nouas co~mo peita e arcabuz. ou usadas como re~da / sisa
+casa / corda. Ou ta~be~ sa~o proprias como liuro porq<ue> lemos}
+{CW. C iiij}
+[fol. 20v]
+{CB1.
+ou mudadas como liuro estrome~to de musica ou sa~o pre-
+meiras como liuro: ou tiradas como liureiro e liuraria:
+de todas estas e de cada ha~a dellas veremos agora.
+{RUB. % Capitolo .xxxj.}
+{IN4.} AS nossas dic'o~es sa~o aquellas que nac'era~o a~tre
+nos ou sa~o ja tam antigas que na~o sabemos se
+viera~o de fora: nestas a gra~matica manda saber
+donde / quando / porq<ue> / e como fora~o feytas: do~de
+fora~o feitas: como pelote de pele: assi como tambe~ ja foy
+em tempo del Rey dom Afonso Anrriquez capa pele:
+quando fora~o feias como sisa em tempo del rey dom Jo-
+ha~o o premeiro: porque fora~o feitas como aueyro nome
+de lugar: porque dantes nessa terra moraria hu~ cac'ador
+d[ ]aues ao qual como d[ ]alcunha chamaua~o o aueiro.
+Tambem saberemos como fora~o feitas as nossas dic'o~es
+assi como neste nome Sanctare~: no qual saberemos q<ue> se
+na~o chamou santerea: segundo o requeria sua etimologia
+& isto fazendoo assi a nossa lingua que e muy amiga de p<ro>-
+nunc'iar suas vozes co a boca aberta e sem muitos moui-
+mentos e no cabo e chea e solta: mas porq<ue> para saber to-
+das estas cousas requerese ler e ver muyto: e ainda assi
+alcanc'aremos pouco: porque auemos de preguntar isto
+a cada tempo e terra e pessoa muito pello miudo: ora po-
+ys se como adeuinhando dixeremos que home~ se chama
+porq<ue> e o meyo de todas as cousas ou porq<ue> esta no meyo
+do mal e do bem: e se dixeremos q<ue> molher se chama porq<ue>
+e molle e velho porq<ue> vio muito: e antigo porq<ue> foy antes
+dagora e te~po porq<ue> te~pera as cousas e lugar quasi lubar
+porque alube em si tudo: & senhor porque os senhores se-
+n~oream senhos senhorios sem outra mestura: & ler / quasi
+liando ver. E tambem escreuer / quasi discretamente ver
+E alfayate porque faz alfayas. E passaro porq<ue> passa vo-ando.}
+[fol. 21r]
+{CB1.
+E onzena porq<ue> da onze por dez: & assi comestas po-
+demos tambem cuydar outras dozentas patranhas: as
+quaes semp<re> sa~o sobejas e muytas vezes falsas: & pouco
+rec'ebidas antre home~s sabedores q<ue> do pouco q<ue> co~ muy-
+to lendo e trabalhando aquerira~o se preza~o e na~o de ima-
+ginac'o~es aldea~s sem juyzo. Poys se alguem me dixer q<ue>
+podemos dizer como temos muytos vocabolos latinos
+& que isto alcanc'a~o os home~s doutos q<ue> sabem lingua lati-
+na: como candea q<ue> vem de candela vocabulo latino: e me-
+sa de mensa q<ue> na~o somente e latino: mas tambe~ te~ ainda
+outro mays escondido nac'imento grego de meson. q<ue> q<ue>r
+dizer cousa q<ue> esta no mevo: assi outro tanto lume de lume~
+latino: e home~ de homo. e molher d<e> mulier. & liuro & por-
+ta e casa / e parede / qua~tos quiserdes. E na~o so latinos
+mas gregos / arabigos / castelhanos.franc'eses: e toda q<u><<a>>n-
+ta outra immundic'ia poderem ajuntar. Preguntarlhey
+enta~o que nos fica a nos? ou se temos de nosso alghu~a
+cousa: & os nossos home~s pois sa~o mais antigos q<ue> os la-
+tinos nessa conuersac'a~o q<ue> teuera~o co~ os latinos: porq<ue> ta~
+bem na~o ensinaria~o? porq<ue> seria~o em tudo & sempre ensina-
+dos: eu na~o quero ter tam bayxo espirito & cuidar q<ue> deuo
+tudo: mas sempre afirmarey q<ue> poys Quintiliano no pri-
+meyro liuro confessa q<ue> os latinos vsaua~o de vocabolos
+emprestados qua~do lhos seus faltaua~o que ta~be~ da nossa
+li~gua tomara~o alghu~s / como nos tomamos da sua: os q<u><<a>>es
+como nossos os auemos de tratar e pronunc'iar e co~for-
+mar ao som da nossa melodia: e ao sentido das nossas ore-
+lhas: e tambem os que forem alheos como alheos lhe da-
+remos o que seu for. E para que isto seja bem feyto he ne-
+c'essario que nesta parte na~o tenha lic'enc'a se na~o que~ com
+habelidade & saber for merec'edor della.
+{RUB. % Capitulo .xxxij.}}
+[fol. 21v]
+{CB1.
+{IN3.} AS dic'o~es alheas sa~o aq<ue>llas q<ue> doutras linguas
+trazem<<os>> a nossa por algu~a nec'essidad<e> d<e> costume
+trato arte: ou cousa algu~a nouamente trazida a
+terra: o costume nouo traz a terra nouos vocabulos como
+agora pouco ha trouxe este nome picote / q<ue> q<ue>r dizer burel
+do qual porq<ue> de fora trouxera~o os malgalantes o costu-
+me: ou p<er>a milhor dizer o desdem de vestir o tal pano trou-
+xera~o tambe~ o nome coesse costume: e alquic'e ta~ pouco e
+vestido da nossa terra por isso tambe~ traz o nome estran-
+geiro co~sigo. E arcabuz ha sete ou oytanos pouco mais
+ou menos que veo ter a esta terra com seu nome dantes
+nunca conhec'ido nella: e porem a este podemos chamar
+nouo mais que alheo / porque pode ser que ta~o pouco
+dantes na~o era vsado nessa terra do~de o nos trouxemos
+ou tomamos. Ora pois de tal nome comeste q<ue> nem e ma-
+is proprio ne~ mais antigo em outra terra q<ue> nesta se quise-
+rem<<os>> saber a etimologia ou nac'ime~to delle ha mester q<ue> sai-
+bamos onde premeiro nac'eo esta cousa aq<ue> chamamos ar-
+cabuz e que~ no pario este nome digo assi nouo nac'ido: na~
+so a terra: mas a pessoa particular hauemos de saber & e~-
+ta~o lhe preguntemos por que lhe assi chamou: e pode ser
+que a pessoa q<ue> achou a cousa na~o lhe pos logo o nome: ou
+por ventura na~o jeste nome mas outro / e despois lhe po-
+sera~o este. E por ve~tura antressa gente a q<ue> o nos foremos
+pregu~tar sera ta~o nouo q<ue> nos preguntara~o outro ta~to co-
+mo nos a elles: assi q<ue> e trabalhoso e pouco c'erto q<ue>rer sa-
+ber os nac'ime~tos particulares das dic'o~es. E neste pare-
+c'er he ta~be~ quintiliano no primeyro liuro. Mas pore po-
+demos saber e e be~ e nec'essario q<ue> saibamos os nacime~tos
+em genero como se sa~o nossas as dic'o~es se sa~o alheas: se
+sa~o nouos velhas ou vsadas: e se sa~o co~postas ou aparta-
+das. E assi de qualq<ue>r outra maneira das q<ue> apo~tei & ey de}
+[fol. 22r]
+{CB1.
+tratar ou trato ja: poys se q<ue>remos pregu~tar pella inter-
+pretac'a~o do nome como se fez e porq<ue>: como se dissessemos
+arcabuz se chamou de arca porq<ue> tem a arca do cano ma-
+yor q<ue> a espingarda: & formase na~o per composic'a~o ou aju~-
+tamento: mas acrec'entando aq<ue>lla silaba .buz. a qual quasi
+e sinal de aumento ougrandeza da cousa como esta sillaba
+a~o. nestes nomes rapaga~o: molhera~o: & como .az. nestes .be-
+berraz. velhacaz: ainda assi tambe~ he duuidosa a etimolo-
+gia particular: e na~o so duuidosa / mas em parte escusada
+porq<ue> posto q<ue> a arte & a delige~c'ia ensine como se forma~o as
+dic'o~es: todauia saber do~de & porq<ue>: quando os home~s dou-
+tos o na~o pode~ alc'a~c'ar na~o cara~o de imaginac'o~es / porq<ue>
+nisso tanto pode fazer hu~a molher farta d[ ]agua comelles:
+& porq<ue> disto ja fica dito no capitolo prec'edente tornemos
+a falar das lic'o~es alheas as q<u><<a>>es tambe~ com alghu~ trato
+vem ter a nos: como de guine e da Jndia onde tratamos
+& co~ arte na~o some~te q<u><<a>>ndo a arte ve~ nouame~te a terra co-
+mo veo a da impressa~o: mas tambe~ nas artes ja vsadas
+quando de nouo visa~o alghu~ costume os alfayates em ve-
+stidos: & os c'apateiros em calc'ado: & os armeiros em ar-
+mas d<e> nouas feyc'o~es / & assi os outros: porq<ue> os home~s fa-
+la~o do q<ue> faze~: e por tanto os aldea~os na~o sabe~ as falas da
+corte: & os c'apateiros na~o sa~o entendidos na arte do ma-
+rear / ne~ os lauradores dantre douraminho entendem as
+nouas vozes q<ue> estano viera~o de Tunez com suas gorras.
+Mas torna~do a nosso proposito a estas dic'o~es alheas co~
+nec'essidade e na~o fac'ilme~te trazidas chamarlhemos alhe-
+as em qua~to fore~ muito nouas de tal feic'a~o q<ue> na~o possa-
+mos negar seu nac'ime~to: e despoys pelo te~po a dia~te co~-
+formandoas co~ nosco chamarlhemos nossas / porq<ue> desta
+maneira fora~o as q<ue> agora chamamos comu~s de q<ue> logo fa-
+laremos.
+{RUB. % Capitolo .xxxiij.}}
+[fol. 22v]
+{CB1.
+{IN4.} DJc'o~es comu~s chamamos aq<ue>llas que em muitas
+linguas seruem igualmente: & o tempo em que
+se mudara~o dhu~a lingoa para outra: fica ta~o lo~-
+ge de nos que na~o podemos fac'ilmente saber
+de qual para qual lingua se mudara~o: porq<ue> assi as podia~o
+tomar as outras linguas da nossa / como a nossa dellas: co-
+mo alfavate. almoxarife. alguidar: almocreue. E muitas
+outras dic'o~es comec'adas nesta sylba .al. as quaes dizem
+que sa~o mouriscas: e assi tambe~ dizem ser na~o some~te lati-
+nas as nossas palauras: & castellanas: & doutras nac'o~es
+nossas vezinhas: mas de grec'ia e doutras gentes mays
+apartadas de nos: e com q<ue> nunca conuersamos dize~ estes
+curiosos ser muitas dic'o~es das nossas: e de tal feyc'a~o se
+aleuanta~o contra a nossa lingua: e a fazem pobre & toda
+emprestada q<ue> lhe na~o devxa~o nada proprio como se na~o
+ouuera home~s na nossa terra antigos e nobres: & sabedo-
+res: mas por ventura os ossos de seus pais e auos destes
+que isto dizem na~o jazem em portugal: ou se jazem nesta
+terra na~o jazem em propria sepultura: portanto deyxemo
+los ficar com sua magoa acusandoos pore~ muy afincada
+mente: porque desfazem muito na gloria do c'eptro & co-
+roa do nosso reyno. estes assi como tambe~ corta~o a per-
+petuidade delle os que de nouo trazem noua lingua a ter-
+ra: porq<ue> a lingua e a unidade della he mui c'erto apellido
+do reyno do senhor & da irmandade dos vassalos: & o rey
+ou senhor ainda q<ue> fosse estrangeyro e viesse de fora senho-
+rear em algu~a terra hauia de apartar sua lingua & na~o na
+deyxar corro~per com alghu~a outra: assi parelle viuer em
+paz como tambe~ porque seu reyno fique e perseuere em
+seus filhos: quanto de minha parte segundo eu entendo
+eu juraria quem folga d[ ]ouuir lingua estrangeyra na sua
+terra na~o e amigo da sua gente nem conforme a[ ]musica na-tural}
+[fol. 23r]
+{CB1.
+della: mas donde isto nac'e eu direi mais alghu~a par-
+te disso e~ outro te~po se agora me q<u><<i>>sere~ ouuir este pouco.
+{RUB. % Capitulo .xxxiiij.}
+{IN4.} AS dic'o~es apartadas a que os latinos chama~o
+simprezes ou singelas sa~o aq<ue>llas cujas partes
+na~o pode~ ser dic'o~es inteiras: mas diuide~se so-
+me~te em syllabas e letras ou tambe~ se pode~
+deuidir q<u><<a>>ndo na~o te~ mais q<ue> hu~a so letra como .E. terc'eyra
+pessoa do presente do indicatiuo no verbo susta~tiuo: & co-
+mo .i. por .ide. imperatiuo deste verbo .ir. e como muitas
+conju~c'o~es e preposic'o~es e auerbios e outras partes assi
+das q<ue> elles dizem q<ue> se na~o declina~o como tambe~ das de-
+clinadas ora seja~o artigos ou quaesquer outras: diuiden
+se poys as dic'o~es singelas ou apartadas como dou. das.
+dar. & como .es. segunda pessoa do verbo susta~tiuo: & em si-
+labas se diuidem: como / damos / & somos / & andamos: &
+na~o se pode~ diuidir em dic'o~es como . fazer . porq<ue> .fa. por si
+na~o diz nada e .zer. tampouco: e posto q<ue> se possa~o diuidir
+qua~to a voz, o seu primeiro & princ'ipal intento & seu sini-
+ficado na~o consinte~ a tal diuisa~o: porq<ue> ainda q<ue> este verbo
+.amariamos. como outras muitas partes ta~be~ faze~ se pos-
+sa apartar em outras partes q<ue> sinifica~o apartadas como
+em ama. nome de molher q<ue> cria ou verbo imperatiuo & ta~
+bem indicatiuo: & mais em riamos preterito imperfeito
+de rir. na~o por isso lhe diremos q<ue> e parte composta ou ju~-
+ta . porq<ue> na~o e seu inte~to em amariamos de amar sinificar
+essoutras cousas nem fora~o as partes desta voz amaria-
+mos em q<u><<a>>nto sinifica amar trazidas doutras dic'o~es & ju~-
+tas aqui por arte / mas aqui nac'era~o e de princ'ipio a natu-
+reza as pos neste lugar quanto a este sinificado digo: do
+que dixemos podem entender o q<ue> se requere para hu~a di-
+c'a~o ser apartada ou singela. {RUB. % Capitulo .xxxv.}}
+[fol. 23v]
+{CB1.
+{IN4.} AS dic'o~es juntas a q<ue> os latinos chama~o co~pos-
+tas sa~o cujas partes apartadas sinifica~o ou po-
+de~ sinificar e sa~ dic'o~es por si ou partes doutras
+dic'o~es e~ q<ue> premeiro seruia~o: & donde te~ seu pri-
+meiro e p<ro>prio nac'ime~to ao co~trairo das apartadas: ou
+as dic'o~es ju~tas sa~o aq<ue>llas e~ q<ue> se ajunta~o diuersas dic'o~es
+ou suas partes faze~do hu~a so dic'a~o: como co~trafazer. refa-
+zer. desfazer. nas q<u><<a>>es dic'o~es se aju~ta~o diuersas outras di-
+c'o~es e~ cada hu~a d<e>llas. e~ co~trafazer se aju~ta~o co~tra & mais
+fazer. E e~ refazer se aju~ta~o .re. & mais fazer: & em desfazer
+des. & mais fazer. & posto q<ue> cada hu~a destas partes na~o si-
+nifiq<ue> apartada por si como .re. & des. q<ue> apartadas na~o di-
+ze~ cousa alghu~a abasta q<ue> hu~a q<u><<a>>lquer das partes da co~posi-
+c'a~o possa sinificar como aqui sinifica fazer: e co~ tudo p<er>a
+mais abastanc'a se se achar alghu~a dic'a~o junta cujas par-
+tes apartadas nenhu~a dellas por si sinifique como. desne
+tambe~. e enta~o. e nelhures. e algures. e tamalaues. Ain-
+da assi lhe chamaremos dic'a~o junta: porq<ue> o[ ]primeiro fun-
+dame~to daquellas partes e serem diuersas / & estar cada
+hu~a por si: as quaes aqui se ajunta~o e faze~ hu~a so dic'a~o &
+co~ tudo na~o semp<re> podemos alca~c'ar donde vem as partes
+deste ajuntamento & tambe~ nas dic'o~es diriuadas ou tira-
+das donde alghu~as sa~o tiradas he dificultoso saber.
+% Alghu~as partes ou vozes temos na nossa lingua as
+q<u><<a>>es sa~o partes por[ ]si / mas na~o sinifica~o cousa alghu~a & por
+ta~to na~o lhe chamaremos partes da orac'a~o ou da lingua
+como sa~o o nome e verbo e outras: mas todauia faze~ aju~-
+tame~to ou composic'a~o porq<ue> de seu nac'imento ellas sa~o a-
+partadas: mas te~ por offic'io sentir sempre em aju~tame~to
+& nu~ca as achamos fora delle: e sa~o estas as partes .re. es.
+& des. As q<u><<a>>es se ajunta~o assi. reuender. estoruar. descon-
+c'ertar. E pore~ em que na~o sinifiquem apartadas por si /}
+[fol. 24r]
+{CB1.
+fazem sinificar as dic'o~es com q<ue> se aju~ta~o mais ou menos
+ou e~ contrairo. Hu~a c'erta maneira de dic'o~es mayorme~-
+te verbos temos nos q<ue> parec'e~ juntos como apanhar: ar-
+ranhar. ac'outar. abertura: abastanc'a. ac'erto: mas na verda-
+de isto em muitas partes na~o he ajuntamento se na~o cos-
+tume be~ ameudado antre nos: posto q<ue> as vezes tambe~ he
+ajuntamento: como acorrer. aparec'er. aconselhar. porq<ue> as
+partes dos primeiros na~o se acha~o apartadas. & as destes
+derradeiros si: como correr parec'er. conselhar. E porque
+aqui e tempo como d<e> caminho quero dizer deste auerbio
+ate o qual antre nos responde ao q<ue> os latinos dize~ vsqz
+este auerbio digo / alghu~s o pronunc'ia~o co~forme ao costu-
+me da nossa lingua que he amiga dabrila boca: e danlhe a-
+quella letra .a. que digo no comec'o: mas outros lhe tira~o
+esse .a. e na~o dize~ ate: mas dize~ te na~o mais comec'a~do e~ .t.
+Antre os quaes eu contarey ires na~o de pouco respeito
+na nossa lingua: antes se ha de fazer muyta conta do co-
+stume de seu falar e sa~o estes. Garc'ia de resende em cujas
+obras o eu li no Canc'ioneyro portugues q<ue> elle ajuntou
+& ajudou. E Joam de Barros ao qual eu vi afirmar que
+isto lhe parec'ia bem: e a mestre Baltasar com o qual fala~-
+do lhe ouui assi pronunc'iar este auerbio q<ue> digo sem a / no
+comec'o e com tudo a mi me parec'e o contrayro: e ao con-
+trairo o vso dandolhe. a no comec'o: assi como damos a
+muitas dic'o~es segundo o que fica dito.
+% O que dissemos das vozes comec'adas e~ .a. podemos
+tambe~ dizer das que comec'a~ em .es. e em: que podem ser
+juntas ou sera somente costume como disse: costume ne-
+stes ensino. e ensinar. escuitar. esperar. e ajuntamento ne-
+stoutros. encarregar. esguardar. espedac'ar.
+% As dic'o~es juntas as vezes se ajunta~o de duas partes
+& as vezes de mais: de duas pella mayor parte / como}
+[fol. 24v]
+{CB1.
+empedir. encolher. d<e>mais como desempedir desencolher
+& as mais na~o sera~o mais q<ue> tres como aqui. sa~o. des.
+& .em. e pedir ou colher . As partes destes ajuntame~tos ou to-
+das guarda~o a forma tinha~o dantes ou na~o todas a gu-
+arda~o ou nenhu~a dellas. todas como empedir: desempe-
+dir . na~o todas como aquelloutro onde a premeira parte
+perde hu~a letra . e . do cabo: e nenhu~a dellas fica enteira: co-
+mo nelhures parec'e ser composto de nenhu~ e mais lu-
+gar: e algures outro ta~to: e nestas mudanc'as das partes
+& letras o q<ue> fica por dizer e da ortografia e na~o he este o
+seu lugar. As dic'o~es juntas as yezes guarda~o a mes-
+ma sinificac'a~o tinha~o as suas apartadas. e as vezes to-
+ura~o outra quasi semelha~te: e outras vezes muito defere~-
+te: guarda~o a mesma sinificac'a~o como toruar & estoruar:
+toma~o outra quasi semelhante como guardar & resguar-
+dar. chegar . e achegar: sa~o de todo difere~tes como podar
+& apodar: pedir: & empedir: & nam so diferentes / mas
+ta~bem co~trairas como fazer: e desfazer: a~dar e desa~dar. &
+qua~do fiqua~o na mesma sinificac'a~o ou acrec'enta~o essa si-
+nificac'a~o como ve~der e reuender: ou a demenue~ como a-
+c'ertar e co~c'ertar porq<ue> mais chegado e ao fim ac'ertar que
+conc'ertar e traz co~sigo mais perfeic'a~o desse auto o qual
+ainda q<ue> parec'a diferente na~o e muita a difere~c'ia e compo-
+sic'a~o na~o ha hi q<ue> duuidar della posto q<ue> se perca esta letra
+.a. do comec'o de premeiro verbo ac'ertar. quando lhe aju~-
+tamos esta parte .com. no comec'o dizendo co~c'ertar: porq<ue>
+assi se faz em outras partes que se muda~o e tira~o & acre-
+c'enta~o letras: de como esta parte .re. no ajuntame~to tem
+virtude de acrec'e~tar: e estoutra .des. tem virtude de desfa-
+zer: ou diminuir: ou fazer o contrairo: e como esta parte
+com sinifica muitas vezes co~panhia: cujo exe~plo seja con-
+chegar: e conjuntar: destas e doutras meudezas na~o fala-mos}
+[fol. 25r]
+{CB1.
+porque para esta obra abasta o que dissemos.
+{RUB. % Capitolo .xxxvj.}
+{IN4.} AS dic'o~es velhas sa~o as que fora~o vsadas: mas
+agora sa~o esq<ue>c'idas como. egas. sancho. dinis. no-
+mes p<ro>prios e rua~o q<ue> quis dizer c'idada~o segu~-
+do que eu julguey e~ liuro antigo o q<u><<a>>l foi tras-
+ladado em te~po do mui esforc'ado rey dom Joha~o da boa
+memorea o premeiro deste nome em portugal: por seu ma~-
+dado foy o liuro q<ue> digo escrito e esta no moesteiro de Pe-
+ra longa: e chamase estorea geral: no qual achei esta com
+outras anteguidades de falar. mas destas e doutras que
+por lugares mais p<ar>ticulares achamos cada dia q<u><<a>>nto nos
+hauemos d[ ]aproveitar ou seruir e como: logo o diremos
+Poys e~ te~po del rey do~ afonso anrriq<ue>z capa pelle era no-
+me de hu~a c'erta vestidura e na~o somete de ta~to te~po / mas
+ta~be~ antes de nos hu~ pouco nossos pays tinha~o alghu~as
+palauras q<ue> ja na~o sa~o agora ouuidas: como co~pe~gar que
+queria dizer comer o pa~o co~ a outra via~da e nemichalda
+o qual tanto valia como agora nemigalha segundo se de-
+clarou poucos dias ha / hu~a velha q<ue> por isto foy pregu~tada
+dize~do ella esta palaura: e era avelha a este te~po q<u><<a>>ndo isto
+disse de c'ento e dezaseis a~nos de sua idade. Estas diz c'i-
+c'ero no terc'eiro liuro a seu irma~o quinto. as velhas digo
+nos diz elle q<ue> guarda~o muito a anteguidade das linguas
+porq<ue> fala~o com menosgente: acara~o q<ue> quer dizer ju~to ou
+apar: & samicas que sinifica por ventura: e outras piores
+vozes ainda agora as ouuimos e zo~bamos d<e>llas: mas na~o
+e muito de marauilhar diz marco varra~o q<ue> as vozes e~ue-
+lhec'a~o e as velhas alghu~a ora parec'a~o mal porq<ue> tambem
+enuelhec'e~ os home~s cujas vozes ellas sa~o: e isto e verdad<e>
+q<ue> a fremosa menenic'e despois de velha na~o e p<er>a ver: &
+assi como os olhos se ofende~ vendo as figuras q<ue> a elles na~o}
+[fol. 25v]
+{CB1.
+contenta~o assi as orelhas na~ consinte~ a musica & vozes fo-
+ra de seu tempo & costume: & muy poucas sa~o as cousas q<ue>
+dura~o por todas ou muitas idades em hu~ estado quanto
+mais as falas q<ue> sempre se conforma~o co~ os conc'eitos ou
+entenderes / juyzos e tratos dos home~s: & esses home~s
+entendem julga~o: & trata~o por diuersas vias & muytas: as
+vezes segundo quer a nec'essidade: e as vezes segundo pe-
+dem as inclinac'o~es naturaes. % O vso destas dic'o~es an-
+tigas diz Quintiliano traz & da muita grac'a ao falar q<u><<a>>n-
+do he temperado & em seus lugares & tempos: a limita-
+c'a~o ou regra sera esta pella mayor parte que das dic'o~es
+velhas tomemos as mais nouas & q<ue> sa~o mais vezinhas
+de nosso tempo: assi como tambe~ das nouas hauemos de
+tomar as mais antigas e mais rec'ebidas de todos ou da
+mayor parte: ainda porem q<ue> na~o sempre isto he ac'ertado /
+porque muitas vezes alghu~as dic'o~es q<ue> ha pouco sa~o pas-
+sadas sa~o ja agora muito auorrec'idas: como abem / ajuso
+acujuso / a suso / & hoganno / algorrem: & outras muitas: &
+pore~ se estas & quaesquer outras semelhantes as metere-
+mos em ma~o dhu~ home~ velho da beyra: ou aldea~o na~o lhe
+parec'era~o mal: mas tambe~ na~o seja~o muitas ne~ q<ue>yramos
+vangloriarmos por dizerem q<ue> vimos muitas anteguida-
+des: porq<ue> se essas dic'o~es antigas q<ue> vsamos: as quaes sen-
+do moderadas nos auia~o d[ ]afremosentar forem sobejas
+faram muito grande disonanc'ia nas orelhas de nossos te~-
+pos & home~s.
+{RUB. % Capitolo .xxxvij.}
+{IN4.} AS dic'o~es nouas sa~o aquellas q<ue> nouamente ou
+de todo fingimos ou em parte achamos: de to-
+do chamo qua~do na~o olhamos a nenhu~ respei-
+to se na~o ao q<ue> nos ensina a natureza p<er>a o que
+teuera~o lic'enc'a os premeiros home~s quando premeiro}
+[fol. 26r]
+{CB1.
+nomeara~o. toalha & guardanapo & quando dixera~o chorar.
+cheirar: espantar: & outros muitos na~o sa~o tirados de
+nenhu~a parte: nos jagora p<er>a fazer vocabolos de todo assi
+como digo na~o temos mui franca lic'e~c'a mas pore~ se acha-
+semos hu~a cousa noua e~ nossa terra be~ lhe podiamos dar
+nome nouo busca~do & fingindo voz noua como poderia~o
+ser as rodas ou moendas em q<ue> agora se fala & dize~ q<ue> ha~o
+de moer com nenha~a & pouca ajuda. Esta tal cousa nunca
+ainda foy vista por tanto na~o pode ter nome se agora de
+nouo for achada trara tambe~ voz noua consigo.
+% Achar dic'o~es nouas em parte e na~o de todo he qua~do
+para fazer a voz noua q<ue> nos he nec'essaria nos fundamos
+em alghu~a cousa como em bombarda que he cousa noua
+& tem vocabolo nouo o qual vocabolo chamara~o assi por
+amor do som que ella lanc'a que he quasi semelhante a es-
+te nome bombarda ou o nome a elle & daqui tambe~ tira-
+mos estoutro isso mesmo nouo esbombordear.
+% Fingir ou achar vocabolos nouos & perigo diz Quin-
+tiliano em tanto que se sa~o bos na~o vos louua~o por isso
+& se na~o presta~o zomba~o de vos. Verdade he que na~o ha
+cousa tam aspera que o vso na~o abrande: mas com tudo
+na~o se fac'a ley do costume dos piores: porque as falas dos
+que na~o sabem fara~o escarneo de si mesmo e de quem as
+faz & vsa.Pois logo desque bem forem fingidos ou acha-
+dos os vocabolos o vso delles se fara com muitos resgu-
+ardos o premeyro q<ue> desses vocabolos nouos tomemos
+os mais velhos como dissemos no capitolo prec'edente:
+E outro resguardo seja que com serem mais velhos seja~o
+tambem mais usados & ameudados / & o vso delles seja a-
+prouado por aquelles q<ue> mais sabem: & tambem teremos es-
+trouto resguardo no vso das vozes nouas semp<re> as sal-
+uaremos co~ alghu~ sinal d<e>stes ou outro q<u><<a>>lq<ue>r semelha~te: os}
+{CW. Dij}
+[fol. 26v]
+{CB1.
+sinaes sa~o: como dize~: porq<ue> assi diga. ou fale. porq<ue> vse d<e>ste
+vocabolo: ou dizer. como dize~ la. como diz foa~o. quasi da~-
+do a entender q<ue> na~o usamos ac'inte da tal nouidade ou ta~
+be~ velhice se for cousa velha porq<ue> ta~be~ das vozes velhas
+dizemos outro tanto como das nouas nestes resguard<<os>>.
+{RUB. % Capitolo .xxxviij.}
+{IN4.} AS dic'o~es vsadas sa~o estas que nos seruem a ca-
+da porta ((como dize~)) estas digo q<ue> todos fala~o &
+entende~ as quaes sa~o proprias do nosso te~po &
+terra: & que~ na~o vsa dellas e desentoado fora do
+tom & musica dos nossos home~s dagora. Algu~as destas
+ficara~o ja de muito tempo ha ta~to q<ue> lhe na~o sabemos seu
+princ'ipio particular: mas em geral sabemos q<ue> he destas q<ue>
+aqui se chama~o vsadas & na~o embargando sua anteguidade
+dura~o ainda como sa~o muitas quasi as mays das di-
+c'o~es: algu~as destas fora~o nouas mais pouco ha: mas por
+sere~ mui freque~tadas na~o fazemos ja nenhu~a difere~c'a de-
+las a essoutras: & pore~de todas ellas ou sa~o geraes a tod<<os>>
+como d<eo>s pa~o vinho / c'eo & terra / ou sa~o particulares: & es-
+ta particularidade ou se faz a~tre offic'ios & tratos como os
+caualeiros te~ hu~s vocabolos: & os lauradores outros: &
+os cortesa~os outros: & os religiosos outros: & os meca-
+nicos outros: & os mercadores outros: ou ta~be~ sefaz e~ ter-
+ras esta particularidade porq<ue> os da beira tem hu~as falas
+& os Dalentejo outras: & os home~s da estremadura sa~o
+diferentes dos dantre douro e minho: porq<ue> assi como os
+te~pos assi ta~be~ as terras cria~o diuersas co~dic'o~es & co~c'ei-
+tos: & o velho como te~ o entender mais firme co~ o mais
+sabe tambe~ suas falas sa~o de peso & as do mancebo mays
+leues: mas o me espanta muito / & q<ue> na lingua latina na
+qual despoys q<ue> os latinos acabara~o na~o temos nos que
+na~o somos latinos licenc'a de por / nem tirar: nem mudar}
+[fol. 27r]
+{CB1.
+nada: nesta lingua latina digo vejo a~tre os letrados della
+assi como sa~o de diuersos faculdades hauer diuersos vo-
+cabolos & geitos de falar & dize~do todos hu~a mesma cou-
+sa na~o sentendem antre si. Mas os gra~maticos zomba~o
+dos logicos: & os sumulistas apupa~o aos rheitoricos: &
+assi de todos os o(n)[u]tros. O qual defeito na~o sey cujo he:
+ainda pore~ q<ue> na~o sey se lhe chama~o elles defeito: mas eu
+julgo o ser gra~de e na~o da lingua: sera logo dos home~s: &
+para que possamos fugir destas & doutras culpas em q<u><<a>>l-
+quer lingua & muito mais na nossa saibamos q<ue> a primei-
+ra & princ'ipal virtude da lingua e ser clara e q<ue> a possa~o to-
+dos entender & pera ser bem ente~dida ha de ser a mais a-
+costumada antre os milhores della & os milhores da lin-
+gua sa~o os q<ue> mais lera~o & vira~o & viuera~o continoando
+mais antre primores sisudos e assentados & na~o amigos
+de muita muda~c'a. {RUB. % Capitolo .xxxix.}
+{IN4.} DJc'o~es proprias chamamos aq<ue>llas q<ue> serue~ na sua
+primeira & princ'ipal sinificac'a~o. Como liuro q<ue>
+desdo seu princ'ipio & princ'ipal inte~to semp<re> quis
+& agora quer dizer este de papel escrito porq<ue> le-
+mos & assi home~ & molher / terra pedra / & muitos infindos
+outros das dic'o~es proprias: & de suas espec'ias & do vso
+dellas hauemos de falar mais largame~te em outra obra
+a[ ]q<u><<i>> so tratamos do nac'ime~to das dic'o~es & hu~a parte desse
+nac'ime~to e a p<ro>priedade de q<ue> aqui abasta o[ ]q<ue> apo~tamos
+todauia amoestamos q<ue> as dic'o~es p<ro>prias te~ a princ'ipal p<ar>te
+da bo~a & clara linguage~ & destas vsaremos mais a meude
+% As dic'o~es mudadas a q<ue> os latinos chama~o traslada-
+das sa~o as q<ue> por nec'essidade ou melhoria d<e>[ ]sinificac'a~o ou
+voz esta~o fora de seu proprio sinificado & ou esta~o e~ lugar
+doutra dic'a~o q<ue> na~o era ta~ bo~a como nos q<ue>riamos p<er>a nos-
+so inte~to / ou esta~o o~de na~o auia dic'a~o propria como liuro}
+{CW. Diij}
+[fol. 27v]
+{CB1.
+q<u><<a>>ndo q<ue>r dizer estormento musico o q<u><<a>>l por ser nouo & na~o
+ter nome ou voz propria & ser semelhante ao liuro de pa-
+pel q<ue> he o proprio lhe chamara~o assi: destas dic'o~es muda-
+das temos ta~bem mais q<ue> dizer em outra parte.
+% As dic'o~es q<ue> chamamos primeiras chama~o os latinos
+primitiuas: estas sa~o cujo nac'ime~to na~o proc'ede doutra
+parte mais q<ue> da vo~tade liure daq<ue>lle que as primeiro pos
+como roupa ma~ta. esteira. cadeyra. & matula & candieiro.
+ainda q<ue> ca~dieiro alghu~ a q<ue> parec'era q<ue> voa muito pode di-
+zer q<ue> vem de ca~deo ca~des verbo latino q<ue> quer dizer respla~-
+decer: porq<ue> o candieiro respla~dec'e: e porem q<u><<a>>ndo te~ lume
+& na~o ja semp<re>: mas como quer q<ue> seja isto e cousa de riso: &
+q<u><<a>>ndo muito aperfiare~ estes nossos latinos acale~temolos
+dizendo que si. % As dic'o~es tiradas a q<ue> os latinos cha-
+ma~o diriuadas sa~o cujos nac'ime~tos vem doutras algu~as
+dic'o~es do~de estas sa~o tiradas / como tinteiro / velhi[*c']e / ho~r-
+rada / tiramos ou formamos hu~as dic'o~es doutras p<er>a aba-
+stec'er e fazer copiosa a nossa li~gua: & porq<ue> nos na~o falte~ vo-
+cabolos nas cousas: p<er>a as q<u><<a>>es todas os p<re>meiros home~s
+na~o podera~o dar vozes e~ co~prime~to: ja na~o digo p<er>a as cou-
+sas q<ue> elles na~o conhec'ia~o: porq<ue> mal pode dar nome a cou-
+sa que~ a na~o conhec'e: mas ainda as sabidas & trabalho no-
+mear de nouo: e pore~ porq<ue> hu~as cousas ou sa~o ou parec'e~
+chegadas a outras: ou ta~be~ desc'ende~tes & espec'eas dellas
+assi isso mesmo fazem<<os>> hu~as dic'o~es q<u><<a>>si como espec'eas p<ar>ti-
+c'ipa~tes doutras: & e~ outras fazemos as formas semelha~-
+tes & chegadas e~ voz como tinteiro: pela vezinhe~c'a & trato
+q<ue> te~ co~ tinta lhe podera~o esse nome: e velhic'e de velho por
+que e sua p<ro>pria: & ho~rrada ou ho~rrado de ho~rrar: te~ muita
+parte assi na cousa como na voz: & a meu ver na~o digamos
+q<ue> foy isto defeito de na~o achare~ vocabolos: mas e co~for-
+me a bo~a reza~o q<ue> aja & se guarde a semelha~c'a das cousas}
+[fol. 28r]
+{CB1.
+nas vozes & assi sa~o mais claras & dize~ milhor seus sinifica-
+dos porq<ue> a diuersidade das vozes mostra auer diuersida-
+de nas cousas & ta~be~ a semelha~c'a por co~segui~te das vozes
+faz ente~der q<ue> as cousas na~o sa~o difere~tes e porq<ue> a forma-
+c'a~o destas vozes q<ue> se tira~o hu~as das outras e~ alghu~as par-
+tes ou nas mais req<ue>re ser julgada ou tratada na parte &
+pellas regras de p<ro>porc'a~o ou semelha~c'a a q<ue> os gregos cha-
+ma~o analogia agora falaremos della q<ue> e outra parte desta
+nossa gra~matica: & mostraremos como se guarda a~tre nos
+porq<ue> ja dissemos ate aqui da etimologia da q<u><<a>>l marco var-
+ra~o diz q<ue> se na~o alca~c'aremos muito della ne~ por isso sere-
+mos dinos de culpa: mas antes ao co~trairo quem souber
+alghu~a cousa seca de louuar: porq<ue> assi como as cousas a-
+partadas & particulares trazem consigo esquec'ime~to assi
+tambe~ se alcanc'a~o com muita diligenc'ia e trabalho a que~
+na~o deue na~o ser dado muito agradec'ime~to.
+{RUB. % Capitolo .xl. Da analogia.}
+{IN4.} ASsi como a difere~c'a das dic'o~es faz conhec'er as
+diuersas cousas hu~as das outras segu~do fica di-
+to tambe~ assi a semelha~c'a das dic'o~es nos abre
+caminho para q<ue> conhec'amos hu~as cousas por
+outras segu~do q<ue> te~ alghu~a semelha~c'a ou parec'er a~tre si: &
+por tanto os nomes se conhec'em dos verbos & os ver-
+bos co~ os nomes das outras partes: porq<ue> sa~o difere~tes
+hu~s dos outros & os nomes se conhec'em por outros no-
+mes: & os verbos por outros verbos porq<ue> sam em alghu~a
+cousa & voz semelhantes cada parte destas co~ as outras
+do seu genero: e co~ tudo na~o ta~to q<ue> na~o tenha~o alghu~as
+meudezas diferentes ou difere~cias mais meudas & par-
+ticulares como o nome ser comu~ ou proprio: ajetiuo & su-
+stantiuo: e o verbo pessoal ou impessoal: e mais ainda ca-
+da verbo ou nome tem diuersidade em outras mais cou-sas:}
+{CW. D iiij}
+[fol. 28v]
+{CB1.
+como o nome em estados: & o verbo em modos & tem-
+pos numeros & pessoas: dos quaes numeros & pessoas
+o nome isso mesmo na~o e liure delles: & esta diferenc'a ou
+semelhanc'a a que os gregos chama~o anomalia / & analo-
+gia ensinaremos nos na nossa lingua quanto nos d<eo>s mi-
+nistrar & couber nesta peq<ue>na obra: porq<ue> mostremos q<ue>
+os nossos home~s ta~be~ sabe~ falar e te~ co~c'erto em sua lingua.
+% Tem difere~c'a as dic'o~es na voz assi como as cousas no
+sinificado: porq<ue> hu~as se declina~o & outras na~o: & esta e a
+premeira diuisa~o q<ue> fazemos das vozes que sinifica~o por
+que e escusado fazer outras mais particulares: & com tu-
+do porque se saiba a quanto alcanc'a este nosso deuidir sa-
+beremos agora premeiro cousa he declinac'a~o porq<ue> al-
+ghu~s fracos gra~maticos se na~o enganem. Declinac'a~o e
+diuersidade de vozes tiradas de hu~ premeiro & firme pri~-
+cipio por respeito de diuersos estados das cousas: a[ ]qual
+assi e nec'essarea como nas gentes o conhecimento dos
+desuairados oficios e estados: e chamase declinac'a~o por
+que daquelle premeiro principio firme q<ue> dissemos o[ ]qual
+na~o se moue nem muda da sua premeira voz se declina~o:
+cae~ ou dec'ende~ q<u><<a>>si como abaixa~dose por graos porq<ue> na~o
+tem a primoria que fica no premeiro principio as vozes
+declinadas cada hu~a por seu geito: e sa~o muitas as manei-
+ras de se declinar as vozes: por que na~o somente se cha-
+ma declinac'a~o a dos casos como logo diremos: pois lo-
+go se quiseremos bem olhar & co~fessar averdade sera cou-
+sa mui cha~ que neste dizer se compre~dem todas as vozes
+sinificatiuas: as vozes hu~as se declina~o e outras se na~o
+declina~o. na~o se declina~o ne~ se traze~ doutros principios
+as dic'o~es que chamamos premeiras: mas declinanse to-
+das as tiradas ou dirivadas: & na~o somente os generos
+das dic'o~es tem seus principios firmes de q<ue> outras se ti-ra~o:}
+[fol. 29r]
+{CB1.
+mas as que en si particularmente se declina~o como
+sa~o nomes & verbos: tambem tem seus premeiros & fir-
+mes principios em que se funda~o & afirma~o: te~ principio
+as dic'o~es em os generos como liuro do~de se tira~o liurei-
+ro & liuraria: & como porta donde porteiro & portaria: os
+principios aqui na~o se moue~ & sa~o atre si diuersos como
+liuro & porta: tem ta~bem particulares principios cada di-
+c'a~o por si quando se declina ou varia em si mesma como
+o nome em numeros & o verbo em modos / te~pos / nume-
+ros / & pessoas em o nome o singular e seu pri~cipio. & no
+verbo o presente do indicatiuo e infinitiuo: & assi como
+as vozes mostra~o esta diuersidade nas cousas & estados
+dellas assi ta~be~ nos faze~ conhec'er qua~ta semelha~c'a te~ co-
+mo hu~s nomes co~ outros: e hu~s verbos co~ outros porq<ue>
+os nomes te~ sua forma distinta da dos v<er>bos & cada parte
+da orac'a~o se conhec'e antras outras & em hu~a mesma par-
+te as diuersas espec'eas ou estados do que tudo agora di-
+remos e de cada cousa destas. {RUB. % Capitolo .xli.}
+{IN4.} MArco varra~o diuide as declinac'o~es em naturaes
+& voluntareas: volu~tareas sa~o as q<ue> cada hu~ faz
+a sua vontade tira~do ha~a voz doutra: como de
+portugal portugues. / & de fra~c'a: fra~c'es: mas de
+frandes framengo. & de galiza galego. & com tudo na~o e
+mui franca ou para milhor dizer solta a liberdade de to-
+dos nesta parte porq<ue> posto q<ue> se na~o pode~ dar aqui mais
+limitadas regras esta que. em toda parte se d<e>ue guardar
+seruira ta~bem aqui: q<ue> neste tirar das dic'o~es. o[ ]qual polla
+mayor parte ja foi feito pollos antigos: e esse hauemos
+de guardar: se aindagora o ouueremos mester seja co~for-
+me a melodia da nossa lingua e seja entregue na~o a qual
+quer pessoa mas aquelles de cujo saber & vontades nos
+poderemos fiar co~ reza~o: porq<ue> na~o sera fiel na nossa lin-gua}
+[fol. 29v]
+{CB1.
+que~ lhe q<u><<i>>ser mal: & mais saberemos q<ue> na~o todas as
+espec'eas das dic'o~es tiradas sa~o assi liares p<er>a podere~ an-
+dar paro~de quisere~ porq<ue> os participios: & os nomes de-
+menutiuos & aume~tatiuos & alghu~s outros ainda q<ue> na~o
+em tudo: na~o se tira~ mas forma~se guarda~do c'ertas regras
+das quaes diremos na declinac'a~o natural porq<ue> nesta tra-
+tamos so das dic'o~es q<ue> na~o te~ c'erta lei de formac'a~o: & assi
+como sa~o os nomes das nac'o~es & outros muitos cujos
+exe~pl<<os>> logo darem<<os>> das nac'oes como d<e> grecia q[<ue>] fez grego
+mas de gocia nome na~o mui difere~te destoutro grecia fe-
+zemos godo & na~o gogo como grego & d<e> arabia arabigo
+mas de persia persio. & de asia asia~o & da india indio. & ta~
+be~ dizemos sarnoso & na~o sarne~to mas ao contrairo cha-
+mamos ao cheo d<e> sarapulhas sarapulhe~to & na~o sarapu-
+lhoso. & de pedras dizemos pedregoso. mas d<e> area aree~-
+to. & de po ne~ poento ne~ pooso / mas e~ outra figura & sinifi-
+cac'a~o e~poado. Se por ve~tura poderemos chamar a essou-
+tros tirados tambe~ te~ a mesma variac'a~o por q<ue> de bac'io
+d[*i]zemos bac'ia e~ diuerso genero: & de c'epo c'epa. & d<e> c'esto
+c'esta. & de ba~co ba~ca. mas na~o de mesa meso: ne~ de casa ca-
+so. & posto q<ue> dizemos bolo & bola: nem por isso dizemos
+bizcoito & bizcoita ne~ pac'o & pac'a. ne~ liuro & liura. & d<e> fra~-
+cisco dizemos Francisca: mas na~o dizemos de Go~c'olo
+gonc'ala posto q<ue> este derradeiro e mais nosso: & na~o me-
+nos de johane dizemos joana mas d[ ]afo~so na~o nos atre-
+uemos a dizer afonsa. & ai~da nesses q<ue> temos somos difere~-
+tes porq<ue> de domingos dizemos domingas. mas de mar-
+cos q<ue> tambe~ acabo em .os. na~o dizemos marcas mas di-
+zemos marquesa nome proprio de molher. se quiserdes
+q<ue> seja de marcos. & os nomes verbaes: assi ta~be~ sa~o dife-
+rentes: porq<ue> de ler dizemos lic'a~o: & de orar orac'a~o: mas
+de amar & honrrar dizem<<os>> amor & ho~rra ainda q<ue> na~o sa~o
+tirados estes derradeiros & na~o some~te os tirados de di-uersas}
+[fol. 30r]
+{CB1.
+partes sa~o difere~tes mas ta~be~ vindo dhu~a mesma
+parte como de capita~o dizem<<os>> molher capitoa & nao ca-
+pitaina. & de pescado ou pescar dizemos home~ pescador:
+& molher pescadeira: & barca pescaresa: & tudo isto na~o e
+muito fazerse assi porq<ue> antros filhos dhu~ so pai hu~s sa~o
+mui feos & outros parec'e~ milhor: & parecese hu~ co~ seu pai
+& outro co~ sua mai & outro co~ nenhu~ delles: & na la~ d<e> hu~a
+so ouelha se acha alghu~a boa & outra na~o tanto & na de
+muitas ju~tame~te se tira hu~a para bos panos & outra p<er>a
+na~o ta~o finos: e p<er> co~segui~te hu~as terras & aruores so hu~a
+mesma constelac'a~o da~o fruito & outras na~o ap<ro>ueita~o p<er>a
+cousa alghu~a: & hu~as por si multiplica~o: & outras regadas
+& curadas despois de muito trabalho na~o q<ue>re~ crec'er ou
+se seca~o: outro ta~to e nas vozes: porq<ue> hu~as na~o forma~o d<e>
+si nada: & outras se pode~ multiplicar: & alghu~as[ ]parec'e~ a
+suas primitiuas ou p<re>meiras do~de dec'e~de~ & outras na~o.
+& outras muito: & muitas menos. E alghu~as formac'o~es
+te~ milhor so~ ou musica q<ue> outras & sa~o mais[ ]vsadas: & mais
+q<ue> toda esta cousa na~o some~te na nossa lingua e ta~ desuai-
+rada: mas ta~be~ nas outras: & a~tre muitas da latina o afir-
+ma ser assi nella marco varra~o cujo bo testemu~ha e .aulo
+gellio no segu~do liuro aos .xxv. cap<ito>los: & quintiliano no
+primeiro liuro da a reza~o por q<ue>: amoesta~donos q<ue> em ca-
+da lingua notemos o proprio do costume della: ca esta ar-
+te de grammatica em todas as suas partes & muito mais
+nesta da analogia: e resguardo & anotac'a~o d<e>sse costume &
+vso tomada despois q<ue> os home~s soubera~o falar: & na~o lei
+posta q<ue> os tire da boa liberdade qua~do e be~ regida & or-
+denada por seu saber: ne~ e diuindade ma~dada do c'eo que
+nos possa d<e> nouo ensinar: o q<ue> ja temos & e nosso: na~o em-
+barga~do q<ue> e mais deuino que~ milhor ente~de: & assi e v<er>da-
+de q<ue> a arte nos pode ensinar a falar milhor ainda q<ue> na~o d<e>
+nouo: ensina aos q<ue> na~o sabia~o & aos q<ue> sabia~o ajuda.}
+[fol. 30v]
+{CB1.
+{RUB. % Capitolo .xlij.}
+{IN4.} AS declinac'o~es naturaes sa~o mais sogeitas as
+regras & leis de cujo mandado se rege esta arte
+As regras ou leys q<ue> digo sa~o como disse anota-
+c'o~es do bo costume. As quaes porque aqui sa~o
+mais gerais & comprendem mais chamamoslhe naturaes
+& de feito parec'e~ ser mais proprias & consoa~tes a nature-
+za da lingua pois lhe ella mais obedec'e~. E assi diz marco
+varra~o que a declinac'a~o natural e aquella q<ue> na~o obedec'e
+a vontade particular de cada hu~: mas q<ue> e conforme ao co-
+mu~ parec'er de todos: & mais na~o se muda ta~o asinha: pos-
+to que o vso do falar tenha seu mouime~to como elle diz &
+na~o perseuere hu~ mesmo a~tre os home~s de todas as ida-
+des: & com tudo tambe~ padec'e a gra~matica aqui suas ey-
+c'eic'o~es como nas outras partes ainda q<ue> na~o tam bastas
+& para q<ue> comec'emos a dar exemplos assi das regras ge-
+raes como das eic'eic'o~s particulares: sabereis que tambe~
+aqui segundo nosso parec'er podem entrar alghu~as espe-
+c'eas de dic'o~es tiradas: como sa~o os nomes dalghu~s offi-
+c'ios mecanicos os quaes se sa~o nossos proprios & sa~o ti-
+rados pella mayor parte acaba~o nesta terminac'a~o .eiro.
+como pedreyro. carpenteiro c'apateiro Dixe se sa~o nossos
+porq<ue> oriuez na~o he nosso & assi outros & dixe se sa~o tira-
+dos porq<ue> alfayate & calafate na~o sa~o tirad<<os>> & outros: mas
+pore~ ainda dos nossos & tirados ha hi alghu~s q<ue> na~o segue~
+a regra q<ue> demos como ferrador. boticairo. c'urrador. & ou-
+tros: & a regra q<ue> demos dos nomes dos offic'ios q<ue> acabas-
+sem em .eiro. damos das offic'inas ou lugares desses offi-
+c'ios cujos nomes acabara~o em ria: pella mayor parte co-
+mo oriuezaria. c'apataria. carpentaria: mas de telheiro di-
+zemos telheira: & d<e> tauerneiro tauerna. & o lugar do mer-
+cador dizemos logea: & o do boticairo botica. Ainda pore~}
+[fol. 31r]
+{CB1.
+que estes na~o sa~o diriuados: tambe~ podemos dizer que e
+regra geral q<ue> os nomes verbaes femeninos acabem to-
+dos em .a~o. como lic'a~o. orac'a~o. e os masculinos acabem
+em or. como regedor. gouernador. & os demenutiuos em
+inho. ou inha. como moc'inho moc'inha. & os aumentati-
+uos em az ou a~o. mas pore~ dos verbaes acabados em a~o
+tiraremos isto que na~o de todos os verbos se podem for-
+mar mas tem outros nomes na~o tirados q<ue> seruem por el-
+les como de amar. amor. & de honrrar. ho~rra. & dos aca-
+bados em .or. tiraremos q<ue> tam pouco se pode~ tirar de to-
+dos: & os q<ue> se tira~o poucos te~ femeninos em a. Na decli-
+nac'a~o natural onde falamos das dic'o~es tiradas: pode-
+mos ta~bem meter os auerbios os quaes quando sa~o tira-
+dos polla mayor parte ou semp<re> acaba~o em mente. como
+co~pridamente. abastadamente. chammente. & porem ha hi
+muitos q<ue> na~o sa~o tirados como. antes. despois. asinha.
+logo. c'edo. tarde: & quasi podemos notar q<ue> os auerbios a-
+cabados em .mente. sinifica~o calidade. & na~o todos os q<ue> si-
+nifica~o qualidad<e> acaba~o em .me~te. porq<ue> ja agora na~o dire-
+mos prestesmente. como dissera~o os velhos ne~ rarame~te
+os quaes velhos tambe~ fara~o amigos de pronu~ciar hu~s
+certos nomes verbaes em .mento. como co~prime~to. afei-
+c'oame~to. & outros q<ue> jagora na~o vsamos. Despois q<ue> disse-
+mos em comu~ o se nos oferec'eo nesta declinac'a~o natu-
+ral. Uejamos particularme~te dos artigos nomes: & ver-
+bos. cuja e esta mais propria. {RUB. % Capitolo .xliij.}
+{IN4.} NAm dizemos aindagora neste lugar ne~ liuro que
+cousa he artigo: nem tampouco mostramos q<u><<a>>l o-
+ficio tem: porq<ue> aqui na~o falamos se na~o das for-
+mas ou figuras das vozes ou dic'o~es. & para isto
+so abasta saber q<ue> os artigos na nossa lingua diuersifica~o
+ou varia~o a forma de sua voz em generos: numeros & casos.}
+[fol. 31v]
+{CB1.
+em generos como .o. & .a. & e~ numeros como .os. & .as
+& em casos como o. do. oo. o. a. da. a. a: oos dos. oos. os. as.
+das. as. as. os generos sa~o distintos em letras[ ]porq<ue> o mas-
+culino te~ .o. & ao femenino serue a. & estas sa~o proprias le-
+tras desses ge(u)[n]eros: ta~be~ nos nomes: & os numer<<os>> nisto
+sa~o difere~tes q<ue> o plural sempre acrec'e~ta esta letra .s. sobre
+o seu singular. & na~o faz mais aq<u><<i>> nos artigos de q<ue> falamos
+posto q<ue> nos nomes as vezes se faz mais q<ue> acrec'e~tar .s. co-
+mo diremos e~ seu lugar. todauia na~o temos plural sem .s.
+nos nomes & artigos digo porq<ue> os v<er>bos va~o por outro
+caminho. A difere~c'a q<ue> te~ os casos dos artigos e q<ue> no pre-
+meiro caso a q<ue> os latinos chama~o nominatiuo & nos lhe po-
+demos chamar p<re>positiuo pola reza~o q<ue> daremos q<u><<a>>ndo fa-
+laremos da natureza dos casos & da composic'a~ da li~gua
+mas na~o nesta obra: neste p<re>meiro caso os artigos mascu-
+linos acaba~o e~ .o. peq<ue>no no singular. E os femeninos e~ .a
+peq<ue>no. & no segu~do caso a q<ue> os latinos chama~o genitiuo
+& nos assi lhe podemos chamar ou possessiuo tambe~ nes-
+se acaba~o em vogaes peq<ue>nas os artigos o masculino e~ .o
+& o femenino e~ .a. mas no terceiro caso a q<ue> nos & os lati-
+nos chamamos datiuo. acaba~o os masculinos e~ .o. gra~de &
+os femeninos em .a. grande: & no derradeiro a q<ue> os lati-
+nos chama~o accusatiuo: & nos pospositiuo: acaba~o em .o.
+peq<ue>no: os masculinos. & os femeninos em .a. peq<ue>no. & no
+plural todos estes acaba~o nesta letra .s. acrec'e~tada sobre
+o seu singular como dissemos: no comec'o ta~be~ temos va-
+riac'a~o nestes artigos porq<ue> hu~s casos comec'a~o em letra
+vogal & outros e~ co~soa~te: os q<ue> comec'a~o em letra co~soa~te
+sa~o os casos possessiuos assi no singular como no plural:
+& todos os outros comec'a~o em ambos os numeros em
+vogal. a letra co~soa~te em q<ue> aq<ue>lles comec'a~o he .d. & as vo-
+gaes sa~o as mesmas em q<ue> acaba~o porq<ue> todos os artigos}
+[fol. 32r]
+{CB1.
+em todos os casos sa~o monosyllabos q<ue> quer dizer de hu~a
+so syllaba: & por ta~to na mesma voz em q<ue> comec'a~o nessa a-
+caba~o: & se~ dito~go. % Nesta parte q<ue>remos amoestar q<ue> na~o
+cuide~ algu~s q<u><<a>>ndo dize~ .ao. parao. aos. paraos. q<ue> tudo aquil-
+lo assi ju~to e so artigo de datiuo. mas as premeiras p<ar>tes
+daq<ue>lles aju~tame~t<<os>> .a. em .ao & para e~. parao. sa~o p<re>posic'o~es
+& o artigo q<ue> traze~ despois d<e> si na~o e datiuo mas e posposi-
+tiuo. o q<u><<a>>l se segue semp<re> despois d<e> p<re>posic'a~o & na~o algu~ ou-
+tro caso: isto dixe porq<ue> alghu~s gra~maticos o ensina~o mal:
+da~do noticia dos casos a seus pri~cipia~tes. & qua~ mal o el-
+les ente~de~: se mostra no pouco p<ro>ueito q<ue> lhes co~ isso faze~.
+& mais q<ue> lhes parec'e q<ue> pode~ ensinar a falar co~ c'erimoneas
+mudas: no. do. polo. & co: sa~o co~postos ou ju~tos. do. q<u><<a>>ndo
+sinifica d<e> .o. como venho do estudo. venho do pac'o. & polo
+q<u><<a>>ndo (f)[s]inifica por .o. como por o amor de d<eo>s. & no por e~ .o.
+& co. por co~ .o. & anto por a~te o meu d<eo>s. & na~o some~te estas
+& outras composic'o~es se fazem com os artigos. mas tam
+bem antreposic'o~es muitas vezes como. diloemos. por
+diremos .o. amaloiamos por amariamos .o. & com tudo
+nestas antreposic'o~es aquelle artigo .o. que se alli antre-
+po~e he relatiuo: alghu~ tanto diferente daqueloutros.
+Aqui quero le~brar como em Portugal temos hu~a cou-
+sa alhea & com grande disona~c'ia onde menos se deuia fa-
+zer: a[ ]qual e esta. que a este nome rey damoslhe artigo ca-
+stelhano chamando lhe elrey: na~o lhe hauiamos de cha-
+mar se na~: o rey: posto q<ue> alghu~s doc'es d[ ]orelhas estranha-
+ra~o este meu parec'er: se na~o quisere~ bem olhar quanto ne-
+le vay: & co~ tudo isto abasta para ser a minha milhor mu-
+sica que ha destes: porque o nosso rey & senhor pois tem
+terra & mando: tenha tambem nome proprio & destinto
+por si: & a sua gente tenha fala ou linguagem na~o mal
+mesturada mas bem apartada: para que seja o rey mais}
+[fol. 32v]
+{CB1.
+nosso dizer que elrey: ajuda me muito o natural da nossa
+lingua o qual imita~o os castelhanos q(n)[u]ando nos querem
+arremedar dize~do. Ma~da o rey de portugal. & na~o dize~
+ma~da el rey de portugal: q<ue> a elles era mais proprio dizer
+mas isto fazem cuida~do q<ue> assi fala~o mais portugues: & de
+feito na~o se engana~o. {RUB. % Capitolo .xliiij.}
+{IN4.} OS nomes se decli(u)[n]a~o em generos & numeros:
+em generos como moc'o. moc'a. & em numeros
+como. moc'o & moc'os. moc'a & moc'as: as declina-
+c'o~es dos generos sa~o muitas & menos p<er>a co~pre~-
+der porq<ue> posto q<ue> os nomes acabados em hu~a letra qual-
+quer seja~o mais dhu~ genero q<ue> doutro na~o por isso se po-
+de dar regra vniuersal como nestas duas letras .a. & .o. das
+quaes hu~a e mais masculina & outra femenina: & com to-
+do te~ suas faltas: porq<ue> isto. isso. e aq<u><<i>>llo. sa~o acabados e~ .o.
+& na~o sa~o masculinos: mas sa~o de genero indeterminado
+na~o neutro como o dos latinos. & eixo. mouc'o. queiro. &
+outros sa~o femeninos. & em .e. pequeno. Tambem temos
+nomes masculinos & femeninos: como almadraque: & al-
+fac'e. em .e. gra~de. outro tanto como alquic'e. & chamine e~
+.i. & .u. ale~ de auer mui poucos: ta~be~ sa~o na~o muito nossos
+como c'afi. guadamec'i. calecu. peru. & c'egu. todauia sa~o es-
+tas letras mais enclinadas a masculinos: em dito~go sem
+consoante acaba~o poucos nomes: & esses que sa~o te~ mais
+parec'er d<e> masculinos como pao. birimbao. breu. treu. bal-
+dreu. & esses dito~gos tendo co~soa~te ou til. sa~o duuidosos
+como lic'a~o: dic'a~o: reza~o: mela~o: corac'a~o. as co~soantes de
+qualquer outra feic'a~o tambe~ sa~o duuidosas ainda q<ue> mais
+enclinadas a hu~ genero q<ue> outro: por q<ue> em al mais sa~o mas-
+culinos. como bancal: cabec'al: brial. & em el. como papel.
+pichel. & em il. como barril: buril & e~ ol. como rol: c'erol. &
+em ar. como lagar: lugar. & em er. como alcac'er. & em or.}
+[fol. 33r]
+{CB1.
+com .oo gra~de como suoor. mas quatro co~paratiuos. ma-
+yor. menor. milhor. & pior sa~o de genero comu~. pois e~ .or.
+com .o. peq<ue>no ta~be~ sa~o masculinos polla mayor parte co-
+mo ardor. feruor: mas algu~s sa~o femininos como flor. cor
+& dor em .ur. na~o me le~bra outro se na~o artur nome p<ro>prio
+d[ ]home~: & mais na~o e nosso: os nomes e~ .as. co~ .a. gra~de: & e~
+Es. com .E. gra~de sa~o masculinos como e~tras. inues. & e~ .es
+co~ .e. peq<ue>no de genero comu~: como portugues. ingres. fra~-
+c'es posto. que tenha~o femininos em a como portuguesa. e~
+os. co~. o. pequeno: & em oos com oo. gra~de sa~o masculinos
+como marcos domingos / cos / retros. em az. sa~o masculi-
+nas. como rapaz. cabaz. & e~ ez co~ .E. gra~de como enxadrez:
+& em. ez. co~ .e. peq<ue>no como pez. ta~be~ sa~o masculinos: mas
+em .iz. d<e>lles sa~o masculinos & delles femininos como juiz
+almofariz & delles femininos: como boyz rayz. perdiz. & e~
+oz. co~ .o. gra~de: & tambe~ em .oz. co~ o peq<ue>no: & outro tanto
+em uz. sa~o. masculinos como arroz. catramoz. alcatruz.
+Ainda porem q<ue> nesta c'idade ouue ou cuido q<ue> ai~da e viua
+hu~a molher q<ue> se chamaua cataroz. Os nomes q<ue> se acaba~o
+em til se tem ditongo ja dissemos de que genero sa~o: mas
+na~o tendo dito~go se tem .a. sam femininos: como. lam. co-
+uilha~. vila~. c'idada~. & se tem .e. as vezes sa~o masculinos: co-
+mo vintem. desde~. almazem. arreuem. & as vezes femini-
+nos: como linguagem linhage~ borrage~. E se be~ olhardes
+aos femininos na~o achareis o ac'e~to na vltima: como aos
+outros. Algue~ ni~gue~. & que~ sa~o d<e> genero indeterminado
+til. com .i. faz os nomes masculinos: como patim: & jardim
+& com .o. tambe~ como som & tom: cu~ .u. tambe~ sam masculi-
+nos: como hum. alghum. nenhum. & mais jejum & debru~.
+Este nome ajetiuo. comu~. serue a masculinos & femininos
+porque na~o digamos nos femininos comu~a: hu~s c'ertos
+nomes ajetiuos acustumamos nos formar em .um. como}
+{CW. E}
+[fol. 33v]
+{CB1.
+ouelhum. cabrum. porcum. E outros os quaes damos a
+genero masculino: mas porem em seu lugar & tempo di-
+remos que os nomes ajetiuos e denotatiuos na~o te~ c'er-
+to genero por si. % Porq<ue> era longo co~prender tanta va-
+riedade d<e> terminac'o~es ajudounos a natureza & vso da nos-
+sa lingua co~ os artigos os quaes sempre ou as mays ve-
+zes acompanha~o os nomes cuja compañia declara os ge-
+neros desses nomes: na~o dixemos aqui quantos ne~ qua-
+es era~o os generos dos nomes: nem ta~pouco que cou-
+sa he nome como tambe fezemos aos artigos: & faremos
+nos verbos: porque do intento desta parte da grammati-
+ca que agora tratamos na~o he mais q<ue> so dar notic'ia das
+vozes & na~o difinc'o~es ou determinadas declarac'o~es das
+cousas. {RUB. % Capitolo .xlv.}
+{IN4.} TEm diferenc'a as vozes dos nomes: ou se decli-
+na~o em numeros porque o singular he dife-
+rente do plural: nem o plural se contenta com
+so as letras do singular. Tirando Domingos.
+Marcos & Lucas: que na~o varia~o seus numeros: &
+com tudo o genero q<ue> tinha~o no singular os nomes esse
+tera~o no plural. como candeya q<ue> he feminino no singular
+tambem o assi sera no plural como candeyas. Uariando
+a letra dos numeros guardamos esta regra geral que o
+plural tem como sua letra propria esta letra /s/ acrec'entan-
+doa sobre seu singular: mas isto d<e> diuersas maneiras por
+que as vezes acrec'e~ta tambe~ outras coella: & as vezes ti-
+ra alghu~as & outras tambe~ muda: fica~do sempre .s. no plu-
+ral: os nomes q<ue> somente acrec'enta~o .s. no plural sa~o todos
+os[ ]q<ue> no singular acabaua~o em vogal. como liuro no singu-
+lar: & no plural. liuros. & porta & portas. ainda q<ue> seja co~
+ditongo como pao & paos. c'eo & c'eos. & os nomes acaba-
+dos em til tambem acrec'enta~o .s. no plural & na~o mays se}
+[fol. 34r]
+{CB1.
+na~o te~ dito~go como vila~. vila~s. som. so~s. jardim. jardi~s. al-
+ghu~m. alghu~s. imagem. image~s. & quando tem dito~go an-
+tes de til. muitas vezes acrec'enta~o /s/ na~o mais como ma~i
+ma~is. ma~o. ma~os. raba~o. raba~os. ruim. ruins. mas outras
+muitas vezes os nomes acabados em a~o co~ dito~go & til /
+muda~o alghu~a das vogaes desse ditongo ou a~bas como
+tabalia~o. tabalia~es. corda~o. cordo~es. Tabalia~o muda hu~a
+so letra do ditongo & corda~o a~bas: tabalia~o muda .o. em .e
+& corda~o muda todo o ditongo .ao. em outro oe. mas p<er>a
+limitar q<u><<a>>es sa~o os nomes q<ue> acrec'enta~o /s/ ou. muda~o hu~a
+so letra ou ambas as do ditongo eu na~o acho regra mais
+geral questa que agora darey ainda que tera muitas ei-
+c'eic'o~es. A regra e esta que os nomes acabados em .a~o.
+se sinifica~o offic'ios ou tratos muda~o a letra derradeyra
+do ditongo que e .o. em .e. Como tabalia~o. tabalia~es. es-
+criua~o. escriua~es. capita~o. capita~es. capela~o. capela~es. re-
+fia~o. refia~es. pia~o. pia~es. trugima~o. trugima~es. E tambe~
+pa~o. pa~es. ca~o ca~es. damia~o. damia~es. gauia~o gauia~es. dia-
+ma~o. diama~es. e mac'apa~o. mac'apa~es. guimara~es. Uerda-
+de e q<ue> vcha~o faz vcho~es. & ortela~o. ortelo~es. E assi pode
+auer outros me na~o lembra~o. Poys dos nomes acaba-
+dos em .a~o. ditongo que na~o muda~o esse ditongo no plu-
+ral: damos esta regra que podera alcanc'ar a mayor par-
+te que os nomes de nac'o~es quando se acaba~o nesse di-
+tongo a~o fazem o que dizemos: como Africa~o africa~os
+Jndia~o india~os. & se fosse em costume tambem diriamos
+Roma~o Roma~os. Jtalia~o Jtalia~os. Ualenc'ia~o Ua-
+lenc'ia~os. E tambem Jorge da Silueira no canc'ioney-
+ro q<ue> aju~tou Garc'ia de resende: diz castela~o: do qual singu-
+lar se o ouuesse no mundo / diriamos no plural castela~os
+Alem destes tambem guarda~o o seu ditongo assi como
+o tinha~o estoutros. cortesa~o que faz cortesa~os. & c'idada~o}
+{CW. E ij}
+[fol. 34v]
+{CB1.
+c'idada~os. aldea~o. aldea~os. vila~o: vila~os. raba~o / raba~os. or-
+ga~o / orga~os. zimba~o / zimba~os. za~ga~o / zanga~os. taua~o / ta-
+ua~os. gra~o / gra~os. coua~o / coua~os. pinta~o / pinta~os. ma~o /
+ma~os. cha~o / cha~os: ourega~o / ourega~os. orfa~o orfa~os. rua~os
+rua~os. fra~ga~o. fra~ga~os. & tambe~ nuno pereira no ca~c'ionei-
+ro Portugues q<ue> dissemos disse de sera~o / sera~os. Mas
+porq<ue> dixemos q<ue> os nomes de nac'o~es fazia~o no plural em
+a~os alema~o na~o faz assi: mas faz alema~es: & breta~o breto~es
+& assi auera outros muitos. A parte desta regra q<ue> mais co~-
+prende e dos nomes q<ue> muda~o todo o dito~go: como lic'a~o
+lic'o~es. poda~o. podo~es. mela~o. melo~es: estes nomes posto
+q<ue> parec'e~ mudar mais q<ue> nenhu~s dessoutros q<ue> ja dissemos
+todauia se olharemos ao singular a~tigo q<ue> ja teuera~o na~o
+muda~o tanto como agora nos parec'e porq<ue> estes nomes
+todos os q<ue> se acaba~o em .a~o. ditongo acabaua~ose em .om.
+como lic'o~. podom. melo~. & acrec'e~tando .e. & .s. formaua~o o
+plural .lic'o~es. podo~es: & melo~es: como ainda agora faze~: &
+outro tanto podemos afirmar dos q<ue> faze~ o plural em .a~es.
+como pa~es. ca~es. dos q<u><<a>>es antigame~te era o[ ]seu singular
+pa~. ca~. cujo testemunho aindagora da antredouraminho.
+% Os outros nomes q<ue> fazem o plural em a~os como cida-
+da~os. cortesa~os assi teuera~o semp<re> o[ ]seu singular acabado e~
+a~o. como agora te~ c'idada~o. cortesa~o. estes guarda~o sua an-
+tiguidade em tudo: e aq<ue>lloutros so no plural: cuja muda~-
+c'a assi como doutras muitas cousas na~o estran~emos porq<ue>
+tambe~ o falar tem seu mouime~to diz marco varra~o: & mu-
+dasse quando & como quer o costume.
+% Os nomes acabados em letra consoante te~ suas forma-
+c'o~es no plural de duas maneiras: os acabados em .l. mu-
+da~o essa letra l. e~ .i. & acrec'e~ta~o .s. q<ue> e p<ro>prio do plural como
+cabec'al. cabec'ays. real. reais. assi qua~do he sustantiuo co-
+mo agetiuo. E na~o digamos dous reeis. tres reeis. os no-m[*e]s}
+[fol. 35r]
+{CB1.
+q<ue> tem seu singular em .el. esses faze~ o plural em .eis.
+como pichel. picheis. burel. bureys. pella regra q<ue> ja de-
+mos & os nomes acabados em .ol. a mesma regra segue~:
+como caracol caracoys. rouxinol. rouxinoys. ourinol. ou-
+rinois. E em .ul. tambem como taful. tafuys. azul. azuys.
+mas em .il. na~o acrec'enta~o .i. se na~o somente muda~o .l. em
+.s. como c'eitil. c'eytis. couil. couis. Dos nomes acabados
+em .ol. parec'e q<ue> deuiamos tirar algu~a eyc'eyc'a~o: porq<ue> al-
+ghu~s nomes temos cuja reza~o & bo~a voz requere que se
+na~o acabem no plural em ois posto q<ue> o costume na~o seja
+por hu~a parte mais que por outra como sa~o portacol por-
+tacolos: & nam portacoys: nem portacoles. este porq<ue> soa
+assi milhor. & sol. fara soles & na~o soys. & rol. roles. & na~o
+rois. por diferenc'a das segundas pessoas destes verbos.
+soyo. soes. por. acostumar. & royo. roes. por roer. Dey a
+estes nomes no plural estes ditongos. ay & oy. co~ .i. & na~o
+com .e. porq<ue> as minhas orelhas assi o julga~o: & na~o e mui-
+to enganarme pois .i. & .e. pequeno sa~o muy vezinhos: mas
+com tudo os verbos se escreuera~o com .e. assi soes. roes.
+tomae. tomaes. andaes. % Os nomes acabados em r. ou.
+s. ou .z. acrec'enta~o sobre seu singular .es. no plural: como
+lagar. lagares: altar. altares / alc'acer. alcac'eres. amor. amo-
+res: & entras. entrases. reues. reueses. arpes. arneses. ca-
+baz. cabazes. & juyz. juyzes. alcabuz. alcabuzes. destes na~o
+me le~bra eic'eic'a~o alghu~a. % Uisto como varia~o os nomes
+seus plurays podemos dizer q<ue> temos q<u><<a>>tro declinac'o~es
+como vem a[ ]saber a premeira q<ue> some~te acrec'e~ta letra: co-
+mo moc'o. moc'os. & a segu~da q<ue> acrec'e~ta syllaba: como pa-
+ues paueses. a terc'eira muda letra como animal. animais
+& a q<u><<a>>rta tambe~ muda syllaba como. almeira~o. almeyro~es.
+% Alghu~s nomes na~o tem plural: como prol: retros. isto.
+isso. aquilo. quem alguem. ninguem. E outros na~o te~ sin-gular:}
+{CW. E iii}
+[fol. 35v]
+{CB1.
+como dous. tres. seys. ambos. & ambas. & outras
+na~o tem .s. que e a propria letra do plural como dissemos /
+& todauia sinifica~o muitos: & na~o somente no genero de
+sua letra: mas tambem em qualquer outro: como quatro
+c'inco. dez. onze. doze. % Qualquer forma ou genero q<ue> os
+nossos nomes te~ no singular esse guarda~o tambe~ no plu-
+ral porq<ue> nisto assi como em outras cousas guarda a nossa
+lingua as regras da proporc'a~o mais que a latina & grega.
+as quaes tem em suas dic'o~es muitas irregularidades &
+segue~ mais o sabor das orelhas q<ue> as regras da reza~o: assi
+como nos tambe~ as vezes deixamos as regras geraes:
+porq<ue> o bo costume & sentido nos manda~o tomar alghu~as
+particularidades. {RUB. % Capitulo .xlvj.}
+{IN4.} DJz marco varra~o que nenhu~a outra lingua tem
+declinac'a~o de casos se na~o a grega & latina: & es-
+ses casos mostra~o antrelles o estado das cousas
+o qual e diuerso segundo os diuersos ofic'ios des-
+sa cousas: porq<ue> hum estado tem este nome home~ qua~do
+faz: dizendo o home~ senhoreya o mundo. E outro estado
+muy diuerso do premeiro tem quando padec'e: dizendo
+deos castiga o home~: & para estas diuersidades & outras
+muitas de estados ou offic'ios q<ue> tem as cousas tem tam-
+bem os nomes antre os latinos & gregos diuersidade d<e>
+letras diuidindo cada estado da cousa com sua diferenc'a
+de letras no cabo do nome assi como nos dissemos que fa-
+zia a nossa lingua nos generos & numeros & posto q<ue> este
+seja hu~ grande primor & perfeic'a~o dessas linguas. decla-
+rar na voz as meudezas das cousas co~ a diuersidade da
+letra ou voz que dissemos: todauia a nossa lingua nem
+por isso ficou sem outro tam bo conc'erto & de menos
+trabalho. Este he o ajuntamento dos artigos os quaes
+juntos com os nomes declara~o nelles tudo o q(n)[u]e os}
+[fol. 36r]
+{CB1.
+casos Latinos e antros Gregos os casos e artigos jun-
+tamente: e assi como a nossa lingua faz tudo qua~to essou-
+tras co~ mais breuidade e fac'ilidade e clareza: assi tambe~
+e mais de louuar sua p<er>feic'a~o: e co~ tudo nos tambe~ temos
+casos em tres pronomes: os quaes sa~o. eu. me. mi. tu. te. ti
+se. si. no premeiro destes o d<e>rradeiro caso q<ue> e mi. alghu~s o
+acaba~o co esta letra. til. assi mi~: porei estes nomes teuera~o
+casos: mais outros em outro tempo e obra o diremos.
+{RUB. % Capitolo .xlvij.}
+{IN4.} AUendo de falar da analo-
+gia dos verbos na~o dizemos q<ue> cousa e verbo ne~
+quantos generos de verbos temos: porq<ue> na~o e
+desta parte a tal accupac'a~o: mas so mostrarem<<os>>
+como sa~o diuersas as vozes desses verbos em generos:
+co~jugac'o~es. modos. te~pos. numeros. & pessoas. & tambe~
+como em cada genero. co~jugac'a~. modo. & te~po. numero &
+pessoa. desses verbos se p<ro>porciona~o essas vozes & mede~
+hu~as por outras. na~o dando pore~ co~prida & particularme~-
+te as inteiras formac'o~es & as eic'eic'o~es de suas faltas se
+na~o so amoestando em breue o q<ue> ha nellas: para q<ue> despois
+a seu te~po quando as trataremos seja~o milhor & co~ mais
+facilidade entendidas. % Nos generos dos verbos na~o
+temos mais q<ue> hu~a so voz acabada em .o. peq<ue>no: como en-
+sino. amo. & ando: a qual serue como digo em todos os ver-
+bos tirando algu~s poucos como sa~o estes. sei. de saber. &
+vou. & dou. & estou. & mais o verbo susta~tiuo o q<u><<a>>l hu~s pro-
+nu~c'ia~ em .om. como som. & outros em ou. como. sou. & ou-
+tros em .a~o. como sa~o. & ta~be~ outros q<ue> eu mais fauorec'o
+em .o. peq<ue>no como .so. no parec'er da premeira pronu~c'ia-
+c'a~o co~ .o. & .m. q<ue> diz som. he o mui nobre joha~ d<e> barros & a
+reza~o da por si e esta: q<ue> de som. mais perto ve~ a formac'a~
+do seu plural o qual diz. somos. com tudo sendo eu moc'o
+peq<ue>no fui criado em sa~o domingos D[ ]euora onde fazia~o}
+[fol. 36v]
+{CB1.
+zo~baria de my~ os da terra porq<ue> o eu assi pronu~ciaua segu~-
+do q<ue> o aprendera na beira. % Jsto dixe da premeira pes-
+soa do p<re>sente do indicatiuo: porq<ue> esse te~po & o infinitiuo
+sa~o principio da co~jugac'a~o: o qual infinitiuo ou acaba em
+ar. como amar. ou em .er. como fazer. ou em .ir. como dor-
+mir. mas co~ tudo tambe~ ahi tem suas eic'eic'o~es os v<er>bos
+por q<ue> este verbo ponho po~es. faz o seu infinitiuo e~ .or. di-
+ze~do .por. o qual todauia ja fez poer & ainda o assi ouuim<<os>>
+a alghu~s velhos: destes dous lugares formamos toda ha
+outra conjugac'a~o a qual he diuersa como logo diremos
+ensina~do qua~tas sa~o as conjugac'o~es & amoesta~do q<ue> ha[ ]hi
+dellas eic'eic'o~es. {RUB. % Capitolo .xlviij.}
+{IN3.} POr que na~o e mui disforme do q<ue> aqui fazemos
+direy como de caminho q<ue> cousa he co~jugac'a~o &
+em outra parte o repetirei ou declararei mais
+por inteiro. Co~jugac'a~o & ajuntame~to de diuersas vozes
+q<ue> segundo boa orde~ se ordena~o seguindose hu~as tras ou-
+tras e~ os verbos: & porq<ue> dissemos que estas vozes era~o
+diuersas: vejamos agora como te~ as vozes dos verbos
+premeiro diuersidade em co~jugac'a~o: por que dhu~a ma-
+neira proporcionamos hu~s por outros: os verbos q<ue> fa-
+zem o infinitiuo em .ar. & a segu~da pessoa em .as. como fa-
+lo. falas. falar. & doutra maneira. os q<ue> te~ a segunda pessoa
+em .es. & o infinitiuo em .er. como fac'o. fazes. fazer: & dou-
+tra maneira p<ro>porcionamos os verbos q<ue> te~ o infinitiuo
+acabado em .ir. como durmo durmir. ouc'o ouuir. porque
+esta he a difere~c'a q<ue> tem as conjugac'o~es antre nos mays
+clara & em q<ue> milhor se conhec'e~. as quaes co~jugac'o~es nos-
+sas ou dos nossos verbos sa~o ires: & cadahu~a dellas tem
+seus modos: como falamos. falemos: falae. & falar. & cada
+modo te~ seus t<em>pos como falo: falaua. falei. & falarei. & cada
+tempo seus numeros: como falo & falamos. falas & falaes}
+[fol. 37r]
+{CB1.
+fala & fala~o. & cada numero te~ suas pessoas: como falo. fa-
+las. fala: falamos. falaes. fala~o. & ta~be~ te~ os nossos verbos
+geru~dios como sendo: ama~do: fazendo. & partecipios co-
+mo lido. amado: regido: le~te: regente: p<er>seuera~te. & nomes
+verbaes como. lic'a~o & regedor & porem algu~s verbos
+na~o te~ todos os modos: & outros falta~o em te~pos & assi e~
+cada[ ]hu~a das outras cousas tambe~ as vezes alghu~s ver-
+bos tem alghu~a falta: ao menos em na~o seguir as regras
+geraes da formac'a~o das suas conjugac'o~es: porq<ue> assi na
+analogia dos verbos como das outras partes na~o temos
+regras q<ue> possa~o co~prender todos se na~o os mais do que
+nos na~o auemos d[ ]espantar por q<ue> os gregos cuja lingua
+e bem conc'ertada tem hu~ bo caderno de verbos irregula-
+res: & alghu~s nomes. & os latinos te~ outro ta~ grande de
+nomes co~ seus verbos de co~panhia: & nos dos nossos fa-
+remos memorea a seu te~po: mas na~o nesta obra na q<u><<a>>l na~o
+fazemos mais q<ue> apontar os principios da grammatica q<ue>
+temos na nossa lingua. {RUB. % Capitolo .xlix.}
+{IN4.} AGora vejamos da co~posic'a~o ou conc'erto que
+as partes ou dic'o~es da nossa lingua te~. antre si
+como em qualq<ue>r outra lingua: & esta he a der-
+radeira parte desta obra: a qual os gra~maticos
+chama~o co~struic'a~o: & nella mais q<ue> em alghu~a outra guar-
+damos nos c'ertas leis & regras: posto q<ue> tambem nas ou-
+tras partes da gra~matica temos menos eic'eic'o~es q<ue> os la-
+tinos & gregos: cujas linguas mui gabadas: muitas vezes
+falta~ na co~uenie~c'ia dos nomes ajetiuo / & sustantiuo / rela-
+tiuo / & antec'ede~te. & isso mesmo do nome co~ o verbo: & os
+casos dos nomes as vezes se troca~o hu~s por outr<<os>>: & nos
+verbos a mesma troca fazem os tempos & modos: pois
+auerbios & preposic'o~es ou quaesquer outras partes sa~o
+muitas vezes mudadas antre os latinos & gregos. & poe~}
+[fol. 37v]
+{CB1.
+se hu~as por outras o q<ue> se na~o faz na nossa lingua: ao me-
+nos ta~o ameude ne~ em todas estas cousas: porq<ue> posto q<ue>
+alghu~ora os verbos infinitiuos sirua~o por nomes como
+o ler faz be~ aos home~s: ou se as preposic'o~es se poe~ em lu-
+gar de artigos. como esta preposic'a~o. de. qua~do serue a ge-
+netiuo: ou se serue em dous officios como esta parte .por.
+a[ ]q<u><<a>>l as vezes e p<re>posic'a~o: & as vezes auerbio & outrota~to
+estas / a~tes / d<e>spois / ate / & outras muitas q<ue> te~ dous officios
+E tambe~ se este verbo / nego / seruia em lugar de co~ju~c'a~o &
+valia a~tros velhos ta~to como sena~o. & aindagora assi val
+na beira. E posto q<ue> os numeros & generos se mude~ como
+nesta orac'a~o & outras semelhantes marido & molher am-
+bos sa~o bos home~s: a fim posto q<ue> muitas desproporc'o~es
+ou dessemelha~c'as se cometa~o na nossa lingua na~o sa~o ta~-
+tas como em outras linguas: aco~tec'e muitas mais vezes
+& sa~o essas linguas hauidas por boas: porque dizem q<ue>
+q<ue> nem semp<re> e virtude seguir as p<ro>porc'o~es da arte mas q<ue>
+vsare~ dalghu~as suas propriedades em particular as afre-
+mosenta. ta~bem a nossa te~ o mesmo: por ta~to na~o nos des-
+prezemos della a[ ]qual foi sempre: & agora e tratada por ho-
+me~s q<ue> se ente~de~ & sabe~ o que fala~o: cuja imitac'a~ nos fara
+galantes & primos a nos & a nosso falar se aguiseremos
+seguir: nesta derradeira parte q<ue> e da co~struic'a~ ou co~posi-
+c'a~o. da lingua na~o dizemos mais por q<ue> temos comec'ada
+hu~a obra em q<ue> particularmente & co~ mais comprimento
+falamos della. {RUB. % Capitulo .l.}
+{IN4.} ALghu~s que escreue~ liuros a~costuma~o fazer nos
+principios prologos de sua defensa~o o q<ue> eu na~o
+fiz: & tenho esta raza~o que me na~o quero quei-
+xar a~tes de ser ofendido. & mais que~ pode dizer
+mal d<e> mi que bo seja pois aos maos na~o posso fugir: mas
+por qualquer parte sempre me ha~o de mal tratar: & co~ tudo}
+[fol. 38r]
+{CB1.
+eu na~o dou lic'enc'a que algue~ possa ser meu juiz se na~o
+quem ler os liuros que eu li: & com tanto trabalho & tam
+be~ ou milhor ente~didos. E ainda assi a sentenc'a ha de ser
+que pera emendar meus erros escreuam da mesma ma-
+terea outras obras milhores: nas q<u><<a>>es mostre~ saber mais
+queu disto de que falamos. E se na~o tudo o que mais fe-
+zere~ he murmurar que na~o cabe antre home~s sebedores:
+pois quanta dos inora~tes na~o fac'o conta: & bem sei que
+na~o deixa~o de reprender se na~o ho que na~o entendem. &
+mais porq<ue> alghu~ tanto me fiz nestes principios breue
+reprendera~o mui asinha o que dixe: & na~o sabera~o louua~-
+do manifestar o que calei ((como diz c'icero no segundo li-
+uro a seu irma~o)) & na~o co~uido eu aos que mais sabe~ cui-
+dando que os na~o ha hi no mundo: mas seria eu ditoso q<ue>
+minhas faltas fossem causa do proueito que sua doutri-
+na pode fazer. Ser eu curto em meu escreuer: & na~o ser
+muy ornado com bos exemplos: & a falta dalghu~as cou-
+sas que deuera escreuer & na~o fiz: & a dissonancia dalghu~s
+termos nouos nesta arte que pus: vsando de vozes pro-
+prias da nossa lingua tudo ante quem na~o folga de dizer
+mal teria escusa com olhar a nouidade da obra: & como es-
+creui sem ter outro exemplo antes de mi. & isto muito
+mais escusara o defeito da ordem que tiue em meu proc'e-
+der se foy errada. E com tudo o que com reza~o pode ser
+reprendido: eu confesso que o na~o escreui com malicia: &
+podese emendar: antes pec'o a quem conhec'er meus er-
+ros que os emende: & todauia na~o murmurando em sua
+casa porque desfaz em si.
+Fim.}
+[fol. 38v]
+{CB1.
+{RUB. % Acabouse d[ ]empremir esta premeira anotac'a~o
+da lingua Portuguesa. por mandado do muy
+manifico senhor dom Fernando D[ ]alma-
+da. em Lixbo~a. e~ casa d<e> Germa~o galhar-
+de a .xxvij. dias do mes de Janeyro
+de mjl e q<u><<i>>nhe~tos & trinta & seis
+annos da nossa saluac'am. :.
+Deo gratias.}
+% Todas cousas te~ seu te~po: & os oc'iosos o perde~.
+{MIN.}}

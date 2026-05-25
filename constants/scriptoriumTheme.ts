@@ -1,0 +1,23 @@
+/** Scriptorium workstation palette — sienna depths, gold accents, vellum parchment. */
+export const scriptoriumTheme = {
+  gradient: ["#120604", "#2e120d", "#4d2218"] as const,
+  gradientAlt: ["#1c0c09", "#381611", "#5a2a1c"] as const,
+  gold: "#ffd36e",
+  goldMuted: "#f6d890",
+  goldBorder: "rgba(246, 216, 144, 0.15)",
+  goldBorderStrong: "rgba(246, 216, 144, 0.28)",
+  inkDark: "#240c08",
+  inkBrown: "#2b110c",
+  frostPanel: "rgba(38, 14, 10, 0.65)",
+  frostPanelDeep: "rgba(26, 8, 5, 0.55)",
+  frostEditor: "rgba(22, 6, 4, 0.85)",
+  textCream: "#fffdf4",
+  textCreamSoft: "rgba(255, 253, 244, 0.72)",
+  parchment: "#f5ebd0",
+  parchmentMuted: "#ebdcb9",
+  rubricRed: "#b21e1e",
+  rubricRedLegacy: "#9b2217",
+  annotationBlue: "#7ba4cc",
+  annotationBar: "rgba(123, 164, 204, 0.35)",
+  shadow: "#000",
+} as const;

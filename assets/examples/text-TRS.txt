@@ -1,0 +1,2418 @@
+{RMK: Pedro Nunes.}
+{RMK: Tratado da sphera com suas anotac'o~es.}
+{RMK: Lisboa | Germa~o Galharde | 1537.}
+{RMK: Sevilha | Fundo Antigo da Biblioteca da Universidade de Sevilha | 7/4/8.}
+{RMK: Michael J Ferreira | Georgetown University | USA.}
+[fol. 1r]
+{CB1.
+{ILL. {IN4.} TRatado da sphera
+com a Theorica do Sol & da
+Lua. E ho primeiro liuro da
+Geographia de Claudio Pto-
+lomeo Alexa~drino. Tirados nouamen-
+te de Latim em lingoagem pello Doutor
+Pero Nunez Cosmographo del Rey do~
+Joa~o ho terceyro deste nome nosso se-
+nhor. E acrece~tados de muitas annota-
+c'o~es & figuras per que mays facilmente
+se podem entender.}
+% Jtem dous tratados q<ue> o mesmo Dou-
+tor fez sobre a carta de marear. Em os
+quaes se decrara~o todas as principaes
+duuidas da nauegac'a~o. Co~ as tauoas do
+mouimento do sol: & sua declinac'a~o. E o
+Regime~to da altura assi ao meyo dia: co-
+mo nos outros tempos.
+COM PREVILEGIO REAL.:.}}
+[fol. 1v]
+{CB1.
+{IN5.} EU el Rey fac'o saber a quantos este meu aluara vi-
+rem que eu ey por bem & me praz que ho Doutor
+Pero nunez meu Cosmografo possa ma~dar empri-
+mir todas as obras que tem feytas: assi em Latim
+como em Lingoagem das sciencias Mathemati-
+cas & Cosmografia. As quaes obras pessoa algu~a nam pode-
+ra ymprimir nem trazer ympresas de fora do Reyno por tempo
+de dez annos que comec'aram da feytura deste: sobe pena de cin-
+quoenta cruzados: A metade pera ho Esprital de todolos San-
+ctos desta Cidade de Lixboa: & a outra metade pera quem os ac-
+cusar: & mais perdera todollos volumes que lhe forem achados.
+Notifico ho assi a todos meus Corregedores Juyzes & justic'as:
+officiaes & pessoas a que ho conhecimento disto pertencer: & man-
+do que lhe cumpra~ guardem & fac'am jnteirame~te comprir & guar-
+dar este aluara como se nelle contem. O qual quero que valha & te-
+nha forc'a & vigor: como se fosse Carta per mi assinada & assela-
+da do meu selo pendente: & passada per minha chancelaria: sem
+embargo da ordenac'am do segundo liuro. Titulo .xx. que diz que
+as cousas cujo effecto ouuer de durar mais de hum anno: passem p<er>
+cartas. Manuel da costa ho fez em Lixboa. A vinte sete de Setem-
+bro. De mil & quinhentos & .xxxvij.}
+[fol. 2r]
+{CB1.
+{RUB. AO SERENISSIMO E EXCE-
+LENTISSIMO PRINCIPE
+HO IFANTE DOM
+LVYS.:.}
+{IN7.} DJz ho bem auenturado
+doutor sancto Agustinho no quinto liuro q<ue>
+escreueo da trindade muito escrarecido &
+muito excelente Principe: que os co~ceptos
+& pella mesma razam a sciencia nam te~ pro-
+pria lingoagem. Porque scie~cia nam he ou-
+tra cousa sena~o hum conhecime~to habitua-
+do no entendimento: o qual se acquirio per demostrac'a~o: & demos-
+trac'a~o he aquelle discurso que nos faz saber. E poys a voz na~o ser-
+ue de mais que de explicarmos nossos conceptos per ella: manifes-
+tamente se segue que a sciencia na~o tem lingoagem: & que per qual
+quer que seja se pode dar a entender. E por tanto se algu~a ora dize-
+mos isto sam termos de sciencia: ou na~o sabemos / ou na~o oulha-
+mos o que falamos. A sciencia na~o trata das cousas que sam so-
+mente ymaginarias falsas ou ymposiueys: mas das certas & ver-
+dadeiras: as quaes todas tem nome em qualquer lingoagem por
+muito barbara q<ue> seja. Que certo he q<ue> os primeiros scriptores em
+qualq<ue>r sciencia na~o fora~ buscar nomes fora de sua lingoage~[ ]mater-
+na pera os porem as cousas de q<ue> trataua~o. E poys de hu~a lingoa-
+gem em outra se pode tirar qualq<ue>r scriptura que na~o seja de scie~cia
+sem se estranhar: nam sey entender do~de veo tamanho receo de tre-
+ladar na linguagem vulgar outra qualquer obra de scie~cia: se na~o
+que os[ ]letrados quisera~o encarecer isto por lhes parecer que desta
+sorte acrecentaua~o mais em sua autoridade. E porque ho bem qua~-
+to mais comu~ & vniuersal: tanto he mays excelente. Vendo eu que
+ho tratado da sphera: & Theorica do sol & da Lua: com ho primei-
+ro liuro da Geographia de Ptolomeu: sam aquelles principios
+que deue ter qualquer pessoa que em Cosmographia deseja saber
+algu~a cousa. Por nam carecerem disso os que nam sabem latim
+ho tirey em nosso lingoagem. Acrecenteilhe algu~as anotac'o~es p<er>a
+que mays facilmente se podessem entender. Pus lhe ao cabo hu~s
+tratados que compus sobre a Carta de marear: & ho regime~to da}
+[fol. 2v]
+{CB1.
+altura: porque na~o sou tam confiado de minhas cousas que cresse
+que per si as quereriam ver: & jndo nesta co~panhia algu~a hora per
+acerto se abrira ho liuro nelles. E duuidando muito comigo se di-
+rigeria isto a .V.A. a materia da obra me conuidaua ao[ ]fazer: que
+poys .V.A. tem ta~to primor em Cosmografia: & na parte instrume~-
+tal & tem tam alto & tam craro entendime~to & jmaginac'a~o q<ue> pode
+facilmente inuentar muitas cousas que os antigos ignorara~o: pa-
+rece que de dereito lhe pertencia. Doutra parte punhame grande
+receo ser a obra tam pequena & nam auer nella cousa que a .V.A.
+seja noua. Finalmente consirando que os seruic'os que se fazem
+aos principes: na~o se estima~ por grandes nem se despreza~o por pe-
+quenos: senam pello animo com que se fazem. E por[ ]ter muita con-
+fianc'a & experiencia de sua humanidade / que me querera rele-
+uar este meu atreuimento: lha dediquey para que leuando o titulo
+de[ ]seu escrarecido nome: pois a obra per si ho na~o he: possa ficar
+illustre & ymmortal.}
+[fol. 3r]
+{CB1.
+{RUB. % Prohemio do autor.}
+{IN5.} O Tratado da sphera se parte em quatro capitulos.
+Em ho primeiro diremos da composic'a~o da sphera
+Que cousa seja sphera & ho seu ce~tro. Que cousa he
+ho eyxo da sphera: & que cousa he ho polo do mu~do.
+Quantas sam as spheras & que figura tem o mu~do
+Em o segundo diremos dos circulos dos quaes a sphera material
+he composta: pellos quaes ente~demos a spera celestial que per esta
+material imaginamos. Em ho terceiro diremos como nacem & se
+poemos signos. Da diuersidade dos dias & noites: que ha em di-
+ferentes lugares & poremos a diuisam dos climas. Em o quarto
+se dira dos circulos & mouime~tos dos pranetas: & como se causam
+os Crises.
+{RUB. % Capitulo primeiro.}
+{MIN.} {IN3.} SPhera segundo Euclides
+he hu~ corpo que se causa pel-
+lo mouime~to da circunfere~-
+cia do meo circulo leuado per derre-
+dor ate tornar ao seu lugar: estando
+ho diametro quedo. Segu~do theo-
+dosio sphera he hu~ corpo maciso re-
+colhido debaixo de hu~a soo face: & te~
+no meo hum po~to: do qual todallas
+linhas leuadas ate a circunferencia
+sam iguaes. Este ponto se chama ce~-
+tro da sphera. A linha dereita q<ue> pas-
+sa pello ce~tro da sphera & toca co~ os
+seus cabos a circunfere~cia: chamase
+Eyxo da sphera. Os dous po~tos q<ue>
+sa~ cabos do eixo sa~o polos do mu~do.
+{IN2.} DUas diuisoe~s ha da sphera: a primeira he sustancial & a segu~-
+da he acide~tal. Susta~cialme~te se diuide a sphera em .ix. sphe-
+ras s<cilicet> em a nona que he o primeyro mobile: em a sphera das estre-
+las fixas que se chama o firmame~to: & em sete spheras de sete prane-
+tas. Das quaes hu~as sam mayores: & outras menores: segundo q<ue>
+mais se chega~ ou se aparta~ do firmame~to. E por ta~to a sphera de sa-
+turno he a mayor & a da lua he a menor como na figura parecera.
+{GLR. % Chame~sse
+fixas porque
+esta~o sempre
+em hu~a mes-
+ma distancia
+de nos por es-
+tare~ todas e~
+hu~ soo ceo q<ue>
+he o oytauo:
+o qual per ra-
+zam dellas se
+chama firma-
+mento & amo-
+stra~ senos es-
+tas estrellas
+semp<re> p<er> hu~as
+mesmas figu-
+ras & guarda~
+o mesmo sino
+as quaes cou-
+sas na~ ha nos
+planetas. E
+segu~do a co-
+mu~ escola dos
+astrologos a
+nona esphera
+na~o he primei-
+ro mobile mas
+segundo & ho
+primeiro: & ne-
+stes do<<us>> ceos
+de cima na~ ha
+estrellas & por
+tanto na~o se
+comprehende
+pello sentido
+se na~o per ra-
+za~ porq<ue> expe-
+rimentamos
+os seus moui-
+mentos na .8.
+que na~o sam
+p<ro>prios a[ ]ella.}}
+{CW. a}
+[fol. 3v]
+{CB1.
+{IN2.} DJuidese a sphera acidentalmente em sphera dereyta & obli-
+qua. Sphera dereita tem os que viuem debaixo da equino-
+cial se alguem hi pode abitar. E chamase Sphera dereita porque
+a estes nenhum dos polos mais que ho outro se leua~ta: ou porque
+ho seu orizonte & a equinocial se corta~o per angulos dereitos sphe-
+raes: Sphera obliqua tem todolos que viuem fora da equinocial
+pera hu~a parte ou pera a outra: & chamase obliqua porque os taes
+{DIAG.} sempre tem hum dos po-
+los encima do horizonte:
+& o outro debaixo: ou por
+que o seu horizo~te & a equi-
+nocial se corta~o per angu-
+los desiguaes & obliquos.
+% A vniuersal machina
+do Mundo se diuide em
+duas partes. Celestial: &
+elemental. A parte elemen-
+tal he sojeita a co~tinua al-
+terac'a~o: & diuidese e~ qua-
+tro s<cilicet> terra a qual esta co-
+mo centro do mundo no
+meo assentada: seguese lo-
+go a Agoa & per derredor
+della ho aar. & logo ho fo-
+go puro que chega ao ceo
+da lua: segu~do diz Aristo-
+teles no liuro dos metheo-
+ros: porque assi os assen-
+tou deos grorioso & alto.
+E estes quatro sam cha-
+mados eleme~tos: os qua-
+es hu~s dos outros se alte-
+ram & corrompem & torna~
+a gerar. Sam[ ]os elemen-
+tos corpos simprezes que
+se nam podem partir em
+partes de diuersas formas: pella mistura dos quaes se fazem diuer-
+sas species das cousas que se geram. E cada hum dos tres cerca
+de todo a terra per derredor: se na~o quanto a secura da terra resiste}
+[fol. 4r]
+{CB1.
+{DIAG.}
+ha humidade da agoa pera viuendo de algu~ animaes. E to-
+dollos outros afora a terra se mouem: a qual como centro do mun-
+do com seu peso: foge igualmente de todallas partes o grande mo-
+uimento dos estremos: & fica no meo da redonda Sphera.
+{IN2.} IUnto da regiam dos elementos: esta logo a regiam celestial
+lucida: & pello seu ser i~mudauel he liure de toda mudanc'a: te~
+contino mouimento circular: & chamaranlhe os philosofos Quin-
+ta essencia. Sam noue spheras como acima dixemos: conuem a sa-
+ber. Sphera da Lu~a: de Mercurio: de Uenus: do Sol: de Mars:
+de Jupiter: de Saturno: das estrellas fixas: & a do derradeiro ceo
+& cada hu~a das de cima cerca as debayxo. Tem dous mouime~tos
+ho primeiro he do derradeiro ceo: & fazse sobre os dous cabos do
+eyxo s<cilicet> polo Artico & Antartico: comec'a de oriente: vay a ocide~te &
+torna outra vez a orie~te: & este mouime~to parte per meo ha eq<u><<i>>nocial
+{GLR. % Quanto a
+ordem nam fa-
+lecem autores
+os quaes tem
+per opinia~o q<ue>
+acima da lu~a
+tem logo o sol
+o segundo lu-
+gar & saluam
+todo o q<ue> pa-
+rece nos mo-
+uimentos.}}
+{CW. a ij}
+[fol. 4v]
+{CB1.
+Ho outro mouimento he das spheras debaixo: contrairo ao pri-
+meiro per oblico: tem proprios eyxos sobre que se faz: os quaes esta~
+apartados dos primeiros per .23. graos & .33. meudos. Mas o pri-
+meiro mouimento moue & leua com seu ympeto todallas outras
+Spheras & em hu~ dia co~ sua noite faze~ per derredor da terra hu~a
+reuoluc'a~o. E porem ellas sem embargo deste mouimento: anda~o
+em contrayro. A oytaua Sphera em cem annos hum grao: & a es-
+te segundo mouimento parte per meo ho zodiaco. debaixo do q<u><<a>>l
+cada hu~ dos pranetas tem propria sphera: em a qual anda per pro-
+prio mouimento: contra o mouimento do derradeyro ceo: & em di-
+uersos espac'os de tempos fazem suas reuoluc'o~es. Saturno em .30
+annos. Jupiter em .12. Mars em dous. Solem .365. dias: & quasi
+seys oras. Uenus & mercurio quasi em outro tanto tempo. a Lua
+em vinte & sete dias & oyto oras.
+{GLL. % Jsto segun-
+do a opinia~o
+de ptolomeu
+porq<ue> os astro-
+logos q<ue> depo-
+ys fora~ acha-
+ram que este
+mouime~to de
+occide~te pera
+orie~te pella or-
+de~ dos signos
+pertence a no-
+na esphera: &
+que na~ he em
+cem a~nos hu~
+grao mas em
+200. hu~ grao
+& .18. minutos
+de sorte que e~
+49. mil a~nos
+falando natu-
+ralme~te se co~-
+prira sua re-
+uoluc'a~o. E o
+mouimento p<ro>-
+prio a oitaua
+he o da trepi-
+dic'a~o q<ue> se faz
+em .7000. an-
+nos.}
+{RUB. % Da reuoluc'a~o do ceo.:.}
+{IN2.} QUe ho ceo ande de oriente pera ocide~te temos signal. Porq<ue>
+as estrellas que nacem em oriente sempre se vam alc'a~do pou-
+{DIAG.} co a pouco ate virem ao meo do
+ceo: & ficam sempre ygualmente
+apartadas hu~as das outras: &
+assi va~o continuame~te & co~ esta
+igualdade ate se porem. Temos
+outro sinal que as estrellas que es-
+ta~ junto do polo artico as quaes
+nunca se nos poe~ mouense de con-
+tino & igualmente: fazendo suas
+reuoluc'o~es per derredor do polo:
+& sempre va~o em ygual compaso
+hu~as das outras. Assi que per es-
+tes dous continos mouimentos
+das estrellas que se poem & das
+que se nam poem: ficca prouado q<ue>
+ho firmamento se moue de orien-
+te em occidente.
+{RUB. Da redondeza do ceo.}}
+[fol. 5r]
+{CB1.
+{IN2.} QUe ho ceo seja redo~do ha tres rezo~es. Semelha~c'a. proueito.
+& necessidade. Pella semelhanc'a se proua ho ceo ser redondo
+porque este mundo sensiuel: he feito a semelhanc'a do mundo arche-
+typo: em ho qual nam ha principio nem fim. E por isso ho mundo
+{DIAG.} sensiuel tem figura redon-
+da: em a qual na~o ha prin-
+cipio nem fim. Ho prouei-
+to he porq<ue> de todolos cor-
+pos ysoperimetros a sphe-
+ra he ho mayor: & de todal-
+las figuras: a redonda he
+mais capaz. E por tanto o
+que for mayor & redondo:
+sera tam bem capacissimo.
+Pois como quer q<ue> o mun-
+do todalas cousas conte-
+nha a figura redonda lhe
+foy proueitosa. A necessi-
+dade he porque se o mu~do
+teuesse outra figura & na~o
+redonda s<cilicet> de tres faces q<u><<a>>-
+tro ou muitas: seguirsehia~
+dous imposiuees s<cilicet> que al-
+gum lugar estaria vazio.
+& que algum corpo estaria
+sem ter lugar: as q<u><<a>>es cou-
+sas sam ambas falsas: co-
+mo parece nos angulos al-
+c'ados & leuados per der-
+redor.
+% Jtem como diz Alfragano se ho ceo fosse cha~o hu~a parte do
+{DIAG.} ceo estaria mais perto de nos que
+a outra: co~uem a saber aquella q<ue>
+esteuesse sobre nossa cabec'a. E
+por tanto a estrella q<ue> hi esteuesse
+se nos chegaria mais q<ue> quando
+esteuesse em oriente ou ocidente.
+{GLR. Esta raza~
+de alfragano
+na~o tem efica-
+cia porq<ue> pois
+ho mouime~to
+do ceo he cir-
+cular de qual
+quer figura q<ue>
+fosse todolos
+pontos guar-
+daria~o semp<re>
+a mesma dis-
+tancia.}
+E porque as cousas que se vem}
+{CW. a iij}
+[fol. 5v]
+{CB1.
+de mais perto parecem mayores. Por tanto ho sol ou outra qual-
+quer estrella: estando no meo do ceo: auia de parecer mayor que
+quando esteuesse em oriente ou occidente. Mas nos vemos ho co~-
+trairo: que mayor parece ho sol: ou outra qualquer estrella: no orien-
+te ou ocidente: que no meyo do ceo. E na verdade na~o he assi: mas
+a causa deste parecer he: que no inuerno & no tempo chuyuoso: so-
+bem algu~s vapores antre a nossa vista & ho sol ou estrella: & porque
+{MIN.} os taes vapores sam corpo dia-
+phano: aparta~o os rayos visua-
+es de sorte que na~p comprende-
+mos a cousa em sua natural &
+verdadeira quantidade: como
+parece no dinheiro que se lanc'a
+no fundo de agoa limpa: ho
+qual pellos rayos da vista se es-
+palhare~: parece mayor do que
+he a sua verdadeira quantidade.
+{RUB. % Da redondeza da terra.}
+{IN2.} QUe a terra seja outrosi redonda se proua: porque os Sig-
+nos & as estrellas na~o nacem nem se poem igualmente a to-
+dollos homens em todallas partes: mas primeyro nacem & se
+poem aos que viuem em oriente: que aos que viuem em ocidente
+E a redondeza da terra causa que mais cedo ou mais tarde nac'a~o
+& se ponham hu~s que a outros: ho que craramente parece ser assi
+{DIAG.} pellas cousas que no ceo se fazem.
+Que hum mesmo Crys da lu~a ve-
+mos nos na primeyra ora da noite &
+os orientaes na terceyra. Pello qual
+consta que primeiro foy a elles noite
+& se lhes pos ho sol que a nos. Nem
+ha outra causa disto: saluo a redon-
+deza da terra. Poys que tambe~ seja
+redonda do norte pera o sul: tem sua
+proua. Porque aos que viuem da
+banda do norte: as estrellas que esta~
+junto do pollo artico: nunca se lhes poem: & as que estam junto do
+polo antartico nunca lhes nacem nem as podem nunca ver. E por
+tanto se alguem fosse do norte pera ho sul: tanto poderia jr: que}
+[fol. 6r]
+{CB1.
+{DIAG.} as estrellas que sempre via ja na~o
+veja: & veja as que antes na~o via.
+E a quem fosse do sul pera ho norte
+outro tanto aconteceria a causa he
+ser a terra redo~da. Mais se a terra
+fosse chaa~ de oriente pera ocidente
+ta~o asinha naceriam as Estrellas
+aos orientaes: como aos occiden-
+taes: o que crarame~te he falso. E se
+do norte ao sul fosse chaa~: seguirse-
+hia que as estrellas que hum sempre ve: posto que muito pello tal
+caminho andasse: nunca as deyxaria de ver: que tambem he falso:
+mas a sua grande quantidade a faz parecer chaam.
+{GLR. % Estes do<<us>>
+elementos a-
+goa & terra fa-
+ze~ ambos ju~-
+tos hu~a sphe-
+ra como se p<ro>-
+ua pellos ecli-
+pses da lu~a:
+por q<ue> a so~bra
+he de ambos
+& na~o he ma-
+yor q<ue> ha q<ue> re-
+sponderia ha
+hu~a spera q<ue>
+teuesse o dia-
+metro da ter-
+ra. Tambem
+se pode p<ro>uar
+ser isto asi por
+que o mesmo
+numero de le-
+goas ou mi-
+lhas respo~de
+a hu~ grao do
+ceo pella ter-
+ra & pelo mar
+igoal mente: o
+que na~o pode-
+ria ser se am-
+bos na~o fezes-
+sem hu~a sphe-
+ra: posto que
+eu tenho por
+muy difficil
+poderse saber
+no mar q<ue> a hu~
+grao de norte
+sul respo~dem
+ta~tas legoas
+Os amigo
+faziam disto
+grandes diffi-
+culdades por-
+que tinha~o q<ue>
+ho Mar era
+muito mayor
+q<ue> a terra: mas
+as nouas na-
+uegac'o~es amostrara~ co-
+parece pe-
+las descripc'o~-
+es dos portu-
+gueses: ser a
+superficie da
+terra mayor
+que a ho mar:}
+{RUB. % Da redondeza da agoa.}
+{IN2.} QUe a agoa seja redonda se proua per esta arte. Ponhasse hu~
+sinal na ribeyra do mar & saya hu~a nao do porto: & apartese
+tanto que quem esteuer ao pee do masto: na~o possa ver o sinal: & es-
+tando assi a nao: verseha ho mesmo sinal da gauia. Poys o olho q<ue>
+esteuesse ao pee do masto: melhor deuia de ver ho sinal que o que en-
+cima esteuesse: como parece pollas duas linhas que va~o ate ho si-
+nal. E por tanto nenhu~ desconto tem isto sena~o ser a agoa redonda
+{MIN.} & ponhamos que na~o aja hi ne-
+uoa: nem vapores nem algu~ ou-
+tro impedimento. Mais poys
+a agoa he corpo homogeneo: se-
+guese que ho todo & as partes se-
+ra~o de hu~a mesma raza~o & pois
+as partes da agoa como parece nas gotas & no orualho das er-
+uas busca~o naturalmente figura redonda. Por tanto a mesma
+agoa que he ho todo tambem deue ser redonda.
+{RUB. % Que a terra seja centro do mundo.}
+{IN2.} QUe ho assento da terra seja no meo do firmamento se proua
+desta maneira. Quer as estrellas este~ no meo do ceo: quer no
+oriente: quer no occidente de hu~a mesma quantidade parece~ aos q<ue>
+estam na face da terra: & a reza~o disto he porque esta a igualme~te a
+terra dellas apartada. Que se mais se achegase a hu~a parte do ceo:}
+{CW. aiiij}
+[fol. 6v]
+{CB1.
+que a outra: seguirseya que que~ esteuesse naquella parte da terra: q<ue>
+esta msi perto do ceo na~o veria a metade do ceo: & isto he contra
+Ptolomeu & todos os filosophos: os quaes dizem que onde que
+que Homem estee: seys signos lhe nacem: & seys signos se lhe poem
+& sempre ve a metade do ceo & a outra metade se lhe encobre. E q<ue>
+a terra seja como centro & hum ponto em respeyto do firmamento
+prouase: porque se teuessa quantidade em respeyto do firmamento
+{MIN.} nam veriamos a metade
+do ceo. Mais imaginem<<os>>
+que hu~a superficie chaam
+passa pollo centro da terra
+& parte a terra & per conse-
+guinte ao firmamento em
+duas partes iguais: ho o-
+lho que esteuer no ce~tro ve-
+ra a metade do firmamen-
+to: & ho olho que esteuer na
+face da terra: vera a mesma
+metade. Do qual se segue
+manifestame~te: que a qua~-
+tidade da terra que ha des
+do centro ate a face della
+he insensiuel: & pello conseguinte toda fica insensiuel em respeyto
+do firmamento. Asfragano tambem diz que a menor das estrellas
+fixas notaueys aa vista: he mayor que toda a terra: & essa mesma
+estrella he quasi hum ponto em respeito do firmamento. pois a ter-
+ra he menor que a estrella: muyta mais razam auera pera ficar per
+ponto em respeyto do firmamento.
+{RUB. % Que a terra seja y~mouel.:}
+{IN2.} QUe a terra no meo de todallas cousas estee queda pois que
+he pesada em summo tem este proua. Toda cousa pesada
+vay naturalmente ao centro: o qual centro he hum ponto no meyo
+do firmamento. E pois a terra he em summo pesada: naturalmen-
+te jra a este ponto. Jtem qualquer cousa que do meyo se moue: con-
+tra a circu~ferencia do ceo sobe. Por tanto se a terra do meyo se mo-
+uesse: soberia que he imposiuel.
+{RUB. % Da quantidade da terra.}}
+[fol. 7r]
+{CB1.
+{IN2.} Ho cerco de toda a terra segundo dizem os filosofos Ambro-
+sio. Theodosio. Macrobio: & Eratostenes: he de dozentos
+& ciquoenta & dous mil estadios: dando a cada hu~a das treze~tas
+& sesenta partes do zodiaco setecentos estadios. E ho modo que se
+tempera se isto alcanc'ar he este. Tomaremos ho estrelabio: & em
+noyte crara & estrellada: oulharemos ho polo per ambos os bura-
+cos do mediclinio: que he a regra que joga no centro: & notaremos
+a quantos graos esta o mediclinio. depoys disso yremos dereitos
+ao norte: ate que outra noite nos amostre ho mediclinio estar ho
+polo mais alto hum grao. Se medirmos este espac'o de caminho:
+acharemos que sam setecentos estadios: & dando outro tanto a ca-
+da hum dos trezentos & sesenta graos: acharemos quanto seja ho
+cerco de toda a terra. Pello qual ho diametro da terra pella regra
+do circulo & diametro se sabera deste modo. Tiraremos do cerco
+da terra hu~a de vinte duas partes: & ho terc'o do que ficar s<cilicet> oyten-
+ta mil & cento & oytenta & hum estadios & meo & quasi hum terc'o:
+sera ho diametro ou grosso da redondeza da terra.
+{RUB. Capitulo segundo: Dos circulos dos quaes a esphera
+material he composta per que entendemos a celestial.}
+{IN4.} DEstes circulos hu~s sam mayores: & outros menores
+como pello sentido julgamos. Mayor cirdulo se cha-
+ma na esphera: ho circulo q<ue> passa pello centro & parte a
+esphera em duas metades. Menor he o que a na~o par-
+te em duas metades: mas antes em partes desiguaes. Qua~to aos
+circulos mayores diremos primeiro da Equinocial. He a equino-
+cial hum circulo que parte a esphera em duas partes yguaes: & per
+todas suas partes ygualmente se aparta dambos os polos. Cha-
+masse equinocial porque quando ho sol passa per elle que he duas
+vezes no anno: no principio de Aries & de libra: sam os dias & as
+noytes iguaes em todo a terra. E por isto se chama tambem igua-
+lador do dia & noyte: porque faz ho dia arteficial seja igual a
+noyte. E chamase outrosi cinto do primeyro mouimento: he ho moui-
+mento do primeiro mobile: co~uem a sa[*b]er da nona esphera ou der-
+redeiro ceo: que he de oriente pera occidente: & torna outra vez a
+oriente. E chamasse tambem mouimento racional: a semelhan-
+c'a do mouimento racional que ha no mundo pequeno que he ho
+homem: quando po~e seu pensamento no criador: & dali vem as
+{GLR. % Plinio diz
+o mesmo per
+autoridade d<e>
+Eratostenes
+mas Cleome-
+des o alegua
+tambe~ & traz
+a sua demos-
+trac'a~ pella q<u><<a>>l
+parece na~o se-
+rem. mays q<ue>
+250. mil esta-
+dios: porq<ue> diz
+que se achou
+auer a~tre sye-
+ne & Alexan-
+dria q<ue> estam
+debaxo de hu~
+meridiano. ci~-
+co mil e[*s]tadi-
+os: & a distan-
+cia per instru-
+me~to era hu~a
+de cinquoe~ta
+partes de to-
+da a circunfe-
+rencia q<ue> he .7
+graos & .12. mi-
+nutos. E fez
+se esta obser-
+uac'a~o em ale-
+xa~dria ao m<e>o
+dia estando o
+sol no tropico
+de Ca~crom de-
+baixo do q<u><<a>>l es-
+ta Syene.
+mas isto na~o
+q<u><<a>>dra co~ ptolo-
+meu: o qual di-
+xe q<ue> o tropico
+distaua da eq<u><<i>>-
+nocial per .23.
+graos & .51. mi~-
+nutos: & pos
+Alexandria e~
+30. g<r><<a>>os & .58.
+minut<<os>>: & assi
+a deferenc'a q<ue>
+ha antre estes
+dous lugares
+per o meridia-
+no na~o sera se-
+gundo ptolo-
+meu tanta co-
+mo diz erato-
+stenes. Mais}}
+[fol. 7v]
+{CB1.
+{GLL. segu~do mari-
+no & Ptolo-
+meu s<cilicet> hu~ g<r><<a>>o
+do ceo respon-
+dem na terra
+500. estadios
+somente: & se-
+gundo Alfra-
+gano pouco
+mais de .450.
+& assi ha mui-
+ta diuersida-
+de antre estes
+autores: sal-
+uo se per ven-
+tura vsara~ de
+medidas dife-
+rentes.}
+craituras & torna ao criador: & hi faz seu assento. Ho segundo mo-
+uimento do firmamento & pranetas he contrairo a este: comec'a de
+ocidente: vay a oriente & torna a ocidente: & este mouime~to he irra-
+tional ou sensual: a semelhanc'a do mouimento do mundo peque-
+no: que he das cousas corruptiueys pera ho criador: & torna outra
+vez as cousas corruptiueis: chamase por tanto a equinocial cinto
+do primeiro mouimento: porque cinge & parte ao primeyro mobi-
+le que he a sphera nona em duas partes iguaes: & igualmente se a-
+parta dos Polos do mundo: E auemos mais de notar que ho po-
+lo do mundo do que sempre vamos: se chama Polo setentrional. Pol
+lo artico: ou Polo boreal. chamase setetrional: porque esta junto
+da vssa menor que he hu~a ymagem a qual se chama septentrional: de
+sete & trion que quer dizer boy: porq<ue> sam sete estrellas: que por sere~
+{DIAG.} vezinhas do Polo se moue~
+de vagar a maneira de boy.
+Ou tambe~ se pode~ chamar
+estas sete estrellas Seten-
+triones: porque sam sete que
+trilham as partes vezinhas
+do polo. Artico se chama o
+dito Polo porque Artos he
+ha vssa mayor: ju~to da qual
+estaa. Chamase Boreal por
+que estaa naquella parte: do~-
+de vem ho vento Boreas.
+Ho polo co~trairo se chama
+Antartico que quer dizer co~-
+tra o artico: & chamase me-
+ridional: porque he da par-
+te do meyo dia: tambem se chama Austral: porque estaa naquella
+parte do~de vem ho vento Austro que he o sul. Assi q<ue> estes dous po~-
+tos fixos no ceo se chama~o Polos do mundo: porque sam cabos
+do eyxo da Sphera: & sobre elles se volue o mu~do: hum delles nos
+he sempre manifesto: & ho outro sempre se nos esconde: & por isso de-
+zia Uergilio no primeiro das Georgicas. Este polo sempre ho te-
+mos alto & manifesto: mas ho outro s<cilicet> ho antartico temos debaixo
+dos peys: & as almas do inferno vem.
+{GLL. % Este vento
+se chama ta~-
+be~ aquilo & he
+nordeste pou-
+co mais de q<u><<a>>r-
+ta do norte:
+porq<ue> toma .30
+graos da cir-
+cu~fere~cia da
+agulha come-
+c'ando do nor-
+te p<er>a leste.}
+{RUB. Do zodiaco.}}
+[fol. 8r]
+{CB1.
+{IN2.} HA outro circulo na esphera que corta a equinocial: & ella tan-
+bem ho corta em duas partes iguaes: hu~a metade delle de-
+clina pera ho norte: & ha outra pera ho sul: chamasse este circulo
+zodiaco: porque zoe quer dizer vida: e pello mouimento dos Pra-
+netas debaixo delle: he a vida nas cousas que debaixo do ceo esta~.
+Pode tambem vir este nome zodiaco de zodio~ que quer dizer ani-
+mal: por quanto este circulo se parte em doze partes yguaes: das
+quaes cada hu~a se chama signo: & tem nome de algu~ animal & isto
+por algu~a propriedade em que conuem ho signo & ho animal: ou
+porque as estrellas fixas daquellas partes fazem figura do tal ani-
+mal. Os latinos chama~o a este circulo signifero: porque leua os si-
+gnos: ou porque se parte em elles: chamalhe Aristoteles no liuro da
+gerc'a~o & corrupc'a~o circulo torto: quando diz que segundo o sol
+se nos chega: ou aparta em o circulo obliquo: se fazem as gerac'o~es
+{MIN.} & corrupc'o~es em estas cousas debai-
+xo. Seguense os nomes a orde~: & o
+numero dos signos Aries. Tauro
+Gemini. Cancro. Leo. Uirgo. Li-
+bra. Scorpio. Sagitario. Capri-
+corno. Aquario. Pisces. ha em ca-
+da hu~ signo trinta graos: & portan-
+to em todo ho zodiaco ha trezentos
+& sesenta graos. Os astrologos par-
+te~ ainda o grao em sesenta meu( )dos
+& ho meu( )do em sesenta segundos:
+& ho segundo em sesenta terceiros: & deste modo va~o partindo ate
+dez. E assi como se parte ho zodiaco: se ha tam bem de partir em se-
+melhantes partes: qualquer circulo da esphera: ora seja mayor ora
+seja menor. E posto que todolos outros circulos da esphera se ima-
+ginem como linha ou circunferencia: ho zodiaco porem auemos d<e>
+entender como superficie que tem doze graos de largura: dos qua-
+es graos ja falamos. E daqui parece ho erro dalgu~s que falando
+em astrologia: dize~ que os signos sam quadrados. Saluo se vsan-
+do mal do nome: a hu~a mesma cousa chama~o quadrada & de qua-
+tro cantos: porque ho signo tem trinta graos de londo & doze de
+largo. A linha que parte o zodiaco em duas partes s<cilicet> seys graos de
+hu~a banda & seys da outra: se chama linha ecliptica. & tem este no-
+me: porque quando ho sol & a lua esta~o debaixo desta mesma linha
+he eclipse do sol ou da lua. Sera eclipse de sol se a lua for noua: & este-
+uer dereitamente antre a nossa vista & ho sol. E sera eclipse de lua se(-)}
+[fol. 8v]
+{CB1.
+for chea: & ho sol esteuer em co~trairo della per diametro. E por ta~to
+na~o he outra cousa crys da lu~a: se nam estar a terra posta antre
+o sol & a lua. Ho sol anda sempre per debaixo da ecliptica: mas os
+outros planetas hu~as vezes anda~o da ba~da do norte: & outras ve-
+zes se apartam pera a banda do sul: & outras vezes estam debaixo
+da ecliptica. A parte do zodiaco que se desuia da equinocial pera o
+norte: chamasse septentrional ou Artica: ou Boreal. E os seys sig-
+nos que vam de Aries ate o fim de virgo: chama~se septentrionaes
+ou boreaes. A outra parte do zodiaco q<ue> se desuia pera o sul: se cha-
+ma Meridional ou Austral ou Antartica. E os seis signos que
+va~o des do principio de Libra ate o fim de Pisces se chama~o meri-
+dionaes: ou austraes. E auemos de saber que quando se diz que o
+sol esta em Aries: ou em outro qualquer signo esta palaura .em. val
+tanto como se dixessemos debaixo: tomando este nome signo pello
+que agora dixemos. Tambem se pode chamar signo hu~a pirami-
+de de quatro faces: a qual tem por basa: aquella superficie que dixe-
+mos que era signo: & a ponta desta piramide estaa no centro da ter-
+ra: & tomando signo nesta segunda maneira: propriamente pode-
+remos dizer que os planetas estam em signos. Ho terceiro modo
+de signo he este. ymaginemos q<ue> pellos polos do zodiaco & pellos
+principios dos doze signos: passam seis circulos: os quaes partem
+toda a superficie da sphera em doze partes largas no meo & estrei-
+tas junto dos Polos: cada hu~a parte destas se chama signo: & tem
+ho nome especial daquelle signo: que fica recolhido antre as suas
+duas linhas: & tomando signo neste terceiro modo as estrellas que
+estam junto dos polos diremos que estam em signos.
+Ho quarto & derradeiro modo de signo he hum corpo que tem por
+basa o terceiro modo de signo: & tem o gume sobre ho eyxo do zo-
+diaco. E tomando signo desta maneira: todo ho mundo se parte
+{MIN.}}
+[fol. 9r]
+{CB1.
+em doze partes iguaes que se chama~o Signos: & qualquer cousa
+que ha no Mundo esta em algum Signo.
+{RUB. % Dos dous coluros.}
+{IN2.} HA outros dous circulos na Esphera: os quaes se chama~o
+Coluros: o seu officio he amostrar os Solsticios & Equino-
+cios. Ueo este nome Coluro de Colon que em grago quer dizer
+membro: & vros que quer dizer Biy siluestre: porque assi como ho
+cabo do Boy siluestre: quando esta alc'ado: que he seu me~bro: faz
+hum semicirculo imperfeito. Assi tambe~ ho coluro sempre nos pa-
+rece imperfeito: por quanto hu~a metade se nos mostra & a outra se
+nos encobre. Ho coluro que amostra os solsticios passa pellos po-
+los do mu~do & pellos do zodiaco: & pellas mayores declinac'o~es
+do sol s<cilicet> pellos primeiros graos de Cancro & de Capricorno. Ho
+{DIAG.} primeiro po~to de Cancro q<ue>
+he onde este coluro corta ho
+zodiaco: chamase ponto do
+solsticio estiual: porque quan-
+do ho sol estaa nelle: he solsti-
+cio estiual: & na~o se pode ho
+sol mais chegar ao zenith da
+nossa cabec'a. Zenith he hu~
+ponto no ceo: que esta derei-
+tame~te sobre nossas cabec'as
+E ho arco do caluro que esta
+antre o po~to do solsticio esti-
+ual & a equinocial he a ma-
+yor declinac'a~o do sol: a qual
+he segundo Ptolomeu .xxiij
+graos: & cinquoenta & hum
+meudos. 
+{GLR. Em nosso te~-
+po he .23. g<r><<a>>os
+& meo & o mo-
+uime~to da tre-
+pidac'a~ da oi-
+taua Sphera
+causa esta di-
+uersidad<e> por
+quanto ho sol
+nu~ca es apar-
+ta da eclipti-
+ca da oytaua
+sphera.}
+Mas segundo Al-
+meon he .xxiij. graos & .xxxiij
+meudos. Ho primeiro po~to
+tambe~ de Capricorno: onde
+ho mesmo coluro pella outra
+parte corta o zodiaco se cha-
+ma ponto do Solsticio hie-
+mal: & o arco do coluro que
+fica antre este ponto & a equi-nocial}
+[fol. 9v]
+{CB1.
+he outra mayor declinac'a~o do sol igual ha primeira. Ho ou-
+tro coluro passa pellos polos do mundo: & pellos primeiros po~tos
+de Aries & de Libra onde sam os dous eq<u><<i>>nocios. E por isso se cha-
+ma coluro que amostra os equinocios: corta~se estes dous coluros
+sobre os polos do mundo em angulos dereitos spheraes. E assi fi-
+ca que Cancro & Capricorno fazem os solsticios: mas Aries & li-
+bra fazem os equinocios.
+{RUB. Do Meridiano & Horizonte.}
+{IN2.} HA outros dous circulos mayores na espera s<cilicet> Meridiano
+& Horizonte: ho meridiano he hum circulo que passa pellos
+polos do mu~do: & pello zenith de nossa cabec'a: & chamase meridia-
+no: porque onde quer que home~ estee & em qualq<ue>r tempo do anno
+quando pello mouimento do primeiro mobile: ho sol vier ao seu
+meridiano: ali he o meo dia: & per esta mesma razam se chama cir-
+culo do meo dia. E auemos de notar que cidade que se chega a
+oriente mais q<ue> a outra tem diferente meridiano: & ho arco da equi-
+nocial que fica recolhido antre os dous meridianos: chamase lon-
+gura das cidades. E se de duas cidades teu( )erem hum mesmo me-
+ridiano: teram hu~a mesma distancia de oriente & de ocidente. Ho-
+rizonte he hum circulo que aparta a mea esphera debaixo da de ci-
+ma: & por isso se chama limitador da vista: tambem se chama circu-
+lo da mea esphera. Duas maneiras ha de horizonte: hum de derei-
+to: & ho outro he obliquo. Horizonte dereito & esphera dereita tem
+aquelles cujo zenith estaa na equinocial. Porque ho seu horizonte
+{DIAG.} he hum circulo que passa
+pellos polos do mundo:
+& parte a equinocial com
+angulos dereitos esphe-
+raes: & por isso se chama
+horizonte dereito & esphe-
+ra dereita. Horizo~te obli-
+quo te~ aquelles aos qua-
+es ho polo do mundo se
+alc'a sobre o horizo~te: por
+que ho seu horizonte par-
+te a equinocial com angu-
+los desiguaes & obliquos
+& por isso se chama Hori-zonte}
+[fol. 10r]
+{CB1.
+obliquo & esphera obliqua. Ho zenit de nossa cabec'a he semp<re>
+polo do orizonte. E daqui se segue: q<ue> qua~to se alc'a o polo do mu~do
+sobre o horizo~te: tanto se aparta o zenith da equinocial: a q<u><<a>>l cousa
+se proua per este modo. Pois em cada hu~ dia natural: cada hu~ dos
+coluros se junta duas vezes co~ ho meridiano: ou fica per meridia-
+no: por tanto ho que se prouar em hum se prouara no outro. To-
+memos pois do coluro que amostra os solsticios a quarta parte:
+conuem a saber des da equinocial ao polo do mundo & tomemos
+outra q<u><<a>>rta do mesmo coluro des do zenith ate ho Horizonte. Estas
+duas quartas por serem de hum mesmo circulo sam yguaes. E por
+que se de cousas iguaes se tirare~ cousas iguaes: ou hu~a mesma cou-
+sa a ambas comu~: he necessario que os restos seja~o yguaes. Por ta~-
+to se destas quartas tirarmos o arco comu~ que ha antre ho zenith &
+o polo do mundo: ficaram cousas yguaes: sera~o a altura do polo
+do mundo sobre o horizonte & a distancia que ha do zenith a equi-
+nocial.
+{RUB. % Dos quatro circulos menores.}
+{IN2.} POys que ja falamos dos seys circulos mayores diremos a-
+gora dos quatro menos. Auemos de notar que estando o
+sol no primeiro po~to de cancro que he ho solsticio do estio: pello mo-
+uimento do primeiro mobile: faz hum circulo que he ho derradei-
+ro que ho sol faz da parte do norte: & chamase circulo do solsticio es-
+tiual pella razam sobredita: & chamase tambem tropico estiual: &
+veo este nome de tropos que quer dizer volta: porque entam come-
+c'a ho sol a fazer volta pera o hemispherio de bayxo & comec'ase apar-
+tar de nos. Estando tambem ho sol no primeiro ponto de Capri-
+corno que he o solsticio do inuerno: pello mouimento do primeiro
+mobile: faz hum circulo que he ho derradeiro que elle faz da banda
+do sul. E chamase circulo do solsticio do ynuerno: ou tropico do yn-
+uerno: porque entam faz ho sol volta pera nos. E pois o zodiaco se
+aparta da equinocial: tambe~ o polo do zodiaco se apartara do po-
+lo do mundo: E pois a oitaua esphera se moue: tambem ho zodia-
+co que he parte da oytaua esphera se mouera: per derredor do eyxo
+do mundo: & ho polo do zodiaco se mouera per derredor do polo
+do mundo. Por ta~to este circulo que o polo do zodiaco faz per der-
+redor do polo artico: chamase circulo artico: & o outro circulo que
+faz ho outro polo do zodiaco per derredor do polo antartico: cha-
+mase circulo antartico. Outro si quanto he o que mays se aparta o
+Sol da equinocial: tanto he o que se aparta ho polo do zodiaco do}
+[fol. 10v]
+{CB1.
+polo do mu~do: ho que se prouara desta maneira. Tomemos ho co-
+luro que amostra os solsticios: ho qual passa pellos polos do mun-
+do & pellos polos do Zodiaco. E pois as quartas de hum mesmo
+circulo sam iguaes: a quarta deste coluro des da equinocial ao po-
+lo do Mundo: sera igual a quarta que fica antre ho primeiro pon-
+to de Cancro & ho polo do Zodiaco. Ora poys se tirarmos des-
+tas quartas iguais ho arco comum que ha des do primeiro pon-
+to de Cancro ao polo do mundo: os restos sera~o iguaes s<cilicet> ho que
+mais se aparta ho sol da equinocial: & ho q<ue> ha antre o polo do mun-
+do & ho polo do zodiaco. E porque ho circulo artico per todallas
+partes igualmente se aparta do polo do mundo: daqui se segue: q<ue>
+aquella parte do coluro que fica antre o primeiro ponto de Cancro
+& ho circulo artico: he quasi ho dobro da mayor decrinac'a~o do sol:
+ou do arco do mesmo coluro que fica antre ho circulo artico & ho po-
+lo do mundo: ho qual arco he igual a mayor decrinac'a~o que tem o
+sol. que pois este coluro te~ .360. graos como os outros circulos da
+esphera: tera por tanto a sua quarta .90. graos. E pois a mayor de-
+crinac'a~o q<ue> ho sol tem: segundo Ptolomeu he de vinte & tres graos
+& cinquoenta & hu~ meudos: & ho arco que jaz antre o circulo artico
+& o polo do  mundo tem outros tantos graos: se os somarmos am-
+bos: faremos quasi .48. graos: os quaes tirando de nouenta fi-
+ca~o .42. graos que val ho arco do coluro que esta antre o primeiro
+ponto de Cancro & ho circulo artico. E desta maneira fica proua-
+do que ho sobredito arco he quasi ho dobro da mayor declinac'a~o
+que ho sol tem. E auemos de notar que a equinocial com os qua-
+tro circulos menores chamanse os cinquo paralellos: como se fos-
+sem igualmente distantes: Nam porque quanto o primeiro se apar-
+ta do segundo: tanto ho segundo se aparta do terceiro: porque isto
+pello sobredito parece ser falso: mas porque tomando quaesquer
+dous circulos destes per si: acharemos que distam hum do outro
+{DIAG.} igualmente per todallas partes. E os
+seus nomes sam estes. Paralello da
+equinocial. Paralello do solsticio do
+estio. Paralello do Solsticio do in-
+uerno. Paralello artico: & Paralello
+antartico. E auemos mays de notar
+que os quatro paralellos menores s<cilicet>
+dous tropicos & ho paralello artico
+& ho antartico nos apata~o no ceo cin-
+quo zonas ou regio~es. E por isso dezia}
+[fol. 11r]
+{CB1.
+Vergilio nas georgicas Cinco zonas ha no ceo hu~a das quaes he
+sempre queimada do sol & torrada do fogo. Outras[ ]tantas partes
+ha na terra que dereitamente esta~o debaixo das ditas zonas: como
+Ouuidio dixe no primo liuro do Metamorphoseos. Aq<u><<i>> esta no
+meyo nam he habitauel per quentura: duas dellas esta~o cubertas
+de neue: & as outras duas que estam antre estas: sam temperadas
+pella mistura do que~te com o frio. Assi que a zona que esta antre os
+dous tropicos he inhabitauel: pella quentura do sol que sempre an-
+da antre os tropicos: & pella mesma causa a terra que jaz debaixo
+della he inhabitauel: & as duas Zonas que estam cercadas pello cir-
+culo artico & pello antartico: sam inhabitaueis per muito frio: por
+que ho sol anda muito apartado dellas: & ho mesmo se ha de dizer
+das regioes da terra que esta~o debaixo: mas das outras duas zo-
+nas: assi a que estaa antre ho tropico do estio & ho circulo antartico: sam
+habitaueis: porque se tempera a quentura da zona torrada q<ue> esta
+antre os tropicos: com a frialdade das zonas frias que esta~o debai-
+xo dos polos & ho mesmo se ha de dizer das partes da terra que es-
+tam debayxo dellas.
+{GLR. % As nauega-
+c'o~es dos por-
+tugueses nos
+amostrara~: q<ue>
+na~o ha terra
+tam deste~pe-
+rada per que~-
+te ne~ per fria
+me q<ue> na~o aja
+home~s.}
+{RUB. % Capitulo .iij. De como nacem & se poem os signos. Da
+deferenc'a dos dias & noytes: & da defere~c'a dos climas.}
+{GLR. <<a>>
+% Pois a eq<u><<i>>-
+nocial faz sua
+volta em .24.
+horas & anda
+igualme~te: e~
+cada hora so-
+bira~o dela .15
+graos: & o me-
+smo he dizer
+este arco do
+zodiaco sobe
+em hu~a hora
+& a ascensam
+deste arco he
+quinze graos
+porq<ue> tudo se
+refere a equi-
+nocial.}
+{IN5.} HO nacer & ho por dos Signos he em duas manei-
+ras: segundo os poetas: & segundo os Astrologos.
+Os poetas fazem tres deferenc'as no nacer & no por
+dos signos. Cosmico. Cronico: & heliaco. Nacime~-
+to cosmico se chama quando algu~ signo ou estrella:
+sobre de dia sobre ho horizo~te da parte de orie~te. E posto q<ue> em cada
+hum dia artificial nac'a~o seys signos desta maneira: aquelle signo
+porem se diz ter nacime~to cosmico per excelencia: co~ o qual ho sol pel-
+la menha~ nace: & este nacimento se chama proprio principal & de ca-
+da dia. Do qual temos enxe~pro nas georgicas onde se ensina a fa-
+zer a sementeira das Fauas & do milho no vera~o: quando ho sol
+estaa em ho signo de Tauro. Diz assi. Quando ho resprandece~te
+Touro abrir i a~no co~ seus cornos dourados: & da~dolhe lugar a co~-
+stellac'a~ canis se po~e. Ho poer cosmico he pello contrairo: co~uem a
+saber quando ho sol nacer com algu~ signo: ho signo contrairo dire-
+mos q<ue> se po~e cosmico. Disto temos enxe~pro nas georgicas qua~do
+nos e~sina Vergilio fazer a[ ]seme~teira do trigo no fim do autuno: q<ue> he}
+{CW. b}
+[fol. 11v]
+{CB1.
+estando ho sol em Scorpio: o qual signo nace pella menha~ com
+ho sol & Tauro que he ho signo contrairo se poem. Diz a letra: pri-
+meiro se te ponha~o a ti as Atlantides que tu entregues a semente a
+terra. Nacimento cronico ou temporal he: quando algum signo ou
+estrella: despoys do Sol posto sobe per cima do horizonte da par-
+te de Oriente: & chamase Cronico porque he de noite. E temporal
+porque ho tempo dos Mathematicos he despoys que ho Sol se
+po~e. Deste nacimento dezia Ouidio no de Ponto aqueixandose
+do muito tempo que auia que estaua degradado. As pleyadas
+com seu nacimento fezeram ja quatro autunos: daua per estas pa-
+lauras a entender que poys eram quatro autunos quatro annos
+eram passados de seu desterro. Mas parece que Uergilio & Oui-
+dio sam nisto contrairos: porque Vergilio dezia que as pleyadas
+se punham no autuno. E a verdade he que segundo Uergilio he
+poer cosmico: & segundo Ouidio he nacimento cronico: a qual
+cousa se pode fazer em hum mesmo dia: mas tem esta deferenc'a: q<ue>
+ho Poer cosmico he pella menha~ & ho nacimento cronico he a tar-
+de: & he pello contrairo ho Poer cronico: do qual dezia Lucano.
+Enta~o a noite pequena constrangia as setas de Thesalia. Naci-
+(ci)mento Heliaco ou solar se diz quando algum signo ou estrella se
+pode ver: por estar apartado do Sol: & antes nam se podia ver:
+por estar junto com elle. Deste nacimento diz Ouidio no de Fastis-
+la ho Aquario leue com seu cantaro obliquo sayo. E vergilio nas
+Georgicas: Primeyro se aparte a estrella decreta da coroa arden-
+te: & diz Uergilio isto porque esta estrella esta em Scorpio: & na~o
+se via quando ho sol estaua nelle. Poer heliaco se diz quando ho
+sol se chega a hum signo & com sua grande craridade nam con-
+sinte que se veja. Disto teuemos acima enxemplo: no verso que de-
+zia. E ho ca~o dando lugar ao touro se po~e.
+{RUB. % De como nacem & se poe~ os Signos: segundo os Astrologos.}
+{IN2.} AGora diremos como nacem & como se poem os Signos:
+segundo os astrologos. E primeiramente diremos na esphe-
+ra dereyta. <<a>> Pello qual auemos de saber q<ue> assi na sphera dereita:
+{GLL. <<b>>
+% A equino-
+cial & ho ori-
+zonte nunca
+muda~ o sitio
+& por esta ra-
+za~o he o a~gu-
+lo sempre igu-
+al o qual co~te~
+os graos q<ue> fi-
+ca~o pera .90.
+tira~do os da
+altura do po-
+lo & ho outro
+angulo he ob-
+tuso q<ue> val .90
+& a altura do
+polo: mas ho
+zodiaco mu-
+da ho sitio &
+faz angulos
+d<e>siguais per
+diuersas par-
+tes co~ o hori-
+zonte. E a ra-
+za~ que traz o
+autor dos .6.
+signos q<ue> na-
+cem cada dia
+quer seja gra~-
+de quer peq<ue>-
+no he suficie~-
+te porq<ue> poys
+ho horizonte
+nos descobre
+a metade do
+ceo: seguese q<ue>
+sempre temos
+seis signos e~
+cima: & poys
+o signo q<ue> na-
+ce pella me-
+nha~ se po~e co~
+ho sol a tard<e>
+he necessario
+q<ue> a esse te~po
+seja~ sobidos
+seys signos.}
+{GLB. <<c>>
+% E por tanto qualquer arco tem outros tres q<ue> tem iguais ascenso~es a que elle tem em
+sphera dereita. exempro Aries tem igual ascensam com Pisces por se apartar em igual
+mente do ponto equinocial do vera~o: & ho mesmo aries tem igual ascensam com Uirgo
+por se apartare~ igualme~te do principio de Ca~cro: & virgo tem igual ascensam co~ Libra
+por se apartare~ igualme~te do equinocio autunal: & assi tera~ todos q<u><<a>>tro iguaes asce~so~es
+dos q<u><<a>>es dous por dous sam co~trairos s<cilicet> aries de libra. & virgo de pisces: & o mesmo he
+nos outros arcos. Assi q<ue> na~o he necessario fazer tauoa de ascenso~es em sphera dereita +}}
+[fol. 12r]
+{CB1.
+como na obliqua sempre a equinocial sobe igualmente: conuem
+a saber em tempos iguaes sobem iguaes arcos da equinocial.
+Porque ho mouimento do ceo he ygual: & nunca faz deferenc'a
+ho angulo <<b>> que faz a equinocial com ho horizo~te obliquo. E po-
+rem as partes do zodiaco: nem a esphera dereyta: nem na obli-
+qua na~o he necessario que suba~o igualmente: porq<ue> quanto algu~a
+parte do zodiaco nace mais dereita: tanto mais tempo poe~ em na-
+cer. A proua disto he que ora ho dia artificial seja grande: ora seja pe-
+queno seys signos nacem nelle & ho mesmo he na noite. E por ta~-
+to auemos de notar que na~o he outra cousa nacer ou poerse hum
+signo: se na~o aq<ue>lla parte da equinocial nacer: a qual nace nace~do o
+tal signo: ou sobindo sobre ho horizo~te: ou poerse aquella parte da
+equinocial: a qual se po~e poendose ho tal signo: conue~ a saber dece~-
+do debayxo do horizonte. Aquelle signo nace dereyto: ho q<u><<a>>l
+nace mayor parte da equinocial: & aquelle nace obliquo: com que
+nace menor parte: & ho mesmo auemos de ente~der dos que se poe~.
+E auemos de saber que na esphera dereita: as quartas do zodia-
+co que comec'a~o dos quatro pontos s<cilicet> dos dous solsticios & dous
+equinocios: sobem ygualmente: quero dizer que a quarta do zo-
+diaco & a quarta da equinocial que tem ho mesmo termo: nacem
+em hum mesmo tempo. Mas as partes das quartas tem deferen-
+c'a no nacer: & nam nacem em ygual tempo: como logo parecera:
+& a regra he esta. {GLR. pera mais que
+hu~a quarta do
+zodiaco porq<ue>
+ella seruira pe-
+ra todas as .4
+quartas tiran-
+do & acrece~ta~-
+do: & a demos-
+trac'a~o destas
+regras se traz
+no segundo li-
+uro do Alma-
+gesto.}
+<<c>> Todollos dous arcos do zodiaco que forem
+yguaes & igualmente se apartare~ de qualquer dos quatro pontos
+sobreditos: naceram em ygual tempo: do qual se segue que os si-
+nos contrairos nacem em igual tempo. E isto he ho que dezia Lu-
+cano falando da yda de Cata~o a Africa contra a equinocial. Na~
+nacem obliquos: nem Scorpio sae mais dereito que Tauro: nem
+Aries da os seus tempos a Libra: nem menos Uirgo manda
+que os pisces dec'a~o de vagar: ygu[a]es sam Gemini & Sagitario:
+& yguaes ho Cancro ardente & ho humido Capricorno: nem se le-
+uanta mais Leo que Aquario. Quer dizer per estas palauras
+Lucano: que aos que viuem debaixo da equinocial: os signos co~-
+trairos em igual tempo nacem: & em igual tempo se poe~. Os sig-
+nos contrairos sam estes. Aries com Libra. Tauro com Scor-
+pio. Gemini com Sagitario. Cancro com Capricorno. Leo
+com Aquario[.] Uirgo com Pisces. E auemos mais de notar
+que esta argumentac'a~o na~o concrude. Estes dous arcos sam igu-
+aes: & comec'a~o em hu~ mesmo tempo a nacer: & he sempre mayor
+parte nacida de hu~ arco que do outro: logo aquelle arco acabara
+{GLR. <<d>>
+% Contando
+semp<re> estes ar-
+cos do zodiaco
+do pri~cipio da
+quarta: porq<ue>
+na~o o fazendo
+assi acharia-
+mos nisto fal-
+sidade: porque
+dez graos de
+gemini tem de
+ascenc'a~o mais
+que dez graos
+da equinocial
+& outros arcos
+da mesma q<u><<a>>rta
+<<e>>
+% Estas p<ar>tes
+se ha~ de co~tar
+des do princi-
+pio de Aries
+porque doutro
+modo seria fal-
+so o q<ue> ho autor
+diz porque do
+fim de gemini
+ate o fim d<e> vir-
+do co~ cada hu~
+arco do zodia-
+co nace mor ar-
+co da eq<u><<i>>nocial
+& assi mesmo
+posto q<ue> des do
+principio de Li-
+bra ate o fim d<e>
+pisces todolos
+arcos do zodia-
+co q<ue> comec'a~o
+de libra nac'a~o +}}
+{CW. b ij}
+[fol. 12v]
+{CB1.
+{GLR. co~ mayor arco
+da equinocial
+tomando pore~
+perfios arcos
+des do fim de
+sagitario ate
+o fim de pisces
+acharemos q<ue>
+cada hu~ deles
+naceo com me-
+nor arco da eq<u><<i>>-
+nocial.}
+{GLR. <<f>>
+% Porq<ue> posto
+q<ue> estes arcos
+do zodiaco q<ue> o
+(o) sol anda fose~
+iguais se toma-
+mos dia natu-
+ral d<e> meyo dia
+a meyo dia: to-
+davia passara~
+ho meridiano
+em tempos de-
+siguais: & sera
+como se teuese-
+mos spera de-
+reita: & se to-
+mamos dia na-
+tural do naci-
+me~to do sol ate
+outra vez tor-
+nar a nacer: na-
+cera~o estes ar-
+cos co~ aquella
+desigualdade
+que te~ as asce~-
+so~es e~ sphera
+obliqua: quan-
+to mais q<ue> estes
+arcos q<ue> ho sol
+anda sam desi-
+guais porque
+ho seu circulo
+he ecentrico: &
+andando p<er> ele
+igualme~te ca-
+da dia .59. mi-
+nutos & oyten-
+ta segundos:
+he necesario q<ue>
+em co~parac'a~o
+do zodia<co> ande
+desigualme~te
+como se demos-
+tra na sua teo-
+rica s<cilicet> hu~as ve-
+zes mais de g.
+& outras vezes
+menos.}
+mais cedo de nacer: do qual era sempre mayor parte nacida.
+E que a tal argumentac'am nam valha: vemolo craramente nas
+partes das sobreditas quartas. Porque se tomarmos a quarta
+do zodiaco des do principio de Aries ate ho fim de Gemini: a-
+charemos isto: <<d>> que sempre mayor parte nace da quarta do zodia-
+co que da quarta da equinocial: que comec'a do mesmo termo.
+E porem estas duas quartas em hum mesmo tempo acaba~o de
+nacer. O mesmo he na quarta do zodiaco des do comec'o de Li-
+bra: ate ho fim de Sagitario. Mais se tomarmos a quarta do zo-
+diaco des do principio de Cancro ate ho fim de Uirgo: achare-
+mos que mayor parte he sempre nacida da quarta da equinocial
+que da quarta do zodiaco que tem ho mesmo termo. E porem es-
+tas duas quartas em hum mesmo tempo acaba~o de nacer. O mes-
+mo he na quarta do zodiaco des do primeiro ponto de Capricor-
+no: ao fim de Pisces. Mas na esphera obliqua as duas me[*t]ades
+do zodiaco tem igoaes nacimentos: & na~o quaes quer metades:
+se na~o as que comec'a~o dos dous pontos equinociais: conuem a
+saber a metade do zodiaco des do principio de Aries ate ho fim
+de Uirgo nace com a metade da Equinocial que tem ho mesmo
+termo: & a outra metade do zodiaco com a outra metade da equi-
+nocial. E porem as partes das ditas metades: tem deferenc'a no
+nacer: porque na metade do zodiaco des do principio de Aries
+ate ho fim de Uirgo: sempre mayor parte he nacida do <<e>> zodiaco
+que da Equinocial: mas sem embargo disto amballas metades
+acaba~o em hum mesmo tempo de nacer. Ho contrairo he na ou-
+tra metade do Zodiaco des do principio de Libra ate ho fim de
+Pisces: porque sempre mayor parte he nacida da equinocial que
+do zodiaco: & porem amballas metades acaba~o juntamente de
+nacer. E nisto se ve reposta mais crara a argumentac'a~o sobredi-
+ta. E auemos mais de saber que todollos arcos des de Aries ate
+o fim de Uirgo: em menos tempo nacem na Sphera obliqua q<ue>
+na dereyta: porque menos nace com elles da Equinocial. E os
+arcos des de Libra ate ho fim de Pisces nacem em mais tempo
+porque nace mais com elles da equinocial: & nacem estes emtan-
+to mais tempo quanto os outros nacem em menos. E disto se
+segue que quaesquer dous arcos yguaes & co~trairos: nacem am-
+bos juntamente em ta~to tempo na Sphera obliqua como na de-
+reyta. Porque quanto se perde per hu~a parte: ta~to se ganha pella
+outra: & qua~to hum dos te~pos he menor: ta~to ho outro he mayor
+& assi fica~ os te~pos iguaes. Na sphera obliqua temos esta regra: q<ue>}
+[fol. 13r]
+{CB1.
+quaes quer dous arcos iguaes: & que igualmente se apartam de
+qualquer dos dous pontos equinociaes nacem em igual tempo.
+E das cousas sobre ditas se segue que os dias naturaes sam desi-
+guaes. Porque dia natural he hu~a volta que faz a equinocial per
+derredor da terra: com tanta mays parte do zodiaco: quanta ho
+sol entre tanto anda per seu proprio mouimento: em contrairo do
+primeiro mobile: mas poys estes arcos <<f>> nacem em tempos desigu-
+{DIAG.} aes: assi em Sphera dereyta co-
+mo em obliqua: o que parece pel-
+las cousas sobreditas: & os taes
+tempos se ham de acrecentar pe-
+ra serem dias naturaes necessa-
+riame~te se segue auerem de ser de-
+siguaes. E na sphera dereita hu~a
+soo causa ha que os faz ser desi-
+guais: a qual he ser ho Zodiaco
+obliquo. Mas na Sphera obli-
+qua ha duas causas: conuem a sa-
+ber ser o zodiaco obliquo: & ser o
+horizonte tambem obliquo. Per terceira causa se soe dar: ser ho cir-
+culo per que ho Sol anda ecentrico. E auemos de notar que ho sol
+tem dous mouimentos: hum delles lhe vem do primeiro Ceo que
+se moue: & assi faz com elle cada dia hu~a volta. Mas se ho fizer-
+mos com hum ponto do primeyro mobile: em quanto der esta vol-
+ta que he ja no principio do dia seguinte: nam ho acharemos no
+mesmo ponto: porque tera andado hum grao per seu proprio mo-
+uimento. E auemos mais de notar que andando ho Sol des
+do primeyro ponto de Capricorno: per ho signo de Aries ate ho
+primeiro ponto de Cancro: lhe faz fazer ho primeyro mobile: cento
+& oytenta & dous paralellos: os quaes posto que na~o sam circulos
+perfeitos mas spiras: porque nisto na~o ha erro que se sinta: be~ lhes
+podemos chamar circulos: do numero dos quaes sam os dous
+tropicos & a equinocial. E estes mesmos circulos faz ho Sol pello
+mouimento do primeyro mobile: descendo do primeyro ponto de Capri-
+corno: & chamanse circulos dos dias naturaes. Os arcos destes cir-
+culos que estam sobre ho horizonte: sam arcos dos dias artificiaes 
+& os q<ue> estam debaxo do horizo~te sam arcos das noytes. E porq<ue> na
+sphera dereyta passa o horizo~te pellos polos do mu~do: parte todos
+estes circulos em partes yguais: <<g>> & por isto aos q<ue> esta~o debaixo da
+{GLR. <<g>>
+% Theodosio
+demostrou a
+19. p<ro>posic'a~o
+do seu primei-
+ro liuro q<ue> to-
+do circulo ma-
+yor que passa
+pellos polos
+de outro cir-
+culo o corta e~
+duas partes
+yguais & per
+angulos rey-
+tos: & na .18.
+demostra q<ue> se
+cortar a algu~
+menor pella
+metade he ne-
+cessario q<ue> pas-
+se pellos po-
+los delle.}
+{GLR. <<h>>
+% Fala nas re-
+gio~es q<ue> esta~
+da banda do
+norte: porque
+nas que esta~
+da banda do
+sul he tudo ao
+contrairo.}
+{GLR. <<i>>
+Mas este cre-
+cimento na~o
+guarda p<ro>por-
+c'a~o nem pelo
+que esta mais
+perto do tro-
+pico p<er> graos
+do zodiaco: ne~
+per graos da
+declinac'a~o.}
+{GLR. <<k>>
+Tudo isto se
+demostra pel-
+la .21. proposi-
+c'a~o do .2. li-
+uro de Theo<dosio>}
+{GLR. <<l>>
+% Diz ho au-
+tor q<ue> imagina~-
+do os dias na-
+turaes como
+circulos para-
+lellos: porq<ue> o
+horizonte os
+corta tod<<os>> pel-
+lo modo sobre
+dito s<cilicet> aos q<ue>}}
+{CW. b iij}
+[fol. 13v]
+{CB1.
+{GLL. se a( )parta~ igu-
+alme~te da eq<u><<i>>-
+nocial q<ue> neces-
+sariame~te sa~
+iguais: corta
+desigualme~te
+mas ha parte
+descuberta d<e>
+hu~ fica igual
+a parte cuber-
+ta do outro:
+como theodo-
+sio demostra
+na .21. proposi-
+c'a~ do .2. liuro
+pareceria os
+dias naturaes
+sere~ iguoais:
+Mas porq<ue> se
+ha de acrecen-
+tar o que o sol
+anda per pro-
+prio mouime~-
+to como aci-
+ma se dixe por
+esta reza~ sam
+desiguais.}
+{GLL. <<m>>
+% Quanto te~-
+po gasta hum
+signo em na-
+cer ta~to gasta
+o seu <con>trairo
+em se por: por
+q<ue> doutra sor-
+te na~ teriam<<os>>
+semp<re> encima
+do horizonte
+seys signos.
+E na sphera
+dereita tanto
+te~po gasta q<u><<a>>l
+quer signo e~
+nacer como e~
+se por: pois q<ue>
+nela os sign<<os>>
+co~trairos na-
+cem em igual
+te~po: mas na
+sphera oblica
+nenhu~ signo
+poe~ igual te~-
+po em nacer &
+em se por: mas
+o q<ue> nace derei-
+to poe~se obli-
+quo & o q<ue> na-
+ce obliquo po-
+ense dereyto.}
+equinocial tamanhos sam os arcos dos dias como os das noy-
+tes: & em qualquer parte q<ue> ho sol estee sempre lhes he equinocio.
+Mas na esphera obliqua soo a equinocial parte o horizonte em par-
+tes iguais: & quando ho sol esta em qualquer dos dous po~tos equi-
+nociaes: ho arco do dia he igual ao arco da noite: & he enta~o equi-
+nocio em toda a terra. E a todolos outros circulos parte o horizo~-
+te obliquo em partes desiguais: per tal arte que em todollos circu-
+los que ha des da equinocial ate o tropico de cancro: & no mesmo
+{DIAG.} tropico he mayor <<h>> ho arco do
+dia: que ho da noite: quero dizer
+que ho arco que esta sobre o ho-
+rizonte he mayor que ho q<ue> fica
+debaixo do horizonte. E daqui
+vem q<ue> em todo o tempo que ho
+sol anda des de Aries p<er> Cancro
+ate a[ ]fim de Uirgo sam mayores
+os dias que as noites: & sam tan-
+to <<i>> mayores: quanto mays o sol
+se chega a Cancro: & tanto he
+menor esta defere~c'a: quanto ma-
+ys se aparta. <<k>> Mas quando
+ho sol anda pellos signos da banda do sul he pello contrairo.
+E em todollos circulos que ho sol faz antre a equinocial & ho tro-
+pico de Capricorno he mayor ho arco que esta debaxo do horizon-
+te & menor ho que fica encima: & por isto ho arco do dia he menor
+enta~o que ho arco da noyte: & segundo a proporc'a~o destes arcos
+sam menores os dias que as noytes: & quanto os circulos forem
+mais chegados ao tropico do ynuerno: tanto os dias seram me-
+nores. E por tanto parece que se tomarmos dous circulos aparta-
+dos igualmente da Equinocial de diuersas partes: tamanho sera
+ho arco do dia em hum: como o arco da noyte no outro. Do qual
+parece que se segue que se tomarmos no anno dous dias natu-
+raes que ygoalmente se apartarem de qualquer dos equinocios
+per partes contrairas: tamanho sera ho dia arteficial de hum: co-
+mo a noyte do outro. <<l>> Mas isto sera assi quanto ao sentido do vul-
+go. & tendo respeyto ao Horizonte: porque na verdade oulhando
+ho que ho Sol vence em contrairo do primeyro mobile: a reza~o jul-
+ga mays verdadeyramente. Quanto ho polo do mundo mays se
+alc'a sobre ho horizonte: tanto sam mayores os dias do estio quan-
+do ho sol anda pellos signos septentrionaes. E he pello contrairo}
+[fol. 14r]
+{CB1.
+quando esta nos signos da outra banda: porq<ue> tanto sam menores
+os dias. E auemos mais de notar que os seys signos des do princi-
+pio de Cancro ate ho fim de Sagitario em sphera obliqua: nacem
+em mais tempo juntamente: que os outros seys signos des do prin-
+cipio de Capricorno ate a fim da Gemini. E por tanto dizemos q<ue>
+os primeiros seys nacem dereitos: & os outros seys nace~ obliquos
+E por isso dezia Uergilio: saem dereitos <<m>> & poe~se obliquos: desde
+Cancro ate se acabar Sagitario: mas os outros signos nacem
+obliquos & poense dereitos. E quando temos o mayor dia: que he
+no estio estando ho sol no principio de Cancro: enta~o nos nacem
+de dia seys signos dereitos <<n>> & de noyte seys obliquos. Mas pello
+contrairo quando ho dia he menor: que he estando ho sol no princi-
+pio de Capricorno: entam nacem de dia seys signos obliquos: & de
+noyte seys dereytos. E quando ho sol esteuer em qualquer dos pon-
+tos equinociaes: entam nacem de dia tres signos dereytos & tres
+obliquos: & ho mesmo he de noite. Porque a regra he que por gra~-
+de ou pequeno que ho dia ou noite seja: seys signos nacem de dia: &
+seys de noite: nem nacem mais nem menos: ora os dias ou as noy-
+tes sejam grandes ora pequenos. E daqui se toma que poys a ora
+natural he espac'o de tempo em que nace a metade de hum signo: te-
+ra ho dia arteficial doze oras naturaes: & outras ta~tas a noite. Em
+todollos outros circulos de hu~a banda da equinocial ou da outra
+sam os dias mayores: ou menores: & assi mesmo as noites segun-
+do que mays signos ou menos nacem dereytos ou obliquos: assi
+no dia como na noyte.
+{GLR. <<n>>
+% Posto q<ue> de-
+sta nossa abi-
+tac'a~o q<ue> he fo-
+ra do tropico
+como diz ver-
+gilio todolos
+arcos des do
+principio de
+ca~cro ate ho
+fim de sagita-
+rio nac'a~o de-
+reitos: nos lu-
+gares porem
+que esteuere~
+p<er>to da linha
+aynda q<ue> seja~
+da banda do
+norte: algu~s
+arcos d<e>sta me-
+tade nacera~o
+obliquos: & fa-
+cilme~te se po-
+deria isto cal-
+cular: & saber
+em q<ue> altura is-
+to acontecera
+mas posto q<ue>
+assi seja e~ to-
+da regia~o da
+banda do nor-
+te: este meo zo-
+diaco de can-
+cro a capricor-
+no nacera co~
+mais de mea
+equinocial: &
+por ve~tura sin-
+tindo isto ho
+nosso autor &
+q<ue>rendo falar
+geralme~te di-
+xe: que nacia~
+em mays t<e~>po
+ju~tame~te por
+que na~o vejo
+de q<ue> serueria
+acrece~tar esta
+palaura ju~ta-
+mente se na~o
+pera este pro-
+posito.}
+{RUB. % Da diuersidade dos dias & noytes
+que tem os que mora~o em diuersas par-
+tes da terra}
+{IN2.} AUemos de saber que os que viuem debayxo da equinocial
+tem ho sol na cabec'a duas vezes no anno: conue~ a saber qua~-
+do estaa no principio de Aries: & quando estaa no principio de Li-
+bra: & tem nestes tempos dous solsticios altos: porq<ue> lhes passa o sol
+dereitamente per cima de sua cabec'a: tem tambem dous solsticios
+bayxos quando ho sol esta nos principios de Cancro & Capricor-
+no: & chamanse bayxos porque entam se aparta ho sol ho mais que
+ser pode do seu zenith: do qual se segue que poys sempre lhes he
+equinocio: teram no anno quatro solsticios dous altos & dous bay-
+xos: & teram dous estios s<cilicet> estando ho sol em qualquer dos dous}
+{CW. b iiij}
+[fol. 14v]
+{CB1.
+po~tos equinociaes ou junto delles. Tambe~ teram dous inuernos s<cilicet>
+estando o sol nos primeiros pontos de cancro & Capricorno ou ju~-
+to delles. E isto he o que diz Alphagrano que o nosso estio & inuer-
+no sam a elles de hu~a mesma compreisa~o: porq<ue> os dous tempos q<ue>
+sam a nos estio & inuerno sam a elles dous inuernos. E daqui tere-
+mos decrarac'am pera aquelles versos de Lucano em que dezia.
+Sabido temos ser este o lugar em o qual o circulo do alto solsticio
+corra em duas metades ao circulo dos signos: chama Lucano ne-
+stes versos circulo do alto solsticio a equinocial: em a qual se fazem
+dous altos solsticios aos que viuem debaxo della: & chama circulo
+dos signos ao zodiaco ao qual a equinocial diuide em duas meta-
+des. Tem estes mesmos quatro sombras no anno: porque qua~do
+o sol esta em qualquer dos pontos da equinocial pella menha~ vay
+a sombra ao ocidente: & a tarde vay pera a parte contraira: ao me-
+yo dia porque tem o sol encima de sua cabec'a ficalhes a sombra per
+pendicular: mas quando ho sol esta nos signos da banda do norte
+vay a sombra pera a banda do sul: & quando ho sol anda da banda
+so sul: vay a sombra pera a banda do norte. E nesta abitac'a~o nace~
+& se poem as estrellas que estam acerca dos polos: como tambem
+ha algu~s outros que moram perto da equinocial: & por isso dezia
+Lucano. Entam a sanha dos Roma~os moueo aos derradeiros
+pouos Horestas & os capita~es de Carmania: os quaes por estare~
+apartados pera a banda do sul: ve~ hu~a parte da constelac'a~o arctos
+porque na~o se lhe poem de todo: & a outra constelac'am bootes: per
+pequeno espac'o de tempo se lhes esconde. Tambem diz Ouidio
+da mesma estrella. A guarda da vssa erimanthidos molhase no
+mar oceano & torua as aguas. E porem nesta abitac'a~o estas estrel-
+las nunca se poem: & por isso dezia Uergilio: este polo sempre ho te-
+mos alto: & o outro temolo debaixo dos pes: ao qual vee~ as almas
+do inferno: & Lucano diz. Este polo nunca se nos po~e: he clarissimo
+& ornado das duas vssas: Diz mais Uergilio nas georgicas que es-
+tas duas constelac'o~es ham medo de se molhar nas agoas do mar
+oceano.
+{RUB. % Dos que viuem antre a equinocial & o[ ]tro-
+pico de Cancro.}
+{IN2.} OS que tem ho zenith antre a equinocial & o tropico de Can-
+cro tem duas vezes no anno ho sol sobre a cabec'a: porque se
+imaginarmos hum circulo equidistante a equinocial: & que passe
+pello zenith da sua cabec'a: craro esta que este tal circulo se enco~tra-ra}
+[fol. 15r]
+{CB1.
+com ho zodiaco em dous lugares que igoalmente se apartam
+do principio de Cancro: & por tanto qua~do quer que ho sol esteuer
+nestes dous lugares passara de necessidade pello zenith de sua ca-
+bec'a. Do qual se segue que tera~ dous estios & dous inuernos qua-
+tro solsticios & quatro deferenc'as de sombras: assi como os que vi-
+uem debaixo da equinocial: eneste sino dizem algu~s que esta Ara-
+bia. E por isso dezia Lucano falando dos Arabes que viera~ a Ro-
+ma em ajuda de Pompeo. O arabes viestes ao mundo que na~o
+conheciaes & andais espa~tados porque as sombras dos campos
+na~o vam a ma~o esquerda: dezia isto porque as naquelas partes: as ve-
+zes sam as sombras perpendiculares: & as vezes sam orie~taes & ou-
+tras vezes ocidentaes: mas quando os Arabes viera~o a Roma
+fora do tropico de Cancro tinham sempre as sombras pera a ban-
+da do norte.
+{RUB. % Dos que viuem debaixo do tropico
+de Cancro.}
+{IN2.} OS que tem ho zenith no tropico de Cancro tem hu~a soo vez
+no anno o sol sobre a sua cabec'a s<cilicet> qua~do esta no primeiro po~-
+to de Cancro: & entam em hu~a soo ora de hum dia de todo anno te~
+a sombra perpendicular: & neste sitio esta a cidade chamada Sye-
+ne: por isso dezia Lucano. Syene pera nenhu~a parte la~c'a sombra
+isto se ha de entender ao meyo dia de hum soo dia: & em todo o ou-
+tro tempo do anno vay a sombra pera a banda do[ ]norte.
+{RUB. % Dos que viuem antre ho tropico de Can-
+cro & ho circulo arctico.}
+{IN2.} OS que viuem antre ho tropico de Cancro & ho circulo arcti-
+co nunca podem ter ho sol no seu zenith: & a sua sombra vay
+sempre pera a ba~da do norte: & este he ho nosso sitio. Pello qual aue-
+mos de notar que a Etiopia ou algu~a parte della esta junto do tro-
+pico de Cancro: & por isso dezia Lucano que a terra de Etiopia na~
+estaria debaixo de algu~a regia~o do circulo dos signos: se ho touro
+na~o estendesse o brac'o & ha alcanc'ase com a vnha. Dizem algu~s q<ue>
+neste lugar de Lucano se toma este nome signo em duas maneiras
+conuem a saber per hu~a das doze partes do zodiaco: & pella figura
+daquelle animal que pella mayor parte esta no signo que delle toma
+o nome: & porque o touro tem a mayor parte sua no zodiaco este~de}
+[fol. 15v]
+{CB1.
+porem tanto hu~a ma~o alem do tropico que lhe fica debaixo sogeita
+a Ethiopia: posto que nam fique debayxo de algu~a parte do zodia-
+co: porque dizem estes que se ho brac'o do touro de que fala Lucano
+se estendese contra a Equinocial & ficasse em dereito do carneyro:
+ou de qualquer outro signo: nam se escusaua Etiopia de ficar de-
+baixo dalgum dos signos: o que se proua manifestamente lanc'a~do
+hu~ circulo equi distante a Equinocial que passe pello zenith da ca-
+bec'a dos etiopes: & per Aries & virgo ou per outros signos. Mas
+como quer que a[ ]razam natural nam co~sinta isto: porque nam seria~
+tam negros os de Ethiopia se nascesem em terra temperada. De-
+uemos de dizer: mas auemos de fazer defere~c'a antre os signos
+porque ha hi signos principaes & signos que se chama~o regio~es: os
+principaes sam os dous em que se fazem os solsticios: & os dous e~
+q<ue> se faze~ os equinocios: & todolos outros signos se chama~o regio~es
+& por tanto como quer que a Ethiopia este debaxo da equinocial: na~
+fiqua debaxo de algu~a regia~o do zodiaco: mas debaixo dos dous
+signos principaes que sam aries & libra.
+{RUB. % Dos que viuem debayxo do circulo arctico.}
+{IN2.} OS que viuem debayxo do circulo arctico tem em cada hum
+dia do anno ho pollo do zodiaco no seu zenith: & ficalhes en-
+ta~o o zodiaco ou a ecliptica por orizonte: & isto he o que diz Alpha-
+grano que nas taes partes o circulo do zodiaco se dobra sobre o cir-
+culo do emispherio: mas como quer que ho primeiro ceo continua
+mente se moua: o circulo do orizonte cortara ao zodiaco em hu~ insta~-
+te: & porque sam dous circulos mayores da esphera cortarse ha~ em
+partes iguaes: & por isso supitamente hu~a metade do zodiaco se al-
+c'ara sobre ho horizonte: & a outra metade se abaixara debaixo do
+orizonte: & isto he o que diz Alphagrano que ali se poem seys sig-
+nos supitamente: & os outros seys nacem com toda a equinocial.
+E poys que a ecliptica he horizo~te delles: teram todo o tropico de
+Cancro sobre o horizonte: & todo o tropico de Capricorno debaxo
+do orizonte: & por tanto quando o sol esteue no primeiro ponto de
+Cancro teram dia de .xxiiij. oras: & quasi hum instante por noyte
+porque em hum instante ou momento passa o sol ho horizonte & su-
+pitamente se leuanta: & aq<ue>lle tocar do horizonte he a noite: o co~tray-
+ro lhes acontece q<u><<a>>ndo ho sol esta no primeiro po~to de Capricorno}
+[fol. 16r]
+{CB1.
+porque entam lhes sera a noite de vinte & quatro oras: & tera~ qua-
+si hum instante por dia.
+{RUB. Dos que viuem antre ho circulo arctico
+& ho polo do Mundo.}
+{IN2.} HO horizo~te <<o>> dos que tem ho zenith antre ho circulo arctico &
+ho polo do mundo cor[*t]a ao zodiaco em dous pontos q<ue> igu-
+almente estam apartados do principio de Cancro. & pello moui-
+mento do primeiro ceo fazse isto: que aquella parte do zodiaco que
+jaz antre os dous pontos que dissemos: fica sempre sobre o horizon-
+te. Do qual se segue: que em quanto ho sol esteuer naquella parte se-
+ra hum dia contino sem auer noite: & portanto se aquella parte do
+zodiaco for quantidade de hum signo: sera o dia de hummes sem
+auer noyte: & se for quantidade de dous signos: teram dous meses
+de dia: & se for mayor sera pello conseguinte. Seguese mais q<ue> a ou-
+tra parte do zodiaco que jaz antre os mesmos pontos pera o princi-
+pio de Capricorno ficara sempre debaixo do horizonte: & por isso
+quando ho sol esteuer naquella parte sera todo aquelle tempo hu~a
+noyte continua: segundo a quantidade da tal parte sem hi auer dia
+Todolos outros signos: que lhes nace~ & se lhes poem: necenlhes
+& poenselhes ao reues. Primeiro lhes nace Tauro que Aries: pri-
+meiro Aries que Pisces: & primeiro Pisces que Aquario: mas os
+signos contrairos destes nacem dereytamente & poense ao reues:
+primeiro se po~e Scorpio que Libra: & primeiro Libra que Uirgo:
+& porem os signos contrairos destes: poense dereitamente: os qua-
+es naciam ao reues.
+{GLR. <<o>>
+% Este hori-
+zonte declina
+menos da eq<u><<i>>-
+nocial q<ue> o zo-
+diaco: & por ta~-
+to aquela par-
+te do zodiaco
+da banda do
+norte q<ue> mais
+declinar nu~ca
+se pora & a ou-
+tra da banda
+do sul nu~ca se
+d<e>scubrira aos
+que teuerem
+este horizo~te:
+& porq<ue> os po~-
+tos q<ue> igualme~-
+te se aparta~o
+do pri~cipio d<e>
+cancro ou de
+capricorno te~
+iguais decli-
+nac'o~es: porta~-
+to diz o autor
+que estando o
+sol em hu~ des-
+tes arcos cu-
+jos termos es-
+ta~o apartad<<os>>
+igualme~te de
+Ca~cro & tem
+a mesma decli-
+nac'a~o que ho
+horizo~te: sera
+sempre de dia
+& no outro ar-
+co como este
+da banda do
+sul sera semp<re>
+noyte & porq<ue>
+ho signo que
+mais d<e>clinar
+da equinocial
+se descubrira
+primeiro. Na-
+cera primey-
+ro aries fica-
+ra ainda cu-
+berto Pisces
+primeiro na-
+cera Aries q<ue> +}
+{RUB. Dos que viuem debayxo do polo arctico.}
+{IN2.} OS que ho zenit no polo arctico tem a equinocial por ho-
+rizonte: & poys a equinocial corta ao zodiaco em duas partes
+iguaes: assi tambe~ ho seu horizonte deyxara meyo zodiaco encima
+& meyo embayxo: & por isso quando ho sol andar pela metade que
+he des do principio de Aries ate o fim de Uirgo: sera tudo isto hu~
+dia continuo sem auer noyte: & quando andar pella outra metade
+que he des do principio de libra ate o fim de Pisces: sera hu~a noyte
+continua sem auer dia: & sera portanto ho primeiro meo anno hum
+soo dia arteficial & ho outro meo anno hu~a soo noyte: & sera todo o
+anno hu~ soo dia natural: & porque o sol nunca se lhes abayxa mais}
+[fol. 16v]
+{CB1.
+{GLL. pisces: & assi
+mesmo primei-
+ro pisces que aq<u><<a>>rio. E porq<ue>
+nace~do hu~ sig-
+no o seu <con>trai-
+ro se poem: he
+necessario q<ue> a
+ordem que te~
+estes q<u><<a>>tro ao
+nacer tera~ os
+contrayros e~
+se por. E porq<ue>
+tauro naceo
+primeiro que
+Aries por ter
+mayor decli-
+nac'a~o & leo te~
+a mesma decli-
+nac'a~o q<ue> tauro
+& Uirgo que
+Aries: pella
+mesma reza~o
+estes .4. sign<<os>>
+<con>trairos dos
+primeiros na-
+cera~o dereita
+mente per sua
+orde~: do qual
+se segue que
+aq<u><<a>>rio. pisces.
+aries & tauro
+se pora~o p<er> sua
+orde~ dereyta-
+mente: & o en-
+xe~pro he que
+o horizo~te de-
+cline da equi-
+nocial pela de-
+clinac'a~ do fim
+de Tauro.}
+que vinte tres graos & meo debayxo do horizonte parecerlhes ha q<ue>
+todo he dia sem noyte: como nos tambe~ temos por dia certa parte
+de tempo antes que ho sol saya. Mas isto he qua~to ao parecer do
+pouo porque na verdaed & per razam natural nom se ha de ter por
+dia artificial se na~o ho tempo des que ho sol nace ate se por: & pare-
+ce ser que os que viuem debayxo do polo teram sempre luz perpe-
+tua: porque segundo diz Ptolomeu antes que ho sol se leuante per
+dezoyto graos he de dia: outros dizem que per trinta graos que he
+a quantidade de hum signo. Mas ho q<ue> finalmente se ha de ter he
+que ho aar naquellas partes he muy cheo de nuues & espesso: porq<ue>
+os rayos do sol sam hi tam fracos que mays vapores aleuantam
+dos que gastam: & por isso estando ho Sol perto do horizonte na~
+tem ho aar craro nem ha hi dia.
+{RUB. Da repartic'a~o dos climas.}
+{IN2.} IMaginemos dous circulos em a face da terra: hum delles
+que va dereitamente por baxo da equinocial: & o outro passe
+per oriente & occidente & pellos polos do mundo. Estes dous cir-
+culos se encontrara~o em dous lugares faze~do angulos reitos sphe-
+raes: & partem toda a terra em quatro quartas. hu~a das quaes he
+a nossa habitauel que fica antre ho meo circulo que vay de oriente a
+ocidente pello polo artico & mea equinocial. E pore~ nem esta quar-
+ta toda he habitauel: porque as partes della que esta~ perto da equi-
+nocial: na~o sam habitaueis per muyto que~tes. Tambem as partes
+que sam vezinhas do polo artico na~o sam habitaueis per muito fri-
+as. E por tanto ymaginemos hu~a linha equidistante ha equino-
+cial que aparte as partes desabitadas per muito quentes: das ou-
+tras habitaueys que ficam pera a banda do norte. Jmaginemos
+mays outra linha equidistante do polo artico: que outro si aparte
+as partes desta quarta que fica~o pera o norte desabitadas per mui-
+to frias das outras que sam abitadas contra a equinocial. Ora
+antre estas duas linhas que ficam per estremos: auemos mais de
+imaginar seys linhas equidistantes a equinocial: as quaes todas
+que sam oyto diuidem todo o que he habitauel da dita quarta em
+sete partes q<ue> se chama~o sete climas: como na presente figura parece.
+% Clima dizemos que he tanto espac'o de terra: per quanto se sinta
+deferenc'a no relogio: porque hum mesmo dia do estio que te~ certo
+numero de horas em hu~a regia~o: nos amostra o sentido ser menor
+em outra regia~o que jaz mais pera o sul. Assi q<ue> na~o he outra cousa}
+[fol. 17r]
+{CB1.
+clima se na~o tanto espac'o: per que hu~ mesmo dia tenha deferenc'a sen-
+siuel: nem serue ho mesmo relogio no principio & no fim deste espa-
+c'o: porque poys as horas do dia fazem deferenc'a sensiuel: tambem
+ho relogio tera mudanc'a. O meyo do primeiro clima he onde ho
+mayor dia do anno he de treze horas: & alc'ase ho norte sobre o hori-
+zonte .16. graos .2/3. & chamase este clima Diameroes. O comec'o
+deste clima he onde o mayor dia he de doze horas & ¾ em altura de
+doze graos & tres quartos: a largura deste clima he ate ho lugar on-
+de ho mayor dia he de treze horas & hum quarto: em altura de vin-
+te graos & meyo: & contem este espac'o .440. milhas. O meyo do
+segundo clima he onde ho mayor he de treze horas & meya e~ al-
+tura de vinte quatro graos & hum quarto: & chamase clima Diasye-
+nes: a sua largura he des do fim do primeiro clima: ate ho lugar on-
+de ho mayor dia he de treze horas & tres quartos em altura de .27.
+graos & meyo: & ho espac'o da terra he .400. milhas. O meyo do
+terceiro clima he onde o mayor dia he de .xiiij. horas e~ altura de .30
+graos & .3/4. & chamase Clima Dialexandrinos: a sua largura he do
+fim do segu~do Clima ate o lugar onde ho mayor dia he de quator-
+ze horas & hum quarto em altura de trinta & tres graos & .3/4. & ho
+espac'o da terra he de trezentas & cinquoenta milhas: ho meo do .4.
+clima he onde ho mayor dia he de quatorze horas & meya: em altu-
+ra de trinta & seys graos & dous quintos: & chamase Diarhodos
+a sua largura he des do fim do terceiro clima ate ho lugar onde ho
+mayor dia he de quatorze horas & .3/4. em altura d<e> trinta & noue gra-
+os. & ho espac'o da terra he de trezentas milhas. O meyo do quinto
+Clima he onde ho mayor dia he de quinze horas em altura de: 41.
+graos & hum terc'o & chamase diaromes. A sua largura he des do
+fim do quarto clima ate ho lugar onde ho mayor dia he de quinze
+horas & hum quarto: em altura de quarenta & tres graos & meyo:
+& ho espac'o da terra he .255. milhas. <<p>> O meo do sexto clima he on-
+de ho mayor dia he de quinze horas & mea em altura d<e> .45. graos &
+dous quintos: & chamase diahoristenes: a[ ]sua largura he des[ ]do[ ]fim
+do quinto clima ate ho lugar onde o mayor dia he de .15. horas & .3/4.
+em altura de .47. & hu~ quarto: & o espac'o da terra he .212. milhas.
+O meo do septimo clima he onde o mayor dia he de .16. horas em
+altura de quarenta & oyto graos & dous terc'os: & chamase Diari-
+pheos: a[ ]sua largura he des do fim do sexto clima ate ho lugar onde
+o mayor dia he de .16. horas & hum quarto em altura de cinquoe~ta
+graos & meo: & ho espac'o da terra he .185. milhas.
+% E posto que alem do fim deste septimo clima aja muitas ylhas &
+{GLR. <<p>>
+% Todo este
+cap<itu>lo tirou
+este autor de
+alfragano: o
+qual na~o da
+ao grao ma-
+yor mais que
+56. milhas &
+dous terc'os
+& esta he a re-
+za~ porq<ue> estes
+climas te~ os
+espac'os q<ue> aq<u><<i>>
+diz: mas pois
+elle seguio a
+opinia~o de
+Eratostenes
+no primeyro
+cap<itu>lo: confor-
+me a ella: ou-
+uera de dar
+o espac'o aos
+climas.}}
+[fol. 17v]
+{CB1.
+abitac'o~es de home~s: por serem de maa abitac'a~o nam se poe~ debai-
+xo de clima. Assi que antre ho principio & ho fim destes climas ha
+deferenc'a de tres horas & mea: & nas alturas do norte ha de defere~-
+c'a trinta & oyto graos. E assi pare(e)[c]e quanta seja a largura de cada
+hum clima des do seu principio que he contra a equinocial: ate ho
+{DIAG.}
+seu fim que he pera ho norte. E que a largura do primeiro he mayor
+que ha do segundo: & a do segundo mayor que ha do terceiro: & as-
+si pello conseguinte nos outros. Lo~gura do clima se pode chamar
+a linha que vay de oriente a ocidente em equidistancia sempre da
+equinocial. E por tanto mayor he a lo~gura do primeiro clima que
+a do segundo & ho mesmo he nos outros: & a causa disto he[ ]jrse re-
+colhendo a esphera per menores circulos.
+{RUB. % Capitulo .iiij. Dos circulos & mouimentos
+dos Planetas: & das causas dos eclipses do Sol & da Lu~a.}
+{IN5.} DEuemos de notar que ho sol tem hu~ soo circulo per
+o qual se moue em a superficie da linha ecliptica: &
+he ecentrico. Chamase circulo ecentrico aquelle cir-
+culo que diuidindo a[ ]terra em duas partes iguais
+na~o tem ho seu centro com ho centro da terra: mas
+fora delle. O ponto no ecentrico que mais se achega ao firmame~to}
+[fol. 18r]
+{CB1.
+chamase auge q<ue> quer dizer altura. Ho ponto contrairo q<ue> mais se a-
+parta do firmame~to chamase po~to co~trairo do auge. O sol te~ dous
+mouime~tos de ocide~te pera oriente: hu~ dos quaes he proprio a elle
+no seu circulo ecentrico pello qual anda cada dia co~ sua noyte quasi
+hu~ grao. O outro mouime~to he mais tardio: & he da sua sphera: &
+fazse sobre os polos do eyxo do circulo dos signos: & he igoal ao
+mouimento da sohera das estrellas fixas s<cilicet> em cem annos hu~ grao
+Assi que destes dous mouimentos resulta ho seu mouimento no
+circulo dos signos de Ocidente pera Oriente pello qual anda todo
+o circulo dos signos em trezentos & sesenta & cinco dias: & quasi a
+quarta parte de hum dia porque lhe falece hu~a cousa pequena que
+na~o he sensiuel. {GLR. % Na~o posso
+crer q<ue> este au-
+tor ignorasse
+qua~to vay ni-
+sto que ele diz
+ser insensiuel
+Mas fala co~
+principia~tes.}
+Cada hum dos planetas afora ho sol tem tres cir-
+culos s<cilicet> equante ou igualador: diferente & epiciclo. Equante na lu~a
+he hum circulo concentrico com a terra: & he na superficie da eclip-
+tica: ho seu deferente he hum circulo ecentrico & nam jaz na superfi-
+cie da ecliptica: mas hu~a metade delle declina pera o norte: & a outra
+pera o sul: ho deferente & ho equante encontranse em dous lugares
+& a figura que se faz per este encontro: chamasse Drago: porque he
+larga no meo & estreita no fim. aquelle encontro no qual estando a
+lua se moue pera o norte chamasse Cabec'a do drago. O outro enco~-
+tro do qual dece pera o sul se chama ho Cabo do drago. Os defe-
+rentes & equantes de qualquer planeta sam iguaes. E auemos de
+saber que assi ho deferente como ho equante de Saturno Jupiter:
+Mars. Venus & Mercurio sam ece~tricos & fora da sup<er>ficie da eclip-
+tica: mas ambos estam em hu~a mesma superficie. E todo planeta
+tirando o sol tem epiciclo. He epiciclo hum pequeno circulo pella
+circunfere~cia do qual he leuado ho corpo do planeta & o centro do
+epiciclo sempre esta na superficie do deferente. E portanto se se tira-
+rem duas linhas dereitas do centro da terra: de sorte que recolham
+antre ellas ho epiciclo de qualquer planeta a hu~a pella banda de ori-
+ente: & a outra pella banda de ocidente: o ponto da banda de orie~te
+em que a linha toca ho epiciclo: chamase primeira estac'a~o: & ho ou-
+tro ponto da banda de ocidente chamase estac'a~o segunda. E qua~-
+do ho planeta esteuer em qualquer destas estac'o~es diremos q<ue> esta
+estacionario. O arco de cima do epiciclo antre duas estac'o~es:
+chamase direyc'a~o: & quando ho planeta nelle estiuer diremos que
+esta dereito: & ho arco debaixo do epiciclo antre as duas estac'o~es
+chamase retrogradac'a~o: & estando nelle ho planeta dizemos que es-
+ta retrogado. A lu~a na~o tem estac'a~o direyc'a~o nem retrogradac'a~o:
+& portanto nunca dizemos q<ue> a lua esta estacionaria dereita ne~ re-trogada:}
+[fol. 18v]
+{CB1.
+a causa he ho seu mouime~to no epiciclo ser muy ligeyro.
+{RUB. % Do eclipse da Lua.}
+{IN2.} COmo quer que ho sol seja mayor q<ue> a terra necessario he que a
+metade da esphera da terra pello menos seja alumiada semp<re>
+do sol: & que a sombra da terra lanc;ada pera o ar fac'a figura pirami-
+dal: per menores: & menores redondezas de circulos: ate acabar na
+superficie do circulo dos signos: sem se apartar nu~ca do nadir do sol
+Chamase nadir do sol hum ponto no firmame~to que per diametro
+esta em contrairo do sol. Pello qual se sendo prelunho esteuer a Lua
+na cabec'a ou no cabo do drago debaixo do nadir do sol: ficara en-
+ta~o a terra antre ho sol & a lua. E como quer q<ue> a lua na~o tenha lume
+se na~o o que lhe vay do sol: sera ao tal tempo realmente priuada do
+lumeL & sera portanto geral eclipse em toda a terra: se ella dereitame~-
+te esteuer na cabec'a ou no cabo do drago. E sera eclipse particular
+se esteuer perto ou dentro das metas q<ue> sam determinadas pera nel-
+las auer eclipses. E os eclipses da lua sempre sam no prelunho ou
+junto delle. Mas nem por isso todallas vezes que for prelunho sera
+eclipse porque posto que seja oposic'a~o: nam acontece sempre que ao
+tal tempo este a lua na cabec'a ou cabo do drago: nem contraira ao
+nadir do sol & disto temos a figura seguinte.
+% E como a lua esteuer na cabec'a ou no cabo do drago: ou ju~to das
+ditas metas & em conjunc'a~o com o sol: ficara enta~o o corpo da Lua
+entreposto antre o sol & a nossa vista: pello qual nos escurecera a cra-
+ridade do sol: & assi padecera ho sol eclipse: nam porque lhe falec'a
+lume a elle: mas por nos falecer a nos: por causa da entreposic'a~o da
+lua a~tre a nossa vista & ho sol. E destas cousas se segue que na~o sera
+eclipse do sol todallas vezes que a lua esteuer em conju~c'a~o co~ elle q<ue>
+he na lua noua. E auemos mais de notar q<ue> quando he eclipse da
+lua: he ho em toda a[ ]terra: mas na~o qua~do he eclipse do sol: porque
+sera em hum clima eclipse do sol & em outro na~o. E a causa disto he
+a diuersidade que faz a vista em diuersos climas. Uergilio tocou
+muy elenganteme~te as naturezas da~bolos eclipses dize~do assi. Os
+desfalecime~tos da lu~a & os varios trabalhos do sol. E das cousas
+sobreditas fica manifesto: q<ue> pois ao te~po que nosso senhor padeceo
+foy eclipse do sol: & isto foy no prelunho: o dito eclipse na~o podia ser
+natural antes foy miraculoso em contrairo da natureza: porque na~
+se faz eclipse do sol se na~o na lua noua ou junto. E por tanto lemos q<ue>
+Dionisio ariopagita dixe no tempo da payxa~o. Ou ho deos da na-
+tureza padece: ou a machina do mundo se desfaz.}
+[fol. 19r]
+{CB1.
+{RUB. % Annotac'a~o sobre as derradeiras palauras do Capitulo
+dos Climas.}
+{IN5.} O Que este autor nesta parte diz da largura dos Cli-
+mas jr deminuindo crece~doa qua~tidade dos dias
+ygualmente de mea em mea hora: dizem todollos
+outros autores que nesta materia fala~o: mas nenhu~
+ho demostra. E por ta~to quero fazer disto demostra-
+c'a~o: & sera a mais facil que eu poder & sem muita Geometria de li-
+nhas curuas & deixarey de alegar aquellas proposic'o~es de Eucli-
+des & Theodosio que sam prontas aos que per elles lera~o: porque
+este he meu custume. E pera mais facilmente nisto proceder demos-
+trarey primeiro que se no circulo .abcd. se lanc'arem dous diame-
+trod que no ce~tro .e. fac'a~ angulos reitos: pera ficar repartido em .4.
+quartas: & nas duas quartas .b.c. & d.c. tomarmos arcos iguais
+comec'ando de .b. & de .d. como sam .b.f. & d.g.f.h. & g.i.h.k. & i.l.
+& ajuntarmos. .f.h.k. com os seus respondentes .g.i.l. per linhas di-
+reitas que cortem ao semidiametro .e.c. nos pontos .o.p.q. Digo
+que se ha linha .p.q. que he mais apartada do centro que .o.p.
+for mayor que a mesma .o.p. sera ho arco .h.k. mayor que ho arco
+f.h. & se .o.p. for mayor que .e.o. sera outrosi .f.h. mayor que ho arco
+b.f. Ponhamos poys .p.q. ser mayor q<ue> .o.p. sendo isto assi na~o po-
+de .h.k. ser igual a .f.h. porq<ue> lanc'a~do as perpendiculares h.r.&.k.s.
+{DIAG.} dos pontos .h. & .k. sobre .f.g.
+& h.i. & ajuntando .h. com .g.
+per linha dereita: & outro si .k.
+com .i. teremos dous triangu-
+los .h.g.r. & k.i.s. q<ue> sam recta~-
+gulos: & se me dizem que .f.h.
+& .h.k. sam iguais: pois a ar-
+cos iguais: seram por tanto os
+angulos .r.g.h. & s.i.k. a~bos
+iguaes: & os outros dous .r.h.
+g. & .s.k.i. tambe~ seram iguaes
+E porque nos tria~gulos equi-
+angulos sam os lados proporcionaes que co~tem angulos iguais.
+Sera logo a p<ro>porc'a~o de .r.g. pera .s.i. como de .r.h. pera .s.k. & por
+que .r.g. he mayor que .s.i. sera portanto .r.h. mayor que .s.k. & pel-
+lo conseguinte .o.p. mayor que .p.q. que he co~tradic'a~o: & pois isto}
+{CW. c}
+[fol. 19v]
+{CB1.
+se segue: na~o pode logo ser que .f.h. & .h.k. sejam iguais. Nem me-
+nos se pode dizer que .h.k. he menor que .f.h. porque tomando ale~
+de .k. tanto espac'o de arco que baste pera ficarem iguais: & tirando
+sua linha dereita a outro ponto seu respondente na quarta .d.c. to-
+mara per dereito no semidia[me]tro .e.c. mayor linha que .p.q. porque
+p.q. ficara parte della: & seguese pella mesma demostrac'a~o: que esta
+tal linha sera menor que .o.p. que he imposiuel pois .o.p. he menor
+que .p.q. E por tanto nam he .h.k. menor que .f.h. nem he ygual &
+assi fica que he mayor. E se posessemos que .p.q. he igual a .o.p. pel-
+la mesma arte demostraremos que .h.k. he mayor que .f.h.
+% Agora ponhamos que ho circulo .a.b.c.d. he o circulo de Can-
+cro ou qualquer outro paralello a equinocial da banda do norte. E
+pois ho meridiano & o horizonte dereito se corta~o no polo deste cir-
+culo per angulos reitos: & repartem este circulo em quatro quartas
+sera por tanto o diametro .b.d. comu~ cortadura do horizonte reyto
+com ho circulo .a.b.c.d. se posermos q<ue> a c he comu~ cortadura do
+meridiano com ho mesmo circulo. Ho ce~tro da sphera seja ho pon-
+to .z. crara cousa he que a linha dereita que vay de .z. pera .e. se se co~-
+tinuar jra ter ao polo: como demostra Theodosio & he perpe~dicu-
+lar sobre o circulo .abcd. & que os horizontes obliquos corta~o
+ao circulo de Cancro ou qualquer outro paralello dos que ho sol
+faz: deixando tanto arco da banda de .d. que seja ho Oriente: como
+da parte de .b. poys pella definic'a~o hum arco semidiurno he igual
+ao outro: & ho meyo noturno tambem igual hum ao outro. E porq<ue>
+a comum cortadura do meridiano & horizonte obliquo: por serem
+circulos mayores he diametro delles ambos. Seguese que este dia-
+metro & ho eyxo da sphera toma~o na circunferencia do meridiano
+{DIAG.} des do polo pera o angulo da
+mea noyte: ho arco da altura
+do polo sobre ho tal horizonte
+obliquo: ao qual responde no
+centro da sphera: ho angulo q<ue>
+ho eyxo da sphera & a dita co-
+mu~ corta dura fazem. E por
+tanto ponhamos que esta co-
+mu~ cortadura des do centro .z
+ate ho lugar onde ho mesmo
+horizonte obliquo: cortando
+ao meridiano chega ao circu-
+lo .abcd. seja a linha dereita}
+[fol. 20r]
+{CB1.
+z.o. sera logo o po~to .o. na sup<er>ficie do circulo .a.b.c.d. & do meridia-
+no & do horizonte obliquo: & sera a linha .f.o.g. comum cortadura
+do circulo .a.b.c.d. & do horizonte obliquo que das quartas .b.c. &
+d[.]c. aparta arcos iguais .b.f. & d.g. & ho angulo .e.z.o. he angulo
+da altura do polo. Jmaginemos mais outros dous Horizontes
+obliquos de mayores alturas do polo: que vam crecendo nas altu-
+ras per iguaes excesos: quero dizer que quanto ho arco da altura
+do segundo orizonte excede ao arco do primeiro: tanto ho arco do
+terceiro exceda ao do segundo: & as comu~s cortaduras destes dous
+horizontes com ho paralello sejam .h.p.i. & k.q.l. & como meridia-
+no ate chegarem ao paralello sejam as linhas .z.p. & z.q. de sorte q<ue>
+ho angulo .ozp. ficara igual ao angulo .p.z.q. por quanto o an-
+gulo .e.z.q. responde ao arco da altura do terceiro horizonte obli-
+quo: & ho angulo .e.z.p. ao arco do segu~do: & o angulo .e.z.o. ao do
+primeiro & os excesos posemos que fossem iguais. E pois no tria~-
+gulo .o.q.z. ho angulo .o.z.q. he diuidido pello meo per a linha .z.
+p. sera pella terceira proposic'a~o do sexto liuro de Euclides a[ ]propor-
+c'a~o de .z.q. pera .z.o. como.p.q. pera .o.p. & porque .z.q. he mayor
+que .z.o. por estar defronte do angulo .zoq. que he obtuso: & z.o.
+defronte do angulo .z.q.o. que he agudo: ou porque ho seu qua-
+drado val ho quadrado de .z.e. & de .e.q. & ho quadrado de .z.o.
+na~o val mais que ho quadrado de .z.e. com ho de .e.o. que he parte
+de .e.q. porque ho angulo .zeq. he reyto. Sera por ta~to .p.q. mayor
+que .op. & pello que acima demostrey se segue que ho arco .h.k. se-
+ra mayor que .f.h. & assi mesmo .i.l. mayor que .g.i. E porque
+estes arcos sam os crecime(u)[n]tos que tem hum mesmo dia artificial
+em difere~tes alturas do polo septentrional: temos daqui prouado
+que se maginarmos tres regio~es da banda do norte: & a altura do
+polo da terceira exceda per tantos graos a altura da segunda: co-
+mo a altura da segunda excede a altura da primeyra: crecera desi-
+gualmente ho mesmo dia: porque por mais excedera ho dia artefi-
+cial na terceira ao dia da segunda: que ho dia da segunda excedeo
+dia da primeyra. Do qual se segue que se tomarmos hum horizon-
+te que corte ao paralello antre .i & l. & antre .h. & k. na linha .x.u.
+de sorte que .i.x. seja igual a .gi. pera os crecimentos do dia se-
+rem iguais: se ymaginarmos que esta comum cortadura com ho
+paralello he a linha dereyta .x.u. que corta .e.c. no ponto .t. antre .p
+& q. & a comu~ cortadura des deste ponto ao centro .z. com ho me-
+ridiano he .z.t: ja ho angulo .pzt. fica menor que ho angulo .pz
+q. ou .o.z.p. E portanto pera o dia crecer igualmente: he necessario}
+{CW. cij}
+[fol. 20v]
+{CB1.
+que a altura crec'a menos: & assi a deferenc'a que ha antre ho primei-
+ro horizonte & ho segundo he per mais graos d[ ]altura do polo que
+ho que ha antre ho segundo & ho terceyro: em que ho dia creceo tan-
+to sobre a quantidade do segundo: quanto creceo no segundo so-
+bre a quantidade do primeiro. E isto he o que de principio queria
+demostrar.
+% E quem esta figura com sua demostrac'a~o contemplar: achara es-
+cusada toda a mais geometria de linhas curuas: & as proposic'o~es
+de Gebre de que tanto se vaa~groriou: & todos os liuros de Monte
+regio seu imitador: pera alcanc'ar muitas cousas que Ptolomeu
+no segundo liuro do Almagesto per tantos rodeos demostra. E
+baste ser isto tam facil & que nenhu~a outra via he mais breue. Por
+que pella demostrac'a~o fica prouado que ho arco .d.g. he o excesso
+do arco semidiurno ao quadrante .a.d. que valseys horas: & per
+via de numeros conforme a demostrac'a~o se sabera quantos graos
+tem. Porque ho tria~gulo .z.o.e. tem o angulo .oez. dereito: & ho
+angulo .e.z.o. contem os graos da altura do polo: & portanto ho
+terceiro angulo que he .e.o.z. valera ho que fica pera .90. que he a
+altura da equinocial: & poys ho lado .e.z. he conhecido porque he
+igual ao sino da declinac'a~o do paralello .a.b.c.d. per que se aparta
+da equinocial: sera portanto sabido ho lado .e.o. nas mesmas par-
+tes. E a regra sera multiplicar ho sino do angulo .e.z.o. per .e.z. &
+partir per o sino do angulo .e.o.z. & vira na partic'am a linha .e.o.
+poys a proporc'a~o dos Sinos dos arcos que valem os angulos
+he a dos lados que estam de fronte delles. E poys temos sabida a
+quantidade de .e.o. em comparac'am do diametro da Sphera: &
+no mesmo respeyto se sabe .e.c. porque he sino do q<ue> fica da declina-
+c'a~o pera .90. crara cousa he q<ue> se ymarginarmos .e.c. ser todo ho sino
+como ho he no seu circulo & a fezermos de mais partes: nessas mes-
+mas se conhecera .e.o. & diremos assi pella regra dos numeros
+proportionaes: se sendo .e.c. ta~tas partes do meo diametro da sphe-
+ra que he ho sino todo: a linha .e.o. he tantas: sendo .e.c. sino todo
+conuem a saber .100000. partes ou mais ou menos segundo a
+tauoa de sinos de que vsamos: quantas partes destas tera .e.o.
+multiplicaremos ho segundo numero pello terceiro: & partiremos
+pello primeiro & virnos ha na partic'a~o as partes que tem ho ar-
+co .d.g. o qual se conuertera em horas: & acresc[e]ntarsea a seys ho-
+ras pera sabermos ho que val ho arco semidiurno: o qual tirado
+de vinte quatro: ficara ho meo noturno. Enxempro queremos sa-ber}
+[fol. 21r]
+{CB1.
+quantas horas tem ho dia estando ho Sol no principio de
+Cancro que he o mayor do a~no: & isto na regiamem que a altura
+do polo sobre ho horizonte he quare~ta graos: faremos assi. Porq<ue>
+ho sino de cinquoenta graos que val ho angulo .e.o.z. he .76604.
+poremos este numero per primeiro: & ho sino do angulo .e.z.o. que
+pomos ser de quarenta graos d[ ]altura do polo he .64278. ponha-
+mos por segundo: & alinha dereita .z.e. sino da declinac'a~o do prin-
+cipio de Cancro que he .39874. poremos por terceyro: portanto
+multiplicaremos .64278. per .39874. & somara~o .2562920972.
+estes partiremos pello primeyro & vira~o na partic'a~o trinta & tres
+mil & quatrocentos & cinquoenta & sete: que sam as partes do semi-
+diametro do circulo mayor da sphera q<ue> tera a linha .e.o. & diremos
+mays assi: se sendo a linha .e.c. q<ue> he sino de .66 1/2 .91706. a linha
+e.o. val trinta & tres mil & quatrocentos & cinquoenta & sete: se a mes-
+ma linha .e.c. fosse cem mil: qua~tas partes teria destas a dita linha
+e.o. multiplicaremos trinta & tres mil & quatrocentos & cinquoe~ta
+& sete per cem mil: & faram .3345700000. estes partiremos per
+91706. & vira~o na partic'a~o trinta & seys mil & quatro(e)[c]entos & oy-
+tenta & dous. & estas partes tem .e.o. sendo sino do arco .d.g. ao
+qual sino respondem vinte & hum graos & quasi vinte quatro mi-
+nutos: & estes tera ho arco .d.g. & porq<ue> hum grao val quatro minu-
+tos de hora: valeram logo estes vinte & hum graos & vinte quatro
+minutos de grao: hu~a hora & vinte cinco minutos de hora: & trinta
+& seis segu~dos: & assi~ tera o arco semidiurno do principio de Can-
+cro em quarenta graos da altura do polo: sete horas & quasi vinte
+seys minutos de hora: que seram em todo ho dia quatorze horas &
+cinquoenta & dous minutos: & ho que fica pera vinte quatro sera a
+quantidade da Noyte ho mesmo dia: ou a quantidade do dia no
+principio de Capricorno. E porque ho mesmo numero de graos q<ue>
+tem ho arco semidiurno sobre .90. he a deferenc'a q<ue> ha antre a ascen-
+sam reyta & obliqua do mesmo ponto do Zodiaco q<ue> faz o dito pa-
+ralello: como na Sphera parece. Pola mesma arte se podera~o saber
+as ascenso~es obliquas tendo sabidas as reytas: & acrecentando &
+tirando estas deferenc'as ascensionaes quando conuem: como ho
+autor da Sphera diz no terceiro capitulo. E a mesma demostrac'a~o
+se pode ordenar pera os Signos da banda do sul: quanto mais q<ue>
+sabida hu~a cousa destas: se sabem todallas outras que com ella ca-
+bem em regra. Mas sem embargo disto a demostrac'a~o he geral: a
+qual nos ensina que a proporc'a~o que tem ho sino da altura da equi-
+nocial: ao sino da altura do polo: essa tem o sino da declinac'a~o que}
+{CW. ciij}
+[fol. 21v]
+{CB1.
+ho sol tem aquelle dia a hu~a linha dereita que no paralello do Sol
+he sino da deferenc'a do arco semidiurno & igual: ou da deferenc'a
+das ascenso~es dereita & obliqua do mesmo ponto do Zodiaco q<ue>
+faz ho dito paralello. E se ordenarmos a figura per esta arte que ho
+(ho) circulo .k.t.l.s. sobre ho centro .z. seja ho meridiano repatido
+{DIAG.} em suas quartas: & a
+linha .a.e.c. corda do
+arco .a.t.c. seja ho dia-
+metro do paralello do
+Sol: & ho arco .t.r. ele-
+uac'a~o do polo .t. sobre
+ho horizo~te: & a linha
+z.r. semidiametro do
+Horizonte & comum
+cortadura do Meri-
+diano: que aparta da
+linha .e.c. que he sino
+do que fica de nouen-
+ta tirando a declina-
+c'a~: a linha .e.o. Se do
+ponto .o. tirarmos li-
+nha .o.g. equidistan-
+te a.e.d. saberemos o
+arco .d.g. per demostrac'a~o nesta figura: & ella mesma sera estrome~-
+to que represente os ditos circulos: & per ella se saybam as quan-
+tidades dos dias & deferenc'as das ascenso~es. E pera mais faci-
+lidade poderemos fazer hum circulo de bo~a quantidade pera ser
+bem destinto: & dentro nelle so(h)[b]re ho seu centro fazer outros que se-
+jam os que ho Sol faz de Aries pera Cancro: tomando por semi-
+diametros os sinos dos arcos que ficam de nouenta tirando lhe
+as declinac'o~es: & graduando ho circulo de fora & lanc'andolhe li-
+nhas equidistantes de grao em grao se ho circulo de for grande: ou
+de tres em tres que bastara que se cruzem com os sinos que lan-
+c'amos. E com sua linha & margarita se quisermos pera escusar-
+mos de lanc'ar paralellos / pois com ella os podemos descreuer to-
+dallas vezes que comprir: poderemos praticar ha demostrac'a~o
+Qua~to mais que com hum soo quadrante se pode todo ho mais
+soprir. E poys em altura de sesenta & seys graos & meyo se desco-
+bre todo ho circulo de Cancro & todo ho de Capricorno fica cu-
+berto / nam he necessario estromento que tenha mais arco que}
+[fol. 22r]
+{CB1.
+que estes sesenta & seys graos & meo como parece nesta figura: &
+a linha que esta presa no centro: serue por comu~ cortadura do me-
+ridiano & Horizonte: o qual se trazera pella roda segundo for a
+altura.
+{DIAG.}
+% E pella figura da demostrac'a~o parece: poys a linha dereyta .f.g.
+he comu~ cortadura do paralello & Horizonte: & fica repartida em
+duas partes iguais no ponto .o. pella linha .z.o. que he comu~ corta-
+dura do Meridiano & Horizonte: que a linha .g.o. he sino do arco
+do horizonte: antre ho ponto onde ho sol nace o mesmo dia & ho an-
+gulo da mea noyte: & sera por tanto .z.o. sino da largura do nacime~-
+to do Sol ou rumo em que nace. E porque nos triangulos de li-
+nhas dereytas a proporc'a~o que guardam os lados: he a que tem
+os sinos dos angulos que estam defronte delles como logo parece}
+{CW. ciiij}
+[fol. 22v]
+{CB1.
+metendo ho triangulo dentro de hum circulo em ho qual ficamos
+mesmos lados por cordas cordas dos arcos que os mesmos angulos
+valem: & as suas metades ficam sinos da valia destes Angu-
+los no centro. Sera logo a proporc'a~o de .z.o. pera .z.e. como do si-
+no todo que he ho do angulo reito .o.e.z. ao sino do angulo .e.o.z.
+E poys .z.o. he os ino do rumo em q<ue> ho sol nace & .z.e. sino da decli-
+nac'a~o: & ho angulo .e.o.z. he ho da altura da equinocial: teremos
+pella mesma demostrac'a~o sabido que a proporc'a~o do sino da lar-
+gura do nacimento do sol pera ho sino da declinac'a~o: sera como to-
+do ho sino de nouenta ao sino da altura da equinocial: & por tanto
+metendo isto em regra dos numeros proporcionaes & ajudando-
+nos da tauoa dos sinos & arcos poderemos saber pella declinac'a~o
+& altura da equinocial ho rumo em que ho sol nace. E conuerten-
+do a operac'a~o pello rumo & declinac'a~o saber a altura: & pello ru-
+mo & altura saber a declinac'a~o. E isto se demostra no segundo do
+Almagesto mas per outros principios & outros autores per ou-
+tros: mas estes meus sam faciles & a mesma figura plana da demo-
+strac'a~o fica por estromento: porque na parte do circulo que tomey:
+ho que fica da linha q<ue> esta presa no centro: antre ho centro & a[ ]linha
+dereyta que co~tinuada apartaria do circulo a[ ]declinac'a~o daquel-
+le dia: he sino da largura do nacimento do Sol: a qual posta sobre
+ho semidiametro diz de qua~tos graos de arco he sino. E hum dos
+modos que eu teria pera no mar verificar quanto a agulha nor-
+destea: seria sabendo a altura do polo & a declinac'a~o fazerlhe sua
+conta: ou per esta figura saber onde nacera ho Sol: & por a agulha
+ao Sol em nacendo com algum pequeno estilo que va enderec'a-
+do ao centro da agulha: pello que ho Sol say do rumo em que auia
+de nacer: saberemos quanto nordestea ou norestea.
+
+% E finalmente poys per esta demostrac'a~o & estrome~to notifiquey
+em hum triangulo espheral de angulo reyto: per conhecimento
+de hum angulo agudo & do lado defronte delle os outros dous
+lados. E per conhecimento do lado que esta defronte do angulo
+reyto & do que jaz defronte do angulo agudo ho mesmo angulo a-
+gudo. E per noticia do lado defronte do angulo reyto & angulo
+agudo: os lados que contem ho angulo reyto. Qualquer pessoa
+de honesto engenho que teuer algu~s principios: podera ordenar
+esta figura a seu proposito: mudando os nomes dos angulos & li-
+nhas como comprir: & podera demostrar per ella as declinac'o~es
+do zodiaco: ascenc'o~es reytas: & muitas outras cousas que per Ge-ometria}
+[fol. 23r]
+{CB1.
+no ceo se alcanc'am: sem auer necessidade de tanta mul-
+tidam de Liuros que hora ha: como sam Apianos & Oroncios: &
+outros que trazem muitas falsidades & erros na demostrac'a~o: &
+com somente saber os officios que tem os circulos da Sphera & ter
+hu~a tauoa de sinos & arcos se he exercitado em multiplicar & repar-
+tir: que ho mays he escusado: & se nam socorrasse ao estromento.
+Posto que eu toda via escreuia Geometria dos triangulos Sphe-
+raes largamente que de Alemanha nos mandassem a Espa-
+nha os liuros de Gebre & Monteregio que na mesma materia fa-
+lam: & despoys de lidos nam rompi o que tinha escripto.
+{RUB. % Fim do tratado da Sphera com
+suas anotac'o~es.}
+
