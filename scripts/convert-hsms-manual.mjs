@@ -1,7 +1,7 @@
 /**
  * Converts HSMS-manual.txt to docs/HSMS-manual.md
  */
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -9,6 +9,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, "..");
 const srcPath = join(root, "..", "HSMS-manual.txt");
 const outPath = join(root, "docs", "HSMS-manual.md");
+
+if (!existsSync(srcPath)) {
+  console.error(`Error: HSMS manual source not found: ${srcPath}`);
+  console.error("Expected sibling file: ../HSMS-manual.txt relative to the repo root.");
+  process.exit(1);
+}
 
 let raw = readFileSync(srcPath, "utf8");
 // Normalize legacy Windows-1252 artifacts from the text export

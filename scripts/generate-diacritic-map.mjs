@@ -93,7 +93,10 @@ function buildMap(pairs) {
 
 function main() {
   if (!fs.existsSync(SETTINGS_INI)) {
-    console.error(`Missing legacy settings: ${SETTINGS_INI}`);
+    console.error(`Error: Legacy HSMS settings not found: ${SETTINGS_INI}`);
+    console.error(
+      "Expected sibling checkout: ../HSMSTools/HSMSParser/settings.ini relative to the repo root.",
+    );
     process.exit(1);
   }
 

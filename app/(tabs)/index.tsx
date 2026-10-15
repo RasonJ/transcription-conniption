@@ -4,6 +4,7 @@ import { ExportManuscriptSheet } from "@/components/ExportManuscriptSheet";
 import { BlockFigureLayout } from "@/components/BlockFigureLayout";
 import { CompilationOverlay } from "@/components/CompilationOverlay";
 import { ConcordanceDrawer } from "@/components/ConcordanceDrawer";
+import { ManuscriptChatbotDrawer } from "@/components/ManuscriptChatbotDrawer";
 import { FigureImageContext, FigurePlaceholder } from "@/components/FigurePlaceholder";
 import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
@@ -44,6 +45,7 @@ import {
   Image as ImageIcon,
   LayoutPanelLeft,
   ListOrdered,
+  MessageCircle,
   Package,
   Layers,
   PlusCircle,
@@ -167,6 +169,7 @@ export default function TranscriptionConniptionScreen() {
   const [suppressOtioseMarks, setSuppressOtioseMarks] = useState(false);
   const [showSynoptic, setShowSynoptic] = useState(false);
   const [concordanceOpen, setConcordanceOpen] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
   const [batchShellVisible, setBatchShellVisible] = useState(false);
   const [placementMode, setPlacementMode] = useState(false);
   const [facsimileCanvasEnabled, setFacsimileCanvasEnabled] = useState(false);
@@ -781,6 +784,13 @@ export default function TranscriptionConniptionScreen() {
                     <Text style={styles.toolButtonText}>Concordance</Text>
                   </Pressable>
                   <Pressable
+                    onPress={() => setAssistantOpen(true)}
+                    style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                  >
+                    <MessageCircle color="#f6d890" size={16} />
+                    <Text style={styles.toolButtonText}>Ask</Text>
+                  </Pressable>
+                  <Pressable
                     onPress={exportTei}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
@@ -914,6 +924,10 @@ export default function TranscriptionConniptionScreen() {
               onClose={() => setConcordanceOpen(false)}
               concordance={parsedManuscript.concordance ?? {}}
               onSelectOccurrence={handleConcordanceJump}
+            />
+            <ManuscriptChatbotDrawer
+              visible={assistantOpen}
+              onClose={() => setAssistantOpen(false)}
             />
           </ScrollView>
           <ResponsiveBatchShell

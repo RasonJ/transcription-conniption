@@ -16,6 +16,7 @@ import {
   type LibraryCatalog,
   type LibraryEntryPayload,
 } from "../utils/libraryCatalog";
+import { readNativeTranscription } from "./readNativeBundle";
 import { readCliArg } from "./readCliArg";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -30,15 +31,6 @@ const assetsCatalogDest = path.join(projectRoot, "assets", "library", "catalog.j
 function copyFile(src: string, dest: string) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
   fs.copyFileSync(src, dest);
-}
-
-function readNativeTranscription(nativePath: string): string | undefined {
-  const source = fs.readFileSync(nativePath, "utf8");
-  const match = source.match(/export const transcriptionText = (.+);\r?\n/);
-  if (!match) {
-    return undefined;
-  }
-  return JSON.parse(match[1]) as string;
 }
 
 if (!fs.existsSync(catalogSrc)) {

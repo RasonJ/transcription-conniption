@@ -81,6 +81,9 @@ utils/
   parseValidation.ts    # Parse-time lexical/structural error collection
   analyzeManuscript.ts  # enrichParsedManuscript (concordance + validation merge)
   concordance.ts        # O(N) KWIC index via RegExp.exec on reconstructedFlow
+  embeddings/           # hashEmbed + intentClassifier (local micro-vectors)
+  manuscriptVectorIndex.ts # ParsedManuscript → contiguous Float32 embed matrix
+  manuscriptSearch.ts   # Folio fast-path + cosine top-K + askManuscript router
   validation.ts         # Multi-line environment stack (stray `}` guards)
   normalizedText.ts     # Diplomatic → student reading edition (buffer + cached regex)
   teiExport.ts          # ParsedManuscript → TEI P5 (escaped abbr/expan, rend attrs)
@@ -119,6 +122,7 @@ components/
     renderOrnateInitial.tsx # Native ornate drop cap (four seeded style matrices)
     dropInitialLetterform.ts # Seeded RNG, illuminated themes, geometry helpers
   ConcordanceDrawer.tsx   # Virtualized KWIC drawer (memoized entry rows)
+  ManuscriptChatbotDrawer.tsx # Local Ask: folio jump + hash-embed passage search
   ValidationPanel.tsx     # Editor-mode diagnostics
   SynopticPane.tsx        # Normalized column for synoptic layout
   SynopticFolioSplit.tsx  # Wide split; scroll-sync gate; maxWidth 1200
@@ -132,6 +136,7 @@ components/
 
 constants/
   scriptoriumTheme.ts   # Sienna/gold palette for home screen
+  manuscriptIntents.ts  # Ask-assistant intent prototype phrases
   stopwords.ts          # Spanish function words excluded from index
 
 assets/images/          # App icon, splash, favicons
@@ -404,6 +409,17 @@ concordanceOpen, batchShellVisible
 `app/(tabs)/index.tsx` consumes `useScriptorium()` for data/actions and keeps only UI-local state (preview toggles, concordance drawer, synoptic options). `app/modal.tsx` reads validation errors via the same context.
 
 Concordance and validation rows call scroll navigation via `ScrollAnchorProvider`.
+
+**Local manuscript assistant** (editor **Ask** tool → `ManuscriptChatbotDrawer`):
+
+| Layer | Role |
+|-------|------|
+| `utils/embeddings/hashEmbed.ts` | FNV-1a trigram hash → unit-norm `Float32Array` (384-d default) |
+| `utils/embeddings/intentClassifier.ts` | Cosine classify against `MANUSCRIPT_INTENT_PROTOTYPES` |
+| `utils/manuscriptVectorIndex.ts` | Block chunks → contiguous N×dim embed matrix |
+| `utils/manuscriptSearch.ts` | Folio regex fast-path → intent filter → vector top-K; jumps via `navigateToAnchor` |
+
+Queries such as `go to fol. 2v` resolve deterministically; otherwise local hash-embed search ranks passages (rubric/gloss filters when intent is confident). No network required.
 
 ### Parser and export performance
 

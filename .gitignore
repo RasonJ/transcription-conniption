@@ -5,6 +5,7 @@ node_modules/
 reports/	
 out/
 .claude
+graphify-out/
 
 # Expo
 .expo/
