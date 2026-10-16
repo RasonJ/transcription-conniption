@@ -13,14 +13,19 @@ export interface BatchProcessResult {
   summary: BatchSummary;
 }
 
-const yieldToUi = (): Promise<void> => new Promise((resolve) => setTimeout(resolve, 16));
-
-function cloneStatuses(statuses: BatchFileStatus[]): BatchFileStatus[] {
-  return JSON.parse(JSON.stringify(statuses)) as BatchFileStatus[];
-}
+const yieldToMainThread = (): Promise<void> =>
+  new Promise((resolve) => {
+    if (typeof requestAnimationFrame !== "undefined") {
+      requestAnimationFrame(() => resolve());
+    } else {
+      setTimeout(resolve, 0);
+    }
+  });
 
 /**
- * Parses multiple transcriptions sequentially with UI yields between files.
+ * Parses multiple transcriptions with main-thread yields so large batches
+ * (50+ files) do not freeze the UI. Status updates use shallow copies —
+ * not JSON deep-clone — to avoid GC spikes on mobile.
  */
 export async function processTranscriptionBatch(
   files: RawFilePayload[],
@@ -37,7 +42,7 @@ export async function processTranscriptionBatch(
     progress: 0,
   }));
 
-  onProgressUpdate(cloneStatuses(fileStatuses));
+  onProgressUpdate([...fileStatuses]);
 
   let totalWordsProcessed = 0;
   let totalAnomaliesDetected = 0;
@@ -49,13 +54,12 @@ export async function processTranscriptionBatch(
     const statusRef = fileStatuses[i];
 
     statusRef.status = "processing";
-    statusRef.progress = 25;
-    onProgressUpdate(cloneStatuses(fileStatuses));
+    statusRef.progress = 30;
+    onProgressUpdate([...fileStatuses]);
 
     try {
-      await yieldToUi();
+      await yieldToMainThread();
       const tree = compileManuscriptTree(targetFile.content);
-      statusRef.progress = 75;
 
       const anomalyCount = tree.validationErrors?.length ?? 0;
       statusRef.stats = {
@@ -79,17 +83,10 @@ export async function processTranscriptionBatch(
       failedFiles++;
       statusRef.status = "failed";
       statusRef.progress = 100;
-
-      if (err instanceof Error) {
-        statusRef.error = err.message;
-      } else if (typeof err === "object" && err !== null && "message" in err) {
-        statusRef.error = String((err as Record<string, unknown>).message);
-      } else {
-        statusRef.error = "Unknown structural compiler failure";
-      }
+      statusRef.error = err instanceof Error ? err.message : String(err);
     }
 
-    onProgressUpdate(cloneStatuses(fileStatuses));
+    onProgressUpdate([...fileStatuses]);
   }
 
   return {

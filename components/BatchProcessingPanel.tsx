@@ -1,5 +1,6 @@
 import type { BatchFileStatus, BatchSummary } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
+import { mapPool } from "@/utils/asyncPool";
 import { processTranscriptionBatch, type BatchProcessResult } from "@/utils/batchProcessor";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "@/utils/expoFileSystem";
@@ -18,13 +19,17 @@ type Props = {
   onBatchComplete: (result: BatchProcessResult) => void;
 };
 
+const READ_CONCURRENCY = 8;
+
 export function BatchProcessingPanel({ onBatchComplete }: Props) {
   const t = useT();
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileStatuses, setFileStatuses] = useState<BatchFileStatus[]>([]);
   const [summary, setSummary] = useState<BatchSummary | null>(null);
+  const [inlineWarning, setInlineWarning] = useState<string | null>(null);
 
   const handleDirectorySelection = useCallback(async () => {
+    setInlineWarning(null);
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ["text/plain", "text/*"],
@@ -39,25 +44,52 @@ export function BatchProcessingPanel({ onBatchComplete }: Props) {
       setIsProcessing(true);
       setSummary(null);
 
-      const preparedPayloads = await Promise.all(
-        result.assets.map(async (asset) => {
-          const content = await FileSystem.readAsStringAsync(asset.uri, {
-            encoding: FileSystem.EncodingType.UTF8,
-          });
-          return {
-            name: asset.name ?? "unknown.txt",
-            content,
-            size: asset.size ?? content.length,
-          };
-        }),
-      );
+      const readErrors: string[] = [];
+      const preparedPayloads = (
+        await mapPool(result.assets, READ_CONCURRENCY, async (asset) => {
+          try {
+            const content = await FileSystem.readAsStringAsync(asset.uri, {
+              encoding: FileSystem.EncodingType.UTF8,
+            });
+            return {
+              name: asset.name ?? "unknown.txt",
+              content,
+              size: asset.size ?? content.length,
+            };
+          } catch (err) {
+            const label = asset.name ?? asset.uri;
+            readErrors.push(label);
+            console.warn("Failed to read batch asset", label, err);
+            return null;
+          }
+        })
+      ).filter((p): p is NonNullable<typeof p> => p != null);
+
+      if (readErrors.length > 0) {
+        setInlineWarning(
+          `Could not read ${readErrors.length} file(s): ${readErrors.slice(0, 3).join(", ")}`,
+        );
+      }
+
+      if (preparedPayloads.length === 0) {
+        setIsProcessing(false);
+        setInlineWarning("No readable transcription files in the selection.");
+        return;
+      }
 
       const batchResult = await processTranscriptionBatch(preparedPayloads, setFileStatuses);
       setSummary(batchResult.summary);
       setIsProcessing(false);
       onBatchComplete(batchResult);
     } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      // DocumentPicker cancellation on some platforms throws instead of canceled:true.
+      if (/cancel/i.test(message)) {
+        setIsProcessing(false);
+        return;
+      }
       console.warn("Batch processing failed", error);
+      setInlineWarning(message);
       setIsProcessing(false);
     }
   }, [onBatchComplete]);
@@ -77,6 +109,13 @@ export function BatchProcessingPanel({ onBatchComplete }: Props) {
         <Text style={styles.zoneTitle}>{t("batch.uploadTitle")}</Text>
         <Text style={styles.zoneSub}>{t("batch.uploadHint")}</Text>
       </Pressable>
+
+      {inlineWarning ? (
+        <View style={styles.warningBanner} accessibilityRole="alert">
+          <AlertTriangle color="#f6d890" size={16} />
+          <Text style={styles.warningText}>{inlineWarning}</Text>
+        </View>
+      ) : null}
 
       {summary ? (
         <View style={styles.summaryCard}>
@@ -144,6 +183,17 @@ const styles = StyleSheet.create({
   pressed: { opacity: 0.8 },
   zoneTitle: { color: "#fff4d2", fontSize: 16, fontWeight: "bold" },
   zoneSub: { color: "rgba(255,244,210,0.6)", fontSize: 12, textAlign: "center" },
+  warningBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    padding: 10,
+    borderRadius: 12,
+    backgroundColor: "rgba(246,216,144,0.12)",
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.35)",
+  },
+  warningText: { flex: 1, color: "#f6d890", fontSize: 12, fontWeight: "600" },
   summaryCard: {
     backgroundColor: "rgba(255,244,210,0.06)",
     borderRadius: 16,

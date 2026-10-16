@@ -45,7 +45,15 @@ export function FigurePlaceholder({ token }: Props) {
 
   if (targetImageUri) {
     return (
-      <View style={styles.activeImageWrapper}>
+      <View
+        style={styles.activeImageWrapper}
+        accessibilityState={{ busy: isImageLoading }}
+        accessibilityLabel={
+          isImageLoading
+            ? t("facsimile.loading")
+            : t("facsimile.uploadLabel", { type: typeLabel, caption: token.value })
+        }
+      >
         <View style={styles.imageCanvasEnvelope}>
           {isImageLoading ? (
             <View style={styles.loadingSkeleton}>
@@ -60,6 +68,7 @@ export function FigurePlaceholder({ token }: Props) {
             onLoadStart={() => setIsImageLoading(true)}
             onLoadEnd={() => setIsImageLoading(false)}
             onError={() => setIsImageLoading(false)}
+            accessibilityIgnoresInvertColors
           />
         </View>
         <View style={styles.canvasControlOverlay}>
@@ -89,6 +98,7 @@ export function FigurePlaceholder({ token }: Props) {
       onPress={() => triggerImagePick(figureId)}
       style={({ pressed }) => [styles.placeholderBox, pressed && styles.placeholderPressed]}
       accessibilityRole="button"
+      accessibilityState={{ busy: false }}
       accessibilityLabel={t("facsimile.uploadLabel", { type: typeLabel, caption: token.value })}
     >
       <View style={styles.placeholderAccentBar} />

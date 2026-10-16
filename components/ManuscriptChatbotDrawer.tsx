@@ -2,6 +2,8 @@ import { useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
 import { useT } from "@/i18n/runtime";
+import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
+import { runHybridTranscriptionPipeline } from "@/services/batchTranscriptionService";
 import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
 import { buildFacetIndex, type FacetIndex } from "@/utils/copilot/facetIndex";
 import {
@@ -14,9 +16,13 @@ import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/t
 import type { PrecompiledFacets } from "@/utils/corpusPrecompute";
 import { loadPrecompiledFacets } from "@/utils/librarySidecars";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
-import { ArrowRight, BookOpen, Search, Sparkles, X } from "lucide-react-native";
+import { looksLikeTranscribeRequest } from "@/utils/visionUpload";
+import * as DocumentPicker from "expo-document-picker";
+import { ArrowRight, BookOpen, Image as ImageIcon, Search, Sparkles, X } from "lucide-react-native";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  ActivityIndicator,
+  InteractionManager,
   Modal,
   Pressable,
   ScrollView,
@@ -26,13 +32,22 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import type { ManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
+
+type AttachedScan = {
+  uri: string;
+  name: string;
+  mimeType?: string;
+};
 
 type Props = {
   visible: boolean;
   onClose: () => void;
+  /** Apply vision HSMS into the Studio parchment (and close the drawer). */
+  onApplyHsms?: (hsms: string, meta: { sourceFileName: string }) => void;
 };
 
-export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
+export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props) {
   const t = useT();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
@@ -41,8 +56,15 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState<CopilotAnswer | null>(null);
+  const [attachedScan, setAttachedScan] = useState<AttachedScan | null>(null);
+  const [visionBusy, setVisionBusy] = useState(false);
   const [precompiledFacets, setPrecompiledFacets] = useState<PrecompiledFacets | null>(null);
+  const [vectorIndex, setVectorIndex] = useState<ManuscriptVectorIndex | undefined>(undefined);
+  const [libraryAwareRouter, setLibraryAwareRouter] = useState<
+    ReturnType<typeof buildLibraryAwareRouterIndex> | undefined
+  >(undefined);
   const liveFacetsRef = useRef<FacetIndex | null>(null);
+  const visionAbortRef = useRef<AbortController | null>(null);
 
   const libraryHit = useMemo(
     () =>
@@ -73,22 +95,35 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     };
   }, [visible, libraryHit?.baseName, parsedManuscript]);
 
+  // Defer heavy index builds until the drawer slide animation finishes (60 FPS).
+  useEffect(() => {
+    if (!visible) {
+      setVectorIndex(undefined);
+      setLibraryAwareRouter(undefined);
+      return;
+    }
+    const task = InteractionManager.runAfterInteractions(() => {
+      setVectorIndex(buildManuscriptVectorIndex(parsedManuscript));
+      setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog));
+    });
+    return () => {
+      task.cancel();
+    };
+  }, [visible, parsedManuscript, catalog]);
+
+  // Cancel in-flight vision OCR when the drawer closes.
+  useEffect(() => {
+    if (visible) return;
+    visionAbortRef.current?.abort();
+    visionAbortRef.current = null;
+  }, [visible]);
+
   const resolveLiveFacets = useCallback((): FacetIndex => {
     if (liveFacetsRef.current) return liveFacetsRef.current;
     const built = buildFacetIndex(parsedManuscript);
     liveFacetsRef.current = built;
     return built;
   }, [parsedManuscript]);
-
-  const vectorIndex = useMemo(
-    () => (visible ? buildManuscriptVectorIndex(parsedManuscript) : undefined),
-    [visible, parsedManuscript],
-  );
-
-  const libraryAwareRouter = useMemo(
-    () => (visible ? buildLibraryAwareRouterIndex(catalog) : undefined),
-    [visible, catalog],
-  );
 
   const overview = useMemo(() => {
     if (!visible) return [];
@@ -109,7 +144,119 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter],
   );
 
+  const handleAttachScan = useCallback(async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+      if (result.canceled || !result.assets?.[0]?.uri) return;
+      const asset = result.assets[0];
+      setAttachedScan({
+        uri: asset.uri,
+        name: asset.name ?? "page_scan.png",
+        mimeType:
+          asset.mimeType ??
+          (/\.pdf$/i.test(asset.name ?? "") ? "application/pdf" : undefined),
+      });
+      if (!query.trim()) {
+        setQuery("transcribe this into hsms");
+      }
+    } catch (err) {
+      console.warn("Attach scan failed", err);
+    }
+  }, [query]);
+
+  const runVisionTranscribe = useCallback(async () => {
+    if (!attachedScan) {
+      setAnswer({
+        recipeId: "transcription.vision_ocr",
+        recipeVersion: 1,
+        tier: "D",
+        headline: t("copilot.visionNeedImage"),
+        rows: [],
+        method: "vision",
+        elapsedMs: 0,
+      });
+      return;
+    }
+    if (!isAzureAgentConfigured()) {
+      setAnswer({
+        recipeId: "transcription.vision_ocr",
+        recipeVersion: 1,
+        tier: "D",
+        headline: t("copilot.visionNeedAzure"),
+        rows: [],
+        method: "vision",
+        elapsedMs: 0,
+      });
+      return;
+    }
+
+    setVisionBusy(true);
+    visionAbortRef.current?.abort();
+    const abort = new AbortController();
+    visionAbortRef.current = abort;
+    const t0 = Date.now();
+    try {
+      const vision = await runHybridTranscriptionPipeline({
+        uri: attachedScan.uri,
+        name: attachedScan.name,
+        mimeType: attachedScan.mimeType,
+        languageHint: "POR",
+        signal: abort.signal,
+      });
+      if (abort.signal.aborted) return;
+      const outName =
+        attachedScan.name.replace(/\.(pdf|png|jpe?g|webp|gif)$/i, "") + ".txt";
+      const elapsedMs = Date.now() - t0;
+      setAnswer({
+        recipeId: "transcription.vision_ocr",
+        recipeVersion: 1,
+        tier: "D",
+        headline: t("copilot.visionDone"),
+        body: vision.hsmsAscii,
+        breakdown: [
+          { label: "pages", value: vision.pageCount },
+          { label: "errors", value: vision.errorCount },
+          { label: "warnings", value: vision.warningCount },
+        ],
+        rows: [],
+        method: "Azure vision → ingestAgentTranscription",
+        elapsedMs,
+      });
+      onApplyHsms?.(vision.hsmsAscii, { sourceFileName: outName });
+      setAttachedScan(null);
+      setQuery("");
+    } catch (err) {
+      if (abort.signal.aborted || (err instanceof Error && err.name === "AbortError")) {
+        return;
+      }
+      console.warn("Copilot vision transcription failed", err);
+      setAnswer({
+        recipeId: "transcription.vision_ocr",
+        recipeVersion: 1,
+        tier: "D",
+        headline: err instanceof Error ? err.message : t("copilot.visionError"),
+        rows: [],
+        method: "vision",
+        elapsedMs: Date.now() - t0,
+      });
+    } finally {
+      setVisionBusy(false);
+    }
+  }, [attachedScan, onApplyHsms, t]);
+
   const handleAsk = useCallback(() => {
+    const wantsVision =
+      Boolean(attachedScan) ||
+      (looksLikeTranscribeRequest(query) && /transcri|hsms|ocr|vision|scan/i.test(query));
+
+    if (wantsVision) {
+      void runVisionTranscribe();
+      return;
+    }
+
     if (!query.trim()) return;
 
     const result = askCopilot(query, parsedManuscript, askOptions);
@@ -121,7 +268,15 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
       return;
     }
     setAnswer(result);
-  }, [query, parsedManuscript, askOptions, navigateToAnchor, onClose]);
+  }, [
+    attachedScan,
+    query,
+    runVisionTranscribe,
+    parsedManuscript,
+    askOptions,
+    navigateToAnchor,
+    onClose,
+  ]);
 
   const handleRecipe = useCallback(
     (recipeId: string) => {
@@ -169,7 +324,35 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
 
           <Text style={styles.hint}>{t("copilot.hint")}</Text>
 
+          {attachedScan ? (
+            <View style={styles.attachChip}>
+              <ImageIcon color="#f6d890" size={14} />
+              <Text style={styles.attachChipText} numberOfLines={1}>
+                {attachedScan.name}
+              </Text>
+              <Pressable
+                onPress={() => setAttachedScan(null)}
+                accessibilityRole="button"
+                accessibilityLabel={t("copilot.clearImageLabel")}
+                hitSlop={8}
+              >
+                <X color="#f6d890" size={14} />
+              </Pressable>
+            </View>
+          ) : null}
+
           <View style={styles.inputRow}>
+            <Pressable
+              onPress={() => {
+                void handleAttachScan();
+              }}
+              style={styles.attachButton}
+              accessibilityRole="button"
+              accessibilityLabel={t("copilot.attachImageLabel")}
+              disabled={visionBusy}
+            >
+              <ImageIcon color="#f6d890" size={16} />
+            </Pressable>
             <TextInput
               value={query}
               onChangeText={setQuery}
@@ -180,16 +363,23 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType="search"
+              editable={!visionBusy}
             />
             <Pressable
               onPress={handleAsk}
-              style={styles.sendButton}
+              style={[styles.sendButton, visionBusy && styles.sendButtonDisabled]}
               accessibilityRole="button"
               accessibilityLabel={t("copilot.searchLabel")}
+              disabled={visionBusy}
             >
-              <Search color="#1a0a05" size={16} />
+              {visionBusy ? (
+                <ActivityIndicator size="small" color="#1a0a05" />
+              ) : (
+                <Search color="#1a0a05" size={16} />
+              )}
             </Pressable>
           </View>
+          {visionBusy ? <Text style={styles.visionBusy}>{t("copilot.visionBusy")}</Text> : null}
 
           <ScrollView style={styles.resultsList} keyboardShouldPersistTaps="handled">
             {libraryHit ? (
@@ -237,6 +427,28 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
                   ) : null}
                 </View>
                 <Text style={styles.headline}>{answer.headline}</Text>
+
+                {answer.body ? (
+                  <View style={styles.hsmsBlock}>
+                    <Text style={styles.hsmsText} selectable>
+                      {answer.body}
+                    </Text>
+                    {onApplyHsms ? (
+                      <Pressable
+                        onPress={() =>
+                          onApplyHsms(answer.body!, {
+                            sourceFileName: "vision_transcription.txt",
+                          })
+                        }
+                        style={styles.applyButton}
+                        accessibilityRole="button"
+                        accessibilityLabel={t("copilot.applyToParchment")}
+                      >
+                        <Text style={styles.applyButtonText}>{t("copilot.applyToParchment")}</Text>
+                      </Pressable>
+                    ) : null}
+                  </View>
+                ) : null}
 
                 {answer.breakdown && answer.breakdown.length > 0 ? (
                   <View style={styles.breakdown}>
@@ -356,7 +568,29 @@ const styles = StyleSheet.create({
     fontFamily: "monospace",
   },
   hint: { color: "rgba(246,216,144,0.65)", fontSize: 12, marginBottom: 4 },
+  attachChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    backgroundColor: "rgba(246,216,144,0.1)",
+    borderColor: "rgba(246,216,144,0.3)",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  attachChipText: { flex: 1, color: "#fff4d2", fontSize: 12, fontWeight: "600" },
   inputRow: { flexDirection: "row", gap: 6, alignItems: "center" },
+  attachButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.35)",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(244,235,208,0.08)",
+  },
   input: {
     flex: 1,
     backgroundColor: "rgba(244,235,208,0.12)",
@@ -376,6 +610,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  sendButtonDisabled: { opacity: 0.6 },
+  visionBusy: { color: "#f6d890", fontSize: 12, fontWeight: "600" },
+  hsmsBlock: {
+    backgroundColor: "rgba(0,0,0,0.35)",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.2)",
+    padding: 10,
+    gap: 8,
+  },
+  hsmsText: {
+    color: "#fff4d2",
+    fontFamily: "monospace",
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  applyButton: {
+    alignSelf: "flex-start",
+    backgroundColor: "#f6d890",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  applyButtonText: { color: "#1a0a05", fontSize: 12, fontWeight: "800" },
   resultsList: { flexGrow: 1, marginTop: 4 },
   overview: { marginBottom: 10, gap: 6 },
   sectionLabel: {

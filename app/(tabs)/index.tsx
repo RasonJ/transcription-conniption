@@ -13,6 +13,7 @@ import { ResponsiveBatchShell } from "@/components/ResponsiveBatchShell";
 import { SvgFacsimilePage } from "@/components/SvgFacsimilePage";
 import { SynopticFolioSplit } from "@/components/SynopticFolioSplit";
 import { EditorLinterBanner } from "@/components/EditorLinterBanner";
+import { TranscriptionProgressBar } from "@/components/TranscriptionProgressBar";
 import { ValidationPanel } from "@/components/ValidationPanel";
 import {
   DEFAULT_DEMO,
@@ -21,6 +22,7 @@ import {
   SIMPLE_SAMPLE,
 } from "@/constants/demoTranscriptions";
 import { scriptoriumTheme as theme } from "@/constants/scriptoriumTheme";
+import { useBatchTranscription } from "@/hooks/useBatchTranscription";
 import { dropCapFontSize } from "@/utils/dropInitial";
 import { tokenizeString } from "@/utils/hsmsLexer";
 import type { FacsimilePlacement, FolioSide, ManuscriptBlock, Token, WordOccurrence } from "@/constants/manuscript";
@@ -32,6 +34,11 @@ import type { ManuscriptExportFormat } from "@/utils/exportFormats";
 import { exportToTEIXML } from "@/utils/teiExport";
 import { copyFigureIntoWorkspace } from "@/utils/figureAssetStorage";
 import { platformShadow } from "@/utils/platformShadow";
+import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
+import {
+  isPlainTextUploadFile,
+  isVisionUploadFile,
+} from "@/utils/visionUpload";
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
@@ -186,8 +193,144 @@ export default function TranscriptionConniptionScreen() {
   const [svgModeEnabled, setSvgModeEnabled] = useState(true);
   const [isDragOver, setIsDragOver] = useState(false);
   const [exportSheetVisible, setExportSheetVisible] = useState(false);
+  const visionSourceNameRef = useRef("vision_transcription.txt");
 
   const synopticEnabled = showSynoptic && width >= 640;
+
+  const {
+    isProcessing: visionBusy,
+    progress: visionProgress,
+    startBatchTranscription,
+  } = useBatchTranscription({
+    onCumulativeHsms: (hsms) => {
+      // Append each folio as soon as Azure returns — parchment re-renders live.
+      applyTranscription(hsms, { sourceFileName: visionSourceNameRef.current });
+      setIsPreview(true);
+      setIsEditorMode(false);
+    },
+  });
+
+  const visionStatusLabel = useMemo(() => {
+    if (!visionBusy) return null;
+    const p = visionProgress;
+    if (p.phase === "slicing") {
+      return tNow("studio.action.transcribeScanSlicing", {
+        page: p.current,
+        total: p.total || "…",
+        folio: p.activeFolio || "—",
+      });
+    }
+    if (p.phase === "repairing") {
+      return tNow("studio.action.transcribeScanRepairing", {
+        page: p.current,
+        total: p.total || "…",
+        folio: p.activeFolio || "—",
+      });
+    }
+    if (p.phase === "merging") {
+      return tNow("studio.action.transcribeScanMerging");
+    }
+    if (p.phase === "transcribing") {
+      return tNow("studio.action.transcribeScanPage", {
+        page: p.current,
+        total: p.total || "…",
+        folio: p.activeFolio || "—",
+      });
+    }
+    return tNow("studio.action.transcribeScanBusy");
+  }, [visionBusy, visionProgress]);
+
+  const runVisionTranscription = useCallback(
+    async (source: {
+      uri: string;
+      name?: string | null;
+      mimeType?: string | null;
+      file?: File;
+    }) => {
+      if (!isAzureAgentConfigured()) {
+        Alert.alert(
+          tNow("studio.action.transcribeScanError"),
+          tNow("studio.action.transcribeScanNeedAzure"),
+        );
+        return;
+      }
+      const mimeType =
+        source.mimeType ??
+        (/\.pdf$/i.test(source.name ?? "") ? "application/pdf" : undefined);
+      const outName =
+        (source.name ?? "vision_transcription").replace(/\.(pdf|png|jpe?g|webp|gif)$/i, "") +
+        ".txt";
+      visionSourceNameRef.current = outName;
+      setIsPreview(true);
+      setIsEditorMode(false);
+
+      try {
+        const visionResult = await startBatchTranscription({
+          uri: source.uri,
+          name: source.name ?? undefined,
+          mimeType: mimeType ?? undefined,
+          file: source.file,
+          languageHint: "POR",
+        });
+        if (!visionResult) return;
+
+        applyTranscription(visionResult.hsmsAscii, { sourceFileName: outName });
+        await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        Alert.alert(
+          tNow("studio.action.transcribeScanDone"),
+          tNow("studio.action.transcribeScanDoneBody", {
+            errors: visionResult.errorCount,
+            warnings: visionResult.warningCount,
+            pages: visionResult.pageCount,
+          }),
+        );
+      } catch (err) {
+        console.warn("Vision transcription failed", err);
+        Alert.alert(
+          tNow("studio.action.transcribeScanError"),
+          err instanceof Error ? err.message : tNow("studio.action.transcribeScanErrorBody"),
+        );
+      }
+    },
+    [applyTranscription, startBatchTranscription],
+  );
+
+  const handleTranscribeScan = useCallback(async () => {
+    if (!isAzureAgentConfigured()) {
+      Alert.alert(tNow("studio.action.transcribeScanError"), tNow("studio.action.transcribeScanNeedAzure"));
+      return;
+    }
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ["image/*", "application/pdf"],
+        copyToCacheDirectory: true,
+      });
+      if (result.canceled || !result.assets?.[0]?.uri) return;
+      const asset = result.assets[0];
+      await runVisionTranscription({
+        uri: asset.uri,
+        name: asset.name,
+        mimeType: asset.mimeType,
+      });
+    } catch (err) {
+      console.warn("Vision transcription failed", err);
+      Alert.alert(
+        tNow("studio.action.transcribeScanError"),
+        err instanceof Error ? err.message : tNow("studio.action.transcribeScanErrorBody"),
+      );
+    }
+  }, [runVisionTranscription]);
+
+  const handleApplyHsmsFromCopilot = useCallback(
+    (hsms: string, meta: { sourceFileName: string }) => {
+      // Load HSMS onto parchment while keeping the assistant open to show the ASCII body.
+      applyTranscription(hsms, { sourceFileName: meta.sourceFileName });
+      setIsPreview(true);
+      setIsEditorMode(false);
+      void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    },
+    [applyTranscription],
+  );
 
   useEffect(() => {
     if (isPreview) {
@@ -195,11 +338,14 @@ export default function TranscriptionConniptionScreen() {
     }
   }, [isPreview, commitEditorBuffer]);
 
-  // ── Web drag-and-drop: drop a .txt file anywhere to open it in parchment mode
+  // ── Web drag-and-drop: .txt → parchment; image/PDF → Azure vision HSMS
   useEffect(() => {
     if (Platform.OS !== "web" || typeof document === "undefined") return;
 
-    const onDragOver = (e: Event) => { e.preventDefault(); setIsDragOver(true); };
+    const onDragOver = (e: Event) => {
+      e.preventDefault();
+      setIsDragOver(true);
+    };
     const onDragLeave = (e: Event) => {
       const de = e as DragEvent;
       if (!de.relatedTarget) setIsDragOver(false);
@@ -210,6 +356,50 @@ export default function TranscriptionConniptionScreen() {
       const de = e as DragEvent;
       const file = de.dataTransfer?.files?.[0];
       if (!file) return;
+
+      if (isVisionUploadFile(file)) {
+        const isPdf =
+          file.type === "application/pdf" || /\.pdf$/i.test(file.name);
+        if (isPdf) {
+          const objectUrl = URL.createObjectURL(file);
+          void runVisionTranscription({
+            uri: objectUrl,
+            name: file.name,
+            mimeType: "application/pdf",
+            file,
+          }).finally(() => {
+            try {
+              URL.revokeObjectURL(objectUrl);
+            } catch {
+              /* ignore */
+            }
+          });
+          return;
+        }
+        // Single page image → data URI (works with Azure vision on web).
+        const reader = new FileReader();
+        reader.onload = () => {
+          const dataUri = typeof reader.result === "string" ? reader.result : "";
+          if (!dataUri) return;
+          void runVisionTranscription({
+            uri: dataUri,
+            name: file.name,
+            mimeType: file.type || "image/jpeg",
+            file,
+          });
+        };
+        reader.readAsDataURL(file);
+        return;
+      }
+
+      if (!isPlainTextUploadFile(file)) {
+        Alert.alert(
+          tNow("studio.action.transcribeScanError"),
+          tNow("studio.action.transcribeScanDropUnsupported"),
+        );
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (evt) => {
         const text = evt.target?.result;
@@ -231,7 +421,7 @@ export default function TranscriptionConniptionScreen() {
       document.removeEventListener("dragleave", onDragLeave);
       document.removeEventListener("drop", onDrop);
     };
-  }, [applyTranscription]);
+  }, [applyTranscription, runVisionTranscription]);
 
   const readingFlowText = useMemo(
     () =>
@@ -483,6 +673,26 @@ export default function TranscriptionConniptionScreen() {
                   <Text style={styles.primaryButtonText}>{t("studio.action.upload")}</Text>
                 </Pressable>
                 <Pressable
+                  onPress={() => {
+                    if (!visionBusy) void handleTranscribeScan();
+                  }}
+                  disabled={visionBusy}
+                  style={({ pressed }) => [
+                    styles.primaryButton,
+                    visionBusy && styles.pressed,
+                    pressed && styles.pressed,
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("studio.action.transcribeScan")}
+                >
+                  <Sparkles color={theme.inkDark} size={16} />
+                  <Text style={styles.primaryButtonText}>
+                    {visionBusy
+                      ? t("studio.action.transcribeScanBusy")
+                      : t("studio.action.transcribeScan")}
+                  </Text>
+                </Pressable>
+                <Pressable
                   onPress={() => setAssistantOpen(true)}
                   style={({ pressed }) => [styles.htmlExportButton, pressed && styles.pressed]}
                   accessibilityRole="button"
@@ -647,6 +857,15 @@ export default function TranscriptionConniptionScreen() {
                 setActiveFile(name);
                 setIsPreview(true);
               }}
+            />
+
+            <TranscriptionProgressBar
+              isProcessing={visionBusy}
+              current={visionProgress.current}
+              total={visionProgress.total}
+              activeFolio={visionProgress.activeFolio}
+              phase={visionProgress.phase === "idle" ? "transcribing" : visionProgress.phase}
+              label={visionStatusLabel ?? undefined}
             />
 
             {hasPublicationMeta && showParchment ? (
@@ -956,6 +1175,7 @@ export default function TranscriptionConniptionScreen() {
             <ManuscriptChatbotDrawer
               visible={assistantOpen}
               onClose={() => setAssistantOpen(false)}
+              onApplyHsms={handleApplyHsmsFromCopilot}
             />
           </ScrollView>
           <ResponsiveBatchShell

@@ -407,6 +407,31 @@ export function SvgFacsimilePage({
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const t = useT();
 
+  // Only this folio's figure URIs — avoids redraw when unrelated images update.
+  const folioImageSig = useMemo(() => {
+    const parts: string[] = [];
+    for (const block of folio.blocks) {
+      for (const tok of block.tokens) {
+        if (tok.figureId) {
+          parts.push(`${tok.figureId}=${uploadedImages[tok.figureId] ?? ""}`);
+        }
+      }
+    }
+    return parts.join("\0");
+  }, [folio, uploadedImages]);
+  const folioImages = useMemo(() => {
+    const next: Record<string, string> = {};
+    for (const block of folio.blocks) {
+      for (const tok of block.tokens) {
+        if (tok.figureId && uploadedImages[tok.figureId]) {
+          next[tok.figureId] = uploadedImages[tok.figureId];
+        }
+      }
+    }
+    return next;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [folio, folioImageSig]);
+
   const canvasW = CANVAS_W;
   const innerW = innerCanvasWidth();
   const colW = columnWidth();
@@ -473,7 +498,7 @@ export function SvgFacsimilePage({
         MARGIN,
         innerW,
         proseCap,
-        uploadedImages,
+        folioImages,
         settings,
         folio.id,
         group.bi,
@@ -509,7 +534,7 @@ export function SvgFacsimilePage({
             leftX,
             colW,
             leftCap,
-            uploadedImages,
+            folioImages,
             settings,
             folio.id,
             bi,
@@ -532,7 +557,7 @@ export function SvgFacsimilePage({
             rightX,
             colW,
             rightCap,
-            uploadedImages,
+            folioImages,
             settings,
             folio.id,
             bi,

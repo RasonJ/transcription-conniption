@@ -25,6 +25,13 @@ const RE_SUBST_GAP = /\)\s+\[/;
 const RE_EMPTY_DEL = /\(\s*\)/;
 const RE_CW_SG = /^\{(?:CW|SG)\.\s*([^}]*)\}?\s*$/i;
 const RE_AD_GL_FOLLOW = /^\{(?:AD|GL)\.(.*)$/i;
+/** Provisional Transkribus/eScriptorium markers that convert_htr_to_hsms should clear. */
+const RE_HTR_TEMP_MARKERS = /[＜＞⊂⊃`]/;
+/**
+ * {AD. / {GL. with payload should prefer ` [^…` (space + scribal insertion).
+ * Empty `{AD.}` / `{GL.}` alone is allowed elsewhere.
+ */
+const RE_AD_GL_INVALID_PAYLOAD = /^\{(?:AD|GL)\.(.+)\}$/i;
 const VECTOR_OK = /^\{(?:MIN|DIAG)\d*\./i;
 
 const KNOWN_STRUCTURAL = new Set([
@@ -116,10 +123,24 @@ export function scanProoferLineIncidents(
       "warning",
       "technical",
       "COMBINING_DIACRITIC",
-      "Combining Unicode diacritic detected — use a precomposed character or HSMS ASCII notation.",
+      "Combining Unicode diacritic detected — use a precomposed character or HSMS ASCII notation (e.g. c', n~).",
       lineIndex,
       line,
       line.search(RE_COMBINING),
+    );
+  }
+
+  const htrMark = line.search(RE_HTR_TEMP_MARKERS);
+  if (htrMark >= 0) {
+    push(
+      issues,
+      "warning",
+      "editorial",
+      "UNCONVERTED_HTR_MARKER",
+      "Provisional HTR marker (＜＞, ⊂⊃, or `) detected — run convert_htr_to_hsms or replace with <…> / <<…>>.",
+      lineIndex,
+      line,
+      htrMark,
     );
   }
 
@@ -429,6 +450,23 @@ export function scanProoferLineIncidents(
         "editorial",
         "AD_GL_HAND",
         "`{AD.` / `{GL.` hand insertions should use `[^…` immediately after the tag text.",
+        lineIndex,
+        line,
+      );
+    }
+  }
+
+  // {AD. payload} / {GL. payload} should be `{AD. [^…]}` (space + insertion), per HSMS_proofer editorial.
+  const adGlPayload = line.match(RE_AD_GL_INVALID_PAYLOAD);
+  if (adGlPayload) {
+    const rawPayload = adGlPayload[1] ?? "";
+    if (rawPayload.trim().length > 0 && !/^\s+\[\^/.test(rawPayload)) {
+      push(
+        issues,
+        "warning",
+        "editorial",
+        "INVALID_AD_GL_FORMAT",
+        "`{AD.}` / `{GL.}` tags with text should be followed by space and `[^` (e.g. `{AD. [^added]}`).",
         lineIndex,
         line,
       );

@@ -78,6 +78,11 @@ export interface CopilotAnswer {
   recipeVersion: number;
   tier: EvidenceTier;
   headline: string;
+  /**
+   * Optional long-form body (e.g. raw HSMS from vision OCR).
+   * Rendered as a monospace block in the assistant drawer.
+   */
+  body?: string;
   breakdown?: BreakdownEntry[];
   rows: EvidenceRow[];
   method: string;

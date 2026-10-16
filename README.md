@@ -62,12 +62,15 @@ Toggle **Advanced editor** on the home screen to unlock:
 - **HSMS-aware parsing** — three-pass compiler: structural lexer, environment stack, folio driver; `{RMK:}` lines populate metadata only (stripped from folio body via `utils/metadataBlocks.ts`)
 - **Spatial layout** — `utils/spatialAst.ts` lifts each folio into column blocks and physical lines for the SVG facsimile path; see [docs/HSMS-LAYOUT.md](docs/HSMS-LAYOUT.md)
 - **Legacy HTML parity** — inline `{INn.}` drop caps (one historiated grapheme per mnemonic; particle remainders stay in the body line, e.g. `{IN4.} AO` → cap **A**, text **O muyto…**), Portuguese `c'o~` compounds, balanced-brace figure lines (`utils/legacyDiacritics.ts`, `utils/dropInitial.ts`, `utils/braceBlocks.ts`); paleographic brackets (`[*]`, `[??]`, loose `??`, `[ ]`) via `utils/hsmsLexer.ts`; web SVG facsimile targets `PedroNunes-TRS` HTML float/justify behaviour
-- **Reference tab** — links to HSMS manual, OSTA guide, and Hispanic Seminary resources
+- **Reference tab (Sources)** — HSMS / OSTA links, Georgetown funding credits, in-app OSTA citation & syntax cards ([docs/OSTA-guide.md](docs/OSTA-guide.md))
+- **Research Copilot** — local Tier‑A recipes (paleography, Voyant-style frequency / n-grams / vocab density) + MCP corpus sidecars
+- **Transcribe Scan (AI)** — optional Azure hybrid stack (`gpt-4o` vision + conditional / batched `gpt-5.4-mini` syntax repair); multi-page PDFs are sliced on the client (PDF.js), clean leaves stream immediately, flagged leaves share one Pass 2 call ([docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md))
 
 ## Requirements
 
 - [Bun](https://bun.sh/) (used for install and scripts)
 - Expo Go on a device, or iOS/Android simulator / web browser for development
+- Optional: Azure OpenAI / Foundry (`EXPO_PUBLIC_AZURE_OPENAI_*`, deployments, agent names) for vision transcription (see `.env.example`)
 
 ## Getting started
 
@@ -90,6 +93,14 @@ bun run start:web
 ```
 
 Scan the QR code with Expo Go, or press the platform key in the terminal to open a simulator.
+
+### Optional: Azure vision transcription
+
+1. Confirm resource Responses deployment **`gpt-4o`** (Pass 1) and Foundry syntax agent **`hsms-agent-607kfp6kw1-gpt5-mini`** / model **`gpt-5.4-mini`** (Pass 2). Optionally paste [docs/prompt-hsms-transcriber.md](docs/prompt-hsms-transcriber.md) into the vision agent; keep **File search OFF**.
+2. Copy `.env.example` → `.env` and set `EXPO_PUBLIC_AZURE_OPENAI_ENDPOINT`, deployment names, agent names, and `EXPO_PUBLIC_AZURE_AGENT_API_KEY` (`TRANSPORT=hybrid` by default).
+3. Restart Expo with `--clear` (prefer **Expo Web** for multi-page PDFs), then use **Transcribe Scan (AI)** on the Studio hero bar.
+
+Full operator notes: [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md).
 
 ## Project layout
 
@@ -120,10 +131,19 @@ Scan the QR code with Expo Go, or press the platform key in the terminal to open
 | `utils/manuscriptParser.ts` | Folio state machine, `{RMK:}` metadata, reading-flow reconstruction |
 | `utils/dropInitial.ts` | `{INn.}` → single-grapheme `drop_initial` token |
 | `utils/hsmsLexer.ts` | Sticky lexical rules (paleographic brackets, expansions, lacunae) |
-| `utils/hsmsLinter.ts` | Fast pre-render lint (`lintHsmsTranscription`) — wraps `validateTranscription` |
+| `utils/hsmsLinter.ts` | Fast pre-render lint (`lintHsmsTranscription`) — structural + Proofer incidents |
+| `utils/prooferIncidents.ts` | HSMS Proofer-style technical / editorial / structural checks + TSV |
 | `utils/validation.ts` | Line-level structural + lexical validation pass |
+| `utils/hsmsDictionary.ts` | Lazy lemma + POS lookup (`lookupHsmsLemma`, `lookupHsmsPos`) |
 | `components/EditorLinterBanner.tsx` | Live lint banner in Transcription code view |
 | `scripts/lint-hsms.ts` | CLI for `npm run lint:hsms` |
+| `services/azureHsmsTranscriber.ts` | Pass 1 vision → lint gate → optional Pass 2 |
+| `services/passTwoRepairService.ts` | Per-leaf + batched HSMS syntax repair |
+| `services/batchTranscriptionService.ts` | PDF slice → Pass 1 stream → batched Pass 2 → merge |
+| `services/azureAgentOrchestrator.ts` | Hybrid chat (paleographer / linter session context) |
+| `services/azureOpenAI.ts` | Azure Responses client (timeouts + 429 retry) |
+| `utils/pdfPageExtractor.web.ts` | Client PDF.js slicer (Expo Web) |
+| `utils/copilot/` | Catalog, Tier A / Voyant executors, MCP sidecar runtime |
 | `utils/legacyDiacritics.ts` | Data-driven `@` notation and Portuguese compound resolution |
 | `utils/metadataText.ts` | Normalize `{RMK:}` title strings for display |
 | `utils/exportFormats.ts` | Extension → format mapping (txt, html, svg, png, jpeg) |
@@ -137,11 +157,15 @@ Scan the QR code with Expo Go, or press the platform key in the terminal to open
 | `utils/ostaIssueReport.ts` | Aggregate `out/*.issues.log` → `issues-summary.txt` / `issues.json` |
 | `scripts/batch-convert-osta.ts` | CLI entry for `npm run batch:osta` |
 | `scripts/aggregate-osta-issues.ts` | CLI entry for `npm run report:osta` |
-| `app/(tabs)/about.tsx` | Sources and references |
+| `app/(tabs)/about.tsx` | Sources, funding, OSTA guide cards |
 | `app/_layout.tsx` | Root providers (`ScriptoriumProvider`, `ScrollAnchorProvider`) |
 | `docs/HSMS-EDITOR.md` | HSMS editor/builder — workflows, workspace, validation, export |
 | `docs/ARCHITECTURE.md` | System design and extension notes |
 | `docs/HSMS-LAYOUT.md` | HSMS → physical page coordinates (parse + SVG/HTML layout) |
+| `docs/OSTA-guide.md` | OSTA citation / query / wildcard cheat-sheet |
+| `docs/prompt-hsms-transcriber.md` | Paste-ready Foundry vision prompt (Pass 1) |
+| `docs/AZURE_HSMS_AGENT_ORCHESTRATION.md` | Hybrid Pass 1 / batched Pass 2 operator guide |
+| `docs/PORTING-FROM-HSMS-MANUALS.md` | Proofer / analizador / Voyant port matrix |
 | `docs/HSMS-TYPOGRAPHY.md` | Facsimile ink semantics and ornate initials |
 | `__tests__/pedroNunesTrsParity.test.ts` | Legacy HTML parity vs `PedroNunes-TRS` |
 | `__tests__/spatialAst.test.ts` | Column blocks, two-column zip, drop-cap folio rows |
@@ -204,11 +228,14 @@ Supported inline tokens include `<expansion>`, `(^scribal deletion)`, `(editoria
 | `bun run start` | Dev server (Rork + tunnel) |
 | `bun run start:web` | Dev server for web |
 | `bun run lint` | Run ESLint |
-| `npm test` | Unit tests only — parser, spatial AST, concordance, normalization, RMK strip, Pedro Nunes parity, paleography, render leakage (**158 tests**; never touches OSTA files) |
-| `npm run lint:hsms` | Paleographic lint of `.txt` / `.hsms` (folio leaks, headers, reconstructions, env stack) |
+| `npm test` | Unit tests only — parser, spatial AST, concordance, Copilot/Proofer/Azure helpers, paleography, render leakage (never touches OSTA files) |
+| `npm run lint:hsms` | Paleographic lint of `.txt` / `.hsms` (folio leaks, Proofer incidents, env stack) |
 | `npm run lint:project` | Recursive OSTA-style batch lint (defaults to sibling `OSTA/transcriptions/` when present) |
 | `npm run test:osta` | OSTA integration suite under `__tests__/integration/osta/` (~650+ files; requires sibling `OSTA/transcriptions/`) |
-| `npm run batch:osta` | Batch-compile OSTA transcriptions → `out/` (HTML, native TS bundles, per-file `*.issues.log`; see [Batch issue logs](#batch-issue-logs); aggregates summary when done) |
+| `npm run batch:osta` | Batch-compile OSTA / Celestina roots → `out/` + library sidecars (HTML, facets, TF-IDF, graph; see [Batch issue logs](#batch-issue-logs)) |
+| `npm run build:library` / `sync:library` | Rebuild / sync catalog + corpus sidecars to `public/` |
+| `npm run compile:copilot` | Regenerate Copilot catalog + MCP tool declarations (`compile:graph-intents` alias) |
+| `npm run generate:dictionary` | Rebuild lemma + POS indexes from `assets/dic/hsms.src` |
 | `npm run report:osta` | Re-aggregate existing `out/*.issues.log` → `issues-summary.txt` and `issues.json` (lint, parse, and render counts) |
 
 `jest.config.js` excludes `__tests__/integration/` so default `npm test` is safe without a local OSTA clone. `npm run test:osta` uses `jest.osta.config.js` and sets `OSTA_INTEGRATION=1`. Optional: `OSTA_WRITE_REPORTS=1` with `npm run test:osta` writes validation logs under `reports/`.
@@ -229,7 +256,7 @@ Each witness under `out/<baseName>.issues.log` has up to three tagged sections:
 
 | Section | Tag | Source |
 |---------|-----|--------|
-| Pre-compile lint | `[LINT]` | `lintHsmsTranscription` — folio leaks, env stack, bracket conventions (including `[ ]` lacuna syntax) |
+| Pre-compile lint | `[LINT]` | `lintHsmsTranscription` — folio leaks, env stack, Proofer incidents, bracket conventions (including `[ ]` lacuna syntax) |
 | Compile / parse | `[PARSE]` | `compileManuscriptTree` validation (deduped against lint) |
 | Post-render leakage | `[RENDER]` | `scanRenderedMarkupLeakage` on exported HTML — stray `{CB.}`, `[*…]`, brace mnemonics, editorial brackets in visible text |
 
@@ -247,9 +274,11 @@ npx jest __tests__/pedroNunesTrsParity.test.ts
 
 | File | Role |
 |------|------|
-| `assets/dic/hsms.src` | HSMS **DB_MAP** lemmatization dictionary (~280k entries) — not character mappings |
+| `assets/dic/hsms.src` | HSMS **DB_MAP** lemmatization dictionary (~280k entries) — lemmas + EAGLES-style POS |
 | `utils/generated/hsmsDiacriticMap.ts` | Generated from `HSMSTools/HSMSParser/settings.ini` `[RegexReplaces]` (legacy `CharRegexReplacements`) |
 | `utils/generated/hsmsLemmaIndex.json` | Compact surface→lemma index built from `hsms.src` |
+| `utils/generated/hsmsPosIndex.json` | Surface→POS index (`lookupHsmsPos`) |
+| `public/dic/hsmsLemmaIndex.v2.tsv` / `hsmsPosIndex.json` | Lazy web dictionary assets |
 
 Regenerate after updating sources:
 
@@ -259,16 +288,21 @@ npm run generate:hsms-assets
 
 - **Diacritics** (`@'`, `@~`, `c'`, etc.) mirror the C# parser’s `CharRegexReplacements` rules.
 - **Concordance** uses the lemma index when a surface form is listed in `hsms.src`; indexing is O(N) via sticky `RegExp.exec` on each folio’s `reconstructedFlow`.
+- **POS** tags are available via `lookupHsmsPos` after `ensureLemmaDictionary()` / `loadLemmaDictionarySync()`.
 
 ## Documentation
 
 | Document | Description |
 |----------|-------------|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | App structure, three-pass compiler + spatial layout, UI performance notes, OSTA testing |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | App structure, three-pass compiler + spatial layout, Copilot/Azure, OSTA testing |
 | [docs/HSMS-EDITOR.md](docs/HSMS-EDITOR.md) | HSMS editor/builder — reader vs scriptorium workflows, workspace, validation, export |
 | [docs/HSMS-LAYOUT.md](docs/HSMS-LAYOUT.md) | Physical line model, fixed 800 px canvas, ForeignObject web path, legacy HTML parity checklist |
 | [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) | Ornate initials, ink palette, facsimile fidelity checklist |
 | [docs/HSMS-manual.md](docs/HSMS-manual.md) | Local Markdown copy of the HSMS manual (5th ed., 1997) |
+| [docs/OSTA-guide.md](docs/OSTA-guide.md) | OSTA citation norms, wildcards, tag crosswalk |
+| [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md) | Hybrid vision → lint → batched Pass 2 setup |
+| [docs/prompt-hsms-transcriber.md](docs/prompt-hsms-transcriber.md) | Foundry vision system prompt (Pass 1) |
+| [docs/PORTING-FROM-HSMS-MANUALS.md](docs/PORTING-FROM-HSMS-MANUALS.md) | Manuals → workstation port plan and status |
 
 **Canonical manual online:** [hispanicseminary.org/manual-en.htm](https://hispanicseminary.org/manual-en.htm)
 

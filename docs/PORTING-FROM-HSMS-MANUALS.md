@@ -211,13 +211,20 @@ The OSTA manual also describes a full CQP-style corpus query UI we do not yet ma
 
 ---
 
-## Suggested implementation order
+## Implementation status
 
-1. **Proofer gap matrix** → harden `hsmsLinter` / `parseValidation` → MCP `audit_hsms_syntax` + TSV diagnostics  
-2. **Dictionary build** → enrich `generate-hsms-dictionary-index.mjs` with analizador tagset / POS  
-3. **`docs/OSTA-guide.md`** + About tab cards (citation, syntax cheat-sheet)  
-4. **Voyant-style Copilot recipes** (freq, n-grams, density) on concordance + corpus sidecars  
-5. Library metadata filters / virtual keyboard / tagged HTML export (stretch)
+| Step | Status | Landing zone |
+|------|--------|--------------|
+| 1. Proofer → linter + MCP | **Done** | `utils/prooferIncidents.ts`, `lintHsmsTranscription`, MCP `audit_hsms_syntax` |
+| 1b. Proofer/linter → agent memory | **Done** | `utils/hsmsAgentRuleCatalog.ts`, `npm run export:agent-memory` → `assets/agent-memory/` |
+| HSMS-tools HTR → HSMS (83 rules) | **Done** | `utils/htrConverter.ts`, `npm run convert:htr`, MCP `convert_htr_to_hsms` |
+| HSMS-tools proofer HTR leftovers | **Done** | `UNCONVERTED_HTR_MARKER`, `INVALID_AD_GL_FORMAT` in `prooferIncidents.ts` |
+| HSMS-tools `diccionario/hsms.src` | **Done** | `generate-hsms-dictionary-index.mjs` resolves sibling `gu/HSMS-tools/diccionario/hsms.src` |
+| 2. Dictionary POS / tagset | **Done** | `generate-hsms-dictionary-index.mjs` → `hsmsPosIndex.json`, `lookupHsmsPos` |
+| 3. OSTA guide + About | **Done** | [OSTA-guide.md](OSTA-guide.md), About tab cards |
+| 4. Voyant Copilot recipes | **Done** | `corpus.term_frequency`, `corpus.ngrams`, `corpus.vocab_density` |
+| 5. Azure vision → HSMS | **Done** | Hybrid gpt-4o + batched Pass 2 (`gpt-5.4-mini`); [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md), Studio **Transcribe Scan (AI)** |
+| 6. Library filters / soft keyboard / tagged HTML | Stretch | See § “Broader OSTA search product” |
 
 ---
 
@@ -232,4 +239,16 @@ gu/manuals/
 └── voyant/         # index.html → herramientas.html, lectura.html
 ```
 
-Last updated: 2026-10-16 — **implemented:** `utils/prooferIncidents.ts` + linter/MCP `audit_hsms_syntax`; POS index via `generate-hsms-dictionary-index.mjs` / `lookupHsmsPos`; `docs/OSTA-guide.md` + About cards; Voyant recipes `corpus.term_frequency` / `corpus.ngrams` / `corpus.vocab_density`.
+---
+
+## Sibling repo: `gu/HSMS-tools`
+
+Additional high-value ports from [`C:\jason\dev\dev\gu\HSMS-tools`](file:///C:/jason/dev/dev/gu/HSMS-tools) (R/Shiny + diccionario; NW.js samples ignored):
+
+| Legacy path | Modern landing |
+|-------------|----------------|
+| `HTR_to_HSMS/HTR_to_HSMS.R` (ordered regex table) | `utils/htrConverter.ts` · `npm run convert:htr` · MCP `convert_htr_to_hsms` |
+| `HSMS_proofer/validator_*.R` (HTR leftovers, AD/GL) | `UNCONVERTED_HTR_MARKER`, `INVALID_AD_GL_FORMAT` in `utils/prooferIncidents.ts` (diagnostics feed Pass 2 / `runBatchPassTwoRepair`) |
+| `diccionario/hsms.src` (~275k forms) | `scripts/generate-hsms-dictionary-index.mjs` (picks largest of local / sibling / `HSMS_SRC_PATH`) |
+
+Last updated: 2026-10-16 — pillars 1–4 + Azure hybrid vision / batched Pass 2 + HSMS-tools HTR/dictionary ports.

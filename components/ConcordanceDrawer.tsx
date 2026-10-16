@@ -113,7 +113,10 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
     [expandedLemma, onSelectOccurrence, onClose, t],
   );
 
-  const keyExtractor = useCallback((item: ConcordanceEntry) => item.lemma, []);
+  const keyExtractor = useCallback(
+    (item: ConcordanceEntry, index: number) => `${item.lemma}_${item.count}_${index}`,
+    [],
+  );
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>

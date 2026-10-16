@@ -11,6 +11,9 @@ import {
   loadLibraryGraph,
   loadPrecompiledFacets,
 } from "@/utils/librarySidecars";
+import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
+import { runHybridTranscriptionPipeline } from "@/services/batchTranscriptionService";
+import { convertHtrToHsms } from "@/utils/htrConverter";
 import {
   auditHsmsProoferIncidents,
   formatProoferTsv,
@@ -183,6 +186,59 @@ export async function executeMcpSidecarTool(
           ranked: [],
           note: "corpus-term-postings.json missing — IDF only.",
         },
+      };
+    }
+
+    if (name === "convert_htr_to_hsms") {
+      const htrText = String(args.htrText ?? args.text ?? args.htr_text ?? "");
+      if (!htrText.trim()) {
+        return { ok: false, tool: name, elapsedMs: now() - t0, error: "htrText required" };
+      }
+      const result = convertHtrToHsms(htrText, {
+        skipSpaceCleanup: Boolean(args.skip_space_cleanup ?? args.skipSpaceCleanup),
+      });
+      return {
+        ok: true,
+        tool: name,
+        elapsedMs: now() - t0,
+        data: result,
+      };
+    }
+
+    if (name === "transcribe_manuscript_image") {
+      if (!isAzureAgentConfigured()) {
+        return {
+          ok: false,
+          tool: name,
+          elapsedMs: now() - t0,
+          error:
+            "Azure agent not configured — set EXPO_PUBLIC_AZURE_AGENT_ENDPOINT and EXPO_PUBLIC_AZURE_AGENT_API_KEY",
+        };
+      }
+      const imageUri = String(args.image_uri ?? args.imageUri ?? "").trim();
+      if (!imageUri) {
+        return { ok: false, tool: name, elapsedMs: now() - t0, error: "image_uri required" };
+      }
+      const vision = await runHybridTranscriptionPipeline({
+        uri: imageUri,
+        name: args.sourceFileName ? String(args.sourceFileName) : undefined,
+        mimeType: args.mime_type
+          ? String(args.mime_type)
+          : imageUri.startsWith("data:application/pdf") || /\.pdf($|\?)/i.test(imageUri)
+            ? "application/pdf"
+            : undefined,
+        languageHint: args.language_hint
+          ? String(args.language_hint)
+          : args.languageHint
+            ? String(args.languageHint)
+            : undefined,
+        maxPages: typeof args.max_pages === "number" ? args.max_pages : undefined,
+      });
+      return {
+        ok: true,
+        tool: name,
+        elapsedMs: now() - t0,
+        data: vision,
       };
     }
 

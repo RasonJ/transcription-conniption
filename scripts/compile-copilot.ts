@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { CATALOG_VERSION, RECIPES } from "../utils/copilot/catalog";
 import type { Recipe, SlotSpec } from "../utils/copilot/types";
 import { normalizeQuery } from "../utils/copilot/router";
@@ -248,7 +249,82 @@ export function renderMcpGraphTools(): McpToolDefinition[] {
       tier: "A",
       category: "corpus",
     },
+    renderHsmsTranscriberMcpTool(),
+    renderHtrToHsmsMcpTool(),
   ];
+}
+
+/** Transkribus / eScriptorium HTR cleanup → HSMS (utils/htrConverter.ts). */
+export function renderHtrToHsmsMcpTool(): McpToolDefinition {
+  return {
+    name: "convert_htr_to_hsms",
+    description:
+      "Cleans Handwritten Text Recognition exports (Transkribus / eScriptorium) into HSMS ASCII using the ordered 80+ substitution rules from HSMS-tools/HTR_to_HSMS.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        htrText: {
+          type: "string",
+          description: "Raw HTR / OCR plain text to convert.",
+        },
+        text: {
+          type: "string",
+          description: "Alias for htrText.",
+        },
+        skip_space_cleanup: {
+          type: "boolean",
+          description: "If true, skip the trailing whitespace normalization pass.",
+          default: false,
+        },
+      },
+      required: [],
+    },
+    recipeId: "transcription.convert_htr",
+    tier: "A",
+    category: "paleography",
+  };
+}
+
+/** Azure Vision → HSMS ASCII (Foundry A2A agent; see docs/azure_hsms_transcriber_prompt.md). */
+export function renderHsmsTranscriberMcpTool(): McpToolDefinition {
+  return {
+    name: "transcribe_manuscript_image",
+    description:
+      "Transcribes a multi-page manuscript page scan or PDF into validated HSMS ASCII markup via the Azure paleography agent.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        image_uri: {
+          type: "string",
+          description:
+            "Image data URI / file URI, or a PDF URI. PDFs are sliced client-side to PNG/JPEG before vision calls (never uploaded as PDF).",
+        },
+        folio_id: {
+          type: "string",
+          description: "Target folio marker for a single leaf, e.g., '1r' or '3v'.",
+        },
+        language_hint: {
+          type: "string",
+          description: "Ibero-Romance language hint (POR, SPA, CAT, LAT).",
+        },
+        max_pages: {
+          type: "integer",
+          description: "Max PDF pages to slice (default 25).",
+          default: 25,
+          minimum: 1,
+          maximum: 50,
+        },
+        mime_type: {
+          type: "string",
+          description: "Optional MIME (application/pdf triggers client slicer).",
+        },
+      },
+      required: ["image_uri"],
+    },
+    recipeId: "transcription.vision_ocr",
+    tier: "A",
+    category: "paleography",
+  };
 }
 
 export function renderMcpToolsModule(
@@ -298,4 +374,11 @@ function main(): void {
   );
 }
 
-if (require.main === module) main();
+const isDirectRun =
+  (typeof require !== "undefined" && require.main === module) ||
+  // ESM / tsx: compare this module URL to the entry argv path.
+  (typeof import.meta !== "undefined" &&
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    import.meta.url === pathToFileURL(path.resolve(process.argv[1] ?? "")).href);
+
+if (isDirectRun) main();

@@ -1,0 +1,192 @@
+# HSMS Agent Memory Rules
+# Generated: 2026-10-16T18:50:44.107Z
+# Rules: 52
+# Source: utils/hsmsAgentRuleCatalog.ts — regenerate with npm run export:agent-memory
+
+HSMS paleography + Proofer/linter rules for Azure Foundry agent memory. Deterministic enforcement remains on-device via lintHsmsTranscription.
+
+## Client vs agent boundary
+- AGENT: visual decipherment, paleographic resolution, draft HSMS ASCII following these rules.
+- CLIENT: hsmsLexer tokenization, spatialAst layout, lintHsmsTranscription / Proofer audit (final gate).
+
+## PALEOGRAPHY (10)
+
+### [FOLIATION_MARKER] (info · paleographic) — Foliation markers
+Mark each leaf top with [fol. Nr] / [fol. Nv]. Never invent folios not visible in the scan.
+Prefer: `[fol. 1r]`
+
+### [COLUMN_ENVELOPE] (info · structural) — Column envelopes
+Enclose column text in {CB1. …} or {CB2. …}. All nested environments must close inside the same column block.
+Prefer: `{CB1.
+text
+}`
+
+### [DROP_CAP_SINGLE_SPACE] (info · paleographic) — Drop-cap gutter spacing
+After {INn.} use exactly one ASCII space before the following text.
+Avoid: `{IN3.}  SPhera`
+Prefer: `{IN3.} SPhera`
+
+### [ABBREV_VS_SUPERSCRIPT] (info · paleographic) — Expansions vs superscripts
+Expanded abbreviations use <…>; raised graphs use <<…>>. Both must be same-line, non-empty, no internal spaces.
+Prefer: `q<ue> · q<u><<i>>`
+
+### [I_VS_J] (info · paleographic) — i vs j
+Use i for non-descending strokes; j when the stroke descends below the baseline.
+
+### [U_VS_V] (info · paleographic) — u vs v
+Preserve scribal u/v as written; do not modernize orthography.
+
+### [TILDE_NASAL] (info · paleographic) — Tildes and nasals
+Nasal tildes expand as <n>/<m>; use n~ for palatal ñ when the manuscript uses a tilde.
+Prefer: `co<m>pan~a`
+
+### [WRAP_BACK_PERCENT2] (info · paleographic) — Wrap-back %2
+Use %2 when line-end text wraps back to the right margin of the preceding line; space calderones correctly.
+
+### [GLOSS_BRACKETS] (info · structural) — Marginal glosses
+Right/left glosses use {GLR. […]} / {GLL. […]} with gloss text in brackets when required.
+
+### [LACUNA_FORMS] (info · editorial) — Lacunae and illegibility
+Use [*text], [^text], (^text), mechanical [ ], and [??]/[???] — never bare [] or four+ question marks.
+
+## LINTER (10)
+
+### [EMPTY_FILE] (error · structural) — Empty transcription
+Never return an empty string; always emit at least a folio marker and column block when a page is visible.
+
+### [STRAY_PAGE_METADATA] (warning · structural) — Catchword/signature near folio top
+Do not place {CW.} or {SG.} in the first few lines after [fol. …]. Put catchwords/signatures at the foot of the leaf.
+Avoid: `[fol. 1r]
+{CW. mundo}`
+Prefer: `…column text…
+{CW. mundo}`
+
+### [MALFORMED_HEADER_BLOCK] (error · structural) — Nested braces in running header
+Running headers {HD.} / {HD1.} / {HD2.} must contain flat text only — no nested structural braces.
+
+### [INITIAL_GUTTER_LEAK] (warning · paleographic) — Multiple spaces after drop cap
+Use exactly one space after {INn.}; extra spaces disturb facsimile gutter metrics.
+Avoid: `{IN4.}  AO muyto`
+Prefer: `{IN4.} AO muyto`
+
+### [MALFORMED_RECONSTRUCTION] (warning · editorial) — Malformed [*text] reconstruction
+Editorial reconstructions must be exactly [*text] with no stray asterisks inside other brackets.
+
+### [EMPTY_BRACKET_TOKEN] (warning · editorial) — Bare empty brackets
+Mechanical lacunae are [ ] (interior space), never bare [].
+Avoid: `a[]que`
+Prefer: `a[ ]que`
+
+### [FOLIO_LEAK] (error · structural) — Folio inside open environment
+Close all open brace environments before emitting the next [fol. …] marker.
+
+### [MALFORMED_DIACRITIC] (warning · technical) — Stacked diacritic markers
+Avoid nested/stacked @/'/~ diacritic clusters; prefer clear HSMS ASCII notation.
+
+### [COMPILER_CRASH] (error · structural) — Unparseable structural line
+Keep brace tags well-formed so the client structural tokenizer never fails.
+
+### [UNCLOSED_ENVIRONMENT] (error · structural) — Unclosed environments at EOF
+Every open {TAG. must have a matching } before the end of the page / document.
+
+## PROOFER (32)
+
+### [COMBINING_DIACRITIC] (warning · technical) — Combining Unicode diacritics
+Prefer precomposed characters or HSMS ASCII diacritic notation over combining marks (e.g. c', n~).
+
+### [UNCONVERTED_HTR_MARKER] (warning · editorial) — Provisional HTR markers
+Replace Transkribus fullwidth ＜＞ / ⊂⊃ with <…> and grave ` superscript marks with <<…>> (or run convert_htr_to_hsms).
+Avoid: `q＜ue＞ / a``
+Prefer: `q<ue> / <<a>>`
+
+### [INVALID_AD_GL_FORMAT] (warning · editorial) — AD/GL payload format
+{AD.} / {GL.} with text must use a space then [^…], e.g. {AD. [^added]}.
+Avoid: `{AD. texto}`
+Prefer: `{AD. [^texto]}`
+
+### [INVISIBLE_CHAR] (warning · technical) — Invisible whitespace
+Do not emit NBSP, TAB, or ZWSP — use ordinary ASCII spaces only.
+
+### [EDGE_SPACE] (warning · technical) — Leading/trailing spaces
+Do not begin or end a physical line with an ASCII space.
+
+### [CONSECUTIVE_SPACES] (warning · technical) — Consecutive spaces
+Avoid two or more consecutive ASCII spaces on the same line (except the single space after {INn.}).
+
+### [LINE_TOO_LONG] (warning · technical) — Overlong line
+Keep lines under ~150 characters; break at natural word boundaries.
+
+### [ELLIPSIS_OUTSIDE_BRACKETS] (warning · editorial) — Ellipsis outside brackets
+Ellipsis ... may appear only inside brackets [...].
+
+### [BRACE_ADJACENT] (warning · editorial) — Adjacent brace tags
+When } and { meet on the same line, put an intervening ASCII space.
+
+### [HYPHEN_BEFORE_BRACE] (warning · editorial) — Hyphen before closing brace
+Do not place a hyphen immediately before }.
+
+### [TAG_LOWERCASE] (warning · editorial) — Lowercase HSMS tags
+Write structural tags in uppercase ({RUB. not {rub.).
+
+### [ILLEGIBLE_RUN] (warning · editorial) — Too many question marks
+Illegibility is ?? or ??? only — never four or more consecutive ?.
+
+### [CALDERON_SPACING] (warning · editorial) — Calderón spacing
+Calderón marks (%, %2, %3) need a space before and after except at line edges.
+
+### [CALDERON_DOUBLE] (warning · editorial) — Double calderón
+Avoid two consecutive calderones unless clearly intentional in the source.
+
+### [ANGLE_DELIMITER] (warning · editorial) — Invalid <…> / <<…>>
+Abbreviation/superscript delimiters must be non-empty, same-line, without internal spaces.
+
+### [ANGLE_UNCLOSED] (warning · editorial) — Unclosed angle delimiters
+<…> and <<…>> must open and close on the same physical line.
+
+### [INSERT_DEL_SPACE] (warning · editorial) — Space after insert/delete openers
+After [^, (^, or [* the text must follow immediately with no space.
+
+### [HAND_MARKER_SPACE] (warning · editorial) — Hand marker spacing
+Non-original hand markers use [^2#text] with no space between digit and #.
+
+### [SUBSTITUTION_GAP] (warning · editorial) — Deletion+insertion gap
+Substitutions (x)[y] must not have a space between ) and [.
+
+### [EMPTY_DELETION] (warning · editorial) — Empty deletion
+Empty parentheses for a deleted space should be ( ).
+
+### [UNBALANCED_BRACKET] (warning · technical) — Unbalanced brackets on a line
+Balance [ and ] on each physical line whenever possible.
+
+### [UNBALANCED_PAREN] (warning · technical) — Unbalanced parentheses on a line
+Balance ( and ) on each physical line whenever possible.
+
+### [CW_SG_LINE] (warning · structural) — CW/SG not same-line closed
+{CW. …} and {SG. …} must include text and close with } on the same line.
+
+### [RMK_UNCLOSED] (error · structural) — Unclosed RMK
+{RMK: must close with } on the same physical line.
+
+### [RMK_PERIOD] (warning · structural) — RMK missing final period
+{RMK: should end with a period immediately before }.
+
+### [RMK_DELIMITER] (warning · structural) — RMK delimiter
+{RMK must use : as its delimiter.
+
+### [AD_GL_HAND] (warning · editorial) — AD/GL hand insertions
+{AD. / {GL. hand insertions should use [^… immediately after the tag text.
+
+### [EQUALS_VECTOR] (warning · editorial) — Equals vector outside MIN/DIAG
+= as a vector marker is only allowed inside {MIN. / {DIAG. tags.
+
+### [UNKNOWN_TAG] (warning · structural) — Unrecognized HSMS tag
+Use only catalogued mnemonics (CB, HD, RUB, GL, CW, SG, IN, LAT, …).
+
+### [BLANK_LINE_RUN] (warning · technical) — Multiple blank lines
+Avoid more than one consecutive blank line between blocks.
+
+### [CONTINUATION_UNRESOLVED] (warning · editorial) — Unresolved +} continuation
+If a tag ends with +}, a later matching tag must resume the text.
+
+### [FILENAME_SIGLA] (warning · technical) — Witness filename sigla
+Witness filenames should be TEXT.SIGLA.txt (client-side naming; agent usually ignores).

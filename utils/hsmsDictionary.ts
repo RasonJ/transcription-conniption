@@ -35,7 +35,13 @@ function install(next: LemmaTable, nextPos?: PosTable | null): void {
   if (nextPos) posTable = nextPos;
   state = "ready";
   generation++;
-  listeners.forEach((fn) => fn());
+  listeners.forEach((fn) => {
+    try {
+      fn();
+    } catch (err) {
+      console.error("Lemma dictionary listener failed:", err);
+    }
+  });
 }
 
 /** Returns a dictionary lemma for a surface form, or undefined if not indexed or not loaded yet. */

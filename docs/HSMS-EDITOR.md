@@ -3,7 +3,8 @@
 How **Transcription Conniption** turns plain-text [HSMS](https://hispanicseminary.org/manual-en.htm) diplomatic transcriptions into a live, editable scriptorium workspace — with validation, facsimile attachments, and export.
 
 > **Markup rules:** [HSMS-manual.md](HSMS-manual.md) · [hispanicseminary.org/manual-en.htm](https://hispanicseminary.org/manual-en.htm)  
-> **Parse pipeline:** [ARCHITECTURE.md](ARCHITECTURE.md) · **Page layout:** [HSMS-LAYOUT.md](HSMS-LAYOUT.md) · **Facsimile typography:** [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md)
+> **Parse pipeline:** [ARCHITECTURE.md](ARCHITECTURE.md) · **Page layout:** [HSMS-LAYOUT.md](HSMS-LAYOUT.md) · **Facsimile typography:** [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md)  
+> **OSTA cheat-sheet:** [OSTA-guide.md](OSTA-guide.md) · **Azure vision OCR:** [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md)
 
 ---
 
@@ -28,17 +29,18 @@ The default experience is **reader-first** (upload and scroll). **Advanced edito
 ```mermaid
 flowchart LR
   subgraph reader [Reader — default]
-    U[Upload & Convert] --> O[Compilation overlay]
+    U[Upload and Convert] --> O[Compilation overlay]
+    AI[Transcribe Scan AI] --> O
     O --> P[Parchment preview]
   end
 
   subgraph editor [Advanced editor]
     N[New blank scriptorium] --> C[Transcription code]
-    I[Import .txt / .hsms] --> C
+    I[Import txt or hsms] --> C
     C --> V[Validation panel]
     C -->|debounced compile| AST[ParsedManuscript]
     AST --> S[Parchment sheet]
-    S --> E[Export / TEI / Concordance]
+    S --> E[Export TEI Concordance Ask]
   end
 
   U -.->|toggle| editor
@@ -46,12 +48,14 @@ flowchart LR
 
 ### 2.1 Reader workflow (convert-and-read)
 
-1. Tap **Upload & Convert** (or drag-and-drop a `.txt` file on web).
-2. `CompilationOverlay` shows progress while `compileManuscriptTree()` runs synchronously.
+1. Tap **Upload & Convert** (or drag-and-drop a `.txt` file on web), **or** **Transcribe Scan (AI)** for an image/PDF when Azure is configured.
+2. `CompilationOverlay` shows progress while `compileManuscriptTree()` runs (or while the Azure vision agent returns HSMS ASCII).
 3. Publication metadata from `{RMK: …}` lines appears in a card **above** the leaf — never duplicated inside the folio body.
 4. Scroll the parchment; diplomatic display toggles stay hidden until **Advanced editor** is enabled.
 
-Best for: checking an OSTA file, Pedro Nunes regression corpus, or a finished transcription.
+**Transcribe Scan (AI):** Pick or **drag-drop a single page image** (PNG/JPEG) or PDF via Studio, or attach an image in the Manuscript Assistant and ask “transcribe this into HSMS”. Flow: `DocumentPicker` / drop → `useBatchTranscription` → `runHybridTranscriptionPipeline`. PDFs are sliced to upright PNG/JPEG on the client (`utils/pdfPageExtractor.web.ts` via PDF.js) so Azure never sees PDF bytes. **Pass 1** (`gpt-4o` vision) runs per leaf; `ingestAgentTranscription` (lint → compile → enrich) gates each draft. Clean folios **stream** into `applyTranscription` / parchment via `onFolioComplete` immediately. Leaves with critical lint errors are held for a **single batched Pass 2** (`runBatchPassTwoRepair` / `gpt-5.4-mini`) so one repair call covers the whole PDF. Progress phases: slicing → transcribing → repairing → merging (`TranscriptionProgressBar`, no blocking overlay). Agent prompt: [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md); memory rules: `npm run export:agent-memory` → `assets/agent-memory/`. Requires hybrid Azure env vars (see [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md) and `.env.example`). Cap: 25 pages. Expo Web recommended for PDF batches.
+
+Best for: checking an OSTA file, Pedro Nunes regression corpus, a finished transcription, or bootstrapping markup from a page scan.
 
 ### 2.2 Scriptorium workflow (edit-and-build)
 
@@ -370,7 +374,7 @@ Each transcription under `OSTA/transcriptions/` produces in `out/` (gitignored):
 
 | Section header | Tag | Module |
 |----------------|-----|--------|
-| `=== PRE-COMPILE LINT (hsmsLinter) ===` | `[LINT]` | `lintHsmsTranscription` — folio markers, env stack, `[*]` / `[ ]` lacuna conventions |
+| `=== PRE-COMPILE LINT (hsmsLinter) ===` | `[LINT]` | `lintHsmsTranscription` — folio markers, env stack, Proofer incidents, `[*]` / `[ ]` lacuna conventions |
 | `=== COMPILE / PARSE VALIDATION ===` | `[PARSE]` | `compileManuscriptTree` validation (deduped against lint keys) |
 | `=== RENDER / HTML LEAKAGE (post-export scan) ===` | `[RENDER]` | `scanRenderedMarkupLeakage` in `utils/renderMarkupLeakage.ts` |
 
@@ -389,6 +393,8 @@ Integration tests that compile the same corpus live under `__tests__/integration
 | Tool | Component / module | Notes |
 |------|-------------------|-------|
 | **Concordance** | `ConcordanceDrawer` + `utils/concordance.ts` | Virtualized KWIC; tap → scroll to folio/line |
+| **Ask / Copilot** | `ManuscriptChatbotDrawer` + `utils/copilot/*` | Tier‑A paleography + Voyant-style recipes; MCP sidecars |
+| **Proofer audit** | `utils/prooferIncidents.ts` / MCP `audit_hsms_syntax` | Technical / editorial / structural flags + TSV |
 | **Synoptic split** | `SynopticFolioSplit` + `utils/normalizedText.ts` | Diplomatic left, normalized right (wide layout) |
 | **Reading flow** | `reconstructManuscriptFlow` | Hyphen-stitched prose across folio boundaries |
 | **Stats** | `parsedManuscript.stats` | Words, lines, rubric/gloss counts in modal |
@@ -417,8 +423,10 @@ On web (`npm run start:web`):
 | `constants/workspaceTemplates.ts` | Blank scriptorium skeleton |
 | `components/EditorLinterBanner.tsx` | Live `lintHsmsTranscription` banner |
 | `components/ValidationPanel.tsx` | Post-compile validation list |
-| `utils/hsmsLinter.ts` | `lintHsmsTranscription` — env stack, folio leaks, CW/SG placement, `[*]` / `[]` checks |
+| `utils/hsmsLinter.ts` | `lintHsmsTranscription` — env stack, folio leaks, Proofer incidents, `[*]` / `[]` checks |
+| `utils/prooferIncidents.ts` | Proofer-style incident scan + TSV export |
 | `utils/validation.ts` | Core single-pass structural validator |
+| `services/azureHsmsTranscriber.ts` | Vision scan → linted HSMS ASCII |
 | `scripts/lint-hsms.ts` | `npm run lint:hsms` CLI |
 | `components/ConcordanceDrawer.tsx` | KWIC side drawer |
 | `components/ManuscriptSelector.tsx` | Batch witness switcher |
@@ -431,7 +439,9 @@ On web (`npm run start:web`):
 | `utils/hsmsLexer.ts` | Paleographic and editorial inline tokens |
 | `__tests__/hsmsPaleography.test.ts` | Drop-cap grapheme + bracket/lacuna regression |
 | `utils/hsmsBundle.ts` | `.hsms` import/export |
-| `utils/batchProcessor.ts` | In-app multi-file compile loop |
+| `utils/batchProcessor.ts` | In-app multi-file compile loop (UI yields between files) |
+| `services/batchTranscriptionService.ts` | Vision PDF batch: Pass 1 stream + batched Pass 2 |
+| `services/passTwoRepairService.ts` | Per-leaf / batched HSMS syntax repair |
 | `utils/ostaBatchConverter.ts` | Headless OSTA batch (CLI) |
 | `utils/ostaIssueReport.ts` | Issue log aggregation |
 | `utils/renderMarkupLeakage.ts` | Post-render HTML leakage patterns and batch scan options |

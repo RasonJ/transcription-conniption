@@ -81,6 +81,13 @@ function main() {
   console.log(`Wrote ${relative(root, outFile)}`);
 
   if (args.has("--save-baseline")) {
+    if (!report.initialJs.gzipBytes || report.initialJs.files.length === 0) {
+      console.error(
+        "Refusing to save an empty baseline (no eager JS found). Run `npm run build:web` first.",
+      );
+      process.exitCode = 1;
+      return;
+    }
     writeFileSync(
       baselineFile,
       `${JSON.stringify({ initialJsGzipBytes: report.initialJs.gzipBytes, savedAt: report.generatedAt }, null, 2)}\n`,

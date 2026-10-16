@@ -8,8 +8,8 @@ import {
   type Locale,
 } from "@/i18n/runtime";
 import { Globe } from "lucide-react-native";
-import React, { useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useCallback } from "react";
+import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 /** Each language in its own name (SPEC-I18N §2); these are never translated. */
 export const LOCALE_NATIVE_NAMES: Record<Locale, string> = {
@@ -35,13 +35,13 @@ export const LOCALE_NATIVE_NAMES: Record<Locale, string> = {
   "en-XA": "[Ëñglîsh ~~~]",
 };
 
-/** Base catalogs (`es`, `pt`) are shared layers, not choices; the pseudo-locale is dev-only. */
-function pickerLocales(): Locale[] {
+/** Built once — base catalogs (`es`, `pt`) are shared layers, not picker choices. */
+const CACHED_LOCALES: Locale[] = (() => {
   const tier1 = TIER1_LOCALES.filter((l) => l !== "es" && l !== "pt");
   const list: Locale[] = [...tier1, ...TIER2_LOCALES];
   if (typeof __DEV__ !== "undefined" && __DEV__) list.push(PSEUDO_LOCALE);
   return list;
-}
+})();
 
 function LocaleOption({ code, active, onPress }: { code: Locale; active: boolean; onPress: () => void }) {
   const t = useT();
@@ -70,7 +70,7 @@ export function LocalePicker() {
     <View style={styles.wrap}>
       <Text style={styles.label}>{t("common.language")}</Text>
       <View style={styles.row}>
-        {pickerLocales().map((code) => (
+        {CACHED_LOCALES.map((code) => (
           <LocaleOption key={code} code={code} active={locale === code} onPress={() => setLocale(code)} />
         ))}
       </View>
@@ -82,7 +82,21 @@ export function LocalePicker() {
 export function LocalePickerCompact() {
   const { locale, setLocale } = useLocale();
   const t = useT();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  const renderItem = useCallback(
+    ({ item: code }: { item: Locale }) => (
+      <LocaleOption
+        code={code}
+        active={locale === code}
+        onPress={() => {
+          setLocale(code);
+          setOpen(false);
+        }}
+      />
+    ),
+    [locale, setLocale],
+  );
 
   return (
     <>
@@ -97,22 +111,21 @@ export function LocalePickerCompact() {
         <Text style={styles.compactText}>{LOCALE_NATIVE_NAMES[locale]}</Text>
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
+        <Pressable
+          style={styles.backdrop}
+          onPress={() => setOpen(false)}
+          accessibilityRole="button"
+          accessibilityLabel={t("common.close")}
+        >
           <Pressable style={styles.sheet} onPress={() => undefined}>
             <Text style={styles.label}>{t("studio.languagePicker")}</Text>
-            <ScrollView contentContainerStyle={styles.row}>
-              {pickerLocales().map((code) => (
-                <LocaleOption
-                  key={code}
-                  code={code}
-                  active={locale === code}
-                  onPress={() => {
-                    setLocale(code);
-                    setOpen(false);
-                  }}
-                />
-              ))}
-            </ScrollView>
+            <FlatList
+              data={CACHED_LOCALES}
+              keyExtractor={(code) => code}
+              renderItem={renderItem}
+              contentContainerStyle={styles.row}
+              keyboardShouldPersistTaps="handled"
+            />
           </Pressable>
         </Pressable>
       </Modal>

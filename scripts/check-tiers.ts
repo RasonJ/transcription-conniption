@@ -58,11 +58,24 @@ function resolveSpecifier(root: string, fromFile: string, spec: string): string 
   return null;
 }
 
+/** Accidental CJS requires in Tier 0 (dynamic `import()` remains the intentional lazy boundary). */
+const REQUIRE_IMPORT_RE =
+  /(?:^|\n)\s*(?:const|let|var)\s+[^=]*=\s*require\(["']([^"']+)["']\)/g;
+
 export function staticImports(source: string): string[] {
   const out: string[] = [];
   STATIC_IMPORT_RE.lastIndex = 0;
   let m: RegExpExecArray | null;
   while ((m = STATIC_IMPORT_RE.exec(source)) !== null) out.push(m[1]);
+  return out;
+}
+
+/** Static ESM imports plus CJS `require()` (does not follow dynamic `import()`). */
+export function staticAndRequireImports(source: string): string[] {
+  const out = staticImports(source);
+  REQUIRE_IMPORT_RE.lastIndex = 0;
+  let m: RegExpExecArray | null;
+  while ((m = REQUIRE_IMPORT_RE.exec(source)) !== null) out.push(m[1]);
   return out;
 }
 
@@ -93,7 +106,7 @@ export function findTierViolations(root: string = resolve(__dirname, "..")): Tie
       continue;
     }
     if (file.endsWith(".json")) continue;
-    for (const spec of staticImports(readFileSync(file, "utf8"))) {
+    for (const spec of staticAndRequireImports(readFileSync(file, "utf8"))) {
       const target = resolveSpecifier(root, file, spec);
       if (target && !parent.has(target)) {
         parent.set(target, file);

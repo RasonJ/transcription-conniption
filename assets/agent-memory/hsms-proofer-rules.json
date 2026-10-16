@@ -1,0 +1,268 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-16T18:50:44.107Z",
+  "description": "Proofer incident codes (señala; el editor decide) for agent memory.",
+  "ruleCount": 32,
+  "rules": [
+    {
+      "id": "COMBINING_DIACRITIC",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Combining Unicode diacritics",
+      "guidance": "Prefer precomposed characters or HSMS ASCII diacritic notation over combining marks (e.g. c', n~)."
+    },
+    {
+      "id": "UNCONVERTED_HTR_MARKER",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Provisional HTR markers",
+      "guidance": "Replace Transkribus fullwidth ＜＞ / ⊂⊃ with <…> and grave ` superscript marks with <<…>> (or run convert_htr_to_hsms).",
+      "exampleBad": "q＜ue＞ / a`",
+      "exampleGood": "q<ue> / <<a>>"
+    },
+    {
+      "id": "INVALID_AD_GL_FORMAT",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "AD/GL payload format",
+      "guidance": "{AD.} / {GL.} with text must use a space then [^…], e.g. {AD. [^added]}.",
+      "exampleBad": "{AD. texto}",
+      "exampleGood": "{AD. [^texto]}"
+    },
+    {
+      "id": "INVISIBLE_CHAR",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Invisible whitespace",
+      "guidance": "Do not emit NBSP, TAB, or ZWSP — use ordinary ASCII spaces only."
+    },
+    {
+      "id": "EDGE_SPACE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Leading/trailing spaces",
+      "guidance": "Do not begin or end a physical line with an ASCII space."
+    },
+    {
+      "id": "CONSECUTIVE_SPACES",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Consecutive spaces",
+      "guidance": "Avoid two or more consecutive ASCII spaces on the same line (except the single space after {INn.})."
+    },
+    {
+      "id": "LINE_TOO_LONG",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Overlong line",
+      "guidance": "Keep lines under ~150 characters; break at natural word boundaries."
+    },
+    {
+      "id": "ELLIPSIS_OUTSIDE_BRACKETS",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Ellipsis outside brackets",
+      "guidance": "Ellipsis ... may appear only inside brackets [...]."
+    },
+    {
+      "id": "BRACE_ADJACENT",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Adjacent brace tags",
+      "guidance": "When } and { meet on the same line, put an intervening ASCII space."
+    },
+    {
+      "id": "HYPHEN_BEFORE_BRACE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Hyphen before closing brace",
+      "guidance": "Do not place a hyphen immediately before }."
+    },
+    {
+      "id": "TAG_LOWERCASE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Lowercase HSMS tags",
+      "guidance": "Write structural tags in uppercase ({RUB. not {rub.)."
+    },
+    {
+      "id": "ILLEGIBLE_RUN",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Too many question marks",
+      "guidance": "Illegibility is ?? or ??? only — never four or more consecutive ?."
+    },
+    {
+      "id": "CALDERON_SPACING",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Calderón spacing",
+      "guidance": "Calderón marks (%, %2, %3) need a space before and after except at line edges."
+    },
+    {
+      "id": "CALDERON_DOUBLE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Double calderón",
+      "guidance": "Avoid two consecutive calderones unless clearly intentional in the source."
+    },
+    {
+      "id": "ANGLE_DELIMITER",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Invalid <…> / <<…>>",
+      "guidance": "Abbreviation/superscript delimiters must be non-empty, same-line, without internal spaces."
+    },
+    {
+      "id": "ANGLE_UNCLOSED",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Unclosed angle delimiters",
+      "guidance": "<…> and <<…>> must open and close on the same physical line."
+    },
+    {
+      "id": "INSERT_DEL_SPACE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Space after insert/delete openers",
+      "guidance": "After [^, (^, or [* the text must follow immediately with no space."
+    },
+    {
+      "id": "HAND_MARKER_SPACE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Hand marker spacing",
+      "guidance": "Non-original hand markers use [^2#text] with no space between digit and #."
+    },
+    {
+      "id": "SUBSTITUTION_GAP",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Deletion+insertion gap",
+      "guidance": "Substitutions (x)[y] must not have a space between ) and [."
+    },
+    {
+      "id": "EMPTY_DELETION",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Empty deletion",
+      "guidance": "Empty parentheses for a deleted space should be ( )."
+    },
+    {
+      "id": "UNBALANCED_BRACKET",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Unbalanced brackets on a line",
+      "guidance": "Balance [ and ] on each physical line whenever possible."
+    },
+    {
+      "id": "UNBALANCED_PAREN",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Unbalanced parentheses on a line",
+      "guidance": "Balance ( and ) on each physical line whenever possible."
+    },
+    {
+      "id": "CW_SG_LINE",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "structural",
+      "title": "CW/SG not same-line closed",
+      "guidance": "{CW. …} and {SG. …} must include text and close with } on the same line."
+    },
+    {
+      "id": "RMK_UNCLOSED",
+      "source": "proofer",
+      "severity": "error",
+      "kind": "structural",
+      "title": "Unclosed RMK",
+      "guidance": "{RMK: must close with } on the same physical line."
+    },
+    {
+      "id": "RMK_PERIOD",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "structural",
+      "title": "RMK missing final period",
+      "guidance": "{RMK: should end with a period immediately before }."
+    },
+    {
+      "id": "RMK_DELIMITER",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "structural",
+      "title": "RMK delimiter",
+      "guidance": "{RMK must use : as its delimiter."
+    },
+    {
+      "id": "AD_GL_HAND",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "AD/GL hand insertions",
+      "guidance": "{AD. / {GL. hand insertions should use [^… immediately after the tag text."
+    },
+    {
+      "id": "EQUALS_VECTOR",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Equals vector outside MIN/DIAG",
+      "guidance": "= as a vector marker is only allowed inside {MIN. / {DIAG. tags."
+    },
+    {
+      "id": "UNKNOWN_TAG",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "structural",
+      "title": "Unrecognized HSMS tag",
+      "guidance": "Use only catalogued mnemonics (CB, HD, RUB, GL, CW, SG, IN, LAT, …)."
+    },
+    {
+      "id": "BLANK_LINE_RUN",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Multiple blank lines",
+      "guidance": "Avoid more than one consecutive blank line between blocks."
+    },
+    {
+      "id": "CONTINUATION_UNRESOLVED",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "editorial",
+      "title": "Unresolved +} continuation",
+      "guidance": "If a tag ends with +}, a later matching tag must resume the text."
+    },
+    {
+      "id": "FILENAME_SIGLA",
+      "source": "proofer",
+      "severity": "warning",
+      "kind": "technical",
+      "title": "Witness filename sigla",
+      "guidance": "Witness filenames should be TEXT.SIGLA.txt (client-side naming; agent usually ignores)."
+    }
+  ]
+}

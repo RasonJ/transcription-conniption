@@ -77,9 +77,11 @@ Crosswalk lives in `docs/HSMS-manual.md` and the Studio linter. High-traffic mne
 
 | Need | Where |
 |------|--------|
-| Full HSMS transcription rules | `docs/HSMS-manual.md` |
-| Proofer incident port notes | `docs/PORTING-FROM-HSMS-MANUALS.md` |
-| Lemma + POS index build | `scripts/generate-hsms-dictionary-index.mjs` |
+| Full HSMS transcription rules | [HSMS-manual.md](HSMS-manual.md) |
+| Proofer incident port notes | [PORTING-FROM-HSMS-MANUALS.md](PORTING-FROM-HSMS-MANUALS.md) |
+| Lemma + POS index build | `scripts/generate-hsms-dictionary-index.mjs` → `lookupHsmsLemma` / `lookupHsmsPos` |
+| Copilot distant-reading recipes | `corpus.term_frequency`, `corpus.ngrams`, `corpus.vocab_density` |
+| Vision OCR → HSMS | [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md) |
 | Live corpus / About links | About tab · [OSTA on GitHub](https://github.com/hispanicseminary/OSTA) |
 
 *Derived from HSMS manuals; do not paste large verbatim HTML. Attribute Hispanic Seminary of Medieval Studies when redistributing.*

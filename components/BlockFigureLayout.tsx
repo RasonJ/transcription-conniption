@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   marginFigureSlot: { width: "100%" },
-  textTrack: { flex: 1, minWidth: 0 },
+  textTrack: { flex: 1, flexShrink: 1, minWidth: 0 },
   inlineFigureRow: { flexDirection: "row", alignItems: "flex-start", marginVertical: 4 },
   inlineFigureSlot: { maxWidth: 120, marginRight: 8 },
   fullWidthFigure: { width: "100%", marginVertical: 6 },

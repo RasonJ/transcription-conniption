@@ -652,6 +652,31 @@ export function SvgFacsimilePage({
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentH, setContentH] = useState(480);
+  // Only re-render SVG when this folio's figure URIs change (ignore unrelated uploads).
+  const folioImageSig = useMemo(() => {
+    const parts: string[] = [];
+    for (const block of folio.blocks) {
+      for (const tok of block.tokens) {
+        if (tok.figureId) {
+          parts.push(`${tok.figureId}=${uploadedImages[tok.figureId] ?? ""}`);
+        }
+      }
+    }
+    return parts.join("\0");
+  }, [folio, uploadedImages]);
+  const folioImages = useMemo(() => {
+    const next: Record<string, string> = {};
+    for (const block of folio.blocks) {
+      for (const tok of block.tokens) {
+        if (tok.figureId && uploadedImages[tok.figureId]) {
+          next[tok.figureId] = uploadedImages[tok.figureId];
+        }
+      }
+    }
+    return next;
+    // folioImageSig captures the relevant URI values.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [folio, folioImageSig]);
 
   const canvasW = CANVAS_W;
   const innerW = innerCanvasWidth();
@@ -690,7 +715,7 @@ export function SvgFacsimilePage({
 
     spatialFolio.columnBlocks.forEach((cb, blockIdx) => {
       rows.push(
-        renderColumnBlock(cb, blockIdx, settings, uploadedImages, innerW, colW, folio.id, triggerImagePick),
+        renderColumnBlock(cb, blockIdx, settings, folioImages, innerW, colW, folio.id, triggerImagePick),
       );
     });
 
@@ -711,14 +736,20 @@ export function SvgFacsimilePage({
 
     return rows;
     // t: rebuild rows (diagram label, catchword/signature) when the UI locale changes.
-  }, [folio, spatialFolio, settings, uploadedImages, innerW, colW, triggerImagePick, t]);
+  }, [folio, spatialFolio, settings, folioImages, innerW, colW, triggerImagePick, t]);
 
   useEffect(() => {
     const el = contentRef.current;
     if (!el) return;
 
+    let raf = 0;
     const measure = () => {
-      setContentH(Math.max(320, el.scrollHeight + PAGE_PAD_TOP + PAGE_PAD_BOT));
+      // Coalesce ResizeObserver callbacks onto the next frame to avoid
+      // "ResizeObserver loop limit exceeded" during fast folio scrolls.
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        setContentH(Math.max(320, el.scrollHeight + PAGE_PAD_TOP + PAGE_PAD_BOT));
+      });
     };
 
     measure();
@@ -726,6 +757,7 @@ export function SvgFacsimilePage({
     ro.observe(el);
 
     return () => {
+      cancelAnimationFrame(raf);
       ro.disconnect();
     };
   }, [htmlBody]);

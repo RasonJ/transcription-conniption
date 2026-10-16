@@ -90,7 +90,7 @@ function main(): void {
 
   const sidecars = fs
     .readdirSync(outputDir)
-    .filter((name) => name.endsWith(".library.json"))
+    .filter((name) => /\.library\.json$/i.test(name))
     .sort((a, b) => a.localeCompare(b));
 
   const entries: LibraryCatalogEntry[] = [];
@@ -108,7 +108,7 @@ function main(): void {
   if (entries.length === 0) {
     const natives = fs
       .readdirSync(outputDir)
-      .filter((name) => name.endsWith(".native.ts"))
+      .filter((name) => /\.native\.ts$/i.test(name))
       .sort((a, b) => a.localeCompare(b));
 
     for (const name of natives) {
@@ -139,12 +139,14 @@ function main(): void {
   console.log("  Precomputing facets / TF-IDF / library graph…");
   const started = Date.now();
   const nodeFs = {
-    readdir: (dir: string) => fs.readdirSync(dir),
-    readFile: (filePath: string) => fs.readFileSync(filePath, "utf8"),
+    readdir: (dir: string) => fs.readdirSync(path.normalize(dir)),
+    readFile: (filePath: string) => fs.readFileSync(path.normalize(filePath), "utf8"),
     writeFile: (filePath: string, contents: string) => {
-      fs.writeFileSync(filePath, contents, "utf8");
+      const normalized = path.normalize(filePath);
+      fs.mkdirSync(path.dirname(normalized), { recursive: true });
+      fs.writeFileSync(normalized, contents, "utf8");
     },
-    exists: (filePath: string) => fs.existsSync(filePath),
+    exists: (filePath: string) => fs.existsSync(path.normalize(filePath)),
   };
 
   const result = runCorpusPrecomputeWithFs(

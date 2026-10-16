@@ -25,8 +25,12 @@ export interface LintReport {
 
 const RE_COLUMN_OPEN = /^\{CB(\d+)\./;
 const RE_COLUMN_STRIP = /^\{CB\d+\.(?:\s|~|\+)*/;
+/** Empty closed column tag `{CB1.}` — common vision-model mistake. */
+const RE_EMPTY_COLUMN_TAG = /^\{CB\d+\.\}\s*$/;
 const RE_BRACE_CLOSE_ONLY = /^\}\s*$/;
 const RE_FOLIO_MARKER = /^\[\s*fol(?:io)?\.?\s*([^\]]+)\]/i;
+/** Metadata / page chrome allowed outside column envelopes. */
+const RE_OUTSIDE_COLUMN_OK = /^\{(?:RMK|HD\d?|CW|SG|ILL|DIAG)\b/i;
 
 const RE_STRAY_CATCHWORD = /^\{CW\.\s*([^}]+)\}/i;
 const RE_STRAY_SIGNATURE = /^\{SG\.\s*([^}]+)\}/i;
@@ -191,6 +195,8 @@ export function lintHsmsTranscription(
   let columnHadEnvOpen = false;
   let pendingVernacularClose = false;
   let linesSinceFolio = -1;
+  /** Vision models often emit `{CB1.}` then loose text; flag that pairing only. */
+  let sawEmptyColumnTag = false;
   const slopWarned = new Set<string>();
 
   for (let i = 0; i < lines.length; i++) {
@@ -241,8 +247,26 @@ export function lintHsmsTranscription(
       );
     }
 
+    if (RE_EMPTY_COLUMN_TAG.test(line)) {
+      pushLintIssue(
+        issues,
+        "error",
+        "EMPTY_COLUMN_ENVELOPE",
+        "Empty column tag `{CBn.}` — open with `{CBn.` on its own line, put text inside, close with `}`.",
+        i,
+        line,
+      );
+      sawEmptyColumnTag = true;
+      inColumnBlock = false;
+      columnLineIndex = -1;
+      columnHadEnvOpen = false;
+      pendingVernacularClose = false;
+      continue;
+    }
+
     if (RE_COLUMN_OPEN.test(line)) {
       inColumnBlock = true;
+      sawEmptyColumnTag = false;
       columnLineIndex = -1;
       columnHadEnvOpen = false;
       pendingVernacularClose = false;
@@ -260,6 +284,22 @@ export function lintHsmsTranscription(
         continue;
       }
       continue;
+    }
+
+    if (
+      sawEmptyColumnTag &&
+      !inColumnBlock &&
+      !RE_OUTSIDE_COLUMN_OK.test(line) &&
+      /[\p{L}\p{N}]/u.test(line)
+    ) {
+      pushLintIssue(
+        issues,
+        "error",
+        "TEXT_OUTSIDE_COLUMN",
+        "Body text follows an empty `{CBn.}` tag — wrap it in a multiline `{CBn.` … `}` envelope.",
+        i,
+        line,
+      );
     }
 
     if (inColumnBlock) columnLineIndex++;

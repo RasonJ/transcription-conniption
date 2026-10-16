@@ -10,6 +10,9 @@ Transcription Conniption is a cross-platform mobile and web app built with **Exp
 | HSMS *Manual of Manuscript Transcription* (English) | [hispanicseminary.org/manual-en.htm](https://hispanicseminary.org/manual-en.htm) |
 | OSTA transcription guide | [hispanicseminary.org/osta-en.htm](https://hispanicseminary.org/osta-en.htm) |
 | OSTA corpus (paleographic transcriptions) | [github.com/hispanicseminary/OSTA](https://github.com/hispanicseminary/OSTA) |
+| In-app OSTA citation / query cheat-sheet | [OSTA-guide.md](OSTA-guide.md) |
+| Azure vision → HSMS (hybrid gpt-4o + gpt-5.4-mini Pass 2) | [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md) · [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md) |
+| Porting notes from `gu/manuals` | [PORTING-FROM-HSMS-MANUALS.md](PORTING-FROM-HSMS-MANUALS.md) |
 
 The in-repo [HSMS-manual.md](HSMS-manual.md) is a convenience Markdown copy of the 1997 manual; the [online manual](https://hispanicseminary.org/manual-en.htm) is authoritative for markup rules.
 
@@ -30,12 +33,13 @@ The in-repo [HSMS-manual.md](HSMS-manual.md) is a convenience Markdown copy of t
          │                                       │
 ┌────────▼────────┐                    ┌─────────▼─────────┐
 │  Studio (index) │                    │  Sources (about)  │
-│  Transcription  │                    │  Reference links  │
-│  + rendered leaf│                    │  + roadmap notes  │
+│  Transcription  │                    │  HSMS / OSTA refs │
+│  + AI scan OCR  │                    │  funding + guides │
+│  + rendered leaf│                    │  citation cards   │
 └─────────────────┘                    └───────────────────┘
 ```
 
-The app follows a **file-based routing** model via [Expo Router](https://docs.expo.dev/router/introduction/). Parsing lives under `utils/`; persistent workspace state in `context/ScriptoriumContext.tsx`; parchment rendering in `app/(tabs)/index.tsx` (React Native `Text` layout) and, when **SVG canvas** is enabled, `components/SvgFacsimilePage.web.tsx` (web) or `components/SvgFacsimilePage.tsx` (native). See [HSMS-LAYOUT.md](HSMS-LAYOUT.md) for the spatial AST and coordinate layout model, and [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md) for parchment aesthetics and typographic fidelity.
+The app follows a **file-based routing** model via [Expo Router](https://docs.expo.dev/router/introduction/). Parsing lives under `utils/`; persistent workspace state in `context/ScriptoriumContext.tsx`; parchment rendering in `app/(tabs)/index.tsx` (React Native `Text` layout) and, when **SVG canvas** is enabled, `components/SvgFacsimilePage.web.tsx` (web) or `components/SvgFacsimilePage.tsx` (native). Optional **Azure** vision transcription (hybrid OpenAI Responses: gpt-4o vision + gpt-5.4-mini syntax repair) lives under `services/`. See [HSMS-LAYOUT.md](HSMS-LAYOUT.md) for the spatial AST and coordinate layout model, and [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md) for parchment aesthetics and typographic fidelity.
 
 ## Technology stack
 
@@ -48,7 +52,8 @@ The app follows a **file-based routing** model via [Expo Router](https://docs.ex
 | Global state | `ScriptoriumProvider` | Workspace, registry, debounced parse, import/compile overlay flags |
 | Local state | React `useState` on `index.tsx` | Reader vs editor mode, preview toggles, concordance drawer |
 | Icons | lucide-react-native | Tab and action icons |
-| File import | expo-document-picker | Plain-text transcription upload |
+| File import | expo-document-picker | Plain-text / image / PDF upload |
+| Azure backoff | Hybrid Responses (`azureOpenAI` + orchestrator) | Vision OCR → lint → optional / batched Pass 2 |
 | Package manager | Bun | Install and script execution |
 
 
@@ -60,10 +65,20 @@ app/
   (tabs)/
     _layout.tsx         # Bottom tab bar (Studio, Sources)
     index.tsx           # Main screen: import, edit, render
-    about.tsx           # HSMS references and future work
+    about.tsx           # HSMS / OSTA refs, funding, OSTA guide cards
   modal.tsx             # Template modal (unused in main flow)
   +native-intent.tsx    # Deep-link redirect → home
   +not-found.tsx        # 404 route
+
+services/
+  azureOpenAI.ts              # Responses client (timeouts, 429 retry)
+  azureA2A.ts                 # Optional Foundry A2A v0.3 wire
+  azureAgentConfig.ts         # Hybrid env / role routing helpers
+  azureAgentOrchestrator.ts   # Session context + chatWithAzureAgent
+  azureHsmsTranscriber.ts     # Single-leaf Pass 1 → lint → optional Pass 2
+  passTwoRepairService.ts     # Per-leaf + batched syntax repair
+  batchTranscriptionService.ts # PDF Pass 1 stream + batched Pass 2
+  hsmsOpenAIInstructions.ts   # Re-anchored Agent 1/2 system prompts
 
 constants/
   manuscript.ts         # Token, block, folio, and ParsedManuscript types
@@ -89,7 +104,8 @@ utils/
   teiExport.ts          # ParsedManuscript → TEI P5 (escaped abbr/expan, rend attrs)
   regexUtils.ts         # escapeRegex, toStickyRegex (deduplicated flag sets)
   environmentBlocks.ts  # ENVELOPE_MAP block types; parseEnvironmentOpen
-  batchProcessor.ts     # Multi-file compile with deep-cloned progress snapshots
+  batchProcessor.ts     # Multi-file compile with rAF / setTimeout UI yields
+  pdfPageExtractor*.ts  # Client PDF → upright PNG/JPEG frames (web pdf.js)
   ostaBatchConverter.ts # Headless OSTA batch: HTML + native TS bundles + *.issues.log
   ostaIssueReport.ts    # Aggregate issue logs → issues-summary.txt / issues.json
   figureAnchors.ts      # Figure ID allocation and {ILL|MIN|DIAG|SYMB} patterns
@@ -250,7 +266,9 @@ Transcription text arrives from:
 - **Simple sample** — lighter folio + rubric example.
 - **Paste / edit** — multiline `TextInput` in Transcription mode.
 - **File upload** — `importTextFile()` → `DocumentPicker` → `FileSystem.readAsStringAsync` → `applyTranscription` (with `CompilationOverlay`).
+- **Transcribe Scan (AI)** — image/PDF via DocumentPicker → client PDF slicer (`utils/pdfPageExtractor*`) → Pass 1 vision per leaf → local lint; clean folios stream via `onFolioComplete`; flagged leaves share one batched Pass 2 repair (`runBatchPassTwoRepair`) before merge (see [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md)).
 - **Batch** — `BatchProcessingPanel` / `ResponsiveBatchShell` (editor mode); per-file status in panel.
+- **Library** — catalog entry → `applyTranscription` with precomputed corpus sidecars for Copilot.
 
 ### 2. Domain model (`constants/manuscript.ts`)
 
@@ -357,7 +375,8 @@ Figure slots stay keyed by stable `figureId` (per folio) inside `assetMap`, so e
 | `buildConcordance` / `getConcordanceForManuscript` | Lemma index from each folio’s `reconstructedFlow` (single-pass `RegExp.exec`; hyphen joins preserved). Not built during compile; memoized lazily by source identity + `PARSER_VERSION` when the concordance drawer or stats need it |
 | `validateTranscription` | Multi-line `{ENV.}` continuation, folio-before-`}`, dangling `+`, stray `}` |
 | `scanLineLexicalIssues` / `scanStructuralTokenIssues` | Parse-time checks using shared `lexicalPatterns` (no regex drift) |
-| `validateTranscription` / `lintHsmsTranscription` | Fast pre-render lint (folio leaks, env stack, lexical brackets); CLI: `npm run lint:hsms` |
+| `validateTranscription` / `lintHsmsTranscription` | Fast pre-render lint (folio leaks, env stack, lexical brackets); includes Proofer-style incidents by default (`utils/prooferIncidents.ts`); CLI: `npm run lint:hsms` |
+| `auditHsmsProoferIncidents` / MCP `audit_hsms_syntax` | Technical / editorial / structural flags + optional TSV (“Proofer señala; el editor decide”) |
 | `renderNormalizedText` | Strip deletions/calderones; inline expansions; u/v orthography hints |
 | `exportToTEIXML` | Map tokens/blocks to TEI P5 (`choice`, `del`, `add`, `head`, `pb`, `foreign`, `pc`); escaped `<abbr>` from `token.raw`; `rend="columns-N"` on blocks |
 | `exportToLegacyHTML` | Self-contained HTML mirroring HSMSLib (`LightGoldenrodYellow`, table rows, `float:left` `{INn.}` caps, `<i>` expansions) |
@@ -410,21 +429,47 @@ concordanceOpen, batchShellVisible
 
 Concordance and validation rows call scroll navigation via `ScrollAnchorProvider`.
 
-**Research copilot** (editor **Ask** → `ManuscriptChatbotDrawer`; see [SPEC-COPILOT.md](SPEC-COPILOT.md)):
+**Research copilot** (Studio **Ask** → `ManuscriptChatbotDrawer`; see [SPEC-COPILOT.md](SPEC-COPILOT.md)):
 
 | Layer | Role |
 |-------|------|
 | `utils/copilot/facetIndex.ts` | Lazy per-witness facets (token types, hands, languages, initials) |
 | `utils/copilot/catalog` + `executors/tierA.ts` | Deterministic Tier A recipes (deletions, glosses, damage, …) |
-| `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → recipe cosine routing → answer cards |
+| `utils/copilot/executors/voyant.ts` | Distant-reading recipes: `corpus.term_frequency`, `corpus.ngrams`, `corpus.vocab_density` |
+| `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → recipe cosine routing → answer cards; eager recipes may use precompiled facets |
+| `utils/copilot/sidecarRecipes.ts` / `mcpSidecarRuntime.ts` | Library sidecars + MCP tools (TF-IDF rank, graph, facets, Proofer audit, vision transcribe) |
 | `utils/embeddings/*` | Shared FNV-1a hash-embed + prototype classifier |
 | `utils/manuscriptVectorIndex.ts` | Passage-search fallback (`search.passages`) |
+| `scripts/compile-copilot.ts` | Regenerates `utils/generated/copilotCatalog.ts` + `mcpManuscriptTools.ts` (`npm run compile:copilot`) |
+
+**Azure paleography backoff** (hybrid OpenAI Responses; optional A2A):
+
+| Layer | Role |
+|-------|------|
+| `services/azureOpenAI.ts` | Responses client (timeouts, 429 retry, vision input) |
+| `services/azureAgentOrchestrator.ts` | Session context + `chatWithAzureAgent` (vision/syntax roles; A2A→Responses fallback) |
+| `services/azureHsmsTranscriber.ts` | Single leaf: Pass 1 → ingest → optional `runPassTwoRepair` (**rejects PDF bytes**) |
+| `services/passTwoRepairService.ts` | Per-leaf + **batched** Pass 2 (`runBatchPassTwoRepair`) |
+| `services/batchTranscriptionService.ts` | PDF → frames → Pass 1 stream (skip per-page Pass 2) → one batch repair → merge |
+| `hooks/useBatchTranscription.ts` | Incremental folio state + progress for Studio |
+| `components/TranscriptionProgressBar.tsx` | Live phases: slicing / transcribing / repairing / merging |
+| `utils/pdfPageExtractor.web.ts` | pdfjs-dist client slicer + canvas teardown (Expo Web) |
+| `utils/pdfPageExtractor.ts` | Native stub / optional `react-native-pdf-to-image` |
+| Foundry prompt | [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md) |
+| Agent memory rules | `assets/agent-memory/` (`npm run export:agent-memory`) |
+| Client ingest gate | `utils/ingestAgentTranscription.ts` |
+| HTR → HSMS cleanup | `utils/htrConverter.ts` · MCP `convert_htr_to_hsms` · `npm run convert:htr` |
+| Env | `EXPO_PUBLIC_AZURE_TRANSPORT=hybrid` (vision `gpt-4o` + syntax agent / model `gpt-5.4-mini`); see `.env.example` |
+
+Local Tier‑A recipes stay on-device. Azure is only used for vision OCR → HSMS (and conditional syntax repair) when configured. Multi-page PDFs are **never** uploaded as PDF — only per-page PNG/JPEG vision frames. Pass 2 is skipped when the client linter reports zero critical errors.
+
+**Library / corpus sidecars** (`npm run build:library` + `sync:library`): `corpus-tfidf.json`, `corpus-stats.json`, `corpus-term-postings.json`, `library-graph.json`, per-witness `*.facets.json` under `assets/library/` / `public/`.
 
 **Lightweight boundary** ([SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md)): concordance is built on demand (`getConcordanceForManuscript`); scholarly modules load via `utils/lazy/loadScholar.ts`; `AnalysisProvider` defaults to local; Tier 2 ingest UI appears only when `EXPO_PUBLIC_ANALYSIS_BACKEND=1`.
 
 **i18n** ([SPEC-I18N.md](SPEC-I18N.md)): `I18nProvider` + Tier 1 catalogs (`en`, `es*`, `pt*`, `ca`, `gl`, `eu`); locale picker on Sources. Witness text and HSMS mnemonics are never translated.
 
-**PDF / IIIF ingest I0** ([SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md)): sidecar types, `layoutForFolio(geometry?)`, line-diff realignment, bundle v2, IIIF Presentation 3 import (`utils/ingest/*`, `IngestPanel`). No on-device PDF parsing.
+**PDF / IIIF ingest I0** ([SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md)): sidecar types, `layoutForFolio(geometry?)`, line-diff realignment, bundle v2, IIIF Presentation 3 import (`utils/ingest/*`, `IngestPanel`). No on-device PDF parsing. Vision OCR for HSMS draft text is the separate Azure path above (not IIIF geometry alignment).
 
 ### Parser and export performance
 
@@ -437,7 +482,7 @@ The compiler path is synchronous but tuned for large OSTA files:
 | `legacyDiacritics.ts` | Static compiled cluster patterns |
 | `normalizedText.ts` | Precompiled replace regex; string buffer array instead of repeated concatenation |
 | `structuralAssembly.ts` | Deep-copy stack frames when attaching `envLayers` (safe across re-parses) |
-| `batchProcessor.ts` | Deep-cloned status snapshots; ~16 ms UI yield between files |
+| `batchProcessor.ts` | Shallow status copies; `requestAnimationFrame` / `setTimeout` yield between files |
 | `teiExport.ts` | Chunked XML assembly; reverse-loop environment lookup |
 | `expoFileSystem.ts` | Chunked base64 decode; Blob URL revoke on web reads |
 
@@ -461,11 +506,16 @@ Import failures surface `Alert` dialogs; parse errors are not distinguished (mal
 
 | Asset | Purpose |
 |-------|---------|
-| `assets/dic/hsms.src` | DB_MAP lemmatization dictionary (surface forms → lemmas) |
+| `assets/dic/hsms.src` | DB_MAP lemmatization dictionary (surface forms → lemmas + EAGLES-style POS) |
 | `utils/generated/hsmsDiacriticMap.ts` | Character rules from legacy `settings.ini` `[RegexReplaces]` |
-| `utils/generated/hsmsLemmaIndex.json` | Compact index built from `hsms.src` |
+| `utils/generated/hsmsLemmaIndex.json` | Compact surface→lemma index built from `hsms.src` |
+| `utils/generated/hsmsPosIndex.json` | Surface→POS tag index (analizador / EAGLES-style; `lookupHsmsPos`) |
+| `public/dic/hsmsLemmaIndex.v2.tsv` | Front-coded web lemma asset (lazy fetch) |
+| `public/dic/hsmsPosIndex.json` | Web POS asset (lazy fetch) |
 
-Regenerate: `npm run generate:hsms-assets`
+Regenerate: `npm run generate:hsms-assets` (or `npm run generate:dictionary` for lemma/POS only).
+
+Runtime: `utils/hsmsDictionary.ts` (`lookupHsmsLemma`, `lookupHsmsPos`, `ensureLemmaDictionary`).
 
 Note: `hsms.src` does **not** use `code+unicode` lines; diacritic mappings come from the C# parser’s `CharRegexReplacements` / INI configuration, expanded into literal keys by `scripts/generate-diacritic-map.mjs`.
 
@@ -527,15 +577,23 @@ Planned or natural evolution paths (also noted on the About screen):
 8. ~~**Inline figure upload**~~ — `figure_anchor` tokens + `FigurePlaceholder`; workspace-scoped assets via `figureAssetStorage` (replace/remove controls).
 9. **Image pane** — third synoptic column for full-leaf facsimile URLs.
 10. ~~**Reader-first UX**~~ — default upload-only surface; advanced editor toggle; compilation overlay; metadata card outside parchment.
+11. ~~**Azure vision transcription**~~ — hybrid gpt-4o vision + conditional / batched gpt-5.4-mini Pass 2 → linted HSMS ASCII ([AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md)).
+12. ~~**Proofer / Voyant / OSTA docs port**~~ — see [PORTING-FROM-HSMS-MANUALS.md](PORTING-FROM-HSMS-MANUALS.md).
+13. **Full CQP-style OSTA search UI** — stretch after lemma/POS indexes (documented in OSTA-guide).
 
-## Engineering specs (proposed)
+## Engineering specs and operator docs
 
-| Spec | Scope |
+| Spec / doc | Scope |
 |------|-------|
 | [SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md) | Load tiers, bundle/startup budgets, lazy lemma dictionary, `AnalysisProvider` backend boundary |
 | [SPEC-I18N.md](SPEC-I18N.md) | Instant UI i18n for Iberian and Latin American locales; witness-language stopwords and collation |
 | [SPEC-COPILOT.md](SPEC-COPILOT.md) | Multilingual research copilot with precompiled, evidence-tiered recipes |
 | [SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md) | PDF/IIIF ingest → HSMS draft → image-aligned, geometry-calibrated digital witness |
+| [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md) | Hybrid vision → lint → batched Pass 2; env vars; MCP `transcribe_manuscript_image` |
+| [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md) | Paste-ready Foundry agent instructions |
+| [azure_hsms_transcriber_prompt.md](azure_hsms_transcriber_prompt.md) | Stub → canonical prompt (compat link) |
+| [OSTA-guide.md](OSTA-guide.md) | Citation, wildcards, tag crosswalk (About tab cards) |
+| [PORTING-FROM-HSMS-MANUALS.md](PORTING-FROM-HSMS-MANUALS.md) | Proofer / analizador / OSTA / Voyant port matrix |
 
 ## Build and quality
 
@@ -545,4 +603,6 @@ Planned or natural evolution paths (also noted on the About screen):
 
 ## Security and privacy
 
-Transcription content stays on-device during import and editing. File picker copies uploads to a cache URI for reading; nothing is sent to a backend in the current implementation.
+Transcription content stays on-device during ordinary import, edit, and local Copilot recipes. File picker copies uploads to a cache URI for reading.
+
+**Azure exception:** when Azure OpenAI / Foundry env is configured and the user taps **Transcribe Scan (AI)** (or MCP `transcribe_manuscript_image`), **page image** data URIs (never raw PDF bytes) and session context are sent to Azure Responses / the syntax agent. Multi-page PDFs are sliced client-side first. Do not commit api-keys (`.env` is gitignored; use `.env.example` as the template).

@@ -39,12 +39,13 @@ export interface LiteralFinding {
   text: string;
 }
 
-const JSX_TEXT_RE = />\s*([^<>{}\n][^<>{}]*?)\s*</g;
+/** Bounded character classes — avoid catastrophic backtracking on large TSX. */
+const JSX_TEXT_RE = />([^<>{}\n\r]+)</g;
 /** Text adjacent to a JSX expression: `>Success: {n}` and `{n} files<`. */
-const JSX_MIXED_BEFORE_RE = />\s*([^<>{}\n]*[A-Za-zÀ-ÿ][^<>{}\n]*?)\s*\{/g;
-const JSX_MIXED_AFTER_RE = /\}\s*([^<>{}\n]*[A-Za-zÀ-ÿ][^<>{}\n]*?)\s*<\//g;
+const JSX_MIXED_BEFORE_RE = />([^<>{}\n\r]*[A-Za-zÀ-ÿ][^<>{}\n\r]*)\{/g;
+const JSX_MIXED_AFTER_RE = /\}([^<>{}\n\r]*[A-Za-zÀ-ÿ][^<>{}\n\r]*)<\//g;
 const CODE_LIKE_RE = /=>|&&|\|\||;|\/\/|\/\*|\*\/|\n\s*\*|\breturn\b|\bconst\b|^[)\]}]|\?\s|^\w+=|=\s*$|\w\(|,\s*$|\$\{|\w\.\w+\)/;
-const PROP_RE = /\b(accessibilityLabel|placeholder|title|label|accessibilityHint)\s*=\s*"([^"]+)"/g;
+const PROP_RE = /\b(accessibilityLabel|placeholder|title|label|accessibilityHint)\s*=\s*"([^"]{2,})"/g;
 
 function scanFile(path: string): LiteralFinding[] {
   const rel = relative(root, path).replace(/\\/g, "/");

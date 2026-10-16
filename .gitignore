@@ -38,6 +38,9 @@ yarn-error.*
 # local env files
 .env*.local
 
+# local smoke / scratch outputs
+tmp/
+
 # typescript
 *.tsbuildinfo
 .vercel

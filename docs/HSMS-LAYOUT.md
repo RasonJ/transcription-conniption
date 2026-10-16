@@ -185,7 +185,7 @@ Within each line, sticky rules tokenize (order matters for brackets):
 
 **Diacritics:** `scripts/generate-diacritic-map.mjs` reads legacy `HSMSTools/HSMSParser/settings.ini` and emits `utils/generated/hsmsDiacriticMap.ts`. Regenerate with `npm run generate:hsms-assets`.
 
-**Dictionary index:** `scripts/generate-hsms-dictionary-index.mjs` builds `hsmsLemmaIndex.json` from `assets/dic/hsms.src` (lemmatization, not character mapping).
+**Dictionary index:** `scripts/generate-hsms-dictionary-index.mjs` builds `hsmsLemmaIndex.json` (surface→lemma) and `hsmsPosIndex.json` (surface→EAGLES-style POS) from `assets/dic/hsms.src`. Runtime: `lookupHsmsLemma` / `lookupHsmsPos` in `utils/hsmsDictionary.ts`. Not character mapping — see diacritic map above.
 
 **Manual conversion:** `scripts/convert-hsms-manual.mjs` produces `docs/HSMS-manual.md` from `../HSMS-manual.txt`.
 
