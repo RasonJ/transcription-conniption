@@ -38,6 +38,8 @@ const TOKEN_RULES: TokenRule[] = [
   { type: "scribal_deletion", regex: /\(\^([^\)]+)\)/ },
   { type: "editorial_deletion", regex: /\(([^\)]+)\)/ },
   { type: "scribal_insertion", regex: /\[\^([^\]]+)\]/ },
+  { type: "prefix_separator", regex: /\[\+\]/ },
+  { type: "non_sequitur", regex: /\[\s*[\u2014\u2013]\s*\]/ },
   { type: "editorial_insertion", regex: /\[(?!\s*[\*\^])([^\]]+)\]/ },
   { type: "calderon_three", regex: /%3/ },
   { type: "calderon_two", regex: /%2/ },

@@ -1,5 +1,7 @@
 {
   "alert.uploadError": "Error al cargar",
-  "studio.action.upload": "Cargar y convertir",
+  "studio.action.upload": "Cargar",
+  "studio.action.uploadHint": "Elegí una transcripción (.txt, .hsms, Word .docx), o una imagen / PDF para IA. También podés soltar o pegar.",
+  "studio.action.uploadError": "Error al cargar",
   "batch.uploadTitle": "Cargar lote de transcripciones"
 }

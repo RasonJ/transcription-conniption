@@ -84,10 +84,11 @@ export function deletionsScribalVsEditorial(
   const folios = foliosWith(facets, ["scribal_deletion", "editorial_deletion"]);
   return {
     headline: `${plural(scribal, "scribal deletion")} and ${plural(editorial, "editorial deletion")} across ${plural(folios, "folio")}.`,
+    params: { scribal, editorial, folios },
     count: scribal + editorial,
     breakdown: [
-      { label: "scribal (^…)", value: scribal },
-      { label: "editorial (…)", value: editorial },
+      { label: "scribal (^…)", value: scribal, key: "scribal_deletion" },
+      { label: "editorial (…)", value: editorial, key: "editorial_deletion" },
     ],
     rows: mergedRows(parsed, [
       { refs: refsOf(facets, "scribal_deletion"), label: "scribal" },
@@ -117,7 +118,10 @@ export function nonOriginalHands(facets: FacetIndex, parsed: ParsedManuscript): 
 
   const breakdown = [...groups.entries()]
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([label, value]) => ({ label, value }));
+    .map(([label, value]) => {
+      const [, hand, type] = label.match(/^hand (\S+) · (.+)$/) ?? [];
+      return { label, value, key: "hand_type", labelParams: { hand: hand ?? "?", type: type ?? "" } };
+    });
   const handCount = new Set(breakdown.map((b) => b.label.split(" · ")[0])).size;
 
   return {
@@ -125,6 +129,8 @@ export function nonOriginalHands(facets: FacetIndex, parsed: ParsedManuscript): 
       total === 0
         ? "No tokens attributed to a non-original hand."
         : `${plural(total, "token")} by ${plural(handCount, "non-original hand")}.`,
+    params: { total, hands: handCount },
+    messageKey: total === 0 ? "none" : undefined,
     count: total,
     breakdown,
     rows: refs.slice(0, ROW_LIMIT).map((ref) => {
@@ -145,10 +151,11 @@ export function superscripts(facets: FacetIndex, parsed: ParsedManuscript): Reci
   const ins = countOf(facets, "scribal_insertion");
   return {
     headline: `${plural(sup, "superscript abbreviation")} and ${plural(ins, "scribal insertion")}.`,
+    params: { superscripts: sup, insertions: ins },
     count: sup + ins,
     breakdown: [
-      { label: "superscript <<…>>", value: sup },
-      { label: "scribal insertion [^…]", value: ins },
+      { label: "superscript <<…>>", value: sup, key: "superscript" },
+      { label: "scribal insertion [^…]", value: ins, key: "scribal_insertion" },
     ],
     rows: mergedRows(parsed, [
       { refs: refsOf(facets, "superscript"), label: "superscript" },
@@ -174,6 +181,8 @@ export function initialHierarchy(facets: FacetIndex, parsed: ParsedManuscript): 
       total === 0
         ? "No illuminated initials ({INn.}) found."
         : `${plural(total, "initial")} across ${plural(depths.length, "depth level")}: ${breakdown.map((b) => `${b.label} ×${b.value}`).join(", ")}.`,
+    params: { total, levels: depths.length },
+    messageKey: total === 0 ? "none" : undefined,
     count: total,
     breakdown,
     rows: refs.slice(0, ROW_LIMIT).map((ref) => {
@@ -215,10 +224,11 @@ export function glossVsAddenda(facets: FacetIndex, parsed: ParsedManuscript): Re
   const addenda = blockCount("addendum");
   return {
     headline: `${plural(glosses, "gloss", "glosses")} and ${plural(addenda, "addendum", "addenda")}.`,
+    params: { glosses, addenda },
     count: glosses + addenda,
     breakdown: [
-      { label: "gloss {GL.}", value: glosses },
-      { label: "addendum {AD.}", value: addenda },
+      { label: "gloss {GL.}", value: glosses, key: "gloss" },
+      { label: "addendum {AD.}", value: addenda, key: "addendum" },
     ],
     rows: blockRows(parsed, [
       { refs: facets.blockRefs.get("gloss") ?? [], label: "gloss" },
@@ -235,11 +245,12 @@ export function damageIllegible(facets: FacetIndex, parsed: ParsedManuscript): R
   const long = illegible.length - short;
   return {
     headline: `${plural(illegible.length, "illegible passage")} and ${plural(missing, "missing fragment")}.`,
+    params: { illegible: illegible.length, missing },
     count: illegible.length + missing,
     breakdown: [
       { label: "[??]", value: short },
       { label: "[???]", value: long },
-      { label: "missing ??", value: missing },
+      { label: "missing ??", value: missing, key: "missing_fragment" },
     ],
     rows: mergedRows(parsed, [
       { refs: illegible, label: "illegible", textOf: (t) => t.raw },
@@ -260,10 +271,16 @@ export function reconstructionsByHand(facets: FacetIndex, parsed: ParsedManuscri
   }
   const breakdown = [...groups.entries()]
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .map(([label, value]) => ({ label, value }));
+    .map(([label, value]) => {
+      const hand = label.match(/^hand (\S+)$/)?.[1];
+      return hand
+        ? { label, value, key: "hand", labelParams: { hand } }
+        : { label, value, key: "unmarked_hand" };
+    });
 
   return {
     headline: `${plural(refs.length, "reconstruction")} across ${plural(groups.size, "hand")}.`,
+    params: { total: refs.length, hands: groups.size },
     count: refs.length,
     breakdown,
     rows: refs.slice(0, ROW_LIMIT).map((ref) => {
@@ -286,6 +303,7 @@ export function layoutWrapback(facets: FacetIndex, parsed: ParsedManuscript): Re
   const folios = foliosWith(facets, ["calderon_two", "calderon_three"]);
   return {
     headline: `${plural(two, "%2 mark")} and ${plural(three, "%3 mark")} across ${plural(folios, "folio")}.`,
+    params: { two, three, folios },
     count: two + three,
     breakdown: [
       { label: "%2", value: two },
@@ -326,8 +344,10 @@ export function codeSwitching(facets: FacetIndex, parsed: ParsedManuscript): Rec
       spanTotal === 0
         ? "No language spans ({LAT.}, {ARG.}, …) found."
         : `${plural(spanTotal, "language span")} in ${plural(entries.length, "language")}: ${entries.map(([c, f]) => `${c} ${f.spans.length} (${plural(f.words, "word")})`).join(", ")}.`,
+    params: { spans: spanTotal, languages: entries.length },
+    messageKey: spanTotal === 0 ? "none" : undefined,
     count: spanTotal,
-    breakdown: entries.map(([code, f]) => ({ label: code, value: f.spans.length })),
+    breakdown: entries.map(([code, f]) => ({ label: code, value: f.spans.length, key: "lang", labelParams: { code } })),
     rows: languageRows(facets, parsed),
   };
 }
@@ -342,10 +362,11 @@ export function foreignRatio(facets: FacetIndex, parsed: ParsedManuscript): Reci
   const pct = total === 0 ? 0 : (foreign / total) * 100;
   const breakdown = [...facets.languageSpans.entries()]
     .sort((a, b) => b[1].words - a[1].words || a[0].localeCompare(b[0]))
-    .map(([code, f]) => ({ label: code, value: f.words }));
+    .map(([code, f]) => ({ label: code, value: f.words, key: "lang", labelParams: { code } }));
 
   return {
     headline: `${pct.toFixed(1)}% of words (${foreign} of ${total}) fall inside language spans.`,
+    params: { pct: pct.toFixed(1), foreign, total },
     count: foreign,
     breakdown,
     rows: languageRows(facets, parsed),

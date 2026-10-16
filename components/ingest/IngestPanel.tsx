@@ -1,7 +1,10 @@
+import { useScriptorium } from "@/context/ScriptoriumContext";
+import { useT } from "@/i18n/runtime";
 import {
   fetchIiifManifest,
   type IiifWitnessDraft,
 } from "@/utils/ingest/iiifManifest";
+import { skeletonFromIiifDraft } from "@/utils/ingest/iiifWorkspace";
 import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
@@ -14,6 +17,9 @@ type Props = {
 const PREVIEW_CANVASES = 5;
 
 function IngestPanelImpl({ onDraftLoaded }: Props) {
+  const t = useT();
+  const { applyTranscription } = useScriptorium();
+  const [created, setCreated] = useState<{ count: number; sequential: boolean } | null>(null);
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,21 +30,34 @@ function IngestPanelImpl({ onDraftLoaded }: Props) {
     if (!trimmed) return;
     setLoading(true);
     setError(null);
+    setCreated(null);
     try {
       const loaded = await fetchIiifManifest(trimmed);
       setDraft(loaded);
       onDraftLoaded?.(loaded);
     } catch (e) {
       setDraft(null);
-      setError(e instanceof Error ? e.message : "Could not load manifest.");
+      setError(e instanceof Error && e.message ? `${t("ingest.iiif.loadError")} ${e.message}` : t("ingest.iiif.loadError"));
     } finally {
       setLoading(false);
     }
-  }, [url, onDraftLoaded]);
+  }, [url, onDraftLoaded, t]);
+
+  // Folio skeleton + IIIF page images as folio backgrounds (no backend needed).
+  const handleCreate = useCallback(() => {
+    if (!draft) return;
+    const sk = skeletonFromIiifDraft(draft);
+    applyTranscription(sk.transcriptionText, {
+      sourceFileName: sk.sourceFileName,
+      manuscriptTitle: sk.manuscriptTitle,
+      folioBackgrounds: sk.folioBackgrounds,
+    });
+    setCreated({ count: draft.canvases.length, sequential: sk.sequentialIds });
+  }, [draft, applyTranscription]);
 
   return (
     <View style={styles.panel}>
-      <Text style={styles.title}>IIIF import</Text>
+      <Text style={styles.title}>{t("ingest.iiif.title")}</Text>
       <View style={styles.inputRow}>
         <TextInput
           value={url}
@@ -57,12 +76,12 @@ function IngestPanelImpl({ onDraftLoaded }: Props) {
           disabled={loading}
           style={styles.button}
           accessibilityRole="button"
-          accessibilityLabel="Load IIIF manifest"
+          accessibilityLabel={t("ingest.iiif.loadLabel")}
         >
           {loading ? (
             <ActivityIndicator color="#1a0a05" size="small" />
           ) : (
-            <Text style={styles.buttonText}>Load</Text>
+            <Text style={styles.buttonText}>{t("ingest.iiif.load")}</Text>
           )}
         </Pressable>
       </View>
@@ -71,9 +90,9 @@ function IngestPanelImpl({ onDraftLoaded }: Props) {
 
       {draft ? (
         <View style={styles.summary}>
-          <Text style={styles.summaryTitle}>{draft.label || "Untitled manifest"}</Text>
+          <Text style={styles.summaryTitle}>{draft.label || t("ingest.iiif.untitled")}</Text>
           <Text style={styles.summaryMeta}>
-            {draft.canvases.length} canvas{draft.canvases.length === 1 ? "" : "es"}
+            {t("ingest.iiif.canvases", { count: draft.canvases.length })}
             {draft.rights ? ` · ${draft.rights}` : ""}
           </Text>
           {draft.canvases.slice(0, PREVIEW_CANVASES).map((c) => (
@@ -83,7 +102,18 @@ function IngestPanelImpl({ onDraftLoaded }: Props) {
           ))}
           {draft.canvases.length > PREVIEW_CANVASES ? (
             <Text style={styles.summaryMeta}>
-              +{draft.canvases.length - PREVIEW_CANVASES} more
+              {t("ingest.iiif.more", { count: draft.canvases.length - PREVIEW_CANVASES })}
+            </Text>
+          ) : null}
+          {draft.canvases.length > 0 ? (
+            <Pressable onPress={handleCreate} style={[styles.button, styles.createButton]} accessibilityRole="button">
+              <Text style={styles.buttonText}>{t("ingest.iiif.create")}</Text>
+            </Pressable>
+          ) : null}
+          {created ? (
+            <Text style={styles.summaryMeta}>
+              {t("ingest.iiif.created", { count: created.count })}
+              {created.sequential ? ` ${t("ingest.iiif.sequential")}` : ""}
             </Text>
           ) : null}
         </View>
@@ -129,6 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   buttonText: { color: "#1a0a05", fontWeight: "800", fontSize: 13 },
+  createButton: { alignSelf: "flex-start", marginTop: 6 },
   error: { color: "#e8836f", fontSize: 12, fontWeight: "600" },
   summary: { gap: 2 },
   summaryTitle: { color: "#fff4d2", fontSize: 14, fontWeight: "700" },

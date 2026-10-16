@@ -29,6 +29,12 @@ function tokenToTei(token: Token): string {
     case "editorial_insertion":
       inner = `<add place="inline">${v}</add>`;
       break;
+    case "prefix_separator":
+      inner = `<c type="prefix-join"/>`;
+      break;
+    case "non_sequitur":
+      inner = `<gap reason="non-sequitur"/>`;
+      break;
     case "reconstructed_text":
       inner = `<supplied reason="illegible" cert="low">[${v}]</supplied>`;
       break;

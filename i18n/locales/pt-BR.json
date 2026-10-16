@@ -4,21 +4,13 @@
   "common.loading": "Carregando…",
   "concordance.summary": "{total} termos indexados · mostrando {shown}. Toque em uma ocorrência para ir ao fólio.",
   "concordance.summaryFiltered": "{total} termos indexados · mostrando {shown} correspondências. Toque em uma ocorrência para ir ao fólio.",
-  "concordance.building": "Criando o índice…",
-  "ingest.chooseFile": "Escolher um arquivo",
-
   "alert.teiShareFailed": "O XML TEI foi gerado, mas não foi possível abrir o menu de compartilhamento.",
   "alert.exportFailedBody": "Não foi possível gerar ou salvar o arquivo exportado.",
   "alert.importTextFailed": "Experimente um arquivo de transcrição HSMS em texto simples.",
-
   "facsimile.loading": "Carregando fac-símile…",
-
   "batch.uploadHint": "Selecione vários arquivos HSMS em texto simples",
-
   "export.fileNameLabel": "Nome do arquivo (a extensão define o formato)",
   "export.detectedFormat": "Formato detectado: .{ext}",
-
   "concordance.lemmatizing": "Carregando o dicionário de lemas… mostram-se formas gráficas até estar pronto.",
-
   "validation.MALFORMED_DIACRITIC": "Foram detectadas marcas diacríticas aninhadas ou sobrepostas: verifique a notação @, ' e ~."
 }

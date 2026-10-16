@@ -232,6 +232,8 @@ function buildFacetIndexUncached(parsed: ParsedManuscript, identity?: string): F
         }
         if (lang && WORD_TYPES.has(token.type)) languageFacet(languageSpans, lang).tokens++;
 
+        // de[+]nostados is one lexical item: the separator joins rather than splits.
+        if (token.type === "prefix_separator") continue;
         if (!WORD_TYPES.has(token.type)) {
           flushWord();
           continue;

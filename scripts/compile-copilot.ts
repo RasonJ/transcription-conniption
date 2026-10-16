@@ -4,6 +4,17 @@ import { pathToFileURL } from "node:url";
 import { CATALOG_VERSION, RECIPES } from "../utils/copilot/catalog";
 import type { Recipe, SlotSpec } from "../utils/copilot/types";
 import { normalizeQuery } from "../utils/copilot/router";
+import en from "../i18n/locales/en.json";
+import es from "../i18n/locales/es.json";
+import pt from "../i18n/locales/pt.json";
+import ca from "../i18n/locales/ca.json";
+import gl from "../i18n/locales/gl.json";
+import eu from "../i18n/locales/eu.json";
+
+/** SPEC-COPILOT §5: ≥ 6 trigger phrases per Tier 1 locale; templates in every base catalog. */
+export const MIN_TRIGGERS_PER_LOCALE = 6;
+const TIER1_COPILOT_LOCALES = ["en", "es", "pt", "ca", "gl", "eu"] as const;
+const CATALOGS: Record<(typeof TIER1_COPILOT_LOCALES)[number], Record<string, string>> = { en, es, pt, ca, gl, eu };
 
 const OUT_PATH = path.resolve(__dirname, "../utils/generated/copilotCatalog.ts");
 const MCP_OUT_PATH = path.resolve(__dirname, "../utils/generated/mcpManuscriptTools.ts");
@@ -28,6 +39,18 @@ export function validateCatalog(): string[] {
     }
     if (recipe.version < 1) errors.push(`${recipe.id}: version must be ≥ 1`);
     if (!recipe.method) errors.push(`${recipe.id}: missing method`);
+
+    for (const locale of TIER1_COPILOT_LOCALES) {
+      const n = new Set((recipe.triggers[locale] ?? []).map(normalizeQuery)).size;
+      if (n < MIN_TRIGGERS_PER_LOCALE) {
+        errors.push(`${recipe.id}: ${n} ${locale} trigger(s), needs ≥ ${MIN_TRIGGERS_PER_LOCALE}`);
+      }
+      for (const kind of ["chip", "answer", "method"]) {
+        if (typeof CATALOGS[locale][`copilot.recipe.${recipe.id}.${kind}`] !== "string") {
+          errors.push(`${recipe.id}: missing ${locale} copilot.recipe.${recipe.id}.${kind}`);
+        }
+      }
+    }
   }
   return errors;
 }

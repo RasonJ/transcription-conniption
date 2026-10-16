@@ -11,6 +11,12 @@ import { compileManuscriptTree } from "@/utils/compiler";
 import { t as tNow } from "@/i18n/core";
 import { copyFigureIntoWorkspace, copyFolioBackgroundIntoWorkspace } from "@/utils/figureAssetStorage";
 import { exportHsmsBundleToFile, importHsmsBundleFromUri } from "@/utils/hsmsBundle";
+import type { FolioReviewState } from "@/utils/ingest/types";
+import {
+  sidecarFromMachineTranscription,
+  withFolioReview,
+  type MachineTranscriptionMeta,
+} from "@/utils/ingest/visionSidecar";
 import * as FileSystem from "@/utils/expoFileSystem";
 import { resolveStoredFileUri } from "@/utils/expoFileSystem";
 import {
@@ -76,8 +82,17 @@ export type ScriptoriumContextValue = {
   uploadedImages: Record<string, string>;
   applyTranscription: (
     source: string,
-    options?: { sourceFileName?: string; manuscriptTitle?: string },
+    options?: {
+      sourceFileName?: string;
+      manuscriptTitle?: string;
+      /** Folio id → image URI (e.g. IIIF canvases), stored with the workspace. */
+      folioBackgrounds?: Record<string, string>;
+      /** Machine (vision/HTR) output: records per-folio review state in the workspace sidecar. */
+      machineTranscription?: MachineTranscriptionMeta;
+    },
   ) => void;
+  /** Mark a machine-transcribed folio side as reviewed (or back to draft). */
+  setFolioReview: (folioId: string, review: FolioReviewState) => Promise<void>;
   updateActiveText: (text: string) => void;
   updateImageUri: (figureId: string, localUri: string) => Promise<void>;
   removeImageUri: (figureId: string) => Promise<void>;
@@ -92,7 +107,7 @@ export type ScriptoriumContextValue = {
     patch: Partial<
       Pick<
         ScriptoriumWorkspace,
-        "assetMap" | "folioBackgrounds" | "freePlacements" | "transcriptionText" | "manuscriptTitle"
+        "assetMap" | "folioBackgrounds" | "freePlacements" | "transcriptionText" | "manuscriptTitle" | "facsSidecar"
       >
     >,
   ) => Promise<void>;
@@ -162,7 +177,15 @@ export function ScriptoriumProvider({
   );
 
   const applyTranscription = useCallback(
-    (source: string, options?: { sourceFileName?: string; manuscriptTitle?: string }) => {
+    (
+      source: string,
+      options?: {
+        sourceFileName?: string;
+        manuscriptTitle?: string;
+        folioBackgrounds?: Record<string, string>;
+        machineTranscription?: MachineTranscriptionMeta;
+      },
+    ) => {
       const fileName = options?.sourceFileName ?? workspace?.sourceFileName ?? "Active_Witness.txt";
       setEditorBuffer(source);
       setLocalEditorBuffer(source);
@@ -179,6 +202,13 @@ export function ScriptoriumProvider({
         manuscriptTitle:
           options?.manuscriptTitle ??
           inferManuscriptTitle(source, fileName),
+        ...(options?.folioBackgrounds ? { folioBackgrounds: options.folioBackgrounds } : {}),
+        // New machine output gets a fresh sidecar; loading a different file drops the old one.
+        ...(options?.machineTranscription
+          ? { facsSidecar: sidecarFromMachineTranscription(source, options.machineTranscription) }
+          : fileName !== workspace.sourceFileName
+            ? { facsSidecar: undefined }
+            : {}),
       });
       setWorkspace(updated);
       setWorkspaceTitle(updated.manuscriptTitle);
@@ -229,7 +259,7 @@ export function ScriptoriumProvider({
       patch: Partial<
         Pick<
           ScriptoriumWorkspace,
-          "assetMap" | "folioBackgrounds" | "freePlacements" | "transcriptionText" | "manuscriptTitle"
+          "assetMap" | "folioBackgrounds" | "freePlacements" | "transcriptionText" | "manuscriptTitle" | "facsSidecar"
         >
       >,
     ) => {
@@ -471,6 +501,16 @@ export function ScriptoriumProvider({
     [workspace, persistWorkspacePatch],
   );
 
+  const setFolioReview = useCallback(
+    async (folioId: string, review: FolioReviewState) => {
+      if (!workspace?.facsSidecar) {
+        return;
+      }
+      await persistWorkspacePatch({ facsSidecar: withFolioReview(workspace.facsSidecar, folioId, review) });
+    },
+    [workspace, persistWorkspacePatch],
+  );
+
   const value = useMemo<ScriptoriumContextValue>(
     () => ({
       workspace,
@@ -505,6 +545,7 @@ export function ScriptoriumProvider({
       persistWorkspacePatch,
       addFreePlacement,
       setFolioBackground,
+      setFolioReview,
     }),
     [
       workspace,
@@ -537,6 +578,7 @@ export function ScriptoriumProvider({
       persistWorkspacePatch,
       addFreePlacement,
       setFolioBackground,
+      setFolioReview,
     ],
   );
 

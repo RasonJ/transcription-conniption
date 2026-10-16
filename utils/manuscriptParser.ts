@@ -204,6 +204,14 @@ export function tokensToReadingString(tokens: Token[], options: ReadingStringOpt
       chunks.push(` ${token.value} `);
       continue;
     }
+    if (token.type === "prefix_separator") {
+      // de[+]nostados reads as one lexical item (manual §3.221a(5)).
+      continue;
+    }
+    if (token.type === "non_sequitur") {
+      chunks.push(" ");
+      continue;
+    }
     chunks.push(
       options.diplomaticDiacritics && token.normalized ? token.raw : token.value,
     );

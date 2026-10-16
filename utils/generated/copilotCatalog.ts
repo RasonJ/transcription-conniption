@@ -26,14 +26,49 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "punteado tachado scribal cancellations",
         "compare (^text) and (text) deletions",
         "list scribal corrections",
-        "editorial cancellations"
+        "editorial cancellations",
+        "how many words were crossed out",
+        "struck through by the copyist versus by the editor"
       ],
       "es": [
         "muestra las tachaduras del copista frente a las del editor",
         "donde expungio o tacho el escriba",
         "punteado y tachado del copista",
         "correcciones del escriba",
-        "cancelaciones editoriales"
+        "cancelaciones editoriales",
+        "compara supresiones (^texto) y (texto)"
+      ],
+      "pt": [
+        "mostra as rasuras do copista e as do editor",
+        "onde o escriba expungiu ou riscou",
+        "supressoes do copista frente as editoriais",
+        "compara (^texto) e (texto)",
+        "correcoes do escriba",
+        "cancelamentos editoriais"
+      ],
+      "ca": [
+        "mostra les supressions del copista i les de l'editor",
+        "on va ratllar o expungir el copista",
+        "supressions del copista enfront de les editorials",
+        "compara (^text) i (text)",
+        "correccions del copista",
+        "cancel·lacions editorials"
+      ],
+      "gl": [
+        "amosa as supresions do copista e as do editor",
+        "onde riscou ou expungiu o copista",
+        "supresions do copista fronte as editoriais",
+        "compara (^texto) e (texto)",
+        "correccions do copista",
+        "cancelacions editoriais"
+      ],
+      "eu": [
+        "erakutsi kopistaren ezabaketak eta editorearenak",
+        "non ezabatu edo marratu zuen kopistak",
+        "kopistaren ezabaketak eta ezabaketa editorialak",
+        "konparatu (^testua) eta (testua)",
+        "kopistaren zuzenketak",
+        "ezabaketa editorialak"
       ]
     }
   },
@@ -56,7 +91,41 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "muestra el texto anadido por manos posteriores",
         "correcciones de la segunda mano",
         "manos no originales",
-        "inserciones de la mano 2 o 3"
+        "inserciones de la mano 2 o 3",
+        "manos posteriores",
+        "inserciones de otra mano [^2#texto]"
+      ],
+      "pt": [
+        "insercoes de maos nao originais",
+        "maos posteriores [^2#texto]",
+        "texto acrescentado por outra mao",
+        "intervencoes de outras maos",
+        "segunda e terceira mao",
+        "acrescentos marginais de outra mao"
+      ],
+      "ca": [
+        "insercions de mans no originals",
+        "mans posteriors [^2#text]",
+        "text afegit per una altra ma",
+        "intervencions d'altres mans",
+        "segona i tercera ma",
+        "afegits marginals d'una altra ma"
+      ],
+      "gl": [
+        "insercions de mans non orixinais",
+        "mans posteriores [^2#texto]",
+        "texto engadido por outra man",
+        "intervencions doutras mans",
+        "segunda e terceira man",
+        "engadidos marxinais doutra man"
+      ],
+      "eu": [
+        "jatorrizkoak ez diren eskuen txertaketak",
+        "geroagoko eskuak [^2#testua]",
+        "beste esku batek gehitutako testua",
+        "beste eskuen esku-hartzeak",
+        "bigarren eta hirugarren eskua",
+        "beste esku baten ertzeko gehigarriak"
       ]
     }
   },
@@ -78,7 +147,43 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
       "es": [
         "muestra las vocales voladas",
         "letras sobrescritas",
-        "abreviaturas voladas frente a inserciones interlineales"
+        "abreviaturas voladas frente a inserciones interlineales",
+        "letras elevadas sobre la linea",
+        "letras voladas",
+        "vocales superpuestas",
+        "voladitas frente a anadidos entre lineas"
+      ],
+      "pt": [
+        "letras sobrescritas",
+        "vogais sobrepostas",
+        "abreviaturas sobrescritas frente a insercoes interlineares",
+        "mostra as letras voadas",
+        "sobrescritos <<a>>",
+        "vogais sobrescritas que suprimem consoantes"
+      ],
+      "ca": [
+        "lletres volades",
+        "vocals sobreposades",
+        "abreviatures volades enfront d'insercions interlineals",
+        "mostra les lletres sobrescrites",
+        "sobrescrits <<a>>",
+        "vocals volades que suprimeixen consonants"
+      ],
+      "gl": [
+        "letras voadas",
+        "vogais superpostas",
+        "abreviaturas voadas fronte a insercions interlinais",
+        "amosa as letras sobrescritas",
+        "sobrescritos <<a>>",
+        "vogais voadas que suprimen consoantes"
+      ],
+      "eu": [
+        "goi-letrak",
+        "gainean idatzitako bokalak",
+        "goi-laburdurak eta lerroarteko txertaketak",
+        "erakutsi goi-indizeko letrak",
+        "goi-indizeak <<a>>",
+        "kontsonanteak ezabatzen dituzten goi-bokalak"
       ]
     }
   },
@@ -101,7 +206,41 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "distribucion de las iniciales iluminadas",
         "iniciales por profundidad",
         "lista las iniciales decoradas",
-        "letras capitales"
+        "letras capitales",
+        "jerarquia de iniciales in1 a in10",
+        "huecos en blanco para el iluminador"
+      ],
+      "pt": [
+        "distribuicao das iniciais iluminadas",
+        "iniciais maiores e menores in1 a in10",
+        "espacos em branco para o iluminador",
+        "lista as capitulares",
+        "hierarquia das iniciais",
+        "iniciais por profundidade"
+      ],
+      "ca": [
+        "distribucio de les inicials il·luminades",
+        "inicials majors i menors in1 a in10",
+        "espais en blanc per a l'il·luminador",
+        "llista les caplletres",
+        "jerarquia de les inicials",
+        "inicials per profunditat"
+      ],
+      "gl": [
+        "distribucion das iniciais iluminadas",
+        "iniciais maiores e menores in1 a in10",
+        "espazos en branco para o iluminador",
+        "lista as capitais",
+        "xerarquia das iniciais",
+        "iniciais por profundidade"
+      ],
+      "eu": [
+        "hasierako letra apainduen banaketa",
+        "hasierako letra handiak eta txikiak in1etik in10era",
+        "argiztatzailearentzat utzitako hutsuneak",
+        "zerrendatu letra kapitalak",
+        "hasierako letren hierarkia",
+        "hasierako letrak sakoneraren arabera"
       ]
     }
   },
@@ -124,7 +263,41 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "glosas contemporaneas frente a adiciones posteriores",
         "notas marginales y adiciones",
         "lista las glosas marginales",
-        "cuantas glosas y adendas"
+        "cuantas glosas y adendas",
+        "glosas frente a adendas",
+        "anotaciones marginales"
+      ],
+      "pt": [
+        "glosas contemporaneas frente a adendas posteriores",
+        "notas marginais e acrescentos",
+        "lista as glosas marginais",
+        "quantas glosas e adendas",
+        "glosas e adicoes",
+        "anotacoes nas margens"
+      ],
+      "ca": [
+        "glosses contemporanies enfront d'addendes posteriors",
+        "notes marginals i afegits",
+        "llista les glosses marginals",
+        "quantes glosses i addendes",
+        "glosses i addicions",
+        "anotacions als marges"
+      ],
+      "gl": [
+        "glosas contemporaneas fronte a adendas posteriores",
+        "notas marxinais e engadidos",
+        "lista as glosas marxinais",
+        "cantas glosas e adendas",
+        "glosas e adicions",
+        "anotacions nas marxes"
+      ],
+      "eu": [
+        "garaiko glosak eta geroagoko gehigarriak",
+        "ertzeko oharrak eta gehigarriak",
+        "zerrendatu ertzeko glosak",
+        "zenbat glosa eta gehigarri",
+        "glosak eta gehikuntzak",
+        "ertzetako oharpenak"
       ]
     }
   },
@@ -141,13 +314,54 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "list missing fragments",
         "damaged areas of the manuscript",
         "count illegible readings [??]",
-        "lacunae and lost words"
+        "lacunae and lost words",
+        "defaced or erased passages",
+        "unreadable text"
       ],
       "es": [
         "muestra los pasajes ilegibles",
         "donde el texto no se puede leer",
         "fragmentos perdidos",
-        "zonas danadas del manuscrito"
+        "zonas danadas del manuscrito",
+        "pasajes deteriorados o borrados",
+        "texto ilegible",
+        "texto borrado o raspado",
+        "lugares con [??] o [???]"
+      ],
+      "pt": [
+        "passos deteriorados ou apagados",
+        "mostra os passos ilegiveis",
+        "onde o texto nao se pode ler",
+        "fragmentos perdidos",
+        "zonas danificadas do manuscrito",
+        "texto apagado ou raspado",
+        "lugares com [??] ou [???]"
+      ],
+      "ca": [
+        "passatges deteriorats o esborrats",
+        "mostra els passatges il·legibles",
+        "on no es pot llegir el text",
+        "fragments perduts",
+        "zones malmeses del manuscrit",
+        "text esborrat o raspat",
+        "llocs amb [??] o [???]"
+      ],
+      "gl": [
+        "pasaxes deterioradas ou borradas",
+        "amosa os pasaxes ilexibles",
+        "onde non se pode ler o texto",
+        "fragmentos perdidos",
+        "zonas danadas do manuscrito",
+        "texto borrado ou raspado",
+        "lugares con [??] ou [???]"
+      ],
+      "eu": [
+        "erakutsi pasarte irakurtezinak",
+        "non ezin da testua irakurri",
+        "galdutako zatiak",
+        "eskuizkribuaren gune kaltetuak",
+        "ezabatutako edo arraskatutako testua",
+        "[??] edo [???] dituzten lekuak"
       ]
     }
   },
@@ -164,12 +378,49 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "where did an editor supply missing text",
         "list reconstructions [*text]",
         "who reconstructed the damaged words",
-        "conjectural readings and their hands"
+        "conjectural readings and their hands",
+        "text the editor supplied by reconstruction",
+        "reconstructed readings"
       ],
       "es": [
         "muestra las reconstrucciones editoriales",
         "texto reconstruido por mano",
-        "lecturas conjeturales"
+        "lecturas conjeturales",
+        "reconstrucciones [*texto] de manos posteriores",
+        "texto suplido por el editor",
+        "pasajes reconstruidos"
+      ],
+      "pt": [
+        "mostra as reconstrucoes editoriais",
+        "texto reconstruido por mao",
+        "leituras conjeturais",
+        "reconstrucoes [*texto] de maos posteriores",
+        "texto suprido pelo editor",
+        "passos reconstruidos"
+      ],
+      "ca": [
+        "mostra les reconstruccions editorials",
+        "text reconstruit per ma",
+        "lectures conjecturals",
+        "reconstruccions [*text] de mans posteriors",
+        "text suplert per l'editor",
+        "passatges reconstruits"
+      ],
+      "gl": [
+        "amosa as reconstrucions editoriais",
+        "texto reconstruido por man",
+        "lecturas conxecturais",
+        "reconstrucions [*texto] de mans posteriores",
+        "texto suplido polo editor",
+        "pasaxes reconstruidos"
+      ],
+      "eu": [
+        "erakutsi berreraikuntza editorialak",
+        "eskuz berreraikitako testua",
+        "irakurketa konjekturalak",
+        "geroagoko eskuen [*testua] berreraikuntzak",
+        "editoreak osatutako testua",
+        "berreraikitako pasarteak"
       ]
     }
   },
@@ -186,12 +437,49 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "list column wrap marks",
         "count paragraph signs %2",
         "turnover marks at the end of lines",
-        "calderon two and calderon three"
+        "calderon two and calderon three",
+        "text carried back to the previous line",
+        "wrap-back at the column foot"
       ],
       "es": [
         "muestra las marcas de reenvio",
         "donde estan los calderones %2 y %3",
-        "marcas de vuelta al final de la linea"
+        "marcas de vuelta al final de la linea",
+        "calderon dos y calderon tres",
+        "texto devuelto al final de la columna",
+        "reenvios %2 %3"
+      ],
+      "pt": [
+        "mostra os caldeiroes %2 e %3",
+        "texto devolvido ao fim da coluna",
+        "marcas de reenvio",
+        "caldeirao dois e caldeirao tres",
+        "onde estao os %2",
+        "reenvio no cabecalho"
+      ],
+      "ca": [
+        "mostra els calderons %2 i %3",
+        "text retornat al final de la columna",
+        "marques de reenviament",
+        "caldero dos i caldero tres",
+        "on son els %2",
+        "reenviament a la capcalera"
+      ],
+      "gl": [
+        "amosa os calderons %2 e %3",
+        "texto devolto ao final da columna",
+        "marcas de reenvio",
+        "calderon dous e calderon tres",
+        "onde estan os %2",
+        "reenvio na cabeceira"
+      ],
+      "eu": [
+        "erakutsi %2 eta %3 kalderoiak",
+        "zutabearen amaierara itzulitako testua",
+        "birbidaltze-markak",
+        "bigarren eta hirugarren kalderoia",
+        "non daude %2 markak",
+        "goiburuko birbidaltzea"
       ]
     }
   },
@@ -208,13 +496,58 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "list latin and aragonese spans",
         "code switching in the text",
         "tagged language spans lat arg cat",
-        "multilingual passages"
+        "multilingual passages",
+        "where does the language switch",
+        "passages written in another language",
+        "switches between romance and latin"
       ],
       "es": [
         "muestra los cambios de lengua",
         "donde cambia de idioma el escriba",
         "tramos en latin",
-        "alternancia de codigos"
+        "alternancia de codigos",
+        "donde cambia la lengua del texto",
+        "pasajes escritos en otra lengua",
+        "pasajes en otras lenguas {lat.} {arb.}",
+        "donde se alterna con el latin"
+      ],
+      "pt": [
+        "onde muda a lingua do texto",
+        "passos escritos noutra lingua",
+        "mostra as mudancas de lingua",
+        "onde o escriba muda de idioma",
+        "passos em latim",
+        "alternancia de codigo",
+        "passos noutras linguas {lat.} {arb.}",
+        "trechos em lingua estrangeira"
+      ],
+      "ca": [
+        "on canvia la llengua del text",
+        "mostra els canvis de llengua",
+        "on canvia d'idioma el copista",
+        "passatges en llati",
+        "alternanca de codi",
+        "passatges en altres llengues {lat.} {arb.}",
+        "trams en llengua estrangera"
+      ],
+      "gl": [
+        "onde cambia a lingua do texto",
+        "amosa os cambios de lingua",
+        "onde cambia de idioma o copista",
+        "pasaxes en latin",
+        "alternancia de codigo",
+        "pasaxes noutras linguas {lat.} {arb.}",
+        "tramos en lingua estranxeira"
+      ],
+      "eu": [
+        "non aldatzen da testuaren hizkuntza",
+        "beste hizkuntza batean idatzitako pasarteak",
+        "erakutsi hizkuntza-aldaketak",
+        "non aldatzen du kopistak hizkuntza",
+        "latinezko pasarteak",
+        "kode-aldaketa",
+        "beste hizkuntzetako pasarteak {lat.} {arb.}",
+        "atzerriko hizkuntzako tarteak"
       ]
     }
   },
@@ -231,12 +564,57 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "foreign word ratio",
         "how much of the witness is not romance",
         "proportion of tagged language words",
-        "ratio of language span words to total"
+        "ratio of language span words to total",
+        "what fraction of the words are foreign",
+        "proportion of the token count in other languages",
+        "how much of the text is latin as a percentage"
       ],
       "es": [
         "que porcentaje del texto esta en otra lengua",
         "proporcion de palabras en latin",
-        "ratio de palabras extranjeras"
+        "ratio de palabras extranjeras",
+        "que fraccion de las palabras es extranjera",
+        "proporcion de palabras en otras lenguas",
+        "porcentaje de palabras en latin o arabe",
+        "cuanto texto hay en otras lenguas",
+        "densidad de lengua extranjera"
+      ],
+      "pt": [
+        "que fracao das palavras e estrangeira",
+        "proporcao de palavras noutras linguas",
+        "que percentagem do texto esta noutra lingua",
+        "proporcao de palavras em latim",
+        "racio de palavras estrangeiras",
+        "porcentagem de palavras em latim",
+        "quanto texto ha em outras linguas",
+        "densidade de lingua estrangeira"
+      ],
+      "ca": [
+        "quina fraccio de les paraules es estrangera",
+        "quin percentatge del text es en una altra llengua",
+        "proporcio de paraules en llati",
+        "ratio de paraules estrangeres",
+        "percentatge de paraules en llati",
+        "quant text hi ha en altres llengues",
+        "densitat de llengua estrangera"
+      ],
+      "gl": [
+        "que fraccion das palabras e estranxeira",
+        "que porcentaxe do texto esta noutra lingua",
+        "proporcion de palabras en latin",
+        "ratio de palabras estranxeiras",
+        "porcentaxe de palabras en latin",
+        "canto texto hai noutras linguas",
+        "densidade de lingua estranxeira"
+      ],
+      "eu": [
+        "hitzen zer zati da atzerrikoa",
+        "testuaren zer ehuneko dago beste hizkuntza batean",
+        "latinezko hitzen proportzioa",
+        "atzerriko hitzen ratioa",
+        "latinezko hitzen ehunekoa",
+        "zenbat testu dago beste hizkuntzetan",
+        "atzerriko hizkuntzaren dentsitatea"
       ]
     }
   },
@@ -253,13 +631,83 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "most frequent words",
         "term frequency",
         "cirrus word cloud terms",
-        "top words in the text"
+        "top words in the text",
+        "words appearing most frequently",
+        "most often used words",
+        "how often each word is used",
+        "words that occur most frequently",
+        "frequency list of the words",
+        "word counts ranked from most common",
+        "commonest words in the witness"
       ],
       "es": [
         "muestra la distribucion de frecuencias",
         "palabras mas frecuentes",
         "frecuencia de terminos",
-        "nube de palabras"
+        "nube de palabras",
+        "palabras que mas veces aparecen",
+        "palabras usadas mas a menudo",
+        "cuantas veces se usa cada palabra",
+        "lista de frecuencias",
+        "palabras con mas apariciones",
+        "distribucion de frecuencias de palabras",
+        "frecuencia de cada palabra",
+        "recuento de palabras mas usadas",
+        "terminos mas frecuentes",
+        "nube de terminos estilo cirrus",
+        "palabras que mas se repiten"
+      ],
+      "pt": [
+        "palavras que mais vezes aparecem",
+        "palavras usadas mais vezes",
+        "quantas vezes se usa cada palavra",
+        "lista de frequencias",
+        "palavras com mais ocorrencias",
+        "distribuicao de frequencia das palavras",
+        "palavras mais frequentes",
+        "frequencia de termos",
+        "nuvem de palavras",
+        "palavras que mais se repetem",
+        "contagem das palavras mais usadas"
+      ],
+      "ca": [
+        "paraules que mes vegades apareixen",
+        "paraules usades mes sovint",
+        "quantes vegades s'usa cada paraula",
+        "llista de frequencies",
+        "paraules amb mes aparicions",
+        "distribucio de frequencies de paraules",
+        "paraules mes frequents",
+        "frequencia de termes",
+        "nuvol de paraules",
+        "paraules que mes es repeteixen",
+        "recompte de les paraules mes usades"
+      ],
+      "gl": [
+        "palabras que mais veces aparecen",
+        "palabras usadas mais a miudo",
+        "cantas veces se usa cada palabra",
+        "lista de frecuencias",
+        "palabras con mais aparicions",
+        "distribucion de frecuencias das palabras",
+        "palabras mais frecuentes",
+        "frecuencia de termos",
+        "nube de palabras",
+        "palabras que mais se repiten",
+        "reconto das palabras mais usadas"
+      ],
+      "eu": [
+        "gehien agertzen diren hitzak",
+        "maizen erabiltzen diren hitzak",
+        "hitz bakoitza zenbat aldiz erabiltzen den",
+        "hitzen maiztasun-zerrenda",
+        "agerraldi gehien dituzten hitzak",
+        "hitzen maiztasun-banaketa",
+        "hitz ohikoenak",
+        "terminoen maiztasuna",
+        "hitz-hodeia",
+        "gehien errepikatzen diren hitzak",
+        "hitz erabilienen zenbaketa"
       ]
     }
   },
@@ -276,13 +724,63 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "show trigrams",
         "frequent collocations",
         "n-gram frequencies",
-        "word pairs that co-occur"
+        "word pairs that co-occur",
+        "two-word combinations",
+        "word sequences of length two"
       ],
       "es": [
         "extrae n-gramas",
         "muestra bigramas",
         "colocaciones frecuentes",
-        "pares de palabras"
+        "pares de palabras",
+        "parejas de palabras frecuentes",
+        "combinaciones de dos palabras",
+        "extrae bigramas",
+        "n-gramas de palabras",
+        "pares de palabras seguidas",
+        "frecuencia de n-gramas",
+        "bigramas mas comunes",
+        "secuencias de dos palabras"
+      ],
+      "pt": [
+        "pares de palavras frequentes",
+        "combinacoes de duas palavras",
+        "extrair n-gramas",
+        "mostrar bigramas",
+        "pares de palavras seguidas",
+        "frequencia de n-gramas",
+        "bigramas mais comuns",
+        "sequencias de duas palavras"
+      ],
+      "ca": [
+        "parelles de paraules frequents",
+        "combinacions de dues paraules",
+        "extreu n-grames",
+        "mostra bigrames",
+        "parells de paraules seguides",
+        "frequencia de n-grames",
+        "bigrames mes comuns",
+        "sequencies de dues paraules"
+      ],
+      "gl": [
+        "parellas de palabras frecuentes",
+        "combinacions de duas palabras",
+        "extrae n-gramas",
+        "amosa bigramas",
+        "pares de palabras seguidas",
+        "frecuencia de n-gramas",
+        "bigramas mais comuns",
+        "secuencias de duas palabras"
+      ],
+      "eu": [
+        "elkarrekin agertzen diren hitzak",
+        "bi hitzeko konbinazioak",
+        "atera n-gramak",
+        "erakutsi bigramak",
+        "jarraian dauden hitz-bikoteak",
+        "n-gramen maiztasuna",
+        "bigrama ohikoenak",
+        "bi hitzeko sekuentziak"
       ]
     }
   },
@@ -299,13 +797,53 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "type token ratio",
         "hapax density",
         "lexical diversity",
-        "sttr of this witness"
+        "sttr of this witness",
+        "vocabulary density per folio",
+        "lexical richness of each folio"
       ],
       "es": [
         "analiza la densidad lexica",
         "densidad de vocabulario por folio",
         "ratio tipos tokens",
-        "diversidad lexica"
+        "diversidad lexica",
+        "densidad de vocabulario",
+        "riqueza lexica por folio",
+        "diversidad del vocabulario",
+        "densidad lexica de cada folio",
+        "proporcion de hapax por folio",
+        "ttr por folio"
+      ],
+      "pt": [
+        "densidade do vocabulario",
+        "riqueza lexical por folio",
+        "diversidade lexical",
+        "densidade lexical de cada folio",
+        "proporcao de hapax por folio",
+        "ttr por folio"
+      ],
+      "ca": [
+        "densitat del vocabulari",
+        "riquesa lexica per foli",
+        "diversitat lexica",
+        "densitat lexica de cada foli",
+        "proporcio d'hapax per foli",
+        "ttr per foli"
+      ],
+      "gl": [
+        "densidade do vocabulario",
+        "riqueza lexica por folio",
+        "diversidade lexica",
+        "densidade lexica de cada folio",
+        "proporcion de hapax por folio",
+        "ttr por folio"
+      ],
+      "eu": [
+        "hiztegiaren dentsitatea",
+        "aberastasun lexikoa folioka",
+        "aniztasun lexikoa",
+        "folio bakoitzeko dentsitate lexikoa",
+        "hapax proportzioa folioka",
+        "ttr folioka"
       ]
     }
   },
@@ -328,7 +866,41 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "ir al folio",
         "ir a la pagina",
         "abrir el folio",
-        "saltar al folio"
+        "saltar al folio",
+        "ve al folio",
+        "abre la hoja"
+      ],
+      "pt": [
+        "ir para o folio",
+        "abrir o folio",
+        "ir a pagina",
+        "saltar para a folha",
+        "mostra o folio",
+        "vai ao folio"
+      ],
+      "ca": [
+        "anar al foli",
+        "obre el foli",
+        "ves a la pagina",
+        "salta al full",
+        "mostra el foli",
+        "anar al full"
+      ],
+      "gl": [
+        "ir ao folio",
+        "abre o folio",
+        "vai a paxina",
+        "salta a folla",
+        "amosa o folio",
+        "ir a folla"
+      ],
+      "eu": [
+        "joan foliora",
+        "ireki folioa",
+        "joan orrira",
+        "salto egin orrira",
+        "erakutsi folioa",
+        "joan orri honetara"
       ]
     }
   },
@@ -351,7 +923,2468 @@ export const COPILOT_CATALOG: CopilotCatalogEntry[] = [
         "buscar pasajes sobre",
         "donde dice",
         "buscar en el manuscrito",
-        "encontrar el texto que menciona"
+        "encontrar el texto que menciona",
+        "busca pasajes que hablen de",
+        "encuentra el texto sobre"
+      ],
+      "pt": [
+        "procurar passos sobre",
+        "onde diz",
+        "procurar no manuscrito",
+        "encontrar o texto que menciona",
+        "buscar trechos sobre",
+        "localiza a passagem"
+      ],
+      "ca": [
+        "cerca passatges sobre",
+        "on diu",
+        "cerca al manuscrit",
+        "troba el text que esmenta",
+        "busca fragments sobre",
+        "localitza el passatge"
+      ],
+      "gl": [
+        "busca pasaxes sobre",
+        "onde di",
+        "buscar no manuscrito",
+        "atopa o texto que menciona",
+        "busca fragmentos sobre",
+        "localiza a pasaxe"
+      ],
+      "eu": [
+        "bilatu honi buruzko pasarteak",
+        "non dio",
+        "bilatu eskuizkribuan",
+        "aurkitu aipatzen duen testua",
+        "bilatu zatiak honi buruz",
+        "kokatu pasartea"
+      ]
+    }
+  },
+  {
+    "id": "abbr.nasal_tilde_vs_geminate",
+    "version": 1,
+    "tier": "B",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "tilde over n versus nn for the palatal nasal",
+        "how often does the scribe write n with tilde or double nn",
+        "n~ vs nn by quire",
+        "palatal nasal abbreviation tilde",
+        "compare n and nn spellings",
+        "nasal tilde versus geminate nn"
+      ],
+      "es": [
+        "tilde sobre la n frente a nn doble",
+        "con que frecuencia usa n con tilde o nn",
+        "n frente a nn por cuaderno",
+        "abreviatura de la nasal palatal",
+        "compara grafias n y nn",
+        "virgulilla frente a geminada nn"
+      ],
+      "pt": [
+        "til sobre o n frente a nn duplo",
+        "com que frequencia o copista usa n com til ou nn",
+        "n frente a nn por caderno",
+        "abreviatura da nasal palatal",
+        "compara grafias n e nn",
+        "til frente a geminada nn"
+      ],
+      "ca": [
+        "titlla sobre la n enfront de nn doble",
+        "amb quina frequencia usa n amb titlla o nn",
+        "n enfront de nn per quadern",
+        "abreviatura de la nasal palatal",
+        "compara grafies n i nn",
+        "titlla enfront de geminada nn"
+      ],
+      "gl": [
+        "til sobre o n fronte a nn dobre",
+        "con que frecuencia usa n con til ou nn",
+        "n fronte a nn por caderno",
+        "abreviatura da nasal palatal",
+        "compara grafias n e nn",
+        "til fronte a xeminada nn"
+      ],
+      "eu": [
+        "n gaineko tilde eta nn bikoitza",
+        "zenbatetan erabiltzen du n tildeduna edo nn",
+        "n eta nn koadernoka",
+        "sudurkari palatalaren laburdura",
+        "konparatu n eta nn grafiak",
+        "tildea eta nn geminatua"
+      ]
+    }
+  },
+  {
+    "id": "abbr.expansion_by_quire",
+    "version": 1,
+    "tier": "A",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "which abbreviations are written out in full in later quires",
+        "abbreviation density early versus late quires",
+        "q<ue> p<er> p<ro> abbreviated or in full by quire",
+        "latinate abbreviations by gathering",
+        "do abbreviations decrease in later quires",
+        "compare abbreviated and full forms across the codex"
+      ],
+      "es": [
+        "que abreviaturas se escriben completas en los ultimos cuadernos",
+        "densidad de abreviaturas al principio y al final",
+        "q<ue> p<er> p<ro> abreviadas o desarrolladas por cuaderno",
+        "abreviaturas latinas por cuaderno",
+        "disminuyen las abreviaturas en los cuadernos finales",
+        "formas abreviadas y completas a lo largo del codice"
+      ],
+      "pt": [
+        "que abreviaturas aparecem por extenso nos ultimos cadernos",
+        "densidade de abreviaturas no inicio e no fim",
+        "q<ue> p<er> p<ro> abreviadas ou por extenso por caderno",
+        "abreviaturas latinas por caderno",
+        "as abreviaturas diminuem nos cadernos finais",
+        "formas abreviadas e por extenso ao longo do codice"
+      ],
+      "ca": [
+        "quines abreviatures s'escriuen senceres als darrers quaderns",
+        "densitat d'abreviatures al principi i al final",
+        "q<ue> p<er> p<ro> abreujades o desenvolupades per quadern",
+        "abreviatures llatines per quadern",
+        "disminueixen les abreviatures als quaderns finals",
+        "formes abreujades i senceres al llarg del codex"
+      ],
+      "gl": [
+        "que abreviaturas se escriben completas nos ultimos cadernos",
+        "densidade de abreviaturas ao comezo e ao final",
+        "q<ue> p<er> p<ro> abreviadas ou desenvolvidas por caderno",
+        "abreviaturas latinas por caderno",
+        "diminuen as abreviaturas nos cadernos finais",
+        "formas abreviadas e completas ao longo do codice"
+      ],
+      "eu": [
+        "zein laburdura idazten dira osorik azken koadernoetan",
+        "laburduren dentsitatea hasieran eta amaieran",
+        "q<ue> p<er> p<ro> laburtuta edo garatuta koadernoka",
+        "latinezko laburdurak koadernoka",
+        "gutxitzen dira laburdurak azken koadernoetan",
+        "forma laburtuak eta osoak kodexean zehar"
+      ]
+    }
+  },
+  {
+    "id": "corr.editorial_overrides",
+    "version": 1,
+    "tier": "B",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "where did the editor override a scribal deletion",
+        "editorial insertion after a scribal deletion",
+        "editor restored text the scribe deleted",
+        "corrections of transposed text",
+        "editorial overrides of scribal corrections",
+        "deleted then supplied by the editor",
+        "editor restores what the scribe deleted",
+        "editorial reversal of a scribal correction"
+      ],
+      "es": [
+        "el editor restituye lo que el escriba suprimio",
+        "donde corrigio el editor una supresion del copista",
+        "insercion editorial tras una tachadura",
+        "texto tachado y restituido por el editor",
+        "correcciones de transposiciones",
+        "el editor anula una correccion del escriba",
+        "tachado y luego suplido"
+      ],
+      "pt": [
+        "o editor restitui o que o escriba suprimiu",
+        "onde o editor corrigiu uma supressao do copista",
+        "insercao editorial depois de uma rasura",
+        "texto riscado e restituido pelo editor",
+        "correcoes de transposicoes",
+        "o editor anula uma correcao do escriba",
+        "riscado e depois suprido"
+      ],
+      "ca": [
+        "l'editor restitueix el que el copista va suprimir",
+        "on va corregir l'editor una supressio del copista",
+        "insercio editorial despres d'una ratllada",
+        "text ratllat i restituit per l'editor",
+        "correccions de transposicions",
+        "l'editor anul·la una correccio del copista",
+        "ratllat i despres suplert"
+      ],
+      "gl": [
+        "o editor restitue o que o copista suprimiu",
+        "onde corrixiu o editor unha supresion do copista",
+        "insercion editorial despois dunha riscadura",
+        "texto riscado e restituido polo editor",
+        "correccions de transposicions",
+        "o editor anula unha correccion do copista",
+        "riscado e despois suplido"
+      ],
+      "eu": [
+        "non zuzendu zuen editoreak kopistaren ezabaketa",
+        "txertaketa editoriala ezabaketa baten ondoren",
+        "marratutako testua editoreak berrezarria",
+        "lekualdaketen zuzenketak",
+        "editoreak kopistaren zuzenketa baliogabetzen du",
+        "marratua eta gero osatua"
+      ]
+    }
+  },
+  {
+    "id": "layout.hyphen_boundaries",
+    "version": 1,
+    "tier": "A",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "line-ending hyphens where divided words cross column boundaries",
+        "words divided across folio breaks",
+        "hyphenated words crossing columns",
+        "column closes with an incomplete word",
+        "divided words at column end section 3.12",
+        "find hyphens at column and folio breaks"
+      ],
+      "es": [
+        "guiones de final de linea entre columnas",
+        "palabras partidas entre folios",
+        "palabras divididas que cruzan la columna",
+        "columna que termina con palabra incompleta",
+        "division de palabras al final de columna 3.12",
+        "guiones en cambios de columna y de folio"
+      ],
+      "pt": [
+        "hifenes de fim de linha entre colunas",
+        "palavras divididas entre folios",
+        "palavras partidas que atravessam a coluna",
+        "coluna que termina com palavra incompleta",
+        "divisao de palavras no fim da coluna 3.12",
+        "hifenes nas mudancas de coluna e de folio"
+      ],
+      "ca": [
+        "guionets de final de linia entre columnes",
+        "paraules partides entre folis",
+        "paraules dividides que travessen la columna",
+        "columna que acaba amb paraula incompleta",
+        "divisio de paraules al final de columna 3.12",
+        "guionets als canvis de columna i de foli"
+      ],
+      "gl": [
+        "guions de final de lina entre columnas",
+        "palabras partidas entre folios",
+        "palabras divididas que cruzan a columna",
+        "columna que remata cunha palabra incompleta",
+        "division de palabras ao final da columna 3.12",
+        "guions nos cambios de columna e de folio"
+      ],
+      "eu": [
+        "lerro-amaierako marratxoak zutabeen artean",
+        "folioen artean zatitutako hitzak",
+        "zutabea zeharkatzen duten hitz zatituak",
+        "hitz osatugabearekin amaitzen den zutabea",
+        "hitz-zatiketa zutabe-amaieran 3.12",
+        "marratxoak zutabe- eta folio-aldaketetan"
+      ]
+    }
+  },
+  {
+    "id": "codex.nonsequitur_after_cw",
+    "version": 1,
+    "tier": "A",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "non-sequiturs after a catchword indicating lost folios",
+        "missing folios between quires",
+        "lost leaves after the catchword",
+        "[—] after {cw.}",
+        "where is the text interrupted by missing folios",
+        "breaks in sense at quire ends"
+      ],
+      "es": [
+        "falta de sentido tras el reclamo",
+        "folios perdidos entre cuadernos",
+        "hojas perdidas despues del reclamo",
+        "[—] despues de {cw.}",
+        "donde se interrumpe el texto por folios perdidos",
+        "saltos de sentido al final de cuaderno"
+      ],
+      "pt": [
+        "quebra de sentido depois do reclamo",
+        "folios perdidos entre cadernos",
+        "folhas perdidas depois do reclamo",
+        "[—] depois de {cw.}",
+        "onde o texto se interrompe por folios perdidos",
+        "saltos de sentido no fim do caderno"
+      ],
+      "ca": [
+        "salt de sentit despres del reclam",
+        "folis perduts entre quaderns",
+        "fulls perduts despres del reclam",
+        "[—] despres de {cw.}",
+        "on s'interromp el text per folis perduts",
+        "salts de sentit al final de quadern"
+      ],
+      "gl": [
+        "salto de sentido despois do reclamo",
+        "folios perdidos entre cadernos",
+        "follas perdidas despois do reclamo",
+        "[—] despois de {cw.}",
+        "onde se interrompe o texto por folios perdidos",
+        "saltos de sentido ao final do caderno"
+      ],
+      "eu": [
+        "zentzu-jauzia deiaren ondoren",
+        "koadernoen arteko folio galduak",
+        "deiaren ondoren galdutako orriak",
+        "[—] {cw.} ondoren",
+        "non eteten da testua folio galduengatik",
+        "zentzu-jauziak koaderno-amaieran"
+      ]
+    }
+  },
+  {
+    "id": "chars.sibilant_graphs",
+    "version": 1,
+    "tier": "B",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "sigma graph versus c cedilla versus long s",
+        "where does the scribe use s' or c'",
+        "sibilant graphs distribution",
+        "long s versus sigma",
+        "c cedilla usage",
+        "show sigma s' and long s~"
+      ],
+      "es": [
+        "sigma frente a c con cedilla frente a s larga",
+        "donde usa el copista s' o c'",
+        "distribucion de grafias sibilantes",
+        "s larga frente a sigma",
+        "uso de la cedilla",
+        "muestra la sigma s' y la s larga s~"
+      ],
+      "pt": [
+        "sigma frente a c cedilhado frente a s longo",
+        "onde o copista usa s' ou c'",
+        "distribuicao das grafias sibilantes",
+        "s longo frente a sigma",
+        "uso da cedilha",
+        "mostra o sigma s' e o s longo s~"
+      ],
+      "ca": [
+        "sigma enfront de c trencada enfront de s llarga",
+        "on usa el copista s' o c'",
+        "distribucio de grafies sibilants",
+        "s llarga enfront de sigma",
+        "us de la ce trencada",
+        "mostra la sigma s' i la s llarga s~"
+      ],
+      "gl": [
+        "sigma fronte a c cedilla fronte a s longo",
+        "onde usa o copista s' ou c'",
+        "distribucion das grafias sibilantes",
+        "s longo fronte a sigma",
+        "uso da cedilla",
+        "amosa o sigma s' e o s longo s~"
+      ],
+      "eu": [
+        "sigma eta c zediladuna eta s luzea",
+        "non erabiltzen du kopistak s' edo c'",
+        "txistukarien grafien banaketa",
+        "s luzea eta sigma",
+        "zedilaren erabilera",
+        "erakutsi sigma s' eta s luzea s~"
+      ]
+    }
+  },
+  {
+    "id": "chars.accents",
+    "version": 1,
+    "tier": "A",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "orthographic accent marks acute grave circumflex dieresis",
+        "accents in latin and romance sections",
+        "where are @' and @^ used",
+        "tonic stress accent marks",
+        "show all accent marks",
+        "dieresis @# occurrences"
+      ],
+      "es": [
+        "acentos agudo grave circunflejo dieresis",
+        "acentos en las secciones latinas y romances",
+        "donde se usan @' y @^",
+        "marcas de acento tonico",
+        "muestra todos los acentos",
+        "dieresis @#"
+      ],
+      "pt": [
+        "acentos agudo grave circunflexo trema",
+        "acentos nas seccoes latinas e romanicas",
+        "onde se usam @' e @^",
+        "marcas de acento tonico",
+        "mostra todos os acentos",
+        "trema @#"
+      ],
+      "ca": [
+        "accents agut greu circumflex dieresi",
+        "accents a les seccions llatines i romaniques",
+        "on s'usen @' i @^",
+        "marques d'accent tonic",
+        "mostra tots els accents",
+        "dieresi @#"
+      ],
+      "gl": [
+        "acentos agudo grave circunflexo dierese",
+        "acentos nas seccions latinas e romanicas",
+        "onde se usan @' e @^",
+        "marcas de acento tonico",
+        "amosa todos os acentos",
+        "dierese @#"
+      ],
+      "eu": [
+        "azentu akutua kamutsa zirkunflexua dieresia",
+        "azentuak latinezko eta erromantzezko ataletan",
+        "non erabiltzen dira @' eta @^",
+        "azentu tonikoaren markak",
+        "erakutsi azentu guztiak",
+        "dieresia @#"
+      ]
+    }
+  },
+  {
+    "id": "chars.numerals_symbols",
+    "version": 1,
+    "tier": "B",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "roman numerals bounded by periods",
+        "apothecary symbols and greek formulas",
+        "extract numerals and symbols",
+        "show {symb.} symbols",
+        "roman numerals like .xxxvij.",
+        "numerals and special symbols"
+      ],
+      "es": [
+        "numeros romanos entre puntos",
+        "signos de boticario y formulas griegas",
+        "extrae numeros y simbolos",
+        "muestra los simbolos {symb.}",
+        "numerales romanos como .xxxvij.",
+        "numerales y signos especiales"
+      ],
+      "pt": [
+        "numerais romanos entre pontos",
+        "simbolos de boticario e formulas gregas",
+        "extrai numeros e simbolos",
+        "mostra os simbolos {symb.}",
+        "numerais romanos como .xxxvij.",
+        "numerais e sinais especiais"
+      ],
+      "ca": [
+        "nombres romans entre punts",
+        "signes d'apotecari i formules gregues",
+        "extreu nombres i simbols",
+        "mostra els simbols {symb.}",
+        "numerals romans com .xxxvij.",
+        "numerals i signes especials"
+      ],
+      "gl": [
+        "numeros romanos entre puntos",
+        "signos de boticario e formulas gregas",
+        "extrae numeros e simbolos",
+        "amosa os simbolos {symb.}",
+        "numerais romanos como .xxxvij.",
+        "numerais e signos especiais"
+      ],
+      "eu": [
+        "puntu artean dauden zenbaki erromatarrak",
+        "botikarioen ikurrak eta formula grekoak",
+        "atera zenbakiak eta ikurrak",
+        "erakutsi {symb.} ikurrak",
+        ".xxxvij. bezalako zenbaki erromatarrak",
+        "zenbakiak eta ikur bereziak"
+      ]
+    }
+  },
+  {
+    "id": "figure.interior_text",
+    "version": 1,
+    "tier": "A",
+    "category": "paleography",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "miniatures or diagrams with interior text",
+        "text inside a diagram",
+        "which figures contain text",
+        "{min.} and {diag.} with captions",
+        "astronomical diagrams with labels",
+        "embedded text in illustrations"
+      ],
+      "es": [
+        "miniaturas o diagramas con texto dentro",
+        "texto dentro de un diagrama",
+        "que figuras contienen texto",
+        "{min.} y {diag.} con leyenda",
+        "diagramas astronomicos con rotulos",
+        "texto incrustado en las ilustraciones"
+      ],
+      "pt": [
+        "miniaturas ou diagramas com texto dentro",
+        "texto dentro de um diagrama",
+        "que figuras contem texto",
+        "{min.} e {diag.} com legenda",
+        "diagramas astronomicos com rotulos",
+        "texto embutido nas ilustracoes"
+      ],
+      "ca": [
+        "miniatures o diagrames amb text a dins",
+        "text dins d'un diagrama",
+        "quines figures contenen text",
+        "{min.} i {diag.} amb llegenda",
+        "diagrames astronomics amb retols",
+        "text incrustat a les il·lustracions"
+      ],
+      "gl": [
+        "miniaturas ou diagramas con texto dentro",
+        "texto dentro dun diagrama",
+        "que figuras contenen texto",
+        "{min.} e {diag.} con lenda",
+        "diagramas astronomicos con rotulos",
+        "texto incrustado nas ilustracions"
+      ],
+      "eu": [
+        "barruan testua duten miniaturak edo diagramak",
+        "diagrama baten barruko testua",
+        "zein irudik dute testua",
+        "{min.} eta {diag.} oinarekin",
+        "etiketak dituzten diagrama astronomikoak",
+        "irudietan txertatutako testua"
+      ]
+    }
+  },
+  {
+    "id": "phon.sibilants",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "intervocalic s versus ss",
+        "compare c cedilla and z",
+        "sibilant devoicing evidence",
+        "frequency of -s- and -ss-",
+        "sibilant spellings for devoicing",
+        "c versus z in this text"
+      ],
+      "es": [
+        "s intervocalica frente a ss",
+        "compara c y z",
+        "pruebas del ensordecimiento de sibilantes",
+        "frecuencia de -s- y -ss-",
+        "grafias de las sibilantes",
+        "c frente a z en este texto"
+      ],
+      "pt": [
+        "s intervocalico frente a ss",
+        "compara c e z",
+        "provas do ensurdecimento das sibilantes",
+        "frequencia de -s- e -ss-",
+        "grafias das sibilantes",
+        "c frente a z neste texto"
+      ],
+      "ca": [
+        "s intervocalica enfront de ss",
+        "compara c i z",
+        "proves de l'ensordiment de sibilants",
+        "frequencia de -s- i -ss-",
+        "grafies de les sibilants",
+        "c enfront de z en aquest text"
+      ],
+      "gl": [
+        "s intervocalico fronte a ss",
+        "compara c e z",
+        "probas do ensordecemento das sibilantes",
+        "frecuencia de -s- e -ss-",
+        "grafias das sibilantes",
+        "c fronte a z neste texto"
+      ],
+      "eu": [
+        "bokal arteko s eta ss",
+        "konparatu c eta z",
+        "txistukarien ahoskabetzearen frogak",
+        "-s- eta -ss- maiztasuna",
+        "txistukarien grafiak",
+        "c eta z testu honetan"
+      ]
+    }
+  },
+  {
+    "id": "phon.palatal_nasal",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "how is the palatal nasal spelled",
+        "palatalization n with tilde geminate nn or plain n",
+        "spellings of n",
+        "palatal nasal orthography",
+        "nn n~ n spellings",
+        "rendering of the palatal nasal"
+      ],
+      "es": [
+        "como se escribe la nasal palatal",
+        "palatalizacion n con tilde nn o n simple",
+        "grafias de la n",
+        "ortografia de la nasal palatal",
+        "grafias nn n~ n",
+        "representacion de la ene"
+      ],
+      "pt": [
+        "como se escreve a nasal palatal",
+        "palatalizacao n com til nn ou n simples",
+        "grafias do nh",
+        "ortografia da nasal palatal",
+        "grafias nn n~ nh",
+        "representacao da nasal palatal"
+      ],
+      "ca": [
+        "com s'escriu la nasal palatal",
+        "palatalitzacio n amb titlla nn o n simple",
+        "grafies de la ny",
+        "ortografia de la nasal palatal",
+        "grafies nn n~ ny",
+        "representacio de la nasal palatal"
+      ],
+      "gl": [
+        "como escribe o copista o son do n",
+        "como se escribe a nasal palatal",
+        "palatalizacion n con til nn ou n simple",
+        "grafias do n",
+        "ortografia da nasal palatal",
+        "grafias nn n~ nh",
+        "representacion da nasal palatal"
+      ],
+      "eu": [
+        "nola idazten da sudurkari palatala",
+        "palatalizazioa n tildeduna nn edo n soila",
+        "n-ren grafiak",
+        "sudurkari palatalaren ortografia",
+        "nn n~ nh grafiak",
+        "sudurkari palatalaren irudikapena"
+      ]
+    }
+  },
+  {
+    "id": "phon.palatal_lateral",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "palatal lateral written as ll li or l",
+        "spellings of ll",
+        "lateral palatal orthography",
+        "ll versus li",
+        "how is the palatal l spelled",
+        "lh and ll spellings"
+      ],
+      "es": [
+        "lateral palatal escrita ll li o l",
+        "grafias de la ll",
+        "ortografia de la lateral palatal",
+        "ll frente a li",
+        "como se escribe la elle",
+        "grafias lh y ll"
+      ],
+      "pt": [
+        "lateral palatal escrita ll li ou l",
+        "grafias do lh",
+        "ortografia da lateral palatal",
+        "ll frente a li",
+        "como se escreve o lh",
+        "grafias lh e ll"
+      ],
+      "ca": [
+        "lateral palatal escrita ll li o l",
+        "grafies de la ll",
+        "ortografia de la lateral palatal",
+        "ll enfront de li",
+        "com s'escriu la ela palatal",
+        "grafies lh i ll"
+      ],
+      "gl": [
+        "lateral palatal escrita ll li ou l",
+        "grafias do ll",
+        "ortografia da lateral palatal",
+        "ll fronte a li",
+        "como se escribe o ll",
+        "grafias lh e ll"
+      ],
+      "eu": [
+        "albokari palatala ll li edo l idatzia",
+        "ll-ren grafiak",
+        "albokari palatalaren ortografia",
+        "ll eta li",
+        "nola idazten da ll",
+        "lh eta ll grafiak"
+      ]
+    }
+  },
+  {
+    "id": "phon.apocope",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "final e apocope",
+        "noch versus noche",
+        "words with and without final e",
+        "apocope of final -e",
+        "apocopated forms",
+        "show word-final e loss"
+      ],
+      "es": [
+        "apocope de la e final",
+        "noch frente a noche",
+        "palabras con y sin e final",
+        "apocope de -e",
+        "formas apocopadas",
+        "perdida de la e final"
+      ],
+      "pt": [
+        "apocope do e final",
+        "noch frente a noche",
+        "palavras com e sem e final",
+        "apocope de -e",
+        "formas apocopadas",
+        "perda do e final"
+      ],
+      "ca": [
+        "apocope de la e final",
+        "noch enfront de noche",
+        "paraules amb e final i sense",
+        "apocope de -e",
+        "formes apocopades",
+        "perdua de la e final"
+      ],
+      "gl": [
+        "apocope do e final",
+        "noch fronte a noche",
+        "palabras con e sen e final",
+        "apocope de -e",
+        "formas apocopadas",
+        "perda do e final"
+      ],
+      "eu": [
+        "amaierako e-ren apokopea",
+        "noch eta noche",
+        "amaierako e-rekin eta gabe dauden hitzak",
+        "-e-ren apokopea",
+        "forma apokopatuak",
+        "amaierako e-ren galera"
+      ]
+    }
+  },
+  {
+    "id": "morph.enclisis",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "enclitic pronouns attached to finite verbs",
+        "dixol llamol saliol",
+        "enclisis versus proclisis",
+        "object pronouns after the verb",
+        "verb plus pronoun written together",
+        "clitic placement"
+      ],
+      "es": [
+        "pronombres encliticos unidos al verbo",
+        "dixol llamol saliol",
+        "enclisis frente a proclisis",
+        "pronombres atonos despues del verbo",
+        "verbo y pronombre escritos juntos",
+        "posicion de los cliticos"
+      ],
+      "pt": [
+        "pronomes encliticos ligados ao verbo",
+        "dixol llamol saliol",
+        "enclise frente a proclise",
+        "pronomes atonos depois do verbo",
+        "verbo e pronome escritos juntos",
+        "posicao dos cliticos"
+      ],
+      "ca": [
+        "pronoms enclitics units al verb",
+        "dixol llamol saliol",
+        "enclisi enfront de proclisi",
+        "pronoms febles despres del verb",
+        "verb i pronom escrits junts",
+        "posicio dels clitics"
+      ],
+      "gl": [
+        "pronomes encliticos unidos ao verbo",
+        "dixol llamol saliol",
+        "enclise fronte a proclise",
+        "pronomes atonos despois do verbo",
+        "verbo e pronome escritos xuntos",
+        "posicion dos cliticos"
+      ],
+      "eu": [
+        "aditzari lotutako izenordain enklitikoak",
+        "dixol llamol saliol",
+        "enklisia eta proklisia",
+        "aditzaren ondoko izenordain ahulak",
+        "aditza eta izenordaina elkarrekin idatziak",
+        "klitikoen kokapena"
+      ]
+    }
+  },
+  {
+    "id": "morph.clitic_elision",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "clitic elision yl versus y le",
+        "elided clitic pronouns",
+        "quel nol sil forms",
+        "vowel elision of clitics",
+        "yl recibio",
+        "elision before a lexical base"
+      ],
+      "es": [
+        "elision de cliticos yl frente a y le",
+        "pronombres cliticos elididos",
+        "formas quel nol sil",
+        "elision vocalica de los cliticos",
+        "yl recibio",
+        "elision ante la base lexica"
+      ],
+      "pt": [
+        "elisao de cliticos yl frente a y le",
+        "pronomes cliticos elididos",
+        "formas quel nol sil",
+        "elisao vocalica dos cliticos",
+        "yl recibio",
+        "elisao antes da base lexical"
+      ],
+      "ca": [
+        "elisio de clitics yl enfront de y le",
+        "pronoms clitics elidits",
+        "formes quel nol sil",
+        "elisio vocalica dels clitics",
+        "yl recibio",
+        "elisio davant la base lexica"
+      ],
+      "gl": [
+        "elision de cliticos yl fronte a y le",
+        "pronomes cliticos elididos",
+        "formas quel nol sil",
+        "elision vocalica dos cliticos",
+        "yl recibio",
+        "elision ante a base lexica"
+      ],
+      "eu": [
+        "klitikoen elisioa yl eta y le",
+        "izenordain klitiko elididuak",
+        "quel nol sil formak",
+        "klitikoen bokal-elisioa",
+        "yl recibio",
+        "oinarri lexikoaren aurreko elisioa"
+      ]
+    }
+  },
+  {
+    "id": "morph.contractions",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "merged contractions enel delos sobrel",
+        "prepositional contractions versus separate",
+        "enel versus en el",
+        "list merged function forms",
+        "contractions like entressi",
+        "preposition plus article written together",
+        "preposition and article fused into one word",
+        "words like delos written as a single unit"
+      ],
+      "es": [
+        "preposicion y articulo fundidos en una palabra",
+        "palabras como delos escritas juntas",
+        "contracciones enel delos sobrel",
+        "contracciones preposicionales frente a formas separadas",
+        "enel frente a en el",
+        "lista de formas contractas",
+        "contracciones como entressi",
+        "preposicion y articulo escritos juntos"
+      ],
+      "pt": [
+        "preposicao e artigo fundidos numa palavra",
+        "contracoes enel delos sobrel",
+        "contracoes preposicionais frente a formas separadas",
+        "enel frente a en el",
+        "lista de formas contraidas",
+        "contracoes como entressi",
+        "preposicao e artigo escritos juntos"
+      ],
+      "ca": [
+        "preposicio i article fosos en una paraula",
+        "contraccions enel delos sobrel",
+        "contraccions preposicionals enfront de formes separades",
+        "enel enfront de en el",
+        "llista de formes contretes",
+        "contraccions com entressi",
+        "preposicio i article escrits junts"
+      ],
+      "gl": [
+        "preposicion e artigo fundidos nunha palabra",
+        "contraccions enel delos sobrel",
+        "contraccions preposicionais fronte a formas separadas",
+        "enel fronte a en el",
+        "lista de formas contractas",
+        "contraccions como entressi",
+        "preposicion e artigo escritos xuntos"
+      ],
+      "eu": [
+        "uzkurdurak enel delos sobrel",
+        "preposizio-uzkurdurak eta forma bereiziak",
+        "enel eta en el",
+        "zerrendatu forma uzkurtuak",
+        "entressi bezalako uzkurdurak",
+        "preposizioa eta artikulua elkarrekin idatziak"
+      ]
+    }
+  },
+  {
+    "id": "morph.prefix_separation",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "editorial prefix separation [+]",
+        "de[+]nostados a[+]caudillar",
+        "compounds with prefix separator",
+        "prefixes written apart from the root",
+        "show [+] words",
+        "morphological compounds marked with plus"
+      ],
+      "es": [
+        "separacion editorial de prefijos [+]",
+        "de[+]nostados a[+]caudillar",
+        "compuestos con separador de prefijo",
+        "prefijos escritos aparte de la raiz",
+        "muestra las palabras con [+]",
+        "compuestos morfologicos marcados con mas"
+      ],
+      "pt": [
+        "separacao editorial de prefixos [+]",
+        "de[+]nostados a[+]caudillar",
+        "compostos com separador de prefixo",
+        "prefixos escritos separados da raiz",
+        "mostra as palavras com [+]",
+        "compostos morfologicos marcados com mais"
+      ],
+      "ca": [
+        "separacio editorial de prefixos [+]",
+        "de[+]nostados a[+]caudillar",
+        "compostos amb separador de prefix",
+        "prefixos escrits separats de l'arrel",
+        "mostra les paraules amb [+]",
+        "compostos morfologics marcats amb mes"
+      ],
+      "gl": [
+        "separacion editorial de prefixos [+]",
+        "de[+]nostados a[+]caudillar",
+        "compostos con separador de prefixo",
+        "prefixos escritos a parte da raiz",
+        "amosa as palabras con [+]",
+        "compostos morfoloxicos marcados con mais"
+      ],
+      "eu": [
+        "aurrizkien bereizketa editoriala [+]",
+        "de[+]nostados a[+]caudillar",
+        "aurrizki-bereizlea duten konposatuak",
+        "errotik bereizita idatzitako aurrizkiak",
+        "erakutsi [+] duten hitzak",
+        "plus ikurrez markatutako konposatu morfologikoak"
+      ]
+    }
+  },
+  {
+    "id": "morph.prefix_linebreak",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "prefix split from its root at line end",
+        "de[+]- at the end of a line",
+        "line break between prefix and root",
+        "divided prefixed words",
+        "prefix separator before a hyphen",
+        "[+]- line ends"
+      ],
+      "es": [
+        "prefijo separado de la raiz a final de linea",
+        "de[+]- al final de la linea",
+        "salto de linea entre prefijo y raiz",
+        "palabras con prefijo divididas",
+        "separador de prefijo antes de guion",
+        "finales de linea con [+]-"
+      ],
+      "pt": [
+        "prefixo separado da raiz no fim da linha",
+        "de[+]- no fim da linha",
+        "quebra de linha entre prefixo e raiz",
+        "palavras com prefixo divididas",
+        "separador de prefixo antes de hifen",
+        "fins de linha com [+]-"
+      ],
+      "ca": [
+        "prefix separat de l'arrel a final de linia",
+        "de[+]- al final de la linia",
+        "salt de linia entre prefix i arrel",
+        "paraules prefixades dividides",
+        "separador de prefix abans de guionet",
+        "finals de linia amb [+]-"
+      ],
+      "gl": [
+        "prefixo separado da raiz a final de lina",
+        "de[+]- ao final da lina",
+        "salto de lina entre prefixo e raiz",
+        "palabras con prefixo divididas",
+        "separador de prefixo antes de guion",
+        "finais de lina con [+]-"
+      ],
+      "eu": [
+        "lerro-amaieran errotik bereizitako aurrizkia",
+        "de[+]- lerroaren amaieran",
+        "aurrizkiaren eta erroaren arteko lerro-jauzia",
+        "aurrizkidun hitz zatituak",
+        "aurrizki-bereizlea marratxoaren aurretik",
+        "[+]- duten lerro-amaierak"
+      ]
+    }
+  },
+  {
+    "id": "lex.latinate_doublets",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "learned latinate spellings versus vernacular",
+        "sancto versus santo",
+        "latinate doublets",
+        "fcta expanded as fecha",
+        "learned spellings",
+        "etymological spellings"
+      ],
+      "es": [
+        "grafias cultas latinizantes frente a populares",
+        "sancto frente a santo",
+        "dobletes latinizantes",
+        "fcta desarrollado como fecha",
+        "grafias cultas",
+        "grafias etimologicas"
+      ],
+      "pt": [
+        "grafias cultas latinizantes frente a populares",
+        "sancto frente a santo",
+        "dupletos latinizantes",
+        "fcta desdobrado como fecha",
+        "grafias cultas",
+        "grafias etimologicas"
+      ],
+      "ca": [
+        "grafies cultes llatinitzants enfront de populars",
+        "sancto enfront de santo",
+        "doblets llatinitzants",
+        "fcta desenvolupat com fecha",
+        "grafies cultes",
+        "grafies etimologiques"
+      ],
+      "gl": [
+        "grafias cultas latinizantes fronte a populares",
+        "sancto fronte a santo",
+        "dobletes latinizantes",
+        "fcta desenvolvido como fecha",
+        "grafias cultas",
+        "grafias etimoloxicas"
+      ],
+      "eu": [
+        "grafia jaso latinizatzaileak eta herrikoiak",
+        "sancto eta santo",
+        "bikote latinizatzaileak",
+        "fcta fecha gisa garatua",
+        "grafia jasoak",
+        "grafia etimologikoak"
+      ]
+    }
+  },
+  {
+    "id": "lex.greek_formulas",
+    "version": 1,
+    "tier": "B",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "greek character formulas xp ih",
+        "nomina sacra",
+        "xp for chr",
+        "ih for jhes",
+        "fossilized greek formulas",
+        "xpo xpiano ihesu",
+        "christ and jesus abbreviated with greek letters",
+        "chrismon abbreviations xps"
+      ],
+      "es": [
+        "abreviaturas de cristo y jesus con letras griegas",
+        "formulas con letras griegas xp ih",
+        "nomina sacra",
+        "xp por chr",
+        "ih por jhes",
+        "formulas griegas fosilizadas",
+        "xpo xpiano ihesu"
+      ],
+      "pt": [
+        "formulas com letras gregas xp ih",
+        "nomina sacra",
+        "xp por chr",
+        "ih por jhes",
+        "formulas gregas fossilizadas",
+        "xpo xpiano ihesu"
+      ],
+      "ca": [
+        "formules amb lletres gregues xp ih",
+        "nomina sacra",
+        "xp per chr",
+        "ih per jhes",
+        "formules gregues fossilitzades",
+        "xpo xpiano ihesu"
+      ],
+      "gl": [
+        "formulas con letras gregas xp ih",
+        "nomina sacra",
+        "xp por chr",
+        "ih por jhes",
+        "formulas gregas fosilizadas",
+        "xpo xpiano ihesu"
+      ],
+      "eu": [
+        "kristo eta jesusen laburdurak",
+        "letra grekoko formulak xp ih",
+        "nomina sacra",
+        "xp chr-ren ordez",
+        "ih jhes-en ordez",
+        "formula greko fosilizatuak",
+        "xpo xpiano ihesu"
+      ]
+    }
+  },
+  {
+    "id": "dial.tagged_spans",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "aragonese or leonese features",
+        "tagged dialect spans {arg.}",
+        "dialect markers in the castilian text",
+        "regional dialect passages",
+        "aragonese words",
+        "ibero-romance dialect spans",
+        "passages marked as aragonese",
+        "spans tagged with a dialect code"
+      ],
+      "es": [
+        "pasajes marcados como aragoneses",
+        "rasgos aragoneses o leoneses",
+        "tramos dialectales etiquetados {arg.}",
+        "marcas dialectales en el texto castellano",
+        "pasajes en dialecto",
+        "palabras aragonesas",
+        "tramos dialectales iberorromanicos"
+      ],
+      "pt": [
+        "tracos aragoneses ou leoneses",
+        "trechos dialetais etiquetados {arg.}",
+        "marcas dialetais no texto castelhano",
+        "passos em dialeto",
+        "palavras aragonesas",
+        "trechos dialetais ibero-romanicos"
+      ],
+      "ca": [
+        "passatges marcats com a aragonesos",
+        "trets aragonesos o lleonesos",
+        "trams dialectals etiquetats {arg.}",
+        "marques dialectals en el text castella",
+        "passatges en dialecte",
+        "paraules aragoneses",
+        "trams dialectals iberoromanics"
+      ],
+      "gl": [
+        "trazos aragoneses ou leoneses",
+        "tramos dialectais etiquetados {arg.}",
+        "marcas dialectais no texto castelan",
+        "pasaxes en dialecto",
+        "palabras aragonesas",
+        "tramos dialectais iberorromanicos"
+      ],
+      "eu": [
+        "aragoiartzat markatutako pasarteak",
+        "ezaugarri aragoiarrak edo leondarrak",
+        "etiketatutako tarte dialektalak {arg.}",
+        "marka dialektalak gaztelaniazko testuan",
+        "dialektoko pasarteak",
+        "hitz aragoiarrak",
+        "tarte dialektal iberoerromantzeak"
+      ]
+    }
+  },
+  {
+    "id": "aljamiado.symb_spans",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "aljamiado transliterated spans",
+        "{symb: transliterated}",
+        "ladino transliteration",
+        "hebrew or arabic script passages",
+        "transliterated material",
+        "aljamiado mapping"
+      ],
+      "es": [
+        "tramos aljamiados transliterados",
+        "{symb: transliterado}",
+        "transliteracion ladina",
+        "pasajes en escritura hebrea o arabe",
+        "material transliterado",
+        "correspondencias aljamiadas"
+      ],
+      "pt": [
+        "trechos aljamiados transliterados",
+        "{symb: transliterado}",
+        "transliteracao ladina",
+        "passos em escrita hebraica ou arabe",
+        "material transliterado",
+        "correspondencias aljamiadas"
+      ],
+      "ca": [
+        "trams aljamiats transliterats",
+        "{symb: transliterat}",
+        "transliteracio ladina",
+        "passatges en escriptura hebrea o arab",
+        "material transliterat",
+        "correspondencies aljamiades"
+      ],
+      "gl": [
+        "tramos aljamiados transliterados",
+        "{symb: transliterado}",
+        "transliteracion ladina",
+        "pasaxes en escrita hebrea ou arabe",
+        "material transliterado",
+        "correspondencias aljamiadas"
+      ],
+      "eu": [
+        "transliteratutako tarte aljamiatuak",
+        "{symb: transliteratua}",
+        "transliterazio ladinoa",
+        "hebreerazko edo arabierazko idazkerako pasarteak",
+        "material transliteratua",
+        "korrespondentzia aljamiatuak"
+      ]
+    }
+  },
+  {
+    "id": "syntax.punctuation",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "scribal punctuation colons virgules periods",
+        "breath group punctuation",
+        "punctuation relative to clause boundaries",
+        "where does the scribe place colons",
+        "punctuation by line position",
+        "medieval punctuation marks",
+        "how the scribe punctuates",
+        "punctuation habits of the copyist"
+      ],
+      "es": [
+        "como puntua el copista",
+        "puntuacion del copista dos puntos virgulillas puntos",
+        "puntuacion y grupos fonicos",
+        "puntuacion y limites de clausula",
+        "donde pone el copista los dos puntos",
+        "puntuacion segun la posicion en la linea",
+        "signos de puntuacion medievales"
+      ],
+      "pt": [
+        "como pontua o copista",
+        "pontuacao do copista dois pontos virgulas pontos",
+        "pontuacao e grupos fonicos",
+        "pontuacao e limites de oracao",
+        "onde o copista poe os dois pontos",
+        "pontuacao segundo a posicao na linha",
+        "sinais de pontuacao medievais"
+      ],
+      "ca": [
+        "puntuacio del copista dos punts virgules punts",
+        "puntuacio i grups fonics",
+        "puntuacio i limits de clausula",
+        "on posa el copista els dos punts",
+        "puntuacio segons la posicio a la linia",
+        "signes de puntuacio medievals"
+      ],
+      "gl": [
+        "como puntua o copista",
+        "puntuacion do copista dous puntos virgulas puntos",
+        "puntuacion e grupos fonicos",
+        "puntuacion e limites de clausula",
+        "onde pon o copista os dous puntos",
+        "puntuacion segundo a posicion na lina",
+        "signos de puntuacion medievais"
+      ],
+      "eu": [
+        "kopistaren puntuazioa bi puntu birgulak puntuak",
+        "puntuazioa eta multzo fonikoak",
+        "puntuazioa eta perpaus-mugak",
+        "non jartzen ditu kopistak bi puntuak",
+        "puntuazioa lerroko posizioaren arabera",
+        "erdi aroko puntuazio-ikurrak"
+      ]
+    }
+  },
+  {
+    "id": "discourse.calderones",
+    "version": 1,
+    "tier": "A",
+    "category": "linguistics",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "calderones as discourse markers",
+        "paragraph marks and speaker turns",
+        "how consistently are % %2 %3 used",
+        "calderon before dialogue",
+        "pilcrows in dialogue",
+        "discourse shifts marked with calderones"
+      ],
+      "es": [
+        "calderones como marcadores del discurso",
+        "calderones y cambios de interlocutor",
+        "uso coherente de % %2 %3",
+        "calderon antes del dialogo",
+        "calderones en el dialogo",
+        "cambios de discurso marcados con calderones"
+      ],
+      "pt": [
+        "caldeiroes como marcadores do discurso",
+        "caldeiroes e mudanca de interlocutor",
+        "uso coerente de % %2 %3",
+        "caldeirao antes do dialogo",
+        "caldeiroes no dialogo",
+        "mudancas de discurso marcadas com caldeiroes"
+      ],
+      "ca": [
+        "calderons com a marcadors del discurs",
+        "calderons i canvis d'interlocutor",
+        "us coherent de % %2 %3",
+        "caldero abans del dialeg",
+        "calderons al dialeg",
+        "canvis de discurs marcats amb calderons"
+      ],
+      "gl": [
+        "calderons como marcadores do discurso",
+        "calderons e cambios de interlocutor",
+        "uso coherente de % %2 %3",
+        "calderon antes do dialogo",
+        "calderons no dialogo",
+        "cambios de discurso marcados con calderons"
+      ],
+      "eu": [
+        "kalderoiak eta estilo zuzena",
+        "kalderoiak diskurtso-markatzaile gisa",
+        "kalderoiak eta solaskide-aldaketak",
+        "% %2 %3 erabilera koherentea",
+        "kalderoia elkarrizketaren aurretik",
+        "kalderoiak elkarrizketan",
+        "kalderoiekin markatutako diskurtso-aldaketak"
+      ]
+    }
+  },
+  {
+    "id": "stats.ttr_hapax",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "type token ratio and hapax legomena",
+        "lexical richness of this manuscript",
+        "ttr per quire",
+        "how many hapax legomena",
+        "vocabulary size statistics",
+        "standardized type token ratio"
+      ],
+      "es": [
+        "relacion tipo token y hapax",
+        "riqueza lexica de este manuscrito",
+        "ttr por cuaderno",
+        "cuantos hapax legomenos hay",
+        "estadisticas del vocabulario",
+        "relacion tipo token estandarizada"
+      ],
+      "pt": [
+        "relacao tipo token e hapax",
+        "riqueza lexical deste manuscrito",
+        "ttr por caderno",
+        "quantos hapax legomenos ha",
+        "estatisticas do vocabulario",
+        "relacao tipo token padronizada"
+      ],
+      "ca": [
+        "relacio tipus token i hapax",
+        "riquesa lexica d'aquest manuscrit",
+        "ttr per quadern",
+        "quants hapax legomens hi ha",
+        "estadistiques del vocabulari",
+        "relacio tipus token estandarditzada"
+      ],
+      "gl": [
+        "relacion tipo token e hapax",
+        "riqueza lexica deste manuscrito",
+        "ttr por caderno",
+        "cantos hapax legomenos hai",
+        "estatisticas do vocabulario",
+        "relacion tipo token estandarizada"
+      ],
+      "eu": [
+        "mota eta token erlazioa eta hapaxak",
+        "eskuizkribu honen aberastasun lexikoa",
+        "ttr koadernoka",
+        "zenbat hapax legomena daude",
+        "hiztegiaren estatistikak",
+        "mota eta token erlazio estandarizatua"
+      ]
+    }
+  },
+  {
+    "id": "stats.top_lemmas",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "most frequent lemmas without function words",
+        "top 50 lemmas",
+        "frequency list",
+        "rank the most common words",
+        "word frequency ranking",
+        "commonest content words"
+      ],
+      "es": [
+        "lemas mas frecuentes sin palabras gramaticales",
+        "los 50 lemas mas frecuentes",
+        "lista de frecuencias",
+        "clasifica las palabras mas comunes",
+        "ranking de frecuencia de palabras",
+        "palabras lexicas mas comunes"
+      ],
+      "pt": [
+        "lemas mais frequentes sem palavras gramaticais",
+        "os 50 lemas mais frequentes",
+        "lista de frequencias",
+        "classifica as palavras mais comuns",
+        "ranking de frequencia das palavras",
+        "palavras lexicais mais comuns"
+      ],
+      "ca": [
+        "lemes mes frequents sense mots gramaticals",
+        "els 50 lemes mes frequents",
+        "llista de frequencies",
+        "classifica les paraules mes comunes",
+        "ranquing de frequencia de paraules",
+        "paraules lexiques mes comunes"
+      ],
+      "gl": [
+        "lemas mais frecuentes sen palabras gramaticais",
+        "os 50 lemas mais frecuentes",
+        "lista de frecuencias",
+        "clasifica as palabras mais comuns",
+        "ranking de frecuencia de palabras",
+        "palabras lexicas mais comuns"
+      ],
+      "eu": [
+        "lema ohikoenak hitz gramatikalik gabe",
+        "50 lema ohikoenak",
+        "maiztasun-zerrenda",
+        "sailkatu hitz ohikoenak",
+        "hitzen maiztasun-sailkapena",
+        "eduki-hitz ohikoenak"
+      ]
+    }
+  },
+  {
+    "id": "stats.variant_share",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "on_demand",
+    "triggers": {
+      "en": [
+        "what percentage of the verb appear as each spelling",
+        "orthographic variants of a lemma",
+        "spelling variants of fazer",
+        "fazer facer facer percentages",
+        "variant distribution for a word",
+        "how is this word spelled"
+      ],
+      "es": [
+        "que porcentaje aparece con cada grafia",
+        "variantes ortograficas de un lema",
+        "variantes graficas de fazer",
+        "porcentajes de fazer facer facer",
+        "distribucion de variantes de una palabra",
+        "como se escribe esta palabra"
+      ],
+      "pt": [
+        "que percentagem aparece com cada grafia",
+        "variantes ortograficas de um lema",
+        "variantes graficas de fazer",
+        "porcentagens de fazer facer facer",
+        "distribuicao das variantes de uma palavra",
+        "como se escreve esta palavra"
+      ],
+      "ca": [
+        "quin percentatge apareix amb cada grafia",
+        "variants ortografiques d'un lema",
+        "variants grafiques de fazer",
+        "percentatges de fazer facer facer",
+        "distribucio de variants d'una paraula",
+        "com s'escriu aquesta paraula"
+      ],
+      "gl": [
+        "que porcentaxe aparece con cada grafia",
+        "variantes ortograficas dun lema",
+        "variantes graficas de fazer",
+        "porcentaxes de fazer facer facer",
+        "distribucion de variantes dunha palabra",
+        "como se escribe esta palabra"
+      ],
+      "eu": [
+        "zer ehunekotan agertzen da grafia bakoitza",
+        "lema baten aldaera ortografikoak",
+        "fazer-en aldaera grafikoak",
+        "fazer facer facer ehunekoak",
+        "hitz baten aldaeren banaketa",
+        "nola idazten da hitz hau"
+      ]
+    }
+  },
+  {
+    "id": "stats.zipf",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "zipfian distribution",
+        "rank frequency curve",
+        "zipf slope",
+        "frequency by rank",
+        "does the text follow zipf's law",
+        "log log rank frequency"
+      ],
+      "es": [
+        "distribucion de zipf",
+        "curva de rango y frecuencia",
+        "pendiente de zipf",
+        "frecuencia segun el rango",
+        "sigue el texto la ley de zipf",
+        "rango frecuencia logaritmico"
+      ],
+      "pt": [
+        "distribuicao de zipf",
+        "curva de posicao e frequencia",
+        "declive de zipf",
+        "frequencia segundo a posicao",
+        "o texto segue a lei de zipf",
+        "posicao frequencia logaritmica"
+      ],
+      "ca": [
+        "distribucio de zipf",
+        "corba de rang i frequencia",
+        "pendent de zipf",
+        "frequencia segons el rang",
+        "segueix el text la llei de zipf",
+        "rang frequencia logaritmic"
+      ],
+      "gl": [
+        "distribucion de zipf",
+        "curva de rango e frecuencia",
+        "pendente de zipf",
+        "frecuencia segundo o rango",
+        "segue o texto a lei de zipf",
+        "rango frecuencia logaritmico"
+      ],
+      "eu": [
+        "zipf banaketa",
+        "maila eta maiztasun kurba",
+        "zipf malda",
+        "maiztasuna mailaren arabera",
+        "zipf-en legea betetzen du testuak",
+        "maila maiztasun logaritmikoa"
+      ]
+    }
+  },
+  {
+    "id": "colloc.window",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "on_demand",
+    "triggers": {
+      "en": [
+        "mutual information or t-score within a 5-word window",
+        "collocates of rey",
+        "words co-occurring with emperador",
+        "collocation analysis",
+        "pmi t-score log-likelihood collocates",
+        "what words appear near"
+      ],
+      "es": [
+        "informacion mutua o puntuacion t en una ventana de 5 palabras",
+        "colocaciones de rey",
+        "palabras que coaparecen con emperador",
+        "analisis de colocaciones",
+        "colocados por pmi t y verosimilitud",
+        "que palabras aparecen cerca de"
+      ],
+      "pt": [
+        "informacao mutua ou pontuacao t numa janela de 5 palavras",
+        "colocacoes de rey",
+        "palavras que coocorrem com imperador",
+        "analise de colocacoes",
+        "colocados por pmi t e verossimilhanca",
+        "que palavras aparecem perto de"
+      ],
+      "ca": [
+        "informacio mutua o puntuacio t en una finestra de 5 paraules",
+        "col·locacions de rey",
+        "paraules que coapareixen amb emperador",
+        "analisi de col·locacions",
+        "col·locats per pmi t i versemblanca",
+        "quines paraules apareixen a prop de"
+      ],
+      "gl": [
+        "informacion mutua ou puntuacion t nunha xanela de 5 palabras",
+        "colocacions de rey",
+        "palabras que coaparecen con emperador",
+        "analise de colocacions",
+        "colocados por pmi t e verosimilitude",
+        "que palabras aparecen preto de"
+      ],
+      "eu": [
+        "elkarrekiko informazioa edo t puntuazioa 5 hitzeko leihoan",
+        "rey-ren kolokazioak",
+        "enperadorearekin batera agertzen diren hitzak",
+        "kolokazio-analisia",
+        "pmi t eta egiantz kolokatuak",
+        "zein hitz agertzen dira ondoan"
+      ]
+    }
+  },
+  {
+    "id": "ngrams.top",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "top 3-gram and 4-gram formulaic sequences",
+        "recurring phrases",
+        "most frequent trigrams",
+        "n-gram frequency",
+        "formulaic sequences",
+        "repeated word sequences"
+      ],
+      "es": [
+        "trigramas y tetragramas formulaicos mas frecuentes",
+        "frases recurrentes",
+        "trigramas mas frecuentes",
+        "frecuencia de n-gramas",
+        "secuencias formulaicas",
+        "secuencias de palabras repetidas"
+      ],
+      "pt": [
+        "trigramas e tetragramas formulaicos mais frequentes",
+        "frases recorrentes",
+        "trigramas mais frequentes",
+        "frequencia de n-gramas",
+        "sequencias formulaicas",
+        "sequencias de palavras repetidas"
+      ],
+      "ca": [
+        "trigrames i tetragrames formulaics mes frequents",
+        "frases recurrents",
+        "trigrames mes frequents",
+        "frequencia de n-grames",
+        "sequencies formularies",
+        "sequencies de paraules repetides"
+      ],
+      "gl": [
+        "trigramas e tetragramas formulaicos mais frecuentes",
+        "frases recorrentes",
+        "trigramas mais frecuentes",
+        "frecuencia de n-gramas",
+        "secuencias formulaicas",
+        "secuencias de palabras repetidas"
+      ],
+      "eu": [
+        "trigrama eta tetragrama formulaiko ohikoenak",
+        "esaldi errepikakorrak",
+        "trigrama ohikoenak",
+        "n-gramen maiztasuna",
+        "sekuentzia formulaikoak",
+        "errepikatutako hitz-sekuentziak"
+      ]
+    }
+  },
+  {
+    "id": "colloc.prep_article",
+    "version": 1,
+    "tier": "B",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "en plus definite article versus zero article",
+        "enel en la en los",
+        "co-occurrence of en and the article",
+        "zero-article forms after en",
+        "preposition article collocation",
+        "en with and without article",
+        "how often does en take an article",
+        "en with or without the article"
+      ],
+      "es": [
+        "con que frecuencia lleva articulo en",
+        "en mas articulo frente a sin articulo",
+        "enel en la en los",
+        "coaparicion de en y el articulo",
+        "formas sin articulo despues de en",
+        "colocacion preposicion articulo",
+        "en con y sin articulo"
+      ],
+      "pt": [
+        "em mais artigo frente a sem artigo",
+        "no na nos nas",
+        "coocorrencia da preposicao e do artigo",
+        "formas sem artigo depois de em",
+        "colocacao preposicao artigo",
+        "preposicao com e sem artigo"
+      ],
+      "ca": [
+        "en mes article enfront de sense article",
+        "enel en la en los",
+        "coaparicio de en i l'article",
+        "formes sense article despres de en",
+        "col·locacio preposicio article",
+        "en amb article i sense"
+      ],
+      "gl": [
+        "en mais artigo fronte a sen artigo",
+        "enel en la en los",
+        "coaparicion de en e o artigo",
+        "formas sen artigo despois de en",
+        "colocacion preposicion artigo",
+        "en con artigo e sen el"
+      ],
+      "eu": [
+        "en gehi artikulua eta artikulurik gabe",
+        "enel en la en los",
+        "en eta artikuluaren agerkidetza",
+        "en ondoren artikulurik gabeko formak",
+        "preposizio artikulu kolokazioa",
+        "en artikuluarekin eta gabe"
+      ]
+    }
+  },
+  {
+    "id": "morph.subordinators",
+    "version": 1,
+    "tier": "B",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "porque paraque anteque puesque as single units versus separated",
+        "complex subordinating conjunctions",
+        "subordinator spelling",
+        "porque versus por que",
+        "fused subordinators",
+        "conjunctions written as one word"
+      ],
+      "es": [
+        "porque paraque anteque puesque juntos o separados",
+        "conjunciones subordinantes complejas",
+        "grafia de los subordinantes",
+        "porque frente a por que",
+        "subordinantes fusionados",
+        "conjunciones escritas en una sola palabra"
+      ],
+      "pt": [
+        "porque paraque anteque juntos ou separados",
+        "conjuncoes subordinativas complexas",
+        "grafia dos subordinantes",
+        "porque frente a por que",
+        "subordinantes fundidos",
+        "conjuncoes escritas numa so palavra"
+      ],
+      "ca": [
+        "porque paraque anteque junts o separats",
+        "conjuncions subordinants complexes",
+        "grafia dels subordinants",
+        "perque enfront de per que",
+        "subordinants fusionats",
+        "conjuncions escrites en una sola paraula"
+      ],
+      "gl": [
+        "porque paraque anteque xuntos ou separados",
+        "conxuncions subordinantes complexas",
+        "grafia dos subordinantes",
+        "porque fronte a por que",
+        "subordinantes fusionados",
+        "conxuncions escritas nunha soa palabra"
+      ],
+      "eu": [
+        "porque paraque anteque batera edo bereizita",
+        "menderagailu konplexuak",
+        "menderagailuen grafia",
+        "porque eta por que",
+        "menderagailu fusionatuak",
+        "hitz bakarrean idatzitako juntagailuak"
+      ]
+    }
+  },
+  {
+    "id": "morph.prefix_productivity",
+    "version": 1,
+    "tier": "A",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "prefix productivity",
+        "count prefixed verbs marked with [+]",
+        "prefixes by semantic domain",
+        "which prefixes are most productive",
+        "prefix frequency",
+        "productive prefixes"
+      ],
+      "es": [
+        "productividad de los prefijos",
+        "cuenta los verbos prefijados marcados con [+]",
+        "prefijos por dominio semantico",
+        "que prefijos son mas productivos",
+        "frecuencia de prefijos",
+        "prefijos productivos"
+      ],
+      "pt": [
+        "produtividade dos prefixos",
+        "conta os verbos prefixados marcados com [+]",
+        "prefixos por dominio semantico",
+        "que prefixos sao mais produtivos",
+        "frequencia de prefixos",
+        "prefixos produtivos"
+      ],
+      "ca": [
+        "productivitat dels prefixos",
+        "compta els verbs prefixats marcats amb [+]",
+        "prefixos per domini semantic",
+        "quins prefixos son mes productius",
+        "frequencia de prefixos",
+        "prefixos productius"
+      ],
+      "gl": [
+        "produtividade dos prefixos",
+        "conta os verbos prefixados marcados con [+]",
+        "prefixos por dominio semantico",
+        "que prefixos son mais produtivos",
+        "frecuencia de prefixos",
+        "prefixos produtivos"
+      ],
+      "eu": [
+        "aurrizkien emankortasuna",
+        "zenbatu [+] markatutako aditz aurrizkidunak",
+        "aurrizkiak eremu semantikoaren arabera",
+        "zein aurrizki dira emankorrenak",
+        "aurrizkien maiztasuna",
+        "aurrizki emankorrak"
+      ]
+    }
+  },
+  {
+    "id": "codex.catchword_hyphen_bias",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "do catchwords at quire feet show more hyphenated words",
+        "page position lexical bias",
+        "hyphenation at quire ends versus internal lines",
+        "statistical test for hyphens at the foot",
+        "divided words at catchword pages",
+        "hyphen frequency by page position"
+      ],
+      "es": [
+        "hay mas palabras partidas al pie de los cuadernos",
+        "sesgo lexico segun la posicion en la pagina",
+        "guiones al final de cuaderno frente a lineas interiores",
+        "prueba estadistica de guiones al pie",
+        "palabras divididas en paginas con reclamo",
+        "frecuencia de guiones segun la posicion"
+      ],
+      "pt": [
+        "palavras partidas na ultima linha do caderno",
+        "ha mais palavras divididas no pe dos cadernos",
+        "vies lexical segundo a posicao na pagina",
+        "hifenes no fim do caderno frente a linhas interiores",
+        "teste estatistico de hifenes no pe",
+        "palavras divididas em paginas com reclamo",
+        "frequencia de hifenes segundo a posicao"
+      ],
+      "ca": [
+        "hi ha mes paraules partides al peu dels quaderns",
+        "biaix lexic segons la posicio a la pagina",
+        "guionets al final de quadern enfront de linies interiors",
+        "prova estadistica de guionets al peu",
+        "paraules dividides a pagines amb reclam",
+        "frequencia de guionets segons la posicio"
+      ],
+      "gl": [
+        "hai mais palabras partidas ao pe dos cadernos",
+        "nesgo lexico segundo a posicion na paxina",
+        "guions ao final do caderno fronte a linas interiores",
+        "proba estatistica de guions ao pe",
+        "palabras divididas en paxinas con reclamo",
+        "frecuencia de guions segundo a posicion"
+      ],
+      "eu": [
+        "hitz zatitu gehiago al dago koadernoen oinean",
+        "alborapen lexikoa orriko posizioaren arabera",
+        "marratxoak koaderno-amaieran eta barneko lerroetan",
+        "oineko marratxoen proba estatistikoa",
+        "deia duten orrietako hitz zatituak",
+        "marratxoen maiztasuna posizioaren arabera"
+      ]
+    }
+  },
+  {
+    "id": "marg.vocab_ratio",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "unique vocabulary in marginal glosses versus the body",
+        "gloss-only words",
+        "ratio of gloss vocabulary",
+        "words that only appear in glosses",
+        "margin versus body vocabulary",
+        "new words introduced in the margins"
+      ],
+      "es": [
+        "vocabulario exclusivo de las glosas frente al cuerpo",
+        "palabras que solo aparecen en glosas",
+        "proporcion del vocabulario de las glosas",
+        "lexico de los margenes",
+        "margen frente a cuerpo del texto",
+        "palabras nuevas introducidas en los margenes"
+      ],
+      "pt": [
+        "vocabulario exclusivo das glosas frente ao corpo",
+        "palavras que so aparecem nas glosas",
+        "proporcao do vocabulario das glosas",
+        "lexico das margens",
+        "margem frente ao corpo do texto",
+        "palavras novas introduzidas nas margens"
+      ],
+      "ca": [
+        "vocabulari exclusiu de les glosses enfront del cos",
+        "paraules que nomes surten a les glosses",
+        "proporcio del vocabulari de les glosses",
+        "lexic dels marges",
+        "marge enfront del cos del text",
+        "paraules noves introduides als marges"
+      ],
+      "gl": [
+        "vocabulario exclusivo das glosas fronte ao corpo",
+        "palabras que so aparecen nas glosas",
+        "proporcion do vocabulario das glosas",
+        "lexico das marxes",
+        "marxe fronte ao corpo do texto",
+        "palabras novas introducidas nas marxes"
+      ],
+      "eu": [
+        "glosen hiztegi bereizgarria gorputzaren aldean",
+        "glosetan bakarrik agertzen diren hitzak",
+        "glosen hiztegiaren proportzioa",
+        "ertzetako lexikoa",
+        "ertza eta testuaren gorputza",
+        "ertzetan sartutako hitz berriak"
+      ]
+    }
+  },
+  {
+    "id": "compare.diachronic",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "on_demand",
+    "triggers": {
+      "en": [
+        "frequency change across centuries",
+        "trace the decline of abbreviations by century",
+        "plot nn versus n~ by decade",
+        "chronological shifts across witnesses",
+        "13th versus 15th century witnesses",
+        "diachronic spelling standardisation"
+      ],
+      "es": [
+        "cambio de frecuencia a lo largo de los siglos",
+        "declive de las abreviaturas por siglo",
+        "nn frente a n~ por decadas",
+        "cambios cronologicos entre testimonios",
+        "testimonios del siglo xiii frente al xv",
+        "estandarizacion ortografica diacronica"
+      ],
+      "pt": [
+        "mudanca de frequencia ao longo dos seculos",
+        "declinio das abreviaturas por seculo",
+        "nn frente a n~ por decadas",
+        "mudancas cronologicas entre testemunhos",
+        "testemunhos do seculo xiii frente ao xv",
+        "padronizacao ortografica diacronica"
+      ],
+      "ca": [
+        "canvi de frequencia al llarg dels segles",
+        "declivi de les abreviatures per segle",
+        "nn enfront de n~ per decades",
+        "canvis cronologics entre testimonis",
+        "testimonis del segle xiii enfront del xv",
+        "estandarditzacio ortografica diacronica"
+      ],
+      "gl": [
+        "cambio de frecuencia ao longo dos seculos",
+        "declive das abreviaturas por seculo",
+        "nn fronte a n~ por decadas",
+        "cambios cronoloxicos entre testemunos",
+        "testemunos do seculo xiii fronte ao xv",
+        "estandarizacion ortografica diacronica"
+      ],
+      "eu": [
+        "maiztasun-aldaketa mendeetan zehar",
+        "laburduren beherakada mendeka",
+        "nn eta n~ hamarkadaka",
+        "lekukoen arteko aldaketa kronologikoak",
+        "xiii eta xv. mendeko lekukoak",
+        "estandarizazio ortografiko diakronikoa"
+      ]
+    }
+  },
+  {
+    "id": "compare.genre",
+    "version": 1,
+    "tier": "C",
+    "category": "corpus",
+    "precompute": "on_demand",
+    "triggers": {
+      "en": [
+        "lexical density of astronomical treatises versus legal texts",
+        "compare genres",
+        "genre comparison",
+        "literary versus legal texts",
+        "lexical density by genre",
+        "how do genres differ"
+      ],
+      "es": [
+        "densidad lexica de tratados astronomicos frente a textos juridicos",
+        "compara generos",
+        "comparacion entre generos",
+        "textos literarios frente a juridicos",
+        "densidad lexica por genero",
+        "en que se diferencian los generos"
+      ],
+      "pt": [
+        "densidade lexical dos tratados astronomicos frente aos textos juridicos",
+        "compara generos",
+        "comparacao entre generos",
+        "textos literarios frente a juridicos",
+        "densidade lexical por genero",
+        "em que diferem os generos"
+      ],
+      "ca": [
+        "densitat lexica dels tractats astronomics enfront dels textos juridics",
+        "compara generes",
+        "comparacio entre generes",
+        "textos literaris enfront de juridics",
+        "densitat lexica per genere",
+        "en que es diferencien els generes"
+      ],
+      "gl": [
+        "densidade lexica dos tratados astronomicos fronte aos textos xuridicos",
+        "compara xeneros",
+        "comparacion entre xeneros",
+        "textos literarios fronte a xuridicos",
+        "densidade lexica por xenero",
+        "en que se diferencian os xeneros"
+      ],
+      "eu": [
+        "tratatu astronomikoen dentsitate lexikoa testu juridikoen aldean",
+        "konparatu generoak",
+        "generoen arteko konparazioa",
+        "testu literarioak eta juridikoak",
+        "dentsitate lexikoa generoka",
+        "zertan desberdintzen dira generoak"
+      ]
+    }
+  },
+  {
+    "id": "syntax.clitic_position",
+    "version": 1,
+    "tier": "D",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "enclitic versus proclitic in main versus subordinate clauses",
+        "clitic position statistics by clause type",
+        "post-verbal versus pre-verbal pronouns",
+        "clitic placement main clause subordinate clause",
+        "percentage of enclitic pronouns",
+        "clitic position by clause"
+      ],
+      "es": [
+        "encliticos frente a procliticos en oraciones principales y subordinadas",
+        "posicion del clitico por tipo de clausula",
+        "pronombres posverbales frente a preverbales",
+        "colocacion del clitico en principal y subordinada",
+        "porcentaje de pronombres encliticos",
+        "posicion de los cliticos por clausula"
+      ],
+      "pt": [
+        "encliticos frente a procliticos em oracoes principais e subordinadas",
+        "posicao do clitico por tipo de oracao",
+        "pronomes pos-verbais frente a pre-verbais",
+        "colocacao do clitico em principal e subordinada",
+        "percentagem de pronomes encliticos",
+        "posicao dos cliticos por oracao"
+      ],
+      "ca": [
+        "enclitics enfront de proclitics en oracions principals i subordinades",
+        "posicio del clitic per tipus d'oracio",
+        "pronoms postverbals enfront de preverbals",
+        "col·locacio del clitic en principal i subordinada",
+        "percentatge de pronoms enclitics",
+        "posicio dels clitics per oracio"
+      ],
+      "gl": [
+        "encliticos fronte a procliticos en oracions principais e subordinadas",
+        "posicion do clitico por tipo de oracion",
+        "pronomes posverbais fronte a preverbais",
+        "colocacion do clitico en principal e subordinada",
+        "porcentaxe de pronomes encliticos",
+        "posicion dos cliticos por oracion"
+      ],
+      "eu": [
+        "enklitikoak eta proklitikoak perpaus nagusietan eta mendekoetan",
+        "klitikoaren posizioa perpaus motaren arabera",
+        "aditz osteko eta aditz aurreko izenordainak",
+        "klitikoaren kokapena perpaus nagusian eta mendekoan",
+        "izenordain enklitikoen ehunekoa",
+        "klitikoen posizioa perpauska"
+      ]
+    }
+  },
+  {
+    "id": "ml.aljamiado_density",
+    "version": 1,
+    "tier": "D",
+    "category": "corpus",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "romance vocabulary versus arabic loanwords in transliterated texts",
+        "aljamiado token density",
+        "ladino loanword ratio",
+        "hebrew loanwords in symb spans",
+        "romance to arabic ratio",
+        "loanword density in aljamiado"
+      ],
+      "es": [
+        "vocabulario romance frente a prestamos arabes en textos transliterados",
+        "densidad aljamiada",
+        "proporcion de prestamos en ladino",
+        "prestamos hebreos en tramos symb",
+        "proporcion romance frente a arabe",
+        "densidad de prestamos aljamiados"
+      ],
+      "pt": [
+        "vocabulario romanico frente a emprestimos arabes em textos transliterados",
+        "densidade aljamiada",
+        "proporcao de emprestimos em ladino",
+        "emprestimos hebraicos em trechos symb",
+        "proporcao romanico frente a arabe",
+        "densidade de emprestimos aljamiados"
+      ],
+      "ca": [
+        "vocabulari romanic enfront de manlleus arabs en textos transliterats",
+        "densitat aljamiada",
+        "proporcio de manlleus en ladi",
+        "manlleus hebreus en trams symb",
+        "proporcio romanic enfront d'arab",
+        "densitat de manlleus aljamiats"
+      ],
+      "gl": [
+        "vocabulario romanico fronte a prestamos arabes en textos transliterados",
+        "densidade aljamiada",
+        "proporcion de prestamos en ladino",
+        "prestamos hebreos en tramos symb",
+        "proporcion romanico fronte a arabe",
+        "densidade de prestamos aljamiados"
+      ],
+      "eu": [
+        "erromantze hiztegia eta arabierazko maileguak testu transliteratuetan",
+        "dentsitate aljamiatua",
+        "ladinozko maileguen proportzioa",
+        "hebreerazko maileguak symb tarteetan",
+        "erromantzearen eta arabieraren proportzioa",
+        "mailegu aljamiatuen dentsitatea"
+      ]
+    }
+  },
+  {
+    "id": "search.kwic",
+    "version": 1,
+    "tier": "A",
+    "category": "navigation",
+    "precompute": "on_demand",
+    "triggers": {
+      "en": [
+        "concordance for a word",
+        "show every occurrence of",
+        "kwic for",
+        "key word in context",
+        "where does the word appear",
+        "all occurrences of"
+      ],
+      "es": [
+        "concordancia de una palabra",
+        "muestra todas las apariciones de",
+        "kwic de",
+        "palabra clave en contexto",
+        "donde aparece la palabra",
+        "todas las apariciones de"
+      ],
+      "pt": [
+        "concordancia de uma palavra",
+        "mostra todas as ocorrencias de",
+        "kwic de",
+        "palavra-chave em contexto",
+        "onde aparece a palavra",
+        "todas as ocorrencias de"
+      ],
+      "ca": [
+        "concordanca d'una paraula",
+        "mostra totes les aparicions de",
+        "kwic de",
+        "paraula clau en context",
+        "on apareix la paraula",
+        "totes les aparicions de"
+      ],
+      "gl": [
+        "concordancia dunha palabra",
+        "amosa todas as aparicions de",
+        "kwic de",
+        "palabra clave en contexto",
+        "onde aparece a palabra",
+        "todas as aparicions de"
+      ],
+      "eu": [
+        "hitz baten konkordantzia",
+        "erakutsi agerraldi guztiak",
+        "kwic",
+        "gako-hitza testuinguruan",
+        "non agertzen da hitza",
+        "agerraldi guztiak"
+      ]
+    }
+  },
+  {
+    "id": "ingest.low_confidence",
+    "version": 1,
+    "tier": "A",
+    "category": "ingest",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "low confidence lines",
+        "which lines did recognition struggle with",
+        "uncertain machine transcription",
+        "lines below confidence threshold",
+        "where should i check the htr",
+        "low ocr confidence"
+      ],
+      "es": [
+        "lineas con baja confianza",
+        "que lineas reconocio peor",
+        "transcripcion automatica dudosa",
+        "lineas bajo el umbral de confianza",
+        "donde debo revisar el htr",
+        "baja confianza del ocr"
+      ],
+      "pt": [
+        "linhas com baixa confianca",
+        "que linhas o reconhecimento leu pior",
+        "transcricao automatica duvidosa",
+        "linhas abaixo do limiar de confianca",
+        "onde devo rever o htr",
+        "baixa confianca do ocr"
+      ],
+      "ca": [
+        "linies amb confianca baixa",
+        "quines linies ha reconegut pitjor",
+        "transcripcio automatica dubtosa",
+        "linies sota el llindar de confianca",
+        "on he de revisar l'htr",
+        "confianca baixa de l'ocr"
+      ],
+      "gl": [
+        "linas con baixa confianza",
+        "que linas reconeceu peor",
+        "transcricion automatica dubidosa",
+        "linas por debaixo do limiar de confianza",
+        "onde debo revisar o htr",
+        "baixa confianza do ocr"
+      ],
+      "eu": [
+        "konfiantza baxuko lerroak",
+        "zein lerro ezagutu ditu okerren",
+        "transkripzio automatiko zalantzazkoa",
+        "konfiantza-atalasetik beherako lerroak",
+        "non berrikusi behar dut htr",
+        "ocr konfiantza baxua"
+      ]
+    }
+  },
+  {
+    "id": "ingest.unreviewed",
+    "version": 1,
+    "tier": "A",
+    "category": "ingest",
+    "precompute": "eager",
+    "triggers": {
+      "en": [
+        "unreviewed folios",
+        "which folios still need review",
+        "review status",
+        "machine draft folios",
+        "folios not yet reviewed",
+        "review progress"
+      ],
+      "es": [
+        "folios sin revisar",
+        "que folios faltan por revisar",
+        "estado de la revision",
+        "folios en borrador automatico",
+        "folios aun no revisados",
+        "progreso de la revision"
+      ],
+      "pt": [
+        "folios por rever",
+        "que folios faltam revisar",
+        "estado da revisao",
+        "folios em rascunho automatico",
+        "folios ainda nao revistos",
+        "progresso da revisao"
+      ],
+      "ca": [
+        "folis sense revisar",
+        "quins folis falten per revisar",
+        "estat de la revisio",
+        "folis en esborrany automatic",
+        "folis encara no revisats",
+        "progres de la revisio"
+      ],
+      "gl": [
+        "folios sen revisar",
+        "que folios faltan por revisar",
+        "estado da revision",
+        "folios en borrador automatico",
+        "folios ainda non revisados",
+        "progreso da revision"
+      ],
+      "eu": [
+        "berrikusi gabeko folioak",
+        "zein folio falta dira berrikusteko",
+        "berrikuspenaren egoera",
+        "zirriborro automatikoko folioak",
+        "oraindik berrikusi gabeko folioak",
+        "berrikuspenaren aurrerapena"
       ]
     }
   }

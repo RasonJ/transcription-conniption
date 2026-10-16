@@ -23,7 +23,11 @@ export type TokenType =
   | "env_close"
   | "scribal_punctuation"
   | "drop_initial"
-  | "citation_wrap";
+  | "citation_wrap"
+  /** `[+]` — prefix written apart from its root, linked by the editor (manual §3.221a(5)). */
+  | "prefix_separator"
+  /** `[—]` — non-sequitur: loss of continuity, e.g. lost folios (manual §1.3, §3.224d(1)). */
+  | "non_sequitur";
 
 export type BlockType =
   | "prose"
@@ -126,6 +130,11 @@ export interface ScriptoriumWorkspace {
   folioBackgrounds?: Record<string, string>;
   /** Tap-to-place overlays not tied to HSMS figure_anchor tokens */
   freePlacements?: FacsimilePlacement[];
+  /**
+   * Machine-transcription sidecar (SPEC-PDF-INGEST §5): folio review states, line links,
+   * provenance. Realigned on every text change by `touchWorkspace`.
+   */
+  facsSidecar?: import("../utils/ingest/types").HsmsFacsSidecar;
   createdAt: string;
   lastModified: string;
 }

@@ -1,30 +1,39 @@
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
-import { useT } from "@/i18n/runtime";
+import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
+import { formatNumber, hasMessage, useLocale, useT } from "@/i18n/runtime";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
 import { runHybridTranscriptionPipeline } from "@/services/batchTranscriptionService";
 import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
+import { getRecipe } from "@/utils/copilot/catalog";
 import { buildFacetIndex, type FacetIndex } from "@/utils/copilot/facetIndex";
 import {
   buildLibraryAwareRouterIndex,
   matchLibraryEntry,
 } from "@/utils/copilot/libraryIntents";
-import { precomputeEager } from "@/utils/copilot/precompute";
+import { loadPersistedOverview, persistOverview } from "@/utils/copilot/persistentOverview";
+import { precomputeEager, type OverviewEntry } from "@/utils/copilot/precompute";
+import { answerToDelimited, presentAnswer, presentChip } from "@/utils/copilot/present";
+import { routingLocales } from "@/utils/copilot/router";
 import { overviewFromPrecompiled } from "@/utils/copilot/sidecarRecipes";
 import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/types";
 import type { PrecompiledFacets } from "@/utils/corpusPrecompute";
 import { loadPrecompiledFacets } from "@/utils/librarySidecars";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
 import { looksLikeTranscribeRequest } from "@/utils/visionUpload";
+import { withFolioReview, type MachineTranscriptionMeta } from "@/utils/ingest/visionSidecar";
+import { detectWitnessLanguage } from "@/utils/witnessLanguage";
 import * as DocumentPicker from "expo-document-picker";
-import { ArrowRight, BookOpen, Image as ImageIcon, Search, Sparkles, X } from "lucide-react-native";
+import { ArrowRight, BookOpen, Copy, Download, Image as ImageIcon, Search, Sparkles, X } from "lucide-react-native";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ActivityIndicator,
   InteractionManager,
   Modal,
+  Platform,
   Pressable,
+  Share,
   ScrollView,
   StyleSheet,
   Text,
@@ -44,14 +53,18 @@ type Props = {
   visible: boolean;
   onClose: () => void;
   /** Apply vision HSMS into the Studio parchment (and close the drawer). */
-  onApplyHsms?: (hsms: string, meta: { sourceFileName: string }) => void;
+  onApplyHsms?: (
+    hsms: string,
+    meta: { sourceFileName: string; machineTranscription?: MachineTranscriptionMeta },
+  ) => void;
 };
 
 export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props) {
   const t = useT();
+  const { locale } = useLocale();
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
-  const { parsedManuscript, activeFileName, workspace } = useScriptorium();
+  const { parsedManuscript, activeFileName, workspace, debouncedText, setFolioReview } = useScriptorium();
   const { catalog } = useLibraryCatalog();
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
@@ -59,6 +72,11 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
   const [attachedScan, setAttachedScan] = useState<AttachedScan | null>(null);
   const [visionBusy, setVisionBusy] = useState(false);
   const [precompiledFacets, setPrecompiledFacets] = useState<PrecompiledFacets | null>(null);
+  const [copied, setCopied] = useState(false);
+  /** undefined = still looking in the persisted store; null = nothing stored. */
+  const [persistedOverview, setPersistedOverview] = useState<OverviewEntry[] | null | undefined>(undefined);
+  // Lemma-based recipes (top lemmas, variant share) need the lazy dictionary (SPEC-LIGHTWEIGHT §4).
+  useLemmaDictionary(visible);
   const [vectorIndex, setVectorIndex] = useState<ManuscriptVectorIndex | undefined>(undefined);
   const [libraryAwareRouter, setLibraryAwareRouter] = useState<
     ReturnType<typeof buildLibraryAwareRouterIndex> | undefined
@@ -104,12 +122,14 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     }
     const task = InteractionManager.runAfterInteractions(() => {
       setVectorIndex(buildManuscriptVectorIndex(parsedManuscript));
-      setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog));
+      // Route over the UI locale ∪ English ∪ the witness language (SPEC-COPILOT §8.1).
+      const witness = detectWitnessLanguage(parsedManuscript).language;
+      setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog, routingLocales(locale, witness)));
     });
     return () => {
       task.cancel();
     };
-  }, [visible, parsedManuscript, catalog]);
+  }, [visible, parsedManuscript, catalog, locale]);
 
   // Cancel in-flight vision OCR when the drawer closes.
   useEffect(() => {
@@ -125,14 +145,36 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     return built;
   }, [parsedManuscript]);
 
+  const witnessLanguage = useMemo(
+    () => (visible ? detectWitnessLanguage(parsedManuscript).language : undefined),
+    [visible, parsedManuscript],
+  );
+
+  // Overview answers persisted across sessions (SPEC-COPILOT §7.2): no FacetIndex rebuild on reopen.
+  useEffect(() => {
+    if (!visible) return;
+    let cancelled = false;
+    setPersistedOverview(undefined);
+    void loadPersistedOverview(debouncedText ?? "").then((entries) => {
+      if (!cancelled) setPersistedOverview(entries);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [visible, debouncedText]);
+
   const overview = useMemo(() => {
     if (!visible) return [];
     if (precompiledFacets) return overviewFromPrecompiled(precompiledFacets);
-    // Non-library witnesses: build once for overview chips.
-    return precomputeEager(parsedManuscript, resolveLiveFacets())
+    if (persistedOverview === undefined) return [];
+    if (persistedOverview) return persistedOverview;
+    // Non-library witnesses: build once for overview chips, then persist.
+    const computed = precomputeEager(parsedManuscript, resolveLiveFacets())
       .filter((entry) => entry.count > 0)
       .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel));
-  }, [visible, precompiledFacets, parsedManuscript, resolveLiveFacets]);
+    void persistOverview(debouncedText ?? "", computed);
+    return computed;
+  }, [visible, precompiledFacets, persistedOverview, parsedManuscript, resolveLiveFacets, debouncedText]);
 
   const askOptions = useMemo(
     () => ({
@@ -140,8 +182,58 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
       resolveFacets: resolveLiveFacets,
       vectorIndex,
       router: libraryAwareRouter,
+      witnessLanguage,
+      sidecar: workspace?.facsSidecar,
     }),
-    [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter],
+    [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter, witnessLanguage, workspace?.facsSidecar],
+  );
+
+  const fmt = useCallback(
+    (value: number, options?: Intl.NumberFormatOptions) => formatNumber(value, options, locale),
+    [locale],
+  );
+  const tAny = t as unknown as (key: string, params?: Record<string, string | number>) => string;
+  const presented = useMemo(
+    () => (answer ? presentAnswer(answer, tAny, hasMessage, fmt) : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [answer, t, fmt],
+  );
+  const chipLabelFor = useCallback(
+    (recipeId: string, fallback: string) => {
+      const recipe = getRecipe(recipeId);
+      return recipe ? presentChip(recipe, tAny, hasMessage) : fallback;
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [t],
+  );
+
+  const handleCopyDsl = useCallback(async () => {
+    if (!answer?.dsl) return;
+    try {
+      if (Platform.OS === "web" && typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(answer.dsl);
+      } else {
+        await Share.share({ message: answer.dsl });
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard unavailable: the expression stays visible on the card */
+    }
+  }, [answer]);
+
+  const handleExport = useCallback(
+    async (sep: "," | "\t") => {
+      if (!answer || !presented) return;
+      const body = answerToDelimited(answer, presented, t("copilot.export.header"), sep);
+      const ext = sep === "," ? "csv" : "tsv";
+      const { saveExportFile } = await import("@/utils/exportFile");
+      await saveExportFile(body, {
+        fileName: `${answer.recipeId}.${ext}`,
+        mimeType: sep === "," ? "text/csv" : "text/tab-separated-values",
+      });
+    },
+    [answer, presented, t],
   );
 
   const handleAttachScan = useCallback(async () => {
@@ -217,15 +309,22 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
         headline: t("copilot.visionDone"),
         body: vision.hsmsAscii,
         breakdown: [
-          { label: "pages", value: vision.pageCount },
-          { label: "errors", value: vision.errorCount },
-          { label: "warnings", value: vision.warningCount },
+          { label: "pages", value: vision.pageCount, key: "pages" },
+          { label: "errors", value: vision.errorCount, key: "errors" },
+          { label: "warnings", value: vision.warningCount, key: "warnings" },
         ],
         rows: [],
         method: "Azure vision → ingestAgentTranscription",
         elapsedMs,
       });
-      onApplyHsms?.(vision.hsmsAscii, { sourceFileName: outName });
+      onApplyHsms?.(vision.hsmsAscii, {
+        sourceFileName: outName,
+        machineTranscription: {
+          pages: vision.pages,
+          sourceKind: attachedScan.mimeType === "application/pdf" ? "pdf" : "image",
+          sourceName: attachedScan.name,
+        },
+      });
       setAttachedScan(null);
       setQuery("");
     } catch (err) {
@@ -404,29 +503,61 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                       onPress={() => handleRecipe(entry.recipeId)}
                       style={styles.chip}
                       accessibilityRole="button"
-                      accessibilityLabel={`${entry.chipLabel}: ${entry.count}`}
+                      accessibilityLabel={`${chipLabelFor(entry.recipeId, entry.chipLabel)}: ${fmt(entry.count)}`}
                     >
-                      <Text style={styles.chipLabel}>{entry.chipLabel}</Text>
-                      <Text style={styles.chipCount}>{entry.count}</Text>
+                      <Text style={styles.chipLabel}>{chipLabelFor(entry.recipeId, entry.chipLabel)}</Text>
+                      <Text style={styles.chipCount}>{fmt(entry.count)}</Text>
                     </Pressable>
                   ))}
                 </View>
               </View>
             ) : null}
 
-            {answer ? (
-              <View style={styles.answerCard}>
+            {answer && presented ? (
+              <View style={styles.answerCard} accessible accessibilityLabel={presented.accessibilityLabel}>
                 <View style={styles.answerTop}>
                   <View style={styles.tierBadge}>
                     <Text style={styles.tierBadgeText}>
                       {answer.tier} · {tierLabel(answer.tier)}
                     </Text>
                   </View>
+                  {getRecipe(answer.recipeId)?.precision !== undefined ? (
+                    <Text style={styles.confidence}>
+                      {t("copilot.precision", {
+                        pct: fmt(Math.round((getRecipe(answer.recipeId)?.precision ?? 0) * 100)),
+                      })}
+                    </Text>
+                  ) : null}
                   {answer.confidence !== undefined && answer.confidence < 1 ? (
                     <Text style={styles.confidence}>{(answer.confidence * 100).toFixed(0)}%</Text>
                   ) : null}
                 </View>
-                <Text style={styles.headline}>{answer.headline}</Text>
+                <Text style={styles.headline}>{presented.headline}</Text>
+                {presented.serverNote ? <Text style={styles.serverNote}>{presented.serverNote}</Text> : null}
+
+                {answer.slotPrompt ? (
+                  <View style={styles.slotPrompt}>
+                    <Text style={styles.sectionLabel}>
+                      {answer.slotPrompt === "lemma" ? t("copilot.slot.lemma") : t("copilot.slot.word")}
+                    </Text>
+                    <TextInput
+                      placeholder={t("copilot.slot.placeholder")}
+                      placeholderTextColor="#99836a"
+                      style={styles.input}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      onSubmitEditing={(e) => {
+                        const value = e.nativeEvent.text.trim();
+                        if (!value) return;
+                        const result = runRecipeById(answer.recipeId, parsedManuscript, {
+                          ...askOptions,
+                          params: { [answer.slotPrompt === "lemma" ? "lemma" : "word"]: value },
+                        });
+                        if (result) setAnswer(result);
+                      }}
+                    />
+                  </View>
+                ) : null}
 
                 {answer.body ? (
                   <View style={styles.hsmsBlock}>
@@ -450,12 +581,12 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                   </View>
                 ) : null}
 
-                {answer.breakdown && answer.breakdown.length > 0 ? (
+                {presented.breakdown.length > 0 ? (
                   <View style={styles.breakdown}>
-                    {answer.breakdown.map((b) => (
-                      <View key={b.label} style={styles.breakdownRow}>
+                    {presented.breakdown.map((b, i) => (
+                      <View key={`${b.label}_${i}`} style={styles.breakdownRow}>
                         <Text style={styles.breakdownLabel}>{b.label}</Text>
-                        <Text style={styles.breakdownValue}>{b.value}</Text>
+                        <Text style={styles.breakdownValue}>{fmt(b.value)}</Text>
                       </View>
                     ))}
                   </View>
@@ -471,7 +602,7 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                         style={styles.chip}
                         accessibilityRole="button"
                       >
-                        <Text style={styles.chipLabel}>{alt.chipLabel}</Text>
+                        <Text style={styles.chipLabel}>{chipLabelFor(alt.recipeId, alt.chipLabel)}</Text>
                       </Pressable>
                     ))}
                   </View>
@@ -505,11 +636,51 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                       <Text style={styles.jumpHintText}>{t("copilot.hit.jump")}</Text>
                       <ArrowRight color="#f6d890" size={12} />
                     </View>
+                    {answer.recipeId === "ingest.unreviewed" && workspace?.facsSidecar ? (
+                      <Pressable
+                        onPress={() => {
+                          const sidecar = withFolioReview(workspace.facsSidecar!, row.folioId, "reviewed");
+                          void setFolioReview(row.folioId, "reviewed");
+                          const next = runRecipeById("ingest.unreviewed", parsedManuscript, { ...askOptions, sidecar });
+                          if (next) setAnswer(next);
+                        }}
+                        style={styles.actionButton}
+                        accessibilityRole="button"
+                      >
+                        <Text style={styles.actionText}>{t("ingest.markReviewed", { folio: row.folioId })}</Text>
+                      </Pressable>
+                    ) : null}
                   </Pressable>
                 ))}
 
-                {answer.method ? <Text style={styles.method}>{answer.method}</Text> : null}
-                {answer.dsl ? <Text style={styles.dsl}>{answer.dsl}</Text> : null}
+                {presented.method ? (
+                  <Text style={styles.method}>
+                    {t("copilot.methodLabel")}: {presented.method}
+                  </Text>
+                ) : null}
+                {answer.dsl ? <Text style={styles.dsl} selectable>{answer.dsl}</Text> : null}
+                <View style={styles.actionRow}>
+                  {answer.dsl ? (
+                    <Pressable onPress={handleCopyDsl} style={styles.actionButton} accessibilityRole="button">
+                      <Copy color="#f6d890" size={12} />
+                      <Text style={styles.actionText}>
+                        {copied ? t("copilot.action.copied") : t("copilot.action.copyDsl")}
+                      </Text>
+                    </Pressable>
+                  ) : null}
+                  {answer.rows.length > 0 || presented.breakdown.length > 0 ? (
+                    <>
+                      <Pressable onPress={() => void handleExport(",")} style={styles.actionButton} accessibilityRole="button">
+                        <Download color="#f6d890" size={12} />
+                        <Text style={styles.actionText}>{t("copilot.action.exportCsv")}</Text>
+                      </Pressable>
+                      <Pressable onPress={() => void handleExport("\t")} style={styles.actionButton} accessibilityRole="button">
+                        <Download color="#f6d890" size={12} />
+                        <Text style={styles.actionText}>{t("copilot.action.exportTsv")}</Text>
+                      </Pressable>
+                    </>
+                  ) : null}
+                </View>
               </View>
             ) : null}
           </ScrollView>
@@ -702,5 +873,19 @@ const styles = StyleSheet.create({
   },
   jumpHintText: { color: "rgba(246,216,144,0.55)", fontSize: 11, fontWeight: "600" },
   method: { color: "rgba(246,216,144,0.55)", fontSize: 11, fontStyle: "italic" },
+  serverNote: { color: "#e0b070", fontSize: 12, fontStyle: "italic" },
+  slotPrompt: { gap: 6 },
+  actionRow: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 4 },
+  actionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.3)",
+  },
+  actionText: { color: "#f6d890", fontSize: 11 },
   dsl: { color: "rgba(143,191,106,0.9)", fontSize: 11, fontFamily: "monospace" },
 });

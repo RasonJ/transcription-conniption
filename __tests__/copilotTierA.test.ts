@@ -23,7 +23,7 @@ describe("copilot tier A executors", () => {
 
   it("corr.deletions_scribal_vs_editorial", () => {
     const r = deletionsScribalVsEditorial(facets, parsed);
-    expect(r.breakdown).toEqual([
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "scribal (^…)", value: 3 },
       { label: "editorial (…)", value: 1 },
     ]);
@@ -36,7 +36,7 @@ describe("copilot tier A executors", () => {
   it("corr.non_original_hands", () => {
     const r = nonOriginalHands(facets, parsed);
     expect(r.count).toBe(3);
-    expect(r.breakdown).toEqual(
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual(
       expect.arrayContaining([
         { label: "hand 2 · scribal_insertion", value: 1 },
         { label: "hand 2 · reconstructed_text", value: 1 },
@@ -53,7 +53,7 @@ describe("copilot tier A executors", () => {
 
   it("illum.initial_hierarchy", () => {
     const r = initialHierarchy(facets, parsed);
-    expect(r.breakdown).toEqual([
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "IN2", value: 1 },
       { label: "IN3", value: 1 },
     ]);
@@ -62,7 +62,7 @@ describe("copilot tier A executors", () => {
 
   it("marg.gloss_vs_addenda", () => {
     const r = glossVsAddenda(facets, parsed);
-    expect(r.breakdown).toEqual([
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "gloss {GL.}", value: 2 },
       { label: "addendum {AD.}", value: 1 },
     ]);
@@ -80,7 +80,7 @@ describe("copilot tier A executors", () => {
   it("damage.reconstructions_by_hand", () => {
     const r = reconstructionsByHand(facets, parsed);
     expect(r.count).toBe(2);
-    expect(r.breakdown).toEqual([
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "hand 2", value: 1 },
       { label: "unmarked hand", value: 1 },
     ]);
@@ -88,7 +88,7 @@ describe("copilot tier A executors", () => {
 
   it("layout.wrapback", () => {
     const r = layoutWrapback(facets, parsed);
-    expect(r.breakdown).toEqual([
+    expect(r.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "%2", value: 1 },
       { label: "%3", value: 1 },
     ]);
@@ -96,7 +96,7 @@ describe("copilot tier A executors", () => {
 
   it("lex.code_switching and ml.foreign_ratio", () => {
     const switching = codeSwitching(facets, parsed);
-    expect(switching.breakdown).toEqual([{ label: "LAT", value: 1 }]);
+    expect(switching.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([{ label: "LAT", value: 1 }]);
     expect(switching.rows[0]).toMatchObject({ folioId: "1r", label: "LAT" });
 
     const ratio = foreignRatio(facets, parsed);
@@ -151,7 +151,7 @@ describe("copilot dsl", () => {
       facets,
       parsed,
     );
-    expect(grouped.breakdown).toEqual([
+    expect(grouped.breakdown?.map(({ label, value }) => ({ label, value }))).toEqual([
       { label: "folio 1r", value: 1 },
       { label: "folio 1v", value: 2 },
     ]);

@@ -79,6 +79,13 @@ export function renderNormalizedText(tokens: Token[]): string {
       buffer.push(` ${token.value} `);
       continue;
     }
+    if (type === "prefix_separator") {
+      continue;
+    }
+    if (type === "non_sequitur") {
+      buffer.push(" [—] ");
+      continue;
+    }
 
     let val = token.normalized ?? token.value;
     if (type === "text") {

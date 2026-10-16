@@ -5,6 +5,7 @@ import type {
   WorkspaceIndexEntry,
 } from "../constants/manuscript";
 import { deleteFigureAsset, ensureWorkspaceDirectories } from "./figureAssetStorage";
+import { alignSidecar } from "./ingest/sidecarAlign";
 import { normalizeMetadataPlainText } from "./metadataText";
 
 /** Lightweight metadata index — no transcription blobs. */
@@ -75,12 +76,22 @@ export function touchWorkspace(
       | "assetMap"
       | "folioBackgrounds"
       | "freePlacements"
+      | "facsSidecar"
     >
   >,
 ): ScriptoriumWorkspace {
+  // Keep the machine-transcription sidecar linked to the edited text (SPEC-PDF-INGEST §5.1).
+  const realigned =
+    !("facsSidecar" in patch) &&
+    workspace.facsSidecar &&
+    patch.transcriptionText !== undefined &&
+    patch.transcriptionText !== workspace.transcriptionText
+      ? { facsSidecar: alignSidecar(workspace.facsSidecar, workspace.transcriptionText, patch.transcriptionText).sidecar }
+      : {};
   return {
     ...workspace,
     ...patch,
+    ...realigned,
     lastModified: new Date().toISOString(),
   };
 }

@@ -57,8 +57,8 @@ export interface SidecarLine {
   baseline: [number, number][];
   /** SegmOnto zone type. */
   zone: string;
-  /** Mean char confidence 0–1. */
-  confidence: number;
+  /** Mean char confidence 0–1; absent when the recognizer does not report it. */
+  confidence?: number;
   lowConfidenceSpans?: Array<[start: number, end: number, conf: number]>;
   words?: Array<{ text: string; box: [x: number, y: number, w: number, h: number] }>;
   machineExpansions?: SidecarMachineExpansion[];

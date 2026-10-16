@@ -109,12 +109,9 @@ describe("i18n translate", () => {
 
 describe("i18n plural formatting", () => {
   it("formats one/other in en", () => {
-    expect(translate("en", "copilot.passagesFound", { count: 1, intent: "search" })).toBe(
-      "1 passage · search",
-    );
-    expect(translate("en", "copilot.passagesFound", { count: 3, intent: "search" })).toBe(
-      "3 passages · search",
-    );
+    // copilot.passagesFound was superseded by the per-recipe answer templates.
+    expect(translate("en", "copilot.recipe.search.passages.answer", { count: 1 })).toBe("1 passage matched.");
+    expect(translate("en", "copilot.recipe.search.passages.answer", { count: 3 })).toBe("3 passages matched.");
   });
 
   it("formats one/other in es and pt", () => {

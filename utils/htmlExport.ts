@@ -76,6 +76,12 @@ function renderTokensToHtml(
       case "mechanical_lacuna":
         pieces.push("&#160;");
         break;
+      case "prefix_separator":
+        pieces.push(`<span style="color: #7a5500; font-size: 0.8em;">+</span>`);
+        break;
+      case "non_sequitur":
+        pieces.push(`<span style="color: #7a5500;">&#8212;</span>`);
+        break;
       case "scribal_insertion":
       case "editorial_insertion": {
         const border =

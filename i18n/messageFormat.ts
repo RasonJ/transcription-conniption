@@ -139,7 +139,7 @@ function render(
         break;
       case "var": {
         const v = params[node.name];
-        out += v === undefined ? `{${node.name}}` : String(v);
+        out += v === undefined ? `{${node.name}}` : typeof v === "number" ? formatNumber(ctx.locale, v) : String(v);
         break;
       }
       case "term":

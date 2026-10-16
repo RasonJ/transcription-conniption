@@ -24,6 +24,8 @@ export const TOKEN_TYPES: readonly TokenType[] = [
   "editorial_deletion",
   "scribal_insertion",
   "editorial_insertion",
+  "prefix_separator",
+  "non_sequitur",
   "reconstructed_text",
   "illegible_text",
   "missing_fragment",

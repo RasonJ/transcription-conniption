@@ -48,6 +48,8 @@ export function termFrequency(facets: FacetIndex, _parsed: ParsedManuscript): Re
     headline: top
       ? `Top term “${top[0]}” ×${top[1]} (${freq.size} types / ${total} tokens).`
       : "No indexable words in this witness.",
+    params: top ? { term: top[0], n: top[1], types: freq.size, tokens: total } : {},
+    messageKey: top ? undefined : "none",
     count: freq.size,
     breakdown: ranked.slice(0, 12).map(([label, value]) => ({ label, value })),
     rows,
@@ -76,6 +78,8 @@ export function ngrams(
       ranked.length === 0
         ? `No ${size}-grams found.`
         : `Top ${size}-gram “${ranked[0][0]}” ×${ranked[0][1]} (${counts.size} distinct).`,
+    params: ranked.length === 0 ? { size } : { size, gram: ranked[0][0], n: ranked[0][1], distinct: counts.size },
+    messageKey: ranked.length === 0 ? "none" : undefined,
     count: counts.size,
     breakdown: ranked.slice(0, 12).map(([label, value]) => ({ label, value })),
     rows: ranked.slice(0, ROW_LIMIT).map(([gram, count]) => ({
@@ -117,12 +121,13 @@ export function vocabDensity(facets: FacetIndex, _parsed: ParsedManuscript): Rec
 
   return {
     headline: `Vocabulary density: TTR ${stats.ttr.toFixed(3)}, STTR ${stats.sttr.toFixed(3)}, hapax ${stats.hapax} (${hapaxShare.toFixed(1)}% of tokens).`,
+    params: { ttr: stats.ttr.toFixed(3), sttr: stats.sttr.toFixed(3), hapax: stats.hapax, share: hapaxShare.toFixed(1) },
     count: stats.types,
     breakdown: [
-      { label: "tokens", value: stats.tokens },
-      { label: "types", value: stats.types },
-      { label: "hapax", value: stats.hapax },
-      { label: "dislegomena", value: stats.disLegomena },
+      { label: "tokens", value: stats.tokens, key: "tokens" },
+      { label: "types", value: stats.types, key: "types" },
+      { label: "hapax", value: stats.hapax, key: "hapax" },
+      { label: "dislegomena", value: stats.disLegomena, key: "dislegomena" },
     ],
     rows: folioRows,
   };

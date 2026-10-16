@@ -14,7 +14,10 @@ import {
   superscripts,
 } from "../executors/tierA";
 import { ngrams, termFrequency, vocabDensity } from "../executors/voyant";
-import type { Recipe, RecipeResult } from "../types";
+import type { CopilotLocale, Recipe, RecipeResult } from "../types";
+import { EXTRA_RECIPES } from "./extra";
+import { LOCALE_TRIGGERS } from "../triggers";
+import TIER_B_PRECISION from "../tierBPrecision.json";
 
 /** Bump when any recipe's triggers or output semantics change. */
 export const CATALOG_VERSION = 2;
@@ -68,6 +71,8 @@ const navFolio: Recipe<{ query?: string }> = {
     const jump = resolveFolioJump(params.query ?? "", ctx.parsed);
     return {
       headline: jump ? `Jump to [fol. ${jump.folioId}].` : "No matching folio in this witness.",
+      params: { folio: jump?.folioId ?? "" },
+      messageKey: jump ? undefined : "none",
       count: jump ? 1 : 0,
       rows: jump ? [{ folioId: jump.folioId, lineNumber: jump.lineNumber, label: "folio" }] : [],
       navigate: jump ?? undefined,
@@ -106,6 +111,8 @@ const searchPassages: Recipe<{ query?: string; topK?: number }> = {
         hits.length > 0
           ? `${hits.length} passage${hits.length === 1 ? "" : "s"} matched.`
           : "No passages above the similarity threshold.",
+      params: { count: hits.length },
+      messageKey: hits.length > 0 ? undefined : "none",
       count: hits.length,
       rows: hits.map((h) => ({
         folioId: h.chunk.folioId,
@@ -119,7 +126,7 @@ const searchPassages: Recipe<{ query?: string; topK?: number }> = {
   method: "Cosine similarity of hash-embedded character trigrams against normalized lines.",
 };
 
-export const RECIPES: readonly AnyRecipe[] = [
+const BASE_RECIPES: readonly AnyRecipe[] = [
   tierA({
     id: "corr.deletions_scribal_vs_editorial",
     category: "paleography",
@@ -390,6 +397,28 @@ export const RECIPES: readonly AnyRecipe[] = [
   navFolio as unknown as AnyRecipe,
   searchPassages as unknown as AnyRecipe,
 ];
+
+/** Merge per-locale trigger files (es, pt, ca, gl, eu…) into each recipe's triggers. */
+function withLocaleTriggers(recipe: AnyRecipe): AnyRecipe {
+  const triggers = { ...recipe.triggers };
+  for (const [locale, table] of Object.entries(LOCALE_TRIGGERS) as Array<[CopilotLocale, Record<string, string[]>]>) {
+    const extra = table[recipe.id];
+    if (!extra?.length) continue;
+    const merged = new Set([...(triggers[locale] ?? []), ...extra]);
+    triggers[locale] = [...merged];
+  }
+  return { ...recipe, triggers };
+}
+
+/** Measured precision per Tier B recipe (`npm run tierb:precision -- score`), SPEC-COPILOT §12. */
+const PRECISION = TIER_B_PRECISION as Record<string, { precision: number; labeled: number }>;
+
+export const RECIPES: readonly AnyRecipe[] = [
+  ...BASE_RECIPES,
+  ...(EXTRA_RECIPES as unknown as AnyRecipe[]),
+]
+  .map(withLocaleTriggers)
+  .map((r) => (PRECISION[r.id] ? { ...r, precision: PRECISION[r.id].precision } : r));
 
 const BY_ID = new Map<string, AnyRecipe>(RECIPES.map((r) => [r.id, r]));
 

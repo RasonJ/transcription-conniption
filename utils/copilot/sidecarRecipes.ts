@@ -38,10 +38,11 @@ export function runEagerFromPrecompiled(
       const editorial = tok(pre, "editorial_deletion");
       return {
         headline: `${plural(scribal, "scribal deletion")} and ${plural(editorial, "editorial deletion")} (precompiled).`,
+        params: { scribal, editorial },
         count: scribal + editorial,
         breakdown: [
-          { label: "scribal (^…)", value: scribal },
-          { label: "editorial (…)", value: editorial },
+          { label: "scribal (^…)", value: scribal, key: "scribal_deletion" },
+          { label: "editorial (…)", value: editorial, key: "editorial_deletion" },
         ],
         rows: [],
       };
@@ -55,12 +56,16 @@ export function runEagerFromPrecompiled(
       const breakdown: BreakdownEntry[] = hands.map((h) => ({
         label: `hand ${h.hand}`,
         value: h.count,
+        key: "hand",
+        labelParams: { hand: h.hand },
       }));
       return {
         headline:
           total === 0
             ? "No tokens attributed to a non-original hand."
             : `${plural(total, "token")} by ${plural(hands.length, "non-original hand")} (precompiled).`,
+        params: { total, hands: hands.length },
+        messageKey: total === 0 ? "none" : undefined,
         count: total,
         breakdown,
         rows: [],
@@ -71,10 +76,11 @@ export function runEagerFromPrecompiled(
       const ins = tok(pre, "scribal_insertion");
       return {
         headline: `${plural(sup, "superscript abbreviation")} and ${plural(ins, "scribal insertion")} (precompiled).`,
+        params: { superscripts: sup, insertions: ins },
         count: sup + ins,
         breakdown: [
-          { label: "superscript <<…>>", value: sup },
-          { label: "scribal insertion [^…]", value: ins },
+          { label: "superscript <<…>>", value: sup, key: "superscript" },
+          { label: "scribal insertion [^…]", value: ins, key: "scribal_insertion" },
         ],
         rows: [],
       };
@@ -99,6 +105,8 @@ export function runEagerFromPrecompiled(
           total === 0
             ? "No illuminated initials ({INn.}) found."
             : `${plural(total, "initial")} (precompiled)${breakdown.length ? `: ${breakdown.map((b) => `${b.label} ×${b.value}`).join(", ")}` : ""}.`,
+        params: { total, levels: depths.length },
+        messageKey: total === 0 ? "none" : undefined,
         count: total,
         breakdown,
         rows: hitRows(pre.facets.dropInitials, (h) => `IN${h.depth ?? 1}`),
@@ -112,10 +120,11 @@ export function runEagerFromPrecompiled(
       );
       return {
         headline: `${plural(glosses, "gloss", "glosses")} and ${plural(addenda, "addendum", "addenda")} (precompiled).`,
+        params: { glosses, addenda },
         count: glosses + addenda,
         breakdown: [
-          { label: "gloss {GL.}", value: glosses },
-          { label: "addendum {AD.}", value: addenda },
+          { label: "gloss {GL.}", value: glosses, key: "gloss" },
+          { label: "addendum {AD.}", value: addenda, key: "addendum" },
         ],
         rows: hitRows(pre.facets.glosses, (h) => h.type ?? "gloss"),
       };
@@ -125,10 +134,11 @@ export function runEagerFromPrecompiled(
       const missing = tok(pre, "missing_fragment");
       return {
         headline: `${plural(illegible, "illegible passage")} and ${plural(missing, "missing fragment")} (precompiled).`,
+        params: { illegible, missing },
         count: illegible + missing,
         breakdown: [
-          { label: "illegible_text", value: illegible },
-          { label: "missing_fragment", value: missing },
+          { label: "illegible_text", value: illegible, key: "illegible" },
+          { label: "missing_fragment", value: missing, key: "missing_fragment" },
         ],
         rows: [],
       };
@@ -137,6 +147,8 @@ export function runEagerFromPrecompiled(
       const total = tok(pre, "reconstructed_text");
       return {
         headline: `${plural(total, "reconstruction")} (precompiled).`,
+        params: { total },
+        messageKey: "precompiled",
         count: total,
         breakdown: [{ label: "reconstructed_text", value: total }],
         rows: [],
@@ -147,6 +159,8 @@ export function runEagerFromPrecompiled(
       const three = tok(pre, "calderon_three");
       return {
         headline: `${plural(two, "%2 mark")} and ${plural(three, "%3 mark")} (precompiled).`,
+        params: { two, three },
+        messageKey: "precompiled",
         count: two + three,
         breakdown: [
           { label: "%2", value: two },
@@ -165,8 +179,10 @@ export function runEagerFromPrecompiled(
           spanTotal === 0
             ? "No language spans ({LAT.}, {ARG.}, …) found."
             : `${plural(spanTotal, "language span")} in ${plural(entries.length, "language")} (precompiled): ${entries.map((e) => `${e.lang} ${e.spans}`).join(", ")}.`,
+        params: { spans: spanTotal, languages: entries.length },
+        messageKey: spanTotal === 0 ? "none" : undefined,
         count: spanTotal,
-        breakdown: entries.map((e) => ({ label: e.lang, value: e.spans })),
+        breakdown: entries.map((e) => ({ label: e.lang, value: e.spans, key: "lang", labelParams: { code: e.lang } })),
         rows: entries.map((e) => ({
           folioId: "—",
           label: e.lang,
@@ -180,11 +196,12 @@ export function runEagerFromPrecompiled(
       const pct = (foreign / total) * 100;
       return {
         headline: `${pct.toFixed(1)}% of words (${foreign} of ${pre.wordCount}) fall inside language spans (precompiled).`,
+        params: { pct: pct.toFixed(1), foreign, total: pre.wordCount },
         count: foreign,
         breakdown: pre.facets.codeSwitching
           .slice()
           .sort((a, b) => b.words - a.words)
-          .map((e) => ({ label: e.lang, value: e.words })),
+          .map((e) => ({ label: e.lang, value: e.words, key: "lang", labelParams: { code: e.lang } })),
         rows: [],
       };
     }

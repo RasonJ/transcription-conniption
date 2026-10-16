@@ -132,6 +132,8 @@ export function tokenToSegs(
     case "mechanical_lacuna":
       return [seg({ text: " ", fill: base })];
     case "editorial_insertion":
+    case "prefix_separator":
+    case "non_sequitur":
       return [seg({ text: `[${v}]`, fill: EDITORIAL_FILL, italic: true })];
     case "calderon":
       return [seg({ text: "¶", fill: RUBRIC_FILL, bold: true })];

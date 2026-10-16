@@ -1,3 +1,4 @@
+import type { CopilotLocale } from "./types";
 import { MANUSCRIPT_INTENT_PROTOTYPES } from "@/constants/manuscriptIntents";
 import type { LibraryCatalog, LibraryCatalogEntry } from "@/utils/libraryCatalog";
 import { RECIPES } from "@/utils/copilot/catalog";
@@ -95,9 +96,11 @@ export function matchLibraryEntry(
  */
 export function buildLibraryAwareRouterIndex(
   catalog: LibraryCatalog | null | undefined,
+  /** Router locales (UI ∪ en ∪ witness language); defaults to all Tier 1 copilot locales. */
+  locales?: CopilotLocale[],
 ): RouterIndex {
   const vocab = libraryCatalogVocabulary(catalog);
-  if (!vocab) return buildRouterIndex();
+  if (!vocab) return buildRouterIndex(undefined, locales);
 
   const extra = vocab
     .split(/\s+/)
@@ -115,5 +118,5 @@ export function buildLibraryAwareRouterIndex(
     return { ...recipe, triggers: { ...recipe.triggers, en } };
   });
 
-  return buildRouterIndex(recipes);
+  return buildRouterIndex(recipes, locales);
 }

@@ -288,6 +288,790 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
     "category": "navigation"
   },
   {
+    "name": "abbr_nasal_tilde_vs_geminate",
+    "description": "n~ vs nn. Counted words whose diplomatic surface matches n~/ñ, nn, nh or ny (graph set palatal_nasal), by quire. Triggers: tilde over n versus nn for the palatal nasal; how often does the scribe write n with tilde or double nn; n~ vs nn by quire. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "abbr.nasal_tilde_vs_geminate",
+    "tier": "B",
+    "category": "paleography"
+  },
+  {
+    "name": "abbr_expansion_by_quire",
+    "description": "Abbreviations by quire. Expansion tokens <…> grouped by expanded reading form, compared with the same form written out in full, first half vs second half of the quires. Triggers: which abbreviations are written out in full in later quires; abbreviation density early versus late quires; q<ue> p<er> p<ro> abbreviated or in full by quire. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "abbr.expansion_by_quire",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "corr_editorial_overrides",
+    "description": "Editorial overrides. Lines where a scribal deletion (^…) is immediately followed by an editorial insertion […]. Transposition notation is not tokenized yet. Triggers: where did the editor override a scribal deletion; editorial insertion after a scribal deletion; editor restored text the scribe deleted. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "corr.editorial_overrides",
+    "tier": "B",
+    "category": "paleography"
+  },
+  {
+    "name": "layout_hyphen_boundaries",
+    "description": "Divided words at breaks. Last line of each column envelope and folio side: a word joined with an internal hyphen (manual §3.12) vs a bare final hyphen (a §3.12 violation). Triggers: line-ending hyphens where divided words cross column boundaries; words divided across folio breaks; hyphenated words crossing columns. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "layout.hyphen_boundaries",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "codex_nonsequitur_after_cw",
+    "description": "Non-sequiturs. Non-sequitur tokens [—] (and OSTA's standalone [...] lines) located at the foot of a folio side that has a catchword. Triggers: non-sequiturs after a catchword indicating lost folios; missing folios between quires; lost leaves after the catchword. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "codex.nonsequitur_after_cw",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "chars_sibilant_graphs",
+    "description": "Sibilant graphs. Diplomatic surfaces matching s' (sigma), c'/ç (cedilla), s~/ſ (long s) and z. Triggers: sigma graph versus c cedilla versus long s; where does the scribe use s' or c'; sibilant graphs distribution. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "chars.sibilant_graphs",
+    "tier": "B",
+    "category": "paleography"
+  },
+  {
+    "name": "chars_accents",
+    "description": "Accent marks. Legacy accent notation @' (acute), @` (grave), @^ (circumflex), @# (dieresis) counted per language section. Triggers: orthographic accent marks acute grave circumflex dieresis; accents in latin and romance sections; where are @' and @^ used. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "chars.accents",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "chars_numerals_symbols",
+    "description": "Numerals & symbols. Words matching .[ivxlcdm]+. bounded by periods, {SYMB.} anchors, and xp-/ih- formulas. Triggers: roman numerals bounded by periods; apothecary symbols and greek formulas; extract numerals and symbols. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "chars.numerals_symbols",
+    "tier": "B",
+    "category": "paleography"
+  },
+  {
+    "name": "figure_interior_text",
+    "description": "Text in figures. Figure anchors {MIN.}/{DIAG.}/{ILL.} with non-empty text, plus {DIAG.} blocks containing words. Triggers: miniatures or diagrams with interior text; text inside a diagram; which figures contain text. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "figure.interior_text",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "phon_sibilants",
+    "description": "Sibilants -s-/-ss-. Intervocalic -s- vs -ss-, and ç/c' vs z, on diplomatic surfaces outside foreign-language spans. Triggers: intervocalic s versus ss; compare c cedilla and z; sibilant devoicing evidence. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "phon.sibilants",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "phon_palatal_nasal",
+    "description": "Palatal nasal. Graph set palatal_nasal (n~/ñ, nn, nh, ny). Plain-n spellings need a lemma list and are not counted. Triggers: how is the palatal nasal spelled; palatalization n with tilde geminate nn or plain n; spellings of ñ. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "phon.palatal_nasal",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "phon_palatal_lateral",
+    "description": "Palatal lateral. Graph set palatal_lateral (ll, li + vowel, lh). li + vowel is noisy: read the examples. Triggers: palatal lateral written as ll li or l; spellings of ll; lateral palatal orthography. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "phon.palatal_lateral",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "phon_apocope",
+    "description": "Apocope. Word types ending in -e whose form without -e is also attested (noche / noch). Triggers: final e apocope; noch versus noche; words with and without final e. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "phon.apocope",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "morph_enclisis",
+    "description": "Enclisis. Words = verb stem + enclitic where the bare stem also occurs alone; proclitic = clitic word followed by that stem. Triggers: enclitic pronouns attached to finite verbs; dixol llamol saliol; enclisis versus proclisis. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.enclisis",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "morph_clitic_elision",
+    "description": "Clitic elision. Closed list of elided clitic forms (yl, quel, nol…) vs their two-word counterparts. Triggers: clitic elision yl versus y le; elided clitic pronouns; quel nol sil forms. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.clitic_elision",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "morph_contractions",
+    "description": "Contractions. Closed list of merged preposition+article/pronoun forms per witness language vs the separate two-word forms. Triggers: merged contractions enel delos sobrel; prepositional contractions versus separate; enel versus en el. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.contractions",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "morph_prefix_separation",
+    "description": "Prefix [+]. prefix_separator tokens [+] (manual §3.221a(5)), grouped by prefix. Triggers: editorial prefix separation [+]; de[+]nostados a[+]caudillar; compounds with prefix separator. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.prefix_separation",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "morph_prefix_linebreak",
+    "description": "Prefix at line end. Lines whose last tokens are [+] followed by a line-end hyphen. Triggers: prefix split from its root at line end; de[+]- at the end of a line; line break between prefix and root. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.prefix_linebreak",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "lex_latinate_doublets",
+    "description": "Latinate doublets. Closed list of learned/vernacular doublets plus abbreviated learned spellings (ct, pt, mn, gn) expanded by the editor. Triggers: learned latinate spellings versus vernacular; sancto versus santo; latinate doublets. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "lex.latinate_doublets",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "lex_greek_formulas",
+    "description": "Greek formulas. Words beginning xp- or ih[s/u]- on the diplomatic surface, with ±5 words of context. Triggers: greek character formulas xp ih; nomina sacra; xp for chr. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "lex.greek_formulas",
+    "tier": "B",
+    "category": "linguistics"
+  },
+  {
+    "name": "dial_tagged_spans",
+    "description": "Dialect spans. Lines containing editor-tagged Iberian language spans ({ARG.}, {CAT.}, {GAL.}, {PRT.}, {BAS.}). Triggers: aragonese or leonese features; tagged dialect spans {ARG.}; dialect markers in the castilian text. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "dial.tagged_spans",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "aljamiado_symb_spans",
+    "description": "Aljamiado spans. {SYMB.} figure anchors with their transliterated text and Romance context. Triggers: aljamiado transliterated spans; {SYMB: transliterated}; ladino transliteration. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "aljamiado.symb_spans",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "syntax_punctuation",
+    "description": "Punctuation. Punctuation marks (. : ; , / ¶ and scribal $; $.) counted by line-final vs internal position. Triggers: scribal punctuation colons virgules periods; breath group punctuation; punctuation relative to clause boundaries. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "syntax.punctuation",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "discourse_calderones",
+    "description": "Calderones. Calderón tokens %, %2, %3 with the following words; a speech verb within six words marks a probable turn (heuristic). Triggers: calderones as discourse markers; paragraph marks and speaker turns; how consistently are % %2 %3 used. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "discourse.calderones",
+    "tier": "A",
+    "category": "linguistics"
+  },
+  {
+    "name": "stats_ttr_hapax",
+    "description": "TTR & hapax. Body-text word forms (accents folded): TTR, STTR over 1,000-token windows, hapax and dis legomena, per quire. Triggers: type token ratio and hapax legomena; lexical richness of this manuscript; ttr per quire. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "witness",
+            "registry"
+          ],
+          "description": "Slot `scope`"
+        }
+      },
+      "required": []
+    },
+    "recipeId": "stats.ttr_hapax",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "stats_top_lemmas",
+    "description": "Top lemmas. HSMS dictionary lemmas (surface forms until it loads), minus the witness-language stopword list. Triggers: most frequent lemmas without function words; top 50 lemmas; frequency list. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "top": {
+          "type": "integer",
+          "description": "Slot `top`",
+          "default": 50,
+          "minimum": 5,
+          "maximum": 200
+        }
+      },
+      "required": []
+    },
+    "recipeId": "stats.top_lemmas",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "stats_variant_share",
+    "description": "Spelling variants. Forms whose dictionary lemma matches, or whose orthographic skeleton (ç/z, ss/s, ff/f, v/u, y/i folded) matches the lemma. Triggers: what percentage of the verb appear as each spelling; orthographic variants of a lemma; spelling variants of fazer. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "lemma": {
+          "type": "string",
+          "description": "Slot `lemma`"
+        }
+      },
+      "required": [
+        "lemma"
+      ]
+    },
+    "recipeId": "stats.variant_share",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "stats_zipf",
+    "description": "Zipf. Least-squares slope of log10(frequency) on log10(rank) over the 200 most frequent word forms. Triggers: zipfian distribution; rank frequency curve; zipf slope. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "stats.zipf",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "colloc_window",
+    "description": "Collocates. Co-occurrence within ±window words (stopwords excluded): PMI, t-score and log-likelihood G²; minimum 3 co-occurrences. Triggers: mutual information or t-score within a 5-word window; collocates of rey; words co-occurring with emperador. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "word": {
+          "type": "string",
+          "description": "Slot `word`"
+        },
+        "window": {
+          "type": "integer",
+          "description": "Slot `window`",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10
+        }
+      },
+      "required": [
+        "word"
+      ]
+    },
+    "recipeId": "colloc.window",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "ngrams_top",
+    "description": "Top n-grams. Contiguous word sequences within each folio side; sequences made only of function words are skipped. Triggers: top 3-gram and 4-gram formulaic sequences; recurring phrases; most frequent trigrams. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "n": {
+          "type": "integer",
+          "description": "Slot `n`",
+          "default": 3,
+          "minimum": 2,
+          "maximum": 5
+        },
+        "top": {
+          "type": "integer",
+          "description": "Slot `top`",
+          "default": 50,
+          "minimum": 5,
+          "maximum": 200
+        }
+      },
+      "required": []
+    },
+    "recipeId": "ngrams.top",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "colloc_prep_article",
+    "description": "en + article. The preposition followed by an article (merged or separate) vs followed by another word. Triggers: en plus definite article versus zero article; enel en la en los; co-occurrence of en and the article. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "colloc.prep_article",
+    "tier": "B",
+    "category": "corpus"
+  },
+  {
+    "name": "morph_subordinators",
+    "description": "Subordinators. Closed list of complex subordinators written as one unit vs split. Triggers: porque paraque anteque puesque as single units versus separated; complex subordinating conjunctions; subordinator spelling. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.subordinators",
+    "tier": "B",
+    "category": "corpus"
+  },
+  {
+    "name": "morph_prefix_productivity",
+    "description": "Prefix productivity. [+] compounds counted by prefix; semantic domains need server processing. Triggers: prefix productivity; count prefixed verbs marked with [+]; prefixes by semantic domain. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "morph.prefix_productivity",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
+    "name": "codex_catchword_hyphen_bias",
+    "description": "Hyphens at quire feet. 2×2 table (folio-final line on a catchword page vs internal line × hyphenated) with log-likelihood G² and p-value; warns when expected counts < 5. Triggers: do catchwords at quire feet show more hyphenated words; page position lexical bias; hyphenation at quire ends versus internal lines. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "codex.catchword_hyphen_bias",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "marg_vocab_ratio",
+    "description": "Gloss vocabulary. Word types in {GL.} blocks vs body lines (accents folded): gloss-only types and Jaccard overlap. Triggers: unique vocabulary in marginal glosses versus the body; gloss-only words; ratio of gloss vocabulary. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "marg.vocab_ratio",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "compare_diachronic",
+    "description": "By decade. Batch witnesses grouped by decade (year from {RMK:} imprint or the library catalog): lexical density and nn/(nn+n~). Triggers: frequency change across centuries; trace the decline of abbreviations by century; plot nn versus n~ by decade. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "witness",
+            "registry"
+          ],
+          "description": "Slot `scope`"
+        }
+      },
+      "required": []
+    },
+    "recipeId": "compare.diachronic",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "compare_genre",
+    "description": "By genre. Batch witnesses grouped by genre metadata: lexical density and nn/(nn+n~). Triggers: lexical density of astronomical treatises versus legal texts; compare genres; genre comparison. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "witness",
+            "registry"
+          ],
+          "description": "Slot `scope`"
+        }
+      },
+      "required": []
+    },
+    "recipeId": "compare.genre",
+    "tier": "C",
+    "category": "corpus"
+  },
+  {
+    "name": "syntax_clitic_position",
+    "description": "Clitics by clause. Needs POS tagging and clause parsing (server); local answer is the Tier B enclisis count. Triggers: enclitic versus proclitic in main versus subordinate clauses; clitic position statistics by clause type; post-verbal versus pre-verbal pronouns. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "syntax.clitic_position",
+    "tier": "D",
+    "category": "corpus"
+  },
+  {
+    "name": "ml_aljamiado_density",
+    "description": "Aljamiado density. Needs the Aljamiado lexicon (server); local answer lists the {SYMB.} spans. Triggers: romance vocabulary versus arabic loanwords in transliterated texts; aljamiado token density; ladino loanword ratio. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "ml.aljamiado_density",
+    "tier": "D",
+    "category": "corpus"
+  },
+  {
+    "name": "search_kwic",
+    "description": "Word in context. Every occurrence of the word (accents folded) with five words of context on each side. Triggers: concordance for a word; show every occurrence of; kwic for. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "word": {
+          "type": "string",
+          "description": "Slot `word`"
+        }
+      },
+      "required": [
+        "word"
+      ]
+    },
+    "recipeId": "search.kwic",
+    "tier": "A",
+    "category": "navigation"
+  },
+  {
+    "name": "ingest_low_confidence",
+    "description": "Low confidence. Ingest sidecar lines with mean character confidence below 0.8. Triggers: low confidence lines; which lines did recognition struggle with; uncertain machine transcription. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "ingest.low_confidence",
+    "tier": "A",
+    "category": "ingest"
+  },
+  {
+    "name": "ingest_unreviewed",
+    "description": "Unreviewed folios. Ingest sidecar folio review states other than reviewed. Triggers: unreviewed folios; which folios still need review; review status. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "ingest.unreviewed",
+    "tier": "A",
+    "category": "ingest"
+  },
+  {
     "name": "query_codicological_graph",
     "description": "Graph search across authors, printers, cities, years, and shared rare vocabulary (out/library-graph.json).",
     "inputSchema": {
@@ -414,26 +1198,15 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
       "properties": {
         "image_uri": {
           "type": "string",
-          "description": "Image data URI / file URI, or a PDF URI. PDFs are sliced client-side to PNG/JPEG before vision calls (never uploaded as PDF)."
+          "description": "Base64 data URI or storage URL of the page scan / PDF (often first ~25 leaves)."
         },
         "folio_id": {
           "type": "string",
-          "description": "Target folio marker for a single leaf, e.g., '1r' or '3v'."
+          "description": "Target folio marker, e.g., '1r' or '3v'."
         },
         "language_hint": {
           "type": "string",
           "description": "Ibero-Romance language hint (POR, SPA, CAT, LAT)."
-        },
-        "max_pages": {
-          "type": "integer",
-          "description": "Max PDF pages to slice (default 25).",
-          "default": 25,
-          "minimum": 1,
-          "maximum": 50
-        },
-        "mime_type": {
-          "type": "string",
-          "description": "Optional MIME (application/pdf triggers client slicer)."
         }
       },
       "required": [
@@ -441,32 +1214,6 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
       ]
     },
     "recipeId": "transcription.vision_ocr",
-    "tier": "A",
-    "category": "paleography"
-  },
-  {
-    "name": "convert_htr_to_hsms",
-    "description": "Cleans Handwritten Text Recognition exports (Transkribus / eScriptorium) into HSMS ASCII using the ordered 80+ substitution rules from HSMS-tools/HTR_to_HSMS.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "htrText": {
-          "type": "string",
-          "description": "Raw HTR / OCR plain text to convert."
-        },
-        "text": {
-          "type": "string",
-          "description": "Alias for htrText."
-        },
-        "skip_space_cleanup": {
-          "type": "boolean",
-          "description": "If true, skip the trailing whitespace normalization pass.",
-          "default": false
-        }
-      },
-      "required": []
-    },
-    "recipeId": "transcription.convert_htr",
     "tier": "A",
     "category": "paleography"
   }
@@ -600,26 +1347,15 @@ export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = [
       "properties": {
         "image_uri": {
           "type": "string",
-          "description": "Image data URI / file URI, or a PDF URI. PDFs are sliced client-side to PNG/JPEG before vision calls (never uploaded as PDF)."
+          "description": "Base64 data URI or storage URL of the page scan / PDF (often first ~25 leaves)."
         },
         "folio_id": {
           "type": "string",
-          "description": "Target folio marker for a single leaf, e.g., '1r' or '3v'."
+          "description": "Target folio marker, e.g., '1r' or '3v'."
         },
         "language_hint": {
           "type": "string",
           "description": "Ibero-Romance language hint (POR, SPA, CAT, LAT)."
-        },
-        "max_pages": {
-          "type": "integer",
-          "description": "Max PDF pages to slice (default 25).",
-          "default": 25,
-          "minimum": 1,
-          "maximum": 50
-        },
-        "mime_type": {
-          "type": "string",
-          "description": "Optional MIME (application/pdf triggers client slicer)."
         }
       },
       "required": [
@@ -627,32 +1363,6 @@ export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = [
       ]
     },
     "recipeId": "transcription.vision_ocr",
-    "tier": "A",
-    "category": "paleography"
-  },
-  {
-    "name": "convert_htr_to_hsms",
-    "description": "Cleans Handwritten Text Recognition exports (Transkribus / eScriptorium) into HSMS ASCII using the ordered 80+ substitution rules from HSMS-tools/HTR_to_HSMS.",
-    "inputSchema": {
-      "type": "object",
-      "properties": {
-        "htrText": {
-          "type": "string",
-          "description": "Raw HTR / OCR plain text to convert."
-        },
-        "text": {
-          "type": "string",
-          "description": "Alias for htrText."
-        },
-        "skip_space_cleanup": {
-          "type": "boolean",
-          "description": "If true, skip the trailing whitespace normalization pass.",
-          "default": false
-        }
-      },
-      "required": []
-    },
-    "recipeId": "transcription.convert_htr",
     "tier": "A",
     "category": "paleography"
   }

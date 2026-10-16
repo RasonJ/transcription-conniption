@@ -35,9 +35,15 @@ import { exportToTEIXML } from "@/utils/teiExport";
 import { copyFigureIntoWorkspace } from "@/utils/figureAssetStorage";
 import { platformShadow } from "@/utils/platformShadow";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
+import type { MachineTranscriptionMeta } from "@/utils/ingest/visionSidecar";
 import {
-  isPlainTextUploadFile,
-  isVisionUploadFile,
+  extractTranscriptionTextFromBrowserFile,
+  extractTranscriptionTextFromUri,
+} from "@/utils/transcriptionFileText";
+import {
+  browserFileToVisionUri,
+  classifyStudioUpload,
+  looksLikeHsmsAscii,
 } from "@/utils/visionUpload";
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
@@ -167,7 +173,6 @@ export default function TranscriptionConniptionScreen() {
     removeImageUri,
     loadBatch,
     createNewWorkspace,
-    importTextFile,
     importHsmsBundle,
     exportHsmsBundle,
     loadSample,
@@ -274,7 +279,15 @@ export default function TranscriptionConniptionScreen() {
         });
         if (!visionResult) return;
 
-        applyTranscription(visionResult.hsmsAscii, { sourceFileName: outName });
+        applyTranscription(visionResult.hsmsAscii, {
+          sourceFileName: outName,
+          // Folio review states for the draft (SPEC-PDF-INGEST §7; copilot ingest.unreviewed).
+          machineTranscription: {
+            pages: visionResult.pages,
+            sourceKind: mimeType === "application/pdf" ? "pdf" : "image",
+            sourceName: source.name ?? undefined,
+          },
+        });
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         Alert.alert(
           tNow("studio.action.transcribeScanDone"),
@@ -295,36 +308,125 @@ export default function TranscriptionConniptionScreen() {
     [applyTranscription, startBatchTranscription],
   );
 
-  const handleTranscribeScan = useCallback(async () => {
-    if (!isAzureAgentConfigured()) {
-      Alert.alert(tNow("studio.action.transcribeScanError"), tNow("studio.action.transcribeScanNeedAzure"));
-      return;
-    }
+  const applyHsmsTextFile = useCallback(
+    async (params: { text: string; sourceFileName: string }) => {
+      applyTranscription(params.text, { sourceFileName: params.sourceFileName });
+      setIsPreview(true);
+      setIsEditorMode(false);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    },
+    [applyTranscription],
+  );
+
+  /** Browser File from drop / paste → local transcription or Azure vision. */
+  const ingestBrowserFile = useCallback(
+    async (file: File) => {
+      const kind = classifyStudioUpload({ name: file.name, type: file.type });
+      if (kind === "unsupported") {
+        Alert.alert(
+          tNow("studio.action.uploadError"),
+          tNow("studio.action.transcribeScanDropUnsupported"),
+        );
+        return;
+      }
+      if (kind === "text") {
+        try {
+          const text = await extractTranscriptionTextFromBrowserFile(file);
+          if (text.trim()) {
+            await applyHsmsTextFile({ text, sourceFileName: file.name });
+          }
+        } catch (err) {
+          Alert.alert(
+            tNow("studio.action.uploadError"),
+            err instanceof Error ? err.message : tNow("alert.importTextFailed"),
+          );
+        }
+        return;
+      }
+      const vision = await browserFileToVisionUri(file);
+      try {
+        await runVisionTranscription({
+          uri: vision.uri,
+          name: file.name,
+          mimeType: vision.mimeType,
+          file,
+        });
+      } finally {
+        vision.revoke?.();
+      }
+    },
+    [applyHsmsTextFile, runVisionTranscription],
+  );
+
+  /**
+   * Single Studio upload: .txt / .hsms / .docx → parchment (no Azure);
+   * image / PDF → AI transcription. Same destinations as drag-drop and paste.
+   */
+  const handleStudioUpload = useCallback(async () => {
+    if (visionBusy || isCompiling) return;
     try {
       const result = await DocumentPicker.getDocumentAsync({
-        type: ["image/*", "application/pdf"],
+        type: [
+          "text/plain",
+          "text/*",
+          "image/*",
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "application/octet-stream",
+          "*/*",
+        ],
         copyToCacheDirectory: true,
       });
       if (result.canceled || !result.assets?.[0]?.uri) return;
       const asset = result.assets[0];
-      await runVisionTranscription({
-        uri: asset.uri,
+      const kind = classifyStudioUpload({
+        name: asset.name,
+        type: asset.mimeType,
+        mimeType: asset.mimeType,
+      });
+
+      if (kind === "vision") {
+        await runVisionTranscription({
+          uri: asset.uri,
+          name: asset.name,
+          mimeType: asset.mimeType,
+        });
+        return;
+      }
+
+      if (kind === "unsupported") {
+        Alert.alert(
+          tNow("studio.action.uploadError"),
+          tNow("studio.action.transcribeScanDropUnsupported"),
+        );
+        return;
+      }
+
+      const fileText = await extractTranscriptionTextFromUri(asset.uri, {
         name: asset.name,
         mimeType: asset.mimeType,
       });
+      await applyHsmsTextFile({
+        text: fileText,
+        sourceFileName: asset.name ?? "transcription.txt",
+      });
     } catch (err) {
-      console.warn("Vision transcription failed", err);
+      console.warn("Studio upload failed", err);
       Alert.alert(
-        tNow("studio.action.transcribeScanError"),
-        err instanceof Error ? err.message : tNow("studio.action.transcribeScanErrorBody"),
+        tNow("studio.action.uploadError"),
+        err instanceof Error ? err.message : tNow("alert.importTextFailed"),
       );
     }
-  }, [runVisionTranscription]);
+  }, [applyHsmsTextFile, isCompiling, runVisionTranscription, visionBusy]);
 
   const handleApplyHsmsFromCopilot = useCallback(
-    (hsms: string, meta: { sourceFileName: string }) => {
+    (hsms: string, meta: { sourceFileName: string; machineTranscription?: MachineTranscriptionMeta }) => {
       // Load HSMS onto parchment while keeping the assistant open to show the ASCII body.
-      applyTranscription(hsms, { sourceFileName: meta.sourceFileName });
+      applyTranscription(hsms, {
+        sourceFileName: meta.sourceFileName,
+        machineTranscription: meta.machineTranscription,
+      });
       setIsPreview(true);
       setIsEditorMode(false);
       void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -338,7 +440,7 @@ export default function TranscriptionConniptionScreen() {
     }
   }, [isPreview, commitEditorBuffer]);
 
-  // ── Web drag-and-drop: .txt → parchment; image/PDF → Azure vision HSMS
+  // ── Web drag-drop + paste: .txt/HSMS → parchment (no Azure); image/PDF → vision
   useEffect(() => {
     if (Platform.OS !== "web" || typeof document === "undefined") return;
 
@@ -355,73 +457,69 @@ export default function TranscriptionConniptionScreen() {
       setIsDragOver(false);
       const de = e as DragEvent;
       const file = de.dataTransfer?.files?.[0];
-      if (!file) return;
+      if (file) {
+        void ingestBrowserFile(file);
+        return;
+      }
+      const text = de.dataTransfer?.getData("text/plain")?.trim();
+      if (text && looksLikeHsmsAscii(text)) {
+        void applyHsmsTextFile({ text, sourceFileName: "pasted_transcription.txt" });
+      }
+    };
 
-      if (isVisionUploadFile(file)) {
-        const isPdf =
-          file.type === "application/pdf" || /\.pdf$/i.test(file.name);
-        if (isPdf) {
-          const objectUrl = URL.createObjectURL(file);
-          void runVisionTranscription({
-            uri: objectUrl,
-            name: file.name,
-            mimeType: "application/pdf",
-            file,
-          }).finally(() => {
-            try {
-              URL.revokeObjectURL(objectUrl);
-            } catch {
-              /* ignore */
+    const onPaste = (e: Event) => {
+      const pe = e as ClipboardEvent;
+      const target = pe.target as HTMLElement | null;
+      // Don't steal paste from inputs / textareas / contenteditable.
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      const files = pe.clipboardData?.files;
+      if (files && files.length > 0) {
+        pe.preventDefault();
+        void ingestBrowserFile(files[0]);
+        return;
+      }
+
+      const items = pe.clipboardData?.items;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.kind === "file") {
+            const file = item.getAsFile();
+            if (file) {
+              pe.preventDefault();
+              void ingestBrowserFile(file);
+              return;
             }
-          });
-          return;
+          }
         }
-        // Single page image → data URI (works with Azure vision on web).
-        const reader = new FileReader();
-        reader.onload = () => {
-          const dataUri = typeof reader.result === "string" ? reader.result : "";
-          if (!dataUri) return;
-          void runVisionTranscription({
-            uri: dataUri,
-            name: file.name,
-            mimeType: file.type || "image/jpeg",
-            file,
-          });
-        };
-        reader.readAsDataURL(file);
-        return;
       }
 
-      if (!isPlainTextUploadFile(file)) {
-        Alert.alert(
-          tNow("studio.action.transcribeScanError"),
-          tNow("studio.action.transcribeScanDropUnsupported"),
-        );
-        return;
+      const text = pe.clipboardData?.getData("text/plain")?.trim();
+      if (text && looksLikeHsmsAscii(text)) {
+        pe.preventDefault();
+        void applyHsmsTextFile({ text, sourceFileName: "pasted_transcription.txt" });
       }
-
-      const reader = new FileReader();
-      reader.onload = (evt) => {
-        const text = evt.target?.result;
-        if (typeof text === "string" && text.length > 0) {
-          applyTranscription(text, { sourceFileName: file.name });
-          setIsPreview(true);
-          setIsEditorMode(false);
-          void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        }
-      };
-      reader.readAsText(file, "utf-8");
     };
 
     document.addEventListener("dragover", onDragOver);
     document.addEventListener("dragleave", onDragLeave);
     document.addEventListener("drop", onDrop);
+    document.addEventListener("paste", onPaste);
     return () => {
       document.removeEventListener("dragover", onDragOver);
       document.removeEventListener("dragleave", onDragLeave);
       document.removeEventListener("drop", onDrop);
+      document.removeEventListener("paste", onPaste);
     };
-  }, [applyTranscription, runVisionTranscription]);
+  }, [applyHsmsTextFile, ingestBrowserFile]);
 
   const readingFlowText = useMemo(
     () =>
@@ -662,34 +760,25 @@ export default function TranscriptionConniptionScreen() {
               <View style={styles.readerActionBar}>
                 <Pressable
                   onPress={() => {
-                    void importTextFile().then(() => {
-                      setIsPreview(true);
-                      setIsEditorMode(false);
-                    });
+                    if (!visionBusy && !isCompiling) void handleStudioUpload();
                   }}
-                  style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}
-                >
-                  <Upload color={theme.inkDark} size={16} />
-                  <Text style={styles.primaryButtonText}>{t("studio.action.upload")}</Text>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    if (!visionBusy) void handleTranscribeScan();
-                  }}
-                  disabled={visionBusy}
+                  disabled={visionBusy || isCompiling}
                   style={({ pressed }) => [
                     styles.primaryButton,
-                    visionBusy && styles.pressed,
+                    (visionBusy || isCompiling) && styles.pressed,
                     pressed && styles.pressed,
                   ]}
                   accessibilityRole="button"
-                  accessibilityLabel={t("studio.action.transcribeScan")}
+                  accessibilityLabel={t("studio.action.upload")}
+                  accessibilityHint={t("studio.action.uploadHint")}
                 >
-                  <Sparkles color={theme.inkDark} size={16} />
+                  <Upload color={theme.inkDark} size={16} />
                   <Text style={styles.primaryButtonText}>
                     {visionBusy
                       ? t("studio.action.transcribeScanBusy")
-                      : t("studio.action.transcribeScan")}
+                      : isCompiling
+                        ? t("studio.processing")
+                        : t("studio.action.upload")}
                   </Text>
                 </Pressable>
                 <Pressable
@@ -1519,6 +1608,8 @@ function TokenStream({
             return <Text key={idx}> </Text>;
           case "scribal_insertion":
           case "editorial_insertion":
+          case "prefix_separator":
+          case "non_sequitur":
             return (
               <Text key={idx} style={[styles.insertionToken, handStyle]}>
                 {token.hand ? (
