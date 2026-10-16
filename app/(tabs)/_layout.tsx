@@ -1,8 +1,11 @@
+import { useT } from "@/i18n/runtime";
 import { Tabs } from "expo-router";
 import { BookMarked, BookOpen, ScrollText } from "lucide-react-native";
 import React from "react";
 
 export default function TabLayout() {
+  const t = useT();
+
   return (
     <Tabs
       screenOptions={{
@@ -18,21 +21,21 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Studio",
+          title: t("studio.tab.studio"),
           tabBarIcon: ({ color }) => <BookOpen color={color} size={22} />,
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
-          title: "Library",
+          title: t("studio.tab.library"),
           tabBarIcon: ({ color }) => <BookMarked color={color} size={22} />,
         }}
       />
       <Tabs.Screen
         name="about"
         options={{
-          title: "Sources",
+          title: t("studio.tab.sources"),
           tabBarIcon: ({ color }) => <ScrollText color={color} size={22} />,
         }}
       />

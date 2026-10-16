@@ -1,6 +1,7 @@
 import type { ScriptoriumWorkspace } from "@/constants/manuscript";
 import * as FileSystem from "@/utils/expoFileSystem";
 import { copyFigureIntoWorkspace, ensureWorkspaceDirectories } from "./figureAssetStorage";
+import { isBundleV2 } from "./ingest/bundleV2";
 import { createWorkspace, persistWorkspace } from "./scriptoriumWorkspace";
 
 export const HSMS_BUNDLE_FORMAT = "hsms-scriptorium-bundle/1";
@@ -116,18 +117,38 @@ export async function exportHsmsBundleToFile(workspace: ScriptoriumWorkspace): P
   return dest;
 }
 
-export function parseHsmsBundleJson(json: string): HsmsBundleFile {
-  const parsed = JSON.parse(json) as HsmsBundleFile;
-  if (parsed?.manifest?.format !== HSMS_BUNDLE_FORMAT) {
+function assertBundleV1(parsed: unknown): HsmsBundleFile {
+  const candidate = parsed as HsmsBundleFile;
+  if (candidate?.manifest?.format !== HSMS_BUNDLE_FORMAT) {
     throw new Error("Unsupported or unrecognized external .hsms payload mapping profile.");
   }
-  return parsed;
+  return candidate;
 }
 
-/** Restores workspace from a `.hsms` bundle file URI. */
+export function parseHsmsBundleJson(json: string): HsmsBundleFile {
+  return assertBundleV1(JSON.parse(json));
+}
+
+/**
+ * Restores workspace from a `.hsms` bundle file URI (v1 and v2).
+ * v2 restores witness text and title; sidecar and IIIF references are not persisted yet.
+ */
 export async function importHsmsBundleFromUri(uri: string): Promise<ScriptoriumWorkspace> {
   const json = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.UTF8 });
-  const bundle = parseHsmsBundleJson(json);
+  const raw: unknown = JSON.parse(json);
+
+  if (isBundleV2(raw)) {
+    const v2 = raw.manifest;
+    const fromV2 = createWorkspace({
+      transcriptionText: v2.witness.text,
+      manuscriptTitle: v2.metadata.title,
+      sourceFileName: v2.witness.sourceFileName,
+    });
+    await persistWorkspace(fromV2);
+    return fromV2;
+  }
+
+  const bundle = assertBundleV1(raw);
   const m = bundle.manifest.workspace;
 
   const workspace = createWorkspace({

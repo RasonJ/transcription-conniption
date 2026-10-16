@@ -1,5 +1,6 @@
-import type { ConcordanceIndex, WordOccurrence } from "@/constants/manuscript";
-import { getConcordanceEntriesSorted } from "@/utils/concordance";
+import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
+import { getConcordanceEntriesSorted, getConcordanceForManuscript } from "@/utils/concordance";
 import { Search, X } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
@@ -9,7 +10,8 @@ type ConcordanceEntry = { lemma: string; count: number; occurrences: WordOccurre
 type Props = {
   visible: boolean;
   onClose: () => void;
-  concordance: ConcordanceIndex;
+  parsed: ParsedManuscript;
+  sourceText?: string;
   onSelectOccurrence: (occurrence: WordOccurrence) => void;
 };
 
@@ -20,7 +22,9 @@ const ConcordanceEntryRow = React.memo(
     onToggle,
     onSelectOccurrence,
     onClose,
+    t,
   }: {
+    t: ReturnType<typeof useT>;
     entry: ConcordanceEntry;
     expanded: boolean;
     onToggle: () => void;
@@ -45,7 +49,9 @@ const ConcordanceEntryRow = React.memo(
                 style={styles.kwicRow}
               >
                 <Text style={styles.kwicMeta}>
-                  [fol. {occ.folioId}]{occ.lineNumber ? ` · line ${occ.lineNumber}` : ""}
+                  {occ.lineNumber
+                    ? t("concordance.occurrence.folioLine", { folio: occ.folioId, line: occ.lineNumber })
+                    : t("concordance.occurrence.folio", { folio: occ.folioId })}
                 </Text>
                 <Text style={styles.kwicLine} numberOfLines={2}>
                   <Text style={styles.kwicPre}>{occ.preContext} </Text>
@@ -60,6 +66,7 @@ const ConcordanceEntryRow = React.memo(
     );
   },
   (prevProps, nextProps) =>
+    prevProps.t === nextProps.t &&
     prevProps.entry.lemma === nextProps.entry.lemma &&
     prevProps.expanded === nextProps.expanded &&
     prevProps.entry.count === nextProps.entry.count,
@@ -67,10 +74,17 @@ const ConcordanceEntryRow = React.memo(
 
 ConcordanceEntryRow.displayName = "ConcordanceEntryRow";
 
-export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccurrence }: Props) {
+const EMPTY_CONCORDANCE: ConcordanceIndex = {};
+
+export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSelectOccurrence }: Props) {
+  const t = useT();
   const [query, setQuery] = useState("");
   const [expandedLemma, setExpandedLemma] = useState<string | null>(null);
 
+  const concordance = useMemo(
+    () => (visible ? getConcordanceForManuscript(parsed, sourceText) : EMPTY_CONCORDANCE),
+    [visible, parsed, sourceText],
+  );
   const entries = useMemo(() => getConcordanceEntriesSorted(concordance), [concordance]);
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -86,9 +100,10 @@ export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccur
         onToggle={() => setExpandedLemma((prev) => (prev === item.lemma ? null : item.lemma))}
         onSelectOccurrence={onSelectOccurrence}
         onClose={onClose}
+        t={t}
       />
     ),
-    [expandedLemma, onSelectOccurrence, onClose],
+    [expandedLemma, onSelectOccurrence, onClose, t],
   );
 
   const keyExtractor = useCallback((item: ConcordanceEntry) => item.lemma, []);
@@ -98,12 +113,12 @@ export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccur
       <View style={styles.backdrop}>
         <View style={styles.panel}>
           <View style={styles.header}>
-            <Text style={styles.title}>KWIC Concordance</Text>
+            <Text style={styles.title}>{t("concordance.title")}</Text>
             <Pressable
               onPress={onClose}
               hitSlop={12}
               accessibilityRole="button"
-              accessibilityLabel="Close concordance"
+              accessibilityLabel={t("concordance.closeLabel")}
             >
               <X color="#f6d890" size={22} />
             </Pressable>
@@ -114,7 +129,7 @@ export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccur
             <TextInput
               value={query}
               onChangeText={setQuery}
-              placeholder="Filter lemmas…"
+              placeholder={t("concordance.filterPlaceholder")}
               placeholderTextColor="#99836a"
               style={styles.searchInput}
               autoCapitalize="none"
@@ -124,8 +139,10 @@ export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccur
           </View>
 
           <Text style={styles.hint}>
-            {entries.length.toLocaleString()} indexed terms · showing {filtered.length.toLocaleString()}
-            {query.trim() ? " matches" : ""}. Tap an occurrence to jump to the leaf.
+            {t(query.trim() ? "concordance.summaryFiltered" : "concordance.summary", {
+              total: entries.length.toLocaleString(),
+              shown: filtered.length.toLocaleString(),
+            })}
           </Text>
 
           <FlatList
@@ -139,7 +156,7 @@ export function ConcordanceDrawer({ visible, onClose, concordance, onSelectOccur
             initialNumToRender={20}
             removeClippedSubviews
             ListEmptyComponent={
-              <Text style={styles.emptyList}>No lemmas match this filter.</Text>
+              <Text style={styles.emptyList}>{t("concordance.empty")}</Text>
             }
           />
         </View>

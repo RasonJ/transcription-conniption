@@ -1,14 +1,14 @@
-import { MANUSCRIPT_INTENT_PROTOTYPES } from "@/constants/manuscriptIntents";
-import type { ManuscriptBlock, ParsedManuscript } from "@/constants/manuscript";
-import { hashEmbed } from "@/utils/embeddings/hashEmbed";
+import { MANUSCRIPT_INTENT_PROTOTYPES } from "../constants/manuscriptIntents";
+import type { ManuscriptBlock, ParsedManuscript } from "../constants/manuscript";
+import { hashEmbed } from "./embeddings/hashEmbed";
 import {
   INTENT_THRESHOLD,
   buildProtoVectors,
   classifyIntent,
   type IntentMatch,
   type ProtoVectors,
-} from "@/utils/embeddings/intentClassifier";
-import type { ManuscriptChunk, ManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
+} from "./embeddings/intentClassifier";
+import type { ManuscriptChunk, ManuscriptVectorIndex } from "./manuscriptVectorIndex";
 
 export interface SearchHit {
   chunk: ManuscriptChunk;

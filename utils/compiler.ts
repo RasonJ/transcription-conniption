@@ -7,7 +7,12 @@
  */
 export { parseHsMsText, parseHsMsText as compileManuscriptTree } from "./manuscriptParser";
 export { lintHsmsTranscription, validationIssuesToLintReport, type LintReport } from "./hsmsLinter";
-export { generateConcordanceIndex, computeManuscriptStats, enrichParsedManuscript } from "./analyzeManuscript";
+export {
+  generateConcordanceIndex,
+  computeManuscriptStats,
+  enrichParsedManuscript,
+  getConcordanceForManuscript,
+} from "./analyzeManuscript";
 export { tokenizeString } from "./hsmsLexer";
 export {
   assembleStructuralTokens,

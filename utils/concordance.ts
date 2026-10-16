@@ -1,6 +1,7 @@
 import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "../constants/manuscript";
 import { STOPWORDS } from "../constants/stopwords";
 import { lookupHsmsLemma } from "./hsmsDictionary";
+import { manuscriptIdentityFromSource } from "./manuscriptIdentity";
 
 const CONTEXT_RADIUS = 28;
 
@@ -99,6 +100,59 @@ export function buildConcordance(
   }
 
   return index;
+}
+
+/** Bump when parser or concordance output changes so memoized indexes are discarded. */
+export const PARSER_VERSION = 1;
+
+const CONCORDANCE_CACHE_LIMIT = 4;
+const concordanceBySource = new Map<string, ConcordanceIndex>();
+const concordanceByParsed = new WeakMap<ParsedManuscript, ConcordanceIndex>();
+
+export function clearConcordanceCache(): void {
+  concordanceBySource.clear();
+}
+
+/**
+ * Lazily build and memoize a concordance. Keyed by source identity + PARSER_VERSION
+ * when `sourceText` is given, otherwise by the parsed object reference.
+ */
+export function getConcordanceForManuscript(
+  parsed: ParsedManuscript,
+  sourceText?: string,
+): ConcordanceIndex {
+  if (parsed.concordance) return parsed.concordance;
+
+  const byRef = concordanceByParsed.get(parsed);
+  if (byRef) return byRef;
+
+  const key =
+    sourceText !== undefined
+      ? `${PARSER_VERSION}:${manuscriptIdentityFromSource(sourceText)}`
+      : null;
+
+  if (key) {
+    const hit = concordanceBySource.get(key);
+    if (hit) {
+      concordanceBySource.delete(key);
+      concordanceBySource.set(key, hit);
+      concordanceByParsed.set(parsed, hit);
+      return hit;
+    }
+  }
+
+  const built = buildConcordance(parsed);
+  concordanceByParsed.set(parsed, built);
+
+  if (key) {
+    concordanceBySource.set(key, built);
+    if (concordanceBySource.size > CONCORDANCE_CACHE_LIMIT) {
+      const oldest = concordanceBySource.keys().next().value;
+      if (oldest !== undefined) concordanceBySource.delete(oldest);
+    }
+  }
+
+  return built;
 }
 
 export function getConcordanceEntriesSorted(index: ConcordanceIndex): Array<{

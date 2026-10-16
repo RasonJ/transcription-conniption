@@ -1,3 +1,4 @@
+import { LocalePicker } from "@/components/LocalePicker";
 import React from "react";
 import {
   StyleSheet,
@@ -75,6 +76,7 @@ export default function AboutScreen() {
             <View
               style={[styles.summaryPanelCard, isDesktop && styles.desktopSplitPanel]}
             >
+              <LocalePicker />
               <View style={styles.brandBadgeRow}>
                 <View style={styles.monasteryIconBox}>
                   <ScrollText color="#ffd36e" size={26} />

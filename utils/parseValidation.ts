@@ -12,10 +12,12 @@ function pushError(
   lineIndex: number,
   rawSnippet: string,
   severity: ValidationError["severity"] = "error",
+  coded?: Pick<ValidationError, "code" | "params">,
 ): void {
   errors.push({
     severity,
     message,
+    ...coded,
     lineIndex,
     rawSnippet: rawSnippet.slice(0, 120),
   });
@@ -208,6 +210,8 @@ export function implicitContinuationSlopWarning(
   return {
     severity: "warning",
     message: `[IMPLICIT_CONTINUATION] Environment {${frame.code}.} missing explicit continuation delimiter (+).`,
+    code: "IMPLICIT_CONTINUATION",
+    params: { mnemonic: `{${frame.code}.}` },
     lineIndex,
     rawSnippet: line.slice(0, 120),
   };
@@ -222,6 +226,8 @@ export function unclosedEnvironmentErrors(stack: StructuralEnvFrame[]): Validati
       `[UNCLOSED_ENV] Unclosed environment block {${frame.code}. started on line ${frame.startLine + 1}`,
       frame.startLine,
       frame.snippet,
+      "error",
+      { code: "UNCLOSED_ENV", params: { mnemonic: `{${frame.code}.`, line: frame.startLine + 1 } },
     );
   }
   return errors;

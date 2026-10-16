@@ -1,10 +1,12 @@
 import { useScriptorium } from "@/context/ScriptoriumContext";
+import { useT } from "@/i18n/runtime";
 import { useRegisterLineAnchor, useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { ExportManuscriptSheet } from "@/components/ExportManuscriptSheet";
 import { BlockFigureLayout } from "@/components/BlockFigureLayout";
 import { CompilationOverlay } from "@/components/CompilationOverlay";
 import { ConcordanceDrawer } from "@/components/ConcordanceDrawer";
 import { ManuscriptChatbotDrawer } from "@/components/ManuscriptChatbotDrawer";
+import { IngestPanel } from "@/components/ingest/IngestPanel";
 import { FigureImageContext, FigurePlaceholder } from "@/components/FigurePlaceholder";
 import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
@@ -159,6 +161,7 @@ export default function TranscriptionConniptionScreen() {
     addFreePlacement,
     setFolioBackground,
   } = useScriptorium();
+  const t = useT();
 
   const [isEditorMode, setIsEditorMode] = useState(false);
   const [isPreview, setIsPreview] = useState(true);
@@ -442,8 +445,8 @@ export default function TranscriptionConniptionScreen() {
                   <BookOpen color={theme.gold} size={26} />
                 </View>
                 <View style={styles.brandTextCol}>
-                  <Text style={styles.kicker}>Historical Philology Platform</Text>
-                  <Text style={styles.title}>Transcription Conniption</Text>
+                  <Text style={styles.kicker}>{t("studio.kicker")}</Text>
+                  <Text style={styles.title}>{t("studio.title")}</Text>
                 </View>
               </View>
               {!isEditorMode ? (
@@ -606,7 +609,7 @@ export default function TranscriptionConniptionScreen() {
                 style={[styles.switchOption, !isPreview && styles.switchOptionActive]}
               >
                 <FileText color={!isPreview ? theme.inkDark : theme.gold} size={16} />
-                <Text style={[styles.switchText, !isPreview && styles.switchTextActive]}>Transcription Code</Text>
+                <Text style={[styles.switchText, !isPreview && styles.switchTextActive]}>{t("studio.view.code")}</Text>
               </Pressable>
               <Pressable
                 onPress={() => {
@@ -616,7 +619,7 @@ export default function TranscriptionConniptionScreen() {
                 style={[styles.switchOption, isPreview && styles.switchOptionActive]}
               >
                 <Wand2 color={isPreview ? theme.inkDark : theme.gold} size={16} />
-                <Text style={[styles.switchText, isPreview && styles.switchTextActive]}>Parchment Sheet</Text>
+                <Text style={[styles.switchText, isPreview && styles.switchTextActive]}>{t("studio.view.sheet")}</Text>
               </Pressable>
             </View>
             ) : null}
@@ -672,7 +675,7 @@ export default function TranscriptionConniptionScreen() {
                 {isParsing ? (
                   <Text style={styles.parsePendingLabel}>Parsing manuscript structure…</Text>
                 ) : null}
-                <Text style={styles.sectionLabel}>HSMS transcription</Text>
+                <Text style={styles.sectionLabel}>{t("editor.section.transcription")}</Text>
                 <TextInput
                   multiline
                   value={localEditorBuffer}
@@ -774,6 +777,8 @@ export default function TranscriptionConniptionScreen() {
                 </View>
                 ) : null}
 
+                {showReaderTools ? <IngestPanel /> : null}
+
                 {showReaderTools ? (
                 <View style={styles.scholarToolbar}>
                   <Pressable
@@ -781,14 +786,14 @@ export default function TranscriptionConniptionScreen() {
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
                     <ListOrdered color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>Concordance</Text>
+                    <Text style={styles.toolButtonText}>{t("studio.tool.concordance")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => setAssistantOpen(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
                     <MessageCircle color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>Ask</Text>
+                    <Text style={styles.toolButtonText}>{t("studio.tool.ask")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={exportTei}
@@ -809,7 +814,7 @@ export default function TranscriptionConniptionScreen() {
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
                     <AlertCircle color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>Errors ({validationCount})</Text>
+                    <Text style={styles.toolButtonText}>{t("studio.tool.errors", { count: validationCount })}</Text>
                   </Pressable>
                   {synopticEnabled ? (
                     <View style={styles.toolBadge}>
@@ -904,15 +909,22 @@ export default function TranscriptionConniptionScreen() {
 
                 {showReaderTools ? (
                 <View style={styles.statStrip}>
-                  <Text style={styles.stat}>Lines: {parsedManuscript.stats.totalLines}</Text>
-                  <Text style={styles.stat}>Words: {parsedManuscript.stats.totalWords}</Text>
-                  <Text style={styles.stat}>Rubrics: {parsedManuscript.stats.rubricCount}</Text>
-                  <Text style={styles.stat}>Glosses: {parsedManuscript.stats.glossCount}</Text>
                   <Text style={styles.stat}>
-                    Index: {Object.keys(parsedManuscript.concordance ?? {}).length}
+                    {t("studio.stat.lines", { count: parsedManuscript.stats.totalLines })}
                   </Text>
                   <Text style={styles.stat}>
-                    Issues: {(parsedManuscript.validationErrors ?? []).length}
+                    {t("studio.stat.words", { count: parsedManuscript.stats.totalWords })}
+                  </Text>
+                  <Text style={styles.stat}>
+                    {t("studio.stat.rubrics", { count: parsedManuscript.stats.rubricCount })}
+                  </Text>
+                  <Text style={styles.stat}>
+                    {t("studio.stat.glosses", { count: parsedManuscript.stats.glossCount })}
+                  </Text>
+                  <Text style={styles.stat}>
+                    {t("studio.stat.issues", {
+                      count: (parsedManuscript.validationErrors ?? []).length,
+                    })}
                   </Text>
                 </View>
                 ) : null}
@@ -922,7 +934,8 @@ export default function TranscriptionConniptionScreen() {
             <ConcordanceDrawer
               visible={concordanceOpen}
               onClose={() => setConcordanceOpen(false)}
-              concordance={parsedManuscript.concordance ?? {}}
+              parsed={parsedManuscript}
+              sourceText={debouncedText}
               onSelectOccurrence={handleConcordanceJump}
             />
             <ManuscriptChatbotDrawer

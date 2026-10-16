@@ -95,6 +95,9 @@ export type ConcordanceIndex = Record<
 export interface ValidationError {
   severity: "error" | "warning";
   message: string;
+  /** Stable issue code for UI localization (`validation.<code>`); `message` stays English for CLI. */
+  code?: string;
+  params?: Record<string, string | number>;
   lineIndex: number;
   rawSnippet: string;
 }

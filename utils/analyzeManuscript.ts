@@ -1,10 +1,14 @@
 import type { ConcordanceIndex, ParsedManuscript } from "../constants/manuscript";
-import { buildConcordance, countWordsInFlow } from "./concordance";
+import {
+  buildConcordance,
+  countWordsInFlow,
+  getConcordanceForManuscript,
+} from "./concordance";
 import { filterMetadataBlocksFromFolios } from "./metadataBlocks";
 import { mergeValidationErrors } from "./parseValidation";
 import { validateTranscription } from "./validation";
 
-/** Attach concordance index and validation diagnostics to a parsed manuscript. */
+/** Attach validation diagnostics to a parsed manuscript. Concordance is built lazily. */
 export function enrichParsedManuscript(
   parsed: ParsedManuscript,
   rawText: string,
@@ -20,7 +24,6 @@ export function enrichParsedManuscript(
       ...parsed.stats,
       totalWords: flowWordCount > 0 ? flowWordCount : parsed.stats.totalWords,
     },
-    concordance: buildConcordance(parsed),
     validationErrors: mergeValidationErrors(
       validateTranscription(rawText),
       parseValidationErrors,
@@ -36,12 +39,14 @@ export function generateConcordanceIndex(parsed: ParsedManuscript): ConcordanceI
   return buildConcordance(parsed);
 }
 
-export function computeManuscriptStats(parsed: ParsedManuscript) {
-  const concordance = buildConcordance(parsed);
+export { getConcordanceForManuscript };
+
+export function computeManuscriptStats(parsed: ParsedManuscript, concordance?: ConcordanceIndex) {
+  const index = concordance ?? getConcordanceForManuscript(parsed);
   return {
     totalWords: parsed.stats.totalWords,
     totalLines: parsed.stats.totalLines,
-    uniqueWords: Object.keys(concordance).length,
+    uniqueWords: Object.keys(index).length,
     rubricCount: parsed.stats.rubricCount,
     glossCount: parsed.stats.glossCount,
   };

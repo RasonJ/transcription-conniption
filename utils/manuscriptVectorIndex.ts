@@ -1,6 +1,6 @@
-import type { ManuscriptBlock, ParsedManuscript } from "@/constants/manuscript";
-import { DEFAULT_DIM, hashEmbedInto } from "@/utils/embeddings/hashEmbed";
-import { renderNormalizedBlock } from "@/utils/normalizedText";
+import type { ManuscriptBlock, ParsedManuscript } from "../constants/manuscript";
+import { DEFAULT_DIM, hashEmbedInto } from "./embeddings/hashEmbed";
+import { renderNormalizedBlock } from "./normalizedText";
 
 export interface ManuscriptChunk {
   id: string;

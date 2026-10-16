@@ -1,8 +1,10 @@
-import { MANUSCRIPT_INTENT_PROTOTYPES } from "@/constants/manuscriptIntents";
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { useScriptorium } from "@/context/ScriptoriumContext";
-import { buildProtoVectors } from "@/utils/embeddings/intentClassifier";
-import { askManuscript, type SearchHit } from "@/utils/manuscriptSearch";
+import { useT } from "@/i18n/runtime";
+import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
+import { buildFacetIndex } from "@/utils/copilot/facetIndex";
+import { precomputeEager } from "@/utils/copilot/precompute";
+import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/types";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
 import { ArrowRight, BookOpen, Search, Sparkles, X } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
@@ -21,58 +23,66 @@ type Props = {
   onClose: () => void;
 };
 
+const TIER_LABEL: Record<EvidenceTier, string> = {
+  A: "Exact",
+  B: "Heuristic",
+  C: "Statistic",
+  D: "Needs server",
+};
+
 export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
+  const t = useT();
   const { parsedManuscript } = useScriptorium();
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
-  const [hits, setHits] = useState<SearchHit[]>([]);
-  const [statusLine, setStatusLine] = useState<string | null>(null);
-  const [searchTimeMs, setSearchTimeMs] = useState<number | null>(null);
+  const [answer, setAnswer] = useState<CopilotAnswer | null>(null);
 
-  const vectorIndex = useMemo(
-    () => buildManuscriptVectorIndex(parsedManuscript),
-    [parsedManuscript],
+  const facets = useMemo(
+    () => (visible ? buildFacetIndex(parsedManuscript) : null),
+    [visible, parsedManuscript],
   );
 
-  const intentProtos = useMemo(
-    () => buildProtoVectors({ ...MANUSCRIPT_INTENT_PROTOTYPES }),
-    [],
+  const vectorIndex = useMemo(
+    () => (visible ? buildManuscriptVectorIndex(parsedManuscript) : undefined),
+    [visible, parsedManuscript],
+  );
+
+  const overview = useMemo(
+    () =>
+      facets
+        ? precomputeEager(parsedManuscript, facets)
+            .filter((entry) => entry.count > 0)
+            .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel))
+        : [],
+    [facets, parsedManuscript],
   );
 
   const handleAsk = useCallback(() => {
-    if (!query.trim()) return;
+    if (!query.trim() || !facets) return;
 
-    const result = askManuscript(query, parsedManuscript, vectorIndex, {
-      protoVecs: intentProtos,
-    });
+    const result = askCopilot(query, parsedManuscript, { facets, vectorIndex });
 
-    setSearchTimeMs(result.elapsedMs);
-
-    if (result.mode === "folio" && result.folioJump) {
-      navigateToAnchor(result.folioJump);
-      setHits([]);
-      setStatusLine(`Jumped to [fol. ${result.folioJump.folioId}]`);
+    if (result.navigate) {
+      navigateToAnchor(result.navigate);
+      setAnswer(null);
       onClose();
       return;
     }
+    setAnswer(result);
+  }, [query, parsedManuscript, facets, vectorIndex, navigateToAnchor, onClose]);
 
-    setHits(result.hits);
-    const intentLabel = result.intent
-      ? `${result.intent.intent} (${(result.intent.score * 100).toFixed(0)}%)`
-      : "search";
-    setStatusLine(
-      result.hits.length > 0
-        ? `${result.hits.length} passage${result.hits.length === 1 ? "" : "s"} · ${intentLabel}`
-        : `No passages above threshold · ${intentLabel}`,
-    );
-  }, [query, parsedManuscript, vectorIndex, intentProtos, navigateToAnchor, onClose]);
+  const handleRecipe = useCallback(
+    (recipeId: string) => {
+      if (!facets) return;
+      const result = runRecipeById(recipeId, parsedManuscript, { facets, vectorIndex });
+      if (result) setAnswer(result);
+    },
+    [facets, parsedManuscript, vectorIndex],
+  );
 
-  const handleJumpToHit = useCallback(
-    (hit: SearchHit) => {
-      navigateToAnchor({
-        folioId: hit.chunk.folioId,
-        lineNumber: hit.chunk.lineNumber,
-      });
+  const handleJumpToRow = useCallback(
+    (row: EvidenceRow) => {
+      navigateToAnchor({ folioId: row.folioId, lineNumber: row.lineNumber });
       onClose();
     },
     [navigateToAnchor, onClose],
@@ -85,32 +95,29 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
           <View style={styles.header}>
             <View style={styles.headerTitleRow}>
               <Sparkles color="#f6d890" size={18} />
-              <Text style={styles.title}>Manuscript Assistant</Text>
+              <Text style={styles.title}>{t("copilot.title")}</Text>
             </View>
-            {searchTimeMs !== null ? (
-              <Text style={styles.speedBadge}>{searchTimeMs.toFixed(2)} ms</Text>
+            {answer && answer.elapsedMs > 0 ? (
+              <Text style={styles.speedBadge}>{answer.elapsedMs.toFixed(2)} ms</Text>
             ) : null}
             <Pressable
               onPress={onClose}
               hitSlop={12}
               accessibilityRole="button"
-              accessibilityLabel="Close manuscript assistant"
+              accessibilityLabel={t("copilot.closeLabel")}
             >
               <X color="#f6d890" size={22} />
             </Pressable>
           </View>
 
-          <Text style={styles.hint}>
-            Local hash-embed search — folio jumps, rubrics, glosses, and passage matches. No
-            network.
-          </Text>
+          <Text style={styles.hint}>{t("copilot.hint")}</Text>
 
           <View style={styles.inputRow}>
             <TextInput
               value={query}
               onChangeText={setQuery}
               onSubmitEditing={handleAsk}
-              placeholder='Ask or search (e.g. "go to fol. 2r", "rubrics about gold")…'
+              placeholder={t("copilot.placeholder")}
               placeholderTextColor="#99836a"
               style={styles.input}
               autoCapitalize="none"
@@ -121,42 +128,109 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
               onPress={handleAsk}
               style={styles.sendButton}
               accessibilityRole="button"
-              accessibilityLabel="Search manuscript"
+              accessibilityLabel={t("copilot.searchLabel")}
             >
               <Search color="#1a0a05" size={16} />
             </Pressable>
           </View>
 
-          {statusLine ? <Text style={styles.status}>{statusLine}</Text> : null}
-
           <ScrollView style={styles.resultsList} keyboardShouldPersistTaps="handled">
-            {hits.map((hit) => (
-              <Pressable
-                key={hit.chunk.id}
-                onPress={() => handleJumpToHit(hit)}
-                style={styles.hitCard}
-                accessibilityRole="button"
-              >
-                <View style={styles.hitHeader}>
-                  <View style={styles.hitMetaRow}>
-                    <BookOpen color="#f6d890" size={12} />
-                    <Text style={styles.hitFolio}>
-                      [fol. {hit.chunk.folioId}]
-                      {hit.chunk.lineNumber ? ` · line ${hit.chunk.lineNumber}` : ""}
-                      {hit.chunk.type !== "prose" ? ` · ${hit.chunk.type}` : ""}
+            {overview.length > 0 ? (
+              <View style={styles.overview}>
+                <Text style={styles.sectionLabel}>Overview</Text>
+                <View style={styles.chipRow}>
+                  {overview.map((entry) => (
+                    <Pressable
+                      key={entry.recipeId}
+                      onPress={() => handleRecipe(entry.recipeId)}
+                      style={styles.chip}
+                      accessibilityRole="button"
+                      accessibilityLabel={`${entry.chipLabel}: ${entry.count}`}
+                    >
+                      <Text style={styles.chipLabel}>{entry.chipLabel}</Text>
+                      <Text style={styles.chipCount}>{entry.count}</Text>
+                    </Pressable>
+                  ))}
+                </View>
+              </View>
+            ) : null}
+
+            {answer ? (
+              <View style={styles.answerCard}>
+                <View style={styles.answerTop}>
+                  <View style={styles.tierBadge}>
+                    <Text style={styles.tierBadgeText}>
+                      {answer.tier} · {TIER_LABEL[answer.tier]}
                     </Text>
                   </View>
-                  <Text style={styles.hitScore}>{(hit.score * 100).toFixed(0)}%</Text>
+                  {answer.confidence !== undefined && answer.confidence < 1 ? (
+                    <Text style={styles.confidence}>{(answer.confidence * 100).toFixed(0)}%</Text>
+                  ) : null}
                 </View>
-                <Text style={styles.hitText} numberOfLines={2}>
-                  {hit.chunk.text}
-                </Text>
-                <View style={styles.jumpHint}>
-                  <Text style={styles.jumpHintText}>Jump to leaf</Text>
-                  <ArrowRight color="#f6d890" size={12} />
-                </View>
-              </Pressable>
-            ))}
+                <Text style={styles.headline}>{answer.headline}</Text>
+
+                {answer.breakdown && answer.breakdown.length > 0 ? (
+                  <View style={styles.breakdown}>
+                    {answer.breakdown.map((b) => (
+                      <View key={b.label} style={styles.breakdownRow}>
+                        <Text style={styles.breakdownLabel}>{b.label}</Text>
+                        <Text style={styles.breakdownValue}>{b.value}</Text>
+                      </View>
+                    ))}
+                  </View>
+                ) : null}
+
+                {answer.alternatives && answer.alternatives.length > 0 ? (
+                  <View style={styles.chipRow}>
+                    <Text style={styles.sectionLabel}>Did you mean</Text>
+                    {answer.alternatives.map((alt) => (
+                      <Pressable
+                        key={alt.recipeId}
+                        onPress={() => handleRecipe(alt.recipeId)}
+                        style={styles.chip}
+                        accessibilityRole="button"
+                      >
+                        <Text style={styles.chipLabel}>{alt.chipLabel}</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                ) : null}
+
+                {answer.rows.map((row, i) => (
+                  <Pressable
+                    key={`${row.folioId}_${row.lineNumber ?? ""}_${i}`}
+                    onPress={() => handleJumpToRow(row)}
+                    style={styles.hitCard}
+                    accessibilityRole="button"
+                  >
+                    <View style={styles.hitHeader}>
+                      <View style={styles.hitMetaRow}>
+                        <BookOpen color="#f6d890" size={12} />
+                        <Text style={styles.hitFolio}>
+                          [fol. {row.folioId}]
+                          {row.lineNumber
+                            ? ` · ${t("copilot.hit.line", { line: row.lineNumber })}`
+                            : ""}
+                        </Text>
+                      </View>
+                      <Text style={styles.hitScore}>{row.label}</Text>
+                    </View>
+                    {row.detail ? (
+                      <Text style={styles.hitText} numberOfLines={2}>
+                        {row.detail}
+                      </Text>
+                    ) : null}
+                    <View style={styles.jumpHint}>
+                      <Text style={styles.jumpHintText}>{t("copilot.hit.jump")}</Text>
+                      <ArrowRight color="#f6d890" size={12} />
+                    </View>
+                  </Pressable>
+                ))}
+
+                {answer.method ? <Text style={styles.method}>{answer.method}</Text> : null}
+                {answer.dsl ? <Text style={styles.dsl}>{answer.dsl}</Text> : null}
+              </View>
+            ) : null}
           </ScrollView>
         </View>
       </View>
@@ -212,15 +286,57 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  status: { color: "rgba(246,216,144,0.75)", fontSize: 12, fontWeight: "600" },
-  resultsList: { flexGrow: 0, maxHeight: 360, marginTop: 4 },
+  resultsList: { flexGrow: 0, maxHeight: 420, marginTop: 4 },
+  overview: { marginBottom: 10, gap: 6 },
+  sectionLabel: {
+    color: "rgba(246,216,144,0.65)",
+    fontSize: 11,
+    fontWeight: "800",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
+  },
+  chipRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, alignItems: "center" },
+  chip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: "rgba(246,216,144,0.1)",
+    borderColor: "rgba(246,216,144,0.3)",
+    borderWidth: 1,
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+  },
+  chipLabel: { color: "#fff4d2", fontSize: 12, fontWeight: "700" },
+  chipCount: { color: "#f6d890", fontSize: 12, fontWeight: "900", fontFamily: "monospace" },
+  answerCard: {
+    backgroundColor: "rgba(255,253,244,0.05)",
+    borderColor: "rgba(246,216,144,0.25)",
+    borderWidth: 1,
+    borderRadius: 14,
+    padding: 12,
+    gap: 8,
+  },
+  answerTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  tierBadge: {
+    backgroundColor: "#f6d890",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  tierBadgeText: { color: "#1a0a05", fontSize: 11, fontWeight: "900" },
+  confidence: { color: "rgba(255,244,210,0.5)", fontSize: 11, fontFamily: "monospace" },
+  headline: { color: "#fff4d2", fontSize: 14, fontWeight: "700", lineHeight: 20 },
+  breakdown: { gap: 2 },
+  breakdownRow: { flexDirection: "row", justifyContent: "space-between" },
+  breakdownLabel: { color: "rgba(255,244,210,0.8)", fontSize: 12 },
+  breakdownValue: { color: "#f6d890", fontSize: 12, fontWeight: "800", fontFamily: "monospace" },
   hitCard: {
     backgroundColor: "rgba(255,253,244,0.05)",
     borderColor: "rgba(246,216,144,0.15)",
     borderWidth: 1,
     borderRadius: 12,
     padding: 12,
-    marginBottom: 8,
     gap: 4,
   },
   hitHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
@@ -235,4 +351,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   jumpHintText: { color: "rgba(246,216,144,0.55)", fontSize: 11, fontWeight: "600" },
+  method: { color: "rgba(246,216,144,0.55)", fontSize: 11, fontStyle: "italic" },
+  dsl: { color: "rgba(143,191,106,0.9)", fontSize: 11, fontFamily: "monospace" },
 });

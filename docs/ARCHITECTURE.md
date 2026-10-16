@@ -410,16 +410,21 @@ concordanceOpen, batchShellVisible
 
 Concordance and validation rows call scroll navigation via `ScrollAnchorProvider`.
 
-**Local manuscript assistant** (editor **Ask** tool → `ManuscriptChatbotDrawer`):
+**Research copilot** (editor **Ask** → `ManuscriptChatbotDrawer`; see [SPEC-COPILOT.md](SPEC-COPILOT.md)):
 
 | Layer | Role |
 |-------|------|
-| `utils/embeddings/hashEmbed.ts` | FNV-1a trigram hash → unit-norm `Float32Array` (384-d default) |
-| `utils/embeddings/intentClassifier.ts` | Cosine classify against `MANUSCRIPT_INTENT_PROTOTYPES` |
-| `utils/manuscriptVectorIndex.ts` | Block chunks → contiguous N×dim embed matrix |
-| `utils/manuscriptSearch.ts` | Folio regex fast-path → intent filter → vector top-K; jumps via `navigateToAnchor` |
+| `utils/copilot/facetIndex.ts` | Lazy per-witness facets (token types, hands, languages, initials) |
+| `utils/copilot/catalog` + `executors/tierA.ts` | Deterministic Tier A recipes (deletions, glosses, damage, …) |
+| `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → recipe cosine routing → answer cards |
+| `utils/embeddings/*` | Shared FNV-1a hash-embed + prototype classifier |
+| `utils/manuscriptVectorIndex.ts` | Passage-search fallback (`search.passages`) |
 
-Queries such as `go to fol. 2v` resolve deterministically; otherwise local hash-embed search ranks passages (rubric/gloss filters when intent is confident). No network required.
+**Lightweight boundary** ([SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md)): concordance is built on demand (`getConcordanceForManuscript`); scholarly modules load via `utils/lazy/loadScholar.ts`; `AnalysisProvider` defaults to local; Tier 2 ingest UI appears only when `EXPO_PUBLIC_ANALYSIS_BACKEND=1`.
+
+**i18n** ([SPEC-I18N.md](SPEC-I18N.md)): `I18nProvider` + Tier 1 catalogs (`en`, `es*`, `pt*`, `ca`, `gl`, `eu`); locale picker on Sources. Witness text and HSMS mnemonics are never translated.
+
+**PDF / IIIF ingest I0** ([SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md)): sidecar types, `layoutForFolio(geometry?)`, line-diff realignment, bundle v2, IIIF Presentation 3 import (`utils/ingest/*`, `IngestPanel`). No on-device PDF parsing.
 
 ### Parser and export performance
 
@@ -522,6 +527,15 @@ Planned or natural evolution paths (also noted on the About screen):
 8. ~~**Inline figure upload**~~ — `figure_anchor` tokens + `FigurePlaceholder`; workspace-scoped assets via `figureAssetStorage` (replace/remove controls).
 9. **Image pane** — third synoptic column for full-leaf facsimile URLs.
 10. ~~**Reader-first UX**~~ — default upload-only surface; advanced editor toggle; compilation overlay; metadata card outside parchment.
+
+## Engineering specs (proposed)
+
+| Spec | Scope |
+|------|-------|
+| [SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md) | Load tiers, bundle/startup budgets, lazy lemma dictionary, `AnalysisProvider` backend boundary |
+| [SPEC-I18N.md](SPEC-I18N.md) | Instant UI i18n for Iberian and Latin American locales; witness-language stopwords and collation |
+| [SPEC-COPILOT.md](SPEC-COPILOT.md) | Multilingual research copilot with precompiled, evidence-tiered recipes |
+| [SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md) | PDF/IIIF ingest → HSMS draft → image-aligned, geometry-calibrated digital witness |
 
 ## Build and quality
 

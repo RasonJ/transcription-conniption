@@ -1,4 +1,5 @@
 // template
+import { I18nProvider } from "@/i18n/runtime";
 import { ScrollAnchorProvider } from "@/context/ScrollAnchorContext";
 import { ScriptoriumProvider } from "@/context/ScriptoriumContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -30,14 +31,16 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <ScrollAnchorProvider>
-          <ScriptoriumProvider>
-            <RootLayoutNav />
-          </ScriptoriumProvider>
-        </ScrollAnchorProvider>
-      </GestureHandlerRootView>
-    </QueryClientProvider>
+    <I18nProvider>
+      <QueryClientProvider client={queryClient}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <ScrollAnchorProvider>
+            <ScriptoriumProvider>
+              <RootLayoutNav />
+            </ScriptoriumProvider>
+          </ScrollAnchorProvider>
+        </GestureHandlerRootView>
+      </QueryClientProvider>
+    </I18nProvider>
   );
 }
