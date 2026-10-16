@@ -8,6 +8,7 @@ import { DEFAULT_DEMO } from "@/constants/demoTranscriptions";
 import { BLANK_SCRIPTORIUM_TEMPLATE } from "@/constants/workspaceTemplates";
 import type { BatchProcessResult } from "@/utils/batchProcessor";
 import { compileManuscriptTree } from "@/utils/compiler";
+import { t as tNow } from "@/i18n/core";
 import { copyFigureIntoWorkspace, copyFolioBackgroundIntoWorkspace } from "@/utils/figureAssetStorage";
 import { exportHsmsBundleToFile, importHsmsBundleFromUri } from "@/utils/hsmsBundle";
 import * as FileSystem from "@/utils/expoFileSystem";
@@ -385,7 +386,7 @@ export function ScriptoriumProvider({
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("Document import failed", error);
-      Alert.alert("Import failed", "Please try a plain-text HSMS transcription file.");
+      Alert.alert(tNow("alert.importFailed"), tNow("alert.importTextFailed"));
     } finally {
       setIsCompiling(false);
       setCompilationStatus("");
@@ -415,7 +416,7 @@ export function ScriptoriumProvider({
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("HSMS bundle export failed", error);
-      Alert.alert("Export failed", "Could not build the .hsms fascicle bundle.");
+      Alert.alert(tNow("alert.exportFailed"), tNow("alert.hsmsExportFailed"));
     }
   }, [workspace]);
 
@@ -440,7 +441,7 @@ export function ScriptoriumProvider({
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("HSMS bundle import failed", error);
-      Alert.alert("Import failed", "Could not read this .hsms bundle file.");
+      Alert.alert(tNow("alert.importFailed"), tNow("alert.hsmsImportFailed"));
     } finally {
       setIsCompiling(false);
       setCompilationStatus("");

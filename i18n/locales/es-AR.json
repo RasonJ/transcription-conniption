@@ -1,0 +1,14 @@
+{
+  "studio.subtitle.reader": "Subí una transcripción HSMS en texto plano para verla en pergamino. Arrastrá y soltá un .txt en cualquier lugar.",
+  "studio.subtitle.readerDrop": "Soltá el archivo para verlo en pergamino…",
+  "studio.subtitle.editor": "Scriptorium avanzado: editá la fuente HSMS, validá la estructura, adjuntá facsímiles y exportá paquetes.",
+  "studio.empty.folio": "Agregá un marcador de folio como [fol. 1r] para empezar a mostrar hojas.",
+  "studio.editor.placeholder": "Pegá acá el diseño HSMS en texto plano...",
+  "alert.nothingToExportBody": "Subí o cargá una transcripción antes de exportar.",
+  "alert.importTextFailed": "Probá con un archivo de transcripción HSMS en texto plano.",
+  "synoptic.enableOne": "Activá al menos un panel sinóptico.",
+  "export.addExtension": "Agregá una extensión (.txt, .html, .svg, .png, .jpg)",
+  "export.orChooseFormat": "O elegí un formato",
+  "batch.uploadHint": "Seleccioná varios archivos HSMS en texto plano",
+  "facsimile.tapToPlace": "Tocá para colocar un fragmento de facsímil"
+}

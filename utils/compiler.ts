@@ -7,12 +7,8 @@
  */
 export { parseHsMsText, parseHsMsText as compileManuscriptTree } from "./manuscriptParser";
 export { lintHsmsTranscription, validationIssuesToLintReport, type LintReport } from "./hsmsLinter";
-export {
-  generateConcordanceIndex,
-  computeManuscriptStats,
-  enrichParsedManuscript,
-  getConcordanceForManuscript,
-} from "./analyzeManuscript";
+export { enrichParsedManuscript } from "./analyzeManuscript";
+// Concordance helpers are Tier 1 (lazy): import them from "./concordance" where needed.
 export { tokenizeString } from "./hsmsLexer";
 export {
   assembleStructuralTokens,

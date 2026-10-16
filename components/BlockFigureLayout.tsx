@@ -1,6 +1,8 @@
 import { FigurePlaceholder } from "@/components/FigurePlaceholder";
 import type { ManuscriptBlock, Token } from "@/constants/manuscript";
 import { LANGUAGE_TAG_LABELS } from "@/constants/languageTags";
+import { hasMessage, t as tNow, type MessageKey } from "@/i18n/core";
+import { bcp47ForHsmsCode } from "@/utils/witnessLanguage";
 import {
   partitionFigureSegments,
   segmentTokensForRender,
@@ -32,7 +34,12 @@ function renderFlowSegments(
     if (textRun.length === 0) return;
 
     nodes.push(
-      <Text key={`txt-${nodeIndex++}`} style={blockStyle}>
+      <Text
+        key={`txt-${nodeIndex++}`}
+        style={blockStyle}
+        // Screen readers pronounce witness text in its own language (SPEC-I18N §6).
+        accessibilityLanguage={bcp47ForHsmsCode(block.language)}
+      >
         {renderTokenStream(textRun, block.type)}
       </Text>,
     );
@@ -83,10 +90,16 @@ export function BlockFigureLayout({ block, highlight, blockStyle, renderTokenStr
     </>
   );
 
+  const langKey = block.language ? `hsms.lang.${block.language.toUpperCase()}` : "";
+  const langLabel = langKey && hasMessage(langKey)
+    ? tNow(langKey as MessageKey)
+    : block.language
+      ? LANGUAGE_TAG_LABELS[block.language]
+      : undefined;
   const headerLabel = block.language ? (
     <Text style={styles.languageTag}>
       {block.language}
-      {LANGUAGE_TAG_LABELS[block.language] ? ` · ${LANGUAGE_TAG_LABELS[block.language]}` : ""}
+      {langLabel ? ` · ${langLabel}` : ""}
     </Text>
   ) : null;
 

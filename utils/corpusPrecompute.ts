@@ -10,6 +10,7 @@ export const FACETS_FORMAT = "hsms-facets/1";
 export const CORPUS_TFIDF_FORMAT = "hsms-corpus-tfidf/1";
 export const CORPUS_STATS_FORMAT = "hsms-corpus-stats/1";
 export const LIBRARY_GRAPH_FORMAT = "hsms-library-graph/1";
+export const CORPUS_POSTINGS_FORMAT = "hsms-corpus-postings/1";
 
 const TOP_TERM_LIMIT = 250;
 const IDF_EXPORT_LIMIT = 8000;
@@ -18,6 +19,8 @@ const TERM_GRAPH_MIN_DF = 2;
 const MAX_RUBRIC_EXCERPTS = 48;
 const MAX_GLOSS_EXCERPTS = 48;
 const MAX_INITIAL_EXCERPTS = 48;
+const POSTINGS_TOP_DOCS = 40;
+const POSTINGS_TERM_LIMIT = 4000;
 
 export type PrecompiledFacetHit = {
   folioId: string;
@@ -102,11 +105,20 @@ export type LibraryGraph = {
   edges: LibraryGraphEdge[];
 };
 
+/** Inverted index: term → top witnesses by TF (for O(1) MCP TF-IDF ranking). */
+export type CorpusTermPostings = {
+  format: typeof CORPUS_POSTINGS_FORMAT;
+  generatedAt: string;
+  totalDocuments: number;
+  postings: Record<string, Array<{ id: string; tf: number }>>;
+};
+
 export type CorpusPrecomputeArtifacts = {
   facetsWritten: number;
   corpusTfidf: CorpusTfidf;
   corpusStats: CorpusStats;
   libraryGraph: LibraryGraph;
+  corpusPostings: CorpusTermPostings;
 };
 
 function slugEntity(kind: string, label: string): string {
@@ -279,6 +291,42 @@ export function buildCorpusTfidf(
     totalDocuments,
     idf,
     df: dfOut,
+  };
+}
+
+export function buildCorpusTermPostings(
+  facets: PrecompiledFacets[],
+  tfidf: CorpusTfidf,
+  options?: { termLimit?: number; topDocs?: number },
+): CorpusTermPostings {
+  const termLimit = options?.termLimit ?? POSTINGS_TERM_LIMIT;
+  const topDocs = options?.topDocs ?? POSTINGS_TOP_DOCS;
+  const exportTerms = new Set(Object.keys(tfidf.idf).slice(0, termLimit));
+  const buckets = new Map<string, Array<{ id: string; tf: number }>>();
+
+  for (const facet of facets) {
+    for (const [term, tf] of Object.entries(facet.termFreq)) {
+      if (!exportTerms.has(term) || tf <= 0) continue;
+      let list = buckets.get(term);
+      if (!list) {
+        list = [];
+        buckets.set(term, list);
+      }
+      list.push({ id: facet.baseName, tf });
+    }
+  }
+
+  const postings: CorpusTermPostings["postings"] = {};
+  for (const [term, list] of buckets) {
+    list.sort((a, b) => b.tf - a.tf || a.id.localeCompare(b.id));
+    postings[term] = list.slice(0, topDocs);
+  }
+
+  return {
+    format: CORPUS_POSTINGS_FORMAT,
+    generatedAt: new Date().toISOString(),
+    totalDocuments: facets.length,
+    postings,
   };
 }
 
@@ -470,6 +518,7 @@ export function runCorpusPrecomputeWithFs(
   const corpusTfidf = buildCorpusTfidf(docTerms);
   const corpusStats = buildCorpusStats(compiledFacets);
   const libraryGraph = buildLibraryGraph(options.catalog, compiledFacets, corpusTfidf);
+  const corpusPostings = buildCorpusTermPostings(compiledFacets, corpusTfidf);
 
   fs.writeFile(
     joinPath(options.outputDir, "corpus-tfidf.json"),
@@ -483,12 +532,17 @@ export function runCorpusPrecomputeWithFs(
     joinPath(options.outputDir, "library-graph.json"),
     JSON.stringify(libraryGraph, null, 2),
   );
+  fs.writeFile(
+    joinPath(options.outputDir, "corpus-term-postings.json"),
+    JSON.stringify(corpusPostings),
+  );
 
   return {
     facetsWritten: compiledFacets.length,
     corpusTfidf,
     corpusStats,
     libraryGraph,
+    corpusPostings,
   };
 }
 

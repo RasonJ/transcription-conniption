@@ -1,4 +1,6 @@
 import type { ValidationError } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
+import { localizeValidationMessage } from "@/utils/validationMessage";
 import { AlertTriangle, CheckCircle2 } from "lucide-react-native";
 import React, { useCallback, useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -15,6 +17,8 @@ const ValidationErrorRow = React.memo(function ValidationErrorRow({
   err: ValidationError;
   onJumpToLine?: (lineIndex: number) => void;
 }) {
+  const t = useT();
+  const message = localizeValidationMessage(t, err);
   const handlePress = useCallback(() => {
     if (typeof err.lineIndex !== "number" || err.lineIndex < 0) return;
     onJumpToLine?.(err.lineIndex);
@@ -26,7 +30,7 @@ const ValidationErrorRow = React.memo(function ValidationErrorRow({
       disabled={!onJumpToLine}
       style={({ pressed }) => [styles.row, pressed && onJumpToLine && styles.rowPressed]}
       accessibilityRole="button"
-      accessibilityLabel={`Line ${err.lineIndex + 1}: ${err.message}`}
+      accessibilityLabel={t("validation.rowLabel", { line: err.lineIndex + 1, message })}
     >
       {err.severity === "error" ? (
         <AlertTriangle color="#c44" size={16} />
@@ -35,18 +39,19 @@ const ValidationErrorRow = React.memo(function ValidationErrorRow({
       )}
       <View style={styles.rowBody}>
         <Text style={styles.message}>
-          L{err.lineIndex + 1}: {err.message}
+          {t("validation.lineShort", { line: err.lineIndex + 1 })}: {message}
         </Text>
         <Text style={styles.snippet} numberOfLines={2}>
           {err.rawSnippet}
         </Text>
-        {onJumpToLine ? <Text style={styles.jump}>Jump to line on canvas →</Text> : null}
+        {onJumpToLine ? <Text style={styles.jump}>{t("validation.jumpToLine")}</Text> : null}
       </View>
     </Pressable>
   );
 });
 
 export function ValidationPanel({ errors, onJumpToLine }: Props) {
+  const t = useT();
   const { errorCount, warnCount, visibleErrors, overflowCount } = useMemo(() => {
     let errorsN = 0;
     let warningsN = 0;
@@ -66,7 +71,7 @@ export function ValidationPanel({ errors, onJumpToLine }: Props) {
     return (
       <View style={styles.okBanner}>
         <CheckCircle2 color="#446622" size={18} />
-        <Text style={styles.okText}>Transcription structure looks consistent.</Text>
+        <Text style={styles.okText}>{t("validation.ok")}</Text>
       </View>
     );
   }
@@ -74,8 +79,9 @@ export function ValidationPanel({ errors, onJumpToLine }: Props) {
   return (
     <View style={styles.panel}>
       <Text style={styles.title}>
-        Validation · {errorCount} error{errorCount !== 1 ? "s" : ""}
-        {warnCount > 0 ? ` · ${warnCount} warning${warnCount !== 1 ? "s" : ""}` : ""}
+        {t("validation.panelTitle", {
+          counts: t("validation.counts", { errors: errorCount, warnings: warnCount }),
+        })}
       </Text>
       {visibleErrors.map((err) => (
         <ValidationErrorRow
@@ -85,7 +91,7 @@ export function ValidationPanel({ errors, onJumpToLine }: Props) {
         />
       ))}
       {overflowCount > 0 ? (
-        <Text style={styles.more}>+{overflowCount} more issues</Text>
+        <Text style={styles.more}>{t("validation.more", { count: overflowCount })}</Text>
       ) : null}
     </View>
   );

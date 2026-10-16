@@ -1,5 +1,6 @@
 import { BatchProcessingPanel } from "@/components/BatchProcessingPanel";
 import type { BatchProcessResult } from "@/utils/batchProcessor";
+import { useT } from "@/i18n/runtime";
 import { ChevronLeft, ChevronRight, FolderUp, X } from "lucide-react-native";
 import React, { useState } from "react";
 import {
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Props) {
+  const t = useT();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -40,7 +42,7 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
         {!isCollapsed ? (
           <View style={styles.innerPanel}>
             <View style={styles.panelHeader}>
-              <Text style={styles.panelTitle}>Batch compiler</Text>
+              <Text style={styles.panelTitle}>{t("batch.compilerTitle")}</Text>
               <Pressable onPress={onClose} style={styles.closeButton}>
                 <X color="#f6d890" size={18} />
               </Pressable>
@@ -58,7 +60,7 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
         <View style={styles.mobileHeader}>
           <View style={styles.mobileTitleGroup}>
             <FolderUp color="#f6d890" size={20} />
-            <Text style={styles.mobileTitle}>Batch processing</Text>
+            <Text style={styles.mobileTitle}>{t("batch.processingTitle")}</Text>
           </View>
           <Pressable onPress={onClose} style={styles.mobileCloseButton}>
             <X color="#2b110c" size={20} />
@@ -66,7 +68,7 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
         </View>
         <ScrollView style={styles.mobileBody} contentContainerStyle={styles.mobileContent}>
           <Text style={styles.mobilePromptText}>
-            Select multiple plaintext transcriptions (e.g. from an OSTA folder) to compile and validate in one pass.
+            {t("batch.prompt")}
           </Text>
           <BatchProcessingPanel onBatchComplete={onBatchComplete} />
         </ScrollView>

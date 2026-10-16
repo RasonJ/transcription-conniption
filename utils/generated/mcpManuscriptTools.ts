@@ -186,6 +186,64 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
     "category": "corpus"
   },
   {
+    "name": "corpus_term_frequency",
+    "description": "Term frequency. Ranked surface frequencies from the FacetIndex word stream (Voyant Cirrus–style). Triggers: show word frequency distribution; word frequency; most frequent words. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "corpus.term_frequency",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
+    "name": "corpus_ngrams",
+    "description": "N-grams. Contiguous n-gram counts over normalized word surfaces (default bigrams). Triggers: extract n-grams; show bigrams; show trigrams. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "n": {
+          "type": "integer",
+          "description": "Slot `n`",
+          "default": 2,
+          "minimum": 2,
+          "maximum": 5
+        }
+      },
+      "required": []
+    },
+    "recipeId": "corpus.ngrams",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
+    "name": "corpus_vocab_density",
+    "description": "Vocab density. Witness TTR / STTR / hapax plus per-folio type–token density (Voyant-style). Triggers: analyze vocabulary density; vocabulary density across folios; type token ratio. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "corpus.vocab_density",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
     "name": "nav_folio",
     "description": "Go to folio. Matched a folio reference in the query against the witness's leaf ids. Triggers: go to folio; turn to page; jump to leaf. (Precompiled local recipe, no network.)",
     "inputSchema": {
@@ -315,6 +373,38 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
     "recipeId": "corpus.rank_tfidf",
     "tier": "A",
     "category": "corpus"
+  },
+  {
+    "name": "audit_hsms_syntax",
+    "description": "Proofer-style HSMS syntax audit (technical / editorial / structural). Returns rows and optional TSV. Does not auto-rewrite — Proofer señala; el editor decide.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Raw HSMS transcription text to audit"
+        },
+        "sourceFileName": {
+          "type": "string",
+          "description": "Optional filename for TEXT.SIGLA.txt convention checks"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "json",
+            "tsv"
+          ],
+          "description": "Result format (default json)",
+          "default": "json"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "recipeId": "diag.audit_hsms_syntax",
+    "tier": "A",
+    "category": "corpus"
   }
 ];
 
@@ -403,6 +493,38 @@ export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = [
       ]
     },
     "recipeId": "corpus.rank_tfidf",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
+    "name": "audit_hsms_syntax",
+    "description": "Proofer-style HSMS syntax audit (technical / editorial / structural). Returns rows and optional TSV. Does not auto-rewrite — Proofer señala; el editor decide.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Raw HSMS transcription text to audit"
+        },
+        "sourceFileName": {
+          "type": "string",
+          "description": "Optional filename for TEXT.SIGLA.txt convention checks"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "json",
+            "tsv"
+          ],
+          "description": "Result format (default json)",
+          "default": "json"
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "recipeId": "diag.audit_hsms_syntax",
     "tier": "A",
     "category": "corpus"
   }

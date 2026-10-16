@@ -19,8 +19,15 @@ import {
   BookOpen,
   Compass,
   Award,
+  Landmark,
+  UserRound,
+  type LucideIcon,
 } from "lucide-react-native";
 import * as WebBrowser from "expo-web-browser";
+
+const GEORGETOWN_URL = "https://www.georgetown.edu/";
+const FERREIRA_URL =
+  "https://gufaculty360.georgetown.edu/s/contact/00336000014RjcyAAC/michael-j-ferreira";
 
 const references = [
   {
@@ -46,6 +53,28 @@ const references = [
     url: "https://github.com/hispanicseminary/OSTA",
     desc: "Open source version-controlled repository containing thousands of raw diplomatic transcriptions.",
     icon: Github,
+  },
+];
+
+type CreditLink = {
+  titleKey: "sources.georgetownTitle" | "sources.ferreiraTitle";
+  descKey: "sources.georgetownDesc" | "sources.ferreiraDesc";
+  url: string;
+  icon: LucideIcon;
+};
+
+const fundingCredits: CreditLink[] = [
+  {
+    titleKey: "sources.georgetownTitle",
+    descKey: "sources.georgetownDesc",
+    url: GEORGETOWN_URL,
+    icon: Landmark,
+  },
+  {
+    titleKey: "sources.ferreiraTitle",
+    descKey: "sources.ferreiraDesc",
+    url: FERREIRA_URL,
+    icon: UserRound,
   },
 ];
 
@@ -89,13 +118,121 @@ export default function AboutScreen() {
               <Text style={styles.mainTitleText}>{t("studio.title")}</Text>
               <Text style={styles.narrativeParagraphText}>{t("sources.narrative1")}</Text>
               <Text style={styles.narrativeParagraphText}>{t("sources.narrative2")}</Text>
+
+              <View style={styles.fundingBlock}>
+                <Text style={styles.sectionTitleLabel}>{t("sources.fundingTitle")}</Text>
+                <Text style={styles.narrativeParagraphText}>{t("sources.fundingBlurb")}</Text>
+                <View
+                  style={[
+                    styles.referencesGrid,
+                    isDesktop && styles.desktopGridTwoColumns,
+                  ]}
+                >
+                  {fundingCredits.map((item) => {
+                    const CreditIcon = item.icon;
+                    return (
+                      <Pressable
+                        key={item.url}
+                        onPress={() => handleOpenLink(item.url)}
+                        accessibilityRole="link"
+                        accessibilityLabel={t(item.titleKey)}
+                        style={({ pressed }) => [
+                          styles.referenceCardItem,
+                          styles.fundingCardItem,
+                          pressed && styles.cardItemPressed,
+                          isDesktop && styles.desktopCardFixedSize,
+                        ]}
+                      >
+                        <View style={styles.cardItemTopLine}>
+                          <View style={styles.microIconContainer}>
+                            <CreditIcon color="#ffd36e" size={16} />
+                          </View>
+                          <ExternalLink color="rgba(255, 211, 110, 0.4)" size={14} />
+                        </View>
+                        <View style={styles.cardItemBody}>
+                          <Text style={styles.referenceItemTitle} numberOfLines={2}>
+                            {t(item.titleKey)}
+                          </Text>
+                          <Text style={styles.referenceItemDesc} numberOfLines={3}>
+                            {t(item.descKey)}
+                          </Text>
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
+
+              <View style={styles.fundingBlock}>
+                <Text style={styles.sectionTitleLabel}>{t("sources.ostaGuideTitle")}</Text>
+                <View
+                  style={[
+                    styles.referencesGrid,
+                    isDesktop && styles.desktopGridTwoColumns,
+                  ]}
+                >
+                  {(
+                    [
+                      {
+                        titleKey: "sources.ostaCitationTitle" as const,
+                        descKey: "sources.ostaCitationDesc" as const,
+                        icon: BookOpen,
+                        url: "https://hispanicseminary.org/osta-en.htm",
+                      },
+                      {
+                        titleKey: "sources.ostaSyntaxTitle" as const,
+                        descKey: "sources.ostaSyntaxDesc" as const,
+                        icon: Compass,
+                        url: "https://github.com/hispanicseminary/OSTA",
+                      },
+                      {
+                        titleKey: "sources.ostaProoferTitle" as const,
+                        descKey: "sources.ostaProoferDesc" as const,
+                        icon: Award,
+                        url: "https://hispanicseminary.org/manual-en.htm",
+                      },
+                    ] as const
+                  ).map((item) => {
+                    const CardIcon = item.icon;
+                    return (
+                      <Pressable
+                        key={item.titleKey}
+                        onPress={() => handleOpenLink(item.url)}
+                        accessibilityRole="link"
+                        accessibilityLabel={t(item.titleKey)}
+                        style={({ pressed }) => [
+                          styles.referenceCardItem,
+                          styles.fundingCardItem,
+                          pressed && styles.cardItemPressed,
+                          isDesktop && styles.desktopCardFixedSize,
+                        ]}
+                      >
+                        <View style={styles.cardItemTopLine}>
+                          <View style={styles.microIconContainer}>
+                            <CardIcon color="#ffd36e" size={16} />
+                          </View>
+                          <ExternalLink color="rgba(255, 211, 110, 0.4)" size={14} />
+                        </View>
+                        <View style={styles.cardItemBody}>
+                          <Text style={styles.referenceItemTitle} numberOfLines={2}>
+                            {t(item.titleKey)}
+                          </Text>
+                          <Text style={styles.referenceItemDesc} numberOfLines={4}>
+                            {t(item.descKey)}
+                          </Text>
+                        </View>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
             </View>
 
             <View
               style={[styles.bibliographySection, isDesktop && styles.desktopSplitPanel]}
             >
               <Text style={styles.sectionTitleLabel}>
-                Authoritative Resources & Corpora
+                {t("sources.resources")}
               </Text>
               <View
                 style={[
@@ -192,6 +329,8 @@ const styles = StyleSheet.create({
     textAlign: "justify",
     fontFamily: "serif",
   },
+  fundingBlock: { gap: 10, marginTop: 8 },
+  fundingCardItem: { minHeight: 110 },
 
   bibliographySection: { gap: 14, justifyContent: "center" },
   sectionTitleLabel: {

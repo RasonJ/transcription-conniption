@@ -38,7 +38,12 @@ describe("i18n fallback chains", () => {
   });
 
   it("resolves device tags with BCP 47 lookup", () => {
-    expect(resolveLocale("es-MX")).toBe("es-419");
+    expect(resolveLocale("es-MX")).toBe("es-MX");
+    expect(resolveLocale("es-CO")).toBe("es-419");
+    expect(resolveLocale("es-AR")).toBe("es-AR");
+    expect(resolveLocale("ca-ES-valencia")).toBe("ca-ES-valencia");
+    expect(resolveLocale("quz-PE")).toBe("qu");
+    expect(resolveLocale("gn-PY")).toBe("gn");
     expect(resolveLocale("es-ES")).toBe("es-ES");
     expect(resolveLocale("es")).toBe("es");
     expect(resolveLocale("pt-AO")).toBe("pt-PT");

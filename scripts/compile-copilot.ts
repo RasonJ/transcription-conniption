@@ -220,6 +220,34 @@ export function renderMcpGraphTools(): McpToolDefinition[] {
       tier: "A",
       category: "corpus",
     },
+    {
+      name: "audit_hsms_syntax",
+      description:
+        "Proofer-style HSMS syntax audit (technical / editorial / structural). Returns rows and optional TSV. Does not auto-rewrite — Proofer señala; el editor decide.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          text: {
+            type: "string",
+            description: "Raw HSMS transcription text to audit",
+          },
+          sourceFileName: {
+            type: "string",
+            description: "Optional filename for TEXT.SIGLA.txt convention checks",
+          },
+          format: {
+            type: "string",
+            enum: ["json", "tsv"],
+            description: "Result format (default json)",
+            default: "json",
+          },
+        },
+        required: ["text"],
+      },
+      recipeId: "diag.audit_hsms_syntax",
+      tier: "A",
+      category: "corpus",
+    },
   ];
 }
 

@@ -1,4 +1,5 @@
 import type { BatchFileStatus, BatchSummary } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
 import { processTranscriptionBatch, type BatchProcessResult } from "@/utils/batchProcessor";
 import * as DocumentPicker from "expo-document-picker";
 import * as FileSystem from "@/utils/expoFileSystem";
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export function BatchProcessingPanel({ onBatchComplete }: Props) {
+  const t = useT();
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileStatuses, setFileStatuses] = useState<BatchFileStatus[]>([]);
   const [summary, setSummary] = useState<BatchSummary | null>(null);
@@ -72,23 +74,23 @@ export function BatchProcessingPanel({ onBatchComplete }: Props) {
         ]}
       >
         <FolderUp color="#f6d890" size={32} />
-        <Text style={styles.zoneTitle}>Upload transcription batch</Text>
-        <Text style={styles.zoneSub}>Select multiple plain-text HSMS files</Text>
+        <Text style={styles.zoneTitle}>{t("batch.uploadTitle")}</Text>
+        <Text style={styles.zoneSub}>{t("batch.uploadHint")}</Text>
       </Pressable>
 
       {summary ? (
         <View style={styles.summaryCard}>
-          <Text style={styles.summaryTitle}>Compilation summary</Text>
+          <Text style={styles.summaryTitle}>{t("batch.summaryTitle")}</Text>
           <View style={styles.grid}>
             <Text style={styles.gridText}>
-              Success: {summary.completedFiles} / {summary.totalFiles}
+              {t("batch.success", { completed: summary.completedFiles, total: summary.totalFiles })}
             </Text>
-            <Text style={styles.gridText}>Failed: {summary.failedFiles}</Text>
+            <Text style={styles.gridText}>{t("batch.failed", { count: summary.failedFiles })}</Text>
             <Text style={styles.gridText}>
-              Words: {summary.totalWordsProcessed.toLocaleString()}
+              {t("batch.words", { count: summary.totalWordsProcessed.toLocaleString() })}
             </Text>
-            <Text style={styles.gridText}>Anomalies: {summary.totalAnomaliesDetected}</Text>
-            <Text style={styles.gridText}>Time: {summary.elapsedTimeMs}ms</Text>
+            <Text style={styles.gridText}>{t("batch.anomalies", { count: summary.totalAnomaliesDetected })}</Text>
+            <Text style={styles.gridText}>{t("batch.time", { ms: summary.elapsedTimeMs })}</Text>
           </View>
         </View>
       ) : null}

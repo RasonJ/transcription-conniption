@@ -1,4 +1,5 @@
 import type { ManuscriptRegistry } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
 import { AlertCircle, ChevronDown, FileText } from "lucide-react-native";
 import React, { useCallback, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export function ManuscriptSelector({ currentFileName, registry, onSelect }: Props) {
+  const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const fileNames = Object.keys(registry);
 
@@ -21,7 +23,7 @@ export function ManuscriptSelector({ currentFileName, registry, onSelect }: Prop
 
   return (
     <View style={[styles.container, isOpen && styles.containerActive]}>
-      <Text style={styles.selectorLabel}>Transcription Source</Text>
+      <Text style={styles.selectorLabel}>{t("selector.label")}</Text>
       <Pressable
         onPress={toggleDropdown}
         style={({ pressed }) => [styles.triggerButton, pressed && styles.pressed]}

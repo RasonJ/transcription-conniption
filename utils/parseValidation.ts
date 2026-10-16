@@ -44,7 +44,9 @@ export function scanLineLexicalIssues(
       }
     }
     if (!hasClose) {
-      pushError(errors, "Unclosed expansion tag `<…>` before line end", lineIndex, trimmed);
+      pushError(errors, "Unclosed expansion tag `<…>` before line end", lineIndex, trimmed, "error", {
+        code: "UNCLOSED_EXPANSION",
+      });
     }
   }
 
@@ -63,6 +65,7 @@ export function scanLineLexicalIssues(
         lineIndex,
         trimmed,
         "warning",
+        { code: "UNCLOSED_DELETION" },
       );
     }
   }
@@ -82,6 +85,7 @@ export function scanLineLexicalIssues(
         lineIndex,
         trimmed,
         "warning",
+        { code: "UNCLOSED_INSERTION" },
       );
     }
   }
@@ -190,6 +194,7 @@ export function scanStructuralTokenIssues(
           lineIndex,
           line,
           "warning",
+          { code: "STRAY_CLOSING_BRACE", params: { line: lineIndex + 1 } },
         );
       }
     }

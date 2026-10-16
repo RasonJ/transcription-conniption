@@ -5,6 +5,7 @@ import {
   inferExportFormatFromFileName,
   type ManuscriptExportFormat,
 } from "@/utils/exportFormats";
+import { useT } from "@/i18n/runtime";
 import { X } from "lucide-react-native";
 import React, { useEffect, useMemo, useState } from "react";
 import {
@@ -25,6 +26,7 @@ type Props = {
 };
 
 export function ExportManuscriptSheet({ visible, onClose, sourceFileName, onExport }: Props) {
+  const t = useT();
   const [selectedFormat, setSelectedFormat] = useState<ManuscriptExportFormat>("html");
   const [fileName, setFileName] = useState(defaultFileNameForFormat(sourceFileName, "html"));
   const [busy, setBusy] = useState(false);
@@ -65,13 +67,18 @@ export function ExportManuscriptSheet({ visible, onClose, sourceFileName, onExpo
       <View style={styles.backdrop}>
         <View style={styles.sheet}>
           <View style={styles.header}>
-            <Text style={styles.title}>Export manuscript</Text>
-            <Pressable onPress={onClose} style={styles.closeBtn}>
+            <Text style={styles.title}>{t("export.title")}</Text>
+            <Pressable
+              onPress={onClose}
+              style={styles.closeBtn}
+              accessibilityRole="button"
+              accessibilityLabel={t("common.close")}
+            >
               <X color="#ffd36e" size={20} />
             </Pressable>
           </View>
 
-          <Text style={styles.label}>File name (extension sets format)</Text>
+          <Text style={styles.label}>{t("export.fileNameLabel")}</Text>
           <TextInput
             value={fileName}
             onChangeText={setFileName}
@@ -82,12 +89,14 @@ export function ExportManuscriptSheet({ visible, onClose, sourceFileName, onExpo
             style={styles.input}
           />
           {inferredFromName ? (
-            <Text style={styles.inferred}>Detected format: .{inferredFromName === "jpeg" ? "jpg" : inferredFromName}</Text>
+            <Text style={styles.inferred}>
+              {t("export.detectedFormat", { ext: inferredFromName === "jpeg" ? "jpg" : inferredFromName })}
+            </Text>
           ) : (
-            <Text style={styles.inferredWarn}>Add an extension (.txt, .html, .svg, .png, .jpg)</Text>
+            <Text style={styles.inferredWarn}>{t("export.addExtension")}</Text>
           )}
 
-          <Text style={styles.label}>Or choose a format</Text>
+          <Text style={styles.label}>{t("export.orChooseFormat")}</Text>
           <View style={styles.formatGrid}>
             {EXPORT_FORMAT_OPTIONS.map((opt) => {
               const active = (inferredFromName ?? selectedFormat) === opt.format;

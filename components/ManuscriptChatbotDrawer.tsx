@@ -3,16 +3,19 @@ import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
 import { useT } from "@/i18n/runtime";
 import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
-import { buildFacetIndex } from "@/utils/copilot/facetIndex";
+import { buildFacetIndex, type FacetIndex } from "@/utils/copilot/facetIndex";
 import {
   buildLibraryAwareRouterIndex,
   matchLibraryEntry,
 } from "@/utils/copilot/libraryIntents";
 import { precomputeEager } from "@/utils/copilot/precompute";
+import { overviewFromPrecompiled } from "@/utils/copilot/sidecarRecipes";
 import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/types";
+import type { PrecompiledFacets } from "@/utils/corpusPrecompute";
+import { loadPrecompiledFacets } from "@/utils/librarySidecars";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
 import { ArrowRight, BookOpen, Search, Sparkles, X } from "lucide-react-native";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -38,31 +41,8 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState<CopilotAnswer | null>(null);
-
-  const facets = useMemo(
-    () => (visible ? buildFacetIndex(parsedManuscript) : null),
-    [visible, parsedManuscript],
-  );
-
-  const vectorIndex = useMemo(
-    () => (visible ? buildManuscriptVectorIndex(parsedManuscript) : undefined),
-    [visible, parsedManuscript],
-  );
-
-  const libraryAwareRouter = useMemo(
-    () => (visible ? buildLibraryAwareRouterIndex(catalog) : undefined),
-    [visible, catalog],
-  );
-
-  const overview = useMemo(
-    () =>
-      facets
-        ? precomputeEager(parsedManuscript, facets)
-            .filter((entry) => entry.count > 0)
-            .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel))
-        : [],
-    [facets, parsedManuscript],
-  );
+  const [precompiledFacets, setPrecompiledFacets] = useState<PrecompiledFacets | null>(null);
+  const liveFacetsRef = useRef<FacetIndex | null>(null);
 
   const libraryHit = useMemo(
     () =>
@@ -74,14 +54,65 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     [catalog, activeFileName, workspace?.sourceFileName, parsedManuscript.metadata.title],
   );
 
-  const handleAsk = useCallback(() => {
-    if (!query.trim() || !facets) return;
+  // Prefer batch facet sidecars — avoid rebuilding FacetIndex when the drawer opens.
+  useEffect(() => {
+    if (!visible) return;
+    let cancelled = false;
+    setPrecompiledFacets(null);
+    liveFacetsRef.current = null;
 
-    const result = askCopilot(query, parsedManuscript, {
-      facets,
+    const baseName = libraryHit?.baseName;
+    if (!baseName) return;
+
+    void loadPrecompiledFacets(baseName).then((facets) => {
+      if (!cancelled && facets) setPrecompiledFacets(facets);
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [visible, libraryHit?.baseName, parsedManuscript]);
+
+  const resolveLiveFacets = useCallback((): FacetIndex => {
+    if (liveFacetsRef.current) return liveFacetsRef.current;
+    const built = buildFacetIndex(parsedManuscript);
+    liveFacetsRef.current = built;
+    return built;
+  }, [parsedManuscript]);
+
+  const vectorIndex = useMemo(
+    () => (visible ? buildManuscriptVectorIndex(parsedManuscript) : undefined),
+    [visible, parsedManuscript],
+  );
+
+  const libraryAwareRouter = useMemo(
+    () => (visible ? buildLibraryAwareRouterIndex(catalog) : undefined),
+    [visible, catalog],
+  );
+
+  const overview = useMemo(() => {
+    if (!visible) return [];
+    if (precompiledFacets) return overviewFromPrecompiled(precompiledFacets);
+    // Non-library witnesses: build once for overview chips.
+    return precomputeEager(parsedManuscript, resolveLiveFacets())
+      .filter((entry) => entry.count > 0)
+      .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel));
+  }, [visible, precompiledFacets, parsedManuscript, resolveLiveFacets]);
+
+  const askOptions = useMemo(
+    () => ({
+      precompiledFacets: precompiledFacets ?? undefined,
+      resolveFacets: resolveLiveFacets,
       vectorIndex,
       router: libraryAwareRouter,
-    });
+    }),
+    [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter],
+  );
+
+  const handleAsk = useCallback(() => {
+    if (!query.trim()) return;
+
+    const result = askCopilot(query, parsedManuscript, askOptions);
 
     if (result.navigate) {
       navigateToAnchor(result.navigate);
@@ -90,23 +121,14 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
       return;
     }
     setAnswer(result);
-  }, [
-    query,
-    parsedManuscript,
-    facets,
-    vectorIndex,
-    libraryAwareRouter,
-    navigateToAnchor,
-    onClose,
-  ]);
+  }, [query, parsedManuscript, askOptions, navigateToAnchor, onClose]);
 
   const handleRecipe = useCallback(
     (recipeId: string) => {
-      if (!facets) return;
-      const result = runRecipeById(recipeId, parsedManuscript, { facets, vectorIndex });
+      const result = runRecipeById(recipeId, parsedManuscript, askOptions);
       if (result) setAnswer(result);
     },
-    [facets, parsedManuscript, vectorIndex],
+    [parsedManuscript, askOptions],
   );
 
   const handleJumpToRow = useCallback(

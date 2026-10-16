@@ -1,5 +1,6 @@
 import type { FolioSide } from "@/constants/manuscript";
 import { renderNormalizedBlock } from "@/utils/normalizedText";
+import { useT } from "@/i18n/runtime";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -23,6 +24,7 @@ export const SynopticPane = React.memo(function SynopticPane({
   highlight,
   embedded,
 }: Props) {
+  const t = useT();
   const normalizedLines = useMemo(() => {
     const lines: NormalizedRow[] = [];
     for (let i = 0; i < folio.blocks.length; i++) {
@@ -39,7 +41,7 @@ export const SynopticPane = React.memo(function SynopticPane({
 
   const body = (
     <>
-      <Text style={styles.paneLabel}>Normalized reading</Text>
+      <Text style={styles.paneLabel}>{t("synoptic.normalizedReading")}</Text>
       <Text style={styles.folioTag}>[fol. {folio.id}]</Text>
       {normalizedLines.map((row, idx) => {
         const isHit = isCurrentFolio && row.lineNumber === highlight?.lineNumber;

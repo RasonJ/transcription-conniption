@@ -13,10 +13,11 @@ import {
   reconstructionsByHand,
   superscripts,
 } from "../executors/tierA";
+import { ngrams, termFrequency, vocabDensity } from "../executors/voyant";
 import type { Recipe, RecipeResult } from "../types";
 
 /** Bump when any recipe's triggers or output semantics change. */
-export const CATALOG_VERSION = 1;
+export const CATALOG_VERSION = 2;
 
 type AnyRecipe = Recipe<Record<string, unknown>>;
 
@@ -316,6 +317,75 @@ export const RECIPES: readonly AnyRecipe[] = [
     run: (ctx) => foreignRatio(ctx.facets, ctx.parsed),
     present: { view: "count", chipLabel: "Foreign words" },
     method: "Words inside language-span environments divided by all words walked from the token stream.",
+  }),
+  tierA({
+    id: "corpus.term_frequency",
+    category: "corpus",
+    triggers: {
+      en: [
+        "show word frequency distribution",
+        "word frequency",
+        "most frequent words",
+        "term frequency",
+        "cirrus word cloud terms",
+        "top words in the text",
+      ],
+      es: [
+        "muestra la distribución de frecuencias",
+        "palabras más frecuentes",
+        "frecuencia de términos",
+        "nube de palabras",
+      ],
+    },
+    run: (ctx) => termFrequency(ctx.facets, ctx.parsed),
+    present: { view: "distribution", chipLabel: "Term frequency" },
+    method: "Ranked surface frequencies from the FacetIndex word stream (Voyant Cirrus–style).",
+  }),
+  {
+    id: "corpus.ngrams",
+    version: 1,
+    category: "corpus",
+    tier: "A",
+    triggers: {
+      en: [
+        "extract n-grams",
+        "show bigrams",
+        "show trigrams",
+        "frequent collocations",
+        "n-gram frequencies",
+        "word pairs that co-occur",
+      ],
+      es: ["extrae n-gramas", "muestra bigramas", "colocaciones frecuentes", "pares de palabras"],
+    },
+    slots: [{ name: "n", type: "int", default: 2, min: 2, max: 5 }],
+    requires: ["facets"],
+    precompute: "on_demand",
+    run: (ctx, params) => ngrams(ctx.facets, ctx.parsed, typeof params.n === "number" ? params.n : 2),
+    present: { view: "table", chipLabel: "N-grams" },
+    method: "Contiguous n-gram counts over normalized word surfaces (default bigrams).",
+  } as AnyRecipe,
+  tierA({
+    id: "corpus.vocab_density",
+    category: "corpus",
+    triggers: {
+      en: [
+        "analyze vocabulary density",
+        "vocabulary density across folios",
+        "type token ratio",
+        "hapax density",
+        "lexical diversity",
+        "STTR of this witness",
+      ],
+      es: [
+        "analiza la densidad léxica",
+        "densidad de vocabulario por folio",
+        "ratio tipos tokens",
+        "diversidad léxica",
+      ],
+    },
+    run: (ctx) => vocabDensity(ctx.facets, ctx.parsed),
+    present: { view: "table", chipLabel: "Vocab density" },
+    method: "Witness TTR / STTR / hapax plus per-folio type–token density (Voyant-style).",
   }),
   navFolio as unknown as AnyRecipe,
   searchPassages as unknown as AnyRecipe,

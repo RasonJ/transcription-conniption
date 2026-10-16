@@ -2,7 +2,7 @@
 module.exports = {
   preset: "jest-expo",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  testMatch: ["**/__tests__/**/*.test.ts"],
+  testMatch: ["**/__tests__/**/*.test.ts", "**/__tests__/**/*.test.tsx"],
   // OSTA corpus integration lives under __tests__/integration/ — run via npm run test:osta only.
   testPathIgnorePatterns: ["/node_modules/", "<rootDir>/__tests__/integration/"],
   moduleNameMapper: {

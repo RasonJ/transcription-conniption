@@ -1,4 +1,5 @@
 import type { Token } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
 import { resolveStoredFileUri } from "@/utils/expoFileSystem";
 import { Image as ImageIcon, PlusCircle, Trash2 } from "lucide-react-native";
 import React, { useContext, useEffect, useState } from "react";
@@ -22,15 +23,11 @@ type Props = {
 
 export function FigurePlaceholder({ token }: Props) {
   const { uploadedImages, triggerImagePick, removeImage } = useContext(FigureImageContext);
+  const t = useT();
   const [isImageLoading, setIsImageLoading] = useState(false);
   const figureId = token.figureId;
-  if (!figureId) {
-    return null;
-  }
-
-  const targetImageUri = uploadedImages[figureId]
-    ? resolveStoredFileUri(uploadedImages[figureId])
-    : undefined;
+  const targetImageUri =
+    figureId && uploadedImages[figureId] ? resolveStoredFileUri(uploadedImages[figureId]) : undefined;
   const typeLabel = token.figureType ?? "FIG";
 
   useEffect(() => {
@@ -41,6 +38,11 @@ export function FigurePlaceholder({ token }: Props) {
     }
   }, [targetImageUri]);
 
+  // Hooks above run unconditionally (rules of hooks); a token without a slot renders nothing.
+  if (!figureId) {
+    return null;
+  }
+
   if (targetImageUri) {
     return (
       <View style={styles.activeImageWrapper}>
@@ -48,7 +50,7 @@ export function FigurePlaceholder({ token }: Props) {
           {isImageLoading ? (
             <View style={styles.loadingSkeleton}>
               <ActivityIndicator size="small" color="#9b2217" />
-              <Text style={styles.loadingLabel}>Loading facsimile…</Text>
+              <Text style={styles.loadingLabel}>{t("facsimile.loading")}</Text>
             </View>
           ) : null}
           <Image
@@ -65,14 +67,14 @@ export function FigurePlaceholder({ token }: Props) {
             onPress={() => triggerImagePick(figureId)}
             style={({ pressed }) => [styles.controlBadge, pressed && styles.controlPressed]}
           >
-            <Text style={styles.controlBadgeText}>Replace</Text>
+            <Text style={styles.controlBadgeText}>{t("common.replace")}</Text>
           </Pressable>
           <Pressable
             onPress={() => removeImage(figureId)}
             style={({ pressed }) => [styles.controlBadge, styles.dangerBadge, pressed && styles.controlPressed]}
           >
             <Trash2 color="#fff4d2" size={12} />
-            <Text style={styles.controlBadgeText}>Remove</Text>
+            <Text style={styles.controlBadgeText}>{t("common.remove")}</Text>
           </Pressable>
         </View>
         <Text style={styles.activeCaption}>
@@ -87,12 +89,12 @@ export function FigurePlaceholder({ token }: Props) {
       onPress={() => triggerImagePick(figureId)}
       style={({ pressed }) => [styles.placeholderBox, pressed && styles.placeholderPressed]}
       accessibilityRole="button"
-      accessibilityLabel={`Upload image for ${typeLabel}: ${token.value}`}
+      accessibilityLabel={t("facsimile.uploadLabel", { type: typeLabel, caption: token.value })}
     >
       <View style={styles.placeholderAccentBar} />
       <View style={styles.placeholderContent}>
         <PlusCircle color="#9b2217" size={28} />
-        <Text style={styles.placeholderTitle}>Insert {typeLabel} facsimile</Text>
+        <Text style={styles.placeholderTitle}>{t("facsimile.insert", { type: typeLabel })}</Text>
         <Text style={styles.placeholderMeta}>{figureId}</Text>
         <Text style={styles.placeholderCaption} numberOfLines={3}>
           {token.value}

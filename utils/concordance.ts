@@ -1,13 +1,15 @@
 import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "../constants/manuscript";
-import { STOPWORDS } from "../constants/stopwords";
-import { lookupHsmsLemma } from "./hsmsDictionary";
+import { lemmaDictionaryGeneration, lookupHsmsLemma } from "./hsmsDictionary";
 import { manuscriptIdentityFromSource } from "./manuscriptIdentity";
+import {
+  detectWitnessLanguage,
+  stopwordsFor,
+  witnessCollator,
+  type WitnessLanguage,
+} from "./witnessLanguage";
 
 const CONTEXT_RADIUS = 28;
 
-const FLOW_CLEAN_RE = /\$[.;]/g;
-const WORD_VALID_RE = /[A-Za-zÀ-ÿ0-9]/;
-const FLOW_TOKEN_PATTERN = /[^\s]+/g;
 const FLOW_WORD_MATCHER = /[A-Za-zÀ-ÿ0-9']+/g;
 
 function normalizeLemma(word: string): string {
@@ -18,33 +20,19 @@ function normalizeLemma(word: string): string {
     .replace(/[^a-z0-9']/g, "");
 }
 
-/**
- * Words from a hyphen-stitched flow string. Splits on whitespace only so
- * margin hyphens joined in reconstructedFlow stay inside lemmas (e.g. adelantar).
- */
-export function extractWordsFromFlow(flow: string): string[] {
-  return flow
-    .split(/\s+/)
-    .map((w) => w.replace(FLOW_CLEAN_RE, "").trim())
-    .filter((w) => w.length > 1 && WORD_VALID_RE.test(w));
-}
-
-/** Count indexable words in a stitched reading flow (stats alignment). */
-export function countWordsInFlow(flow: string): number {
-  if (!flow) return 0;
-  let count = 0;
-  while (FLOW_TOKEN_PATTERN.exec(flow) !== null) {
-    count++;
-  }
-  FLOW_TOKEN_PATTERN.lastIndex = 0;
-  return count;
-}
+export { countWordsInFlow, extractWordsFromFlow } from "./flowWords";
 
 export function buildConcordance(
   parsed: ParsedManuscript,
-  options?: { minCount?: number; maxOccurrencesPerWord?: number },
+  options?: {
+    minCount?: number;
+    maxOccurrencesPerWord?: number;
+    /** Stopword list to apply; detected from the text when omitted (SPEC-I18N §8). */
+    language?: WitnessLanguage;
+  },
 ): ConcordanceIndex {
   const index: ConcordanceIndex = {};
+  const stopwords = stopwordsFor(options?.language ?? detectWitnessLanguage(parsed).language);
   const minCount = options?.minCount ?? 1;
   const maxOcc = options?.maxOccurrencesPerWord ?? 200;
 
@@ -61,7 +49,7 @@ export function buildConcordance(
       const start = match.index;
 
       const lemma = lookupHsmsLemma(word) || normalizeLemma(word);
-      if (!lemma || lemma.length < 2 || STOPWORDS.has(lemma)) {
+      if (!lemma || lemma.length < 2 || stopwords.has(lemma)) {
         continue;
       }
 
@@ -107,28 +95,53 @@ export const PARSER_VERSION = 1;
 
 const CONCORDANCE_CACHE_LIMIT = 4;
 const concordanceBySource = new Map<string, ConcordanceIndex>();
-const concordanceByParsed = new WeakMap<ParsedManuscript, ConcordanceIndex>();
+const concordanceByParsed = new WeakMap<ParsedManuscript, { generation: string; index: ConcordanceIndex }>();
 
 export function clearConcordanceCache(): void {
   concordanceBySource.clear();
 }
 
 /**
- * Lazily build and memoize a concordance. Keyed by source identity + PARSER_VERSION
- * when `sourceText` is given, otherwise by the parsed object reference.
+ * Concordance keyed by normalized lemma from hyphen-stitched folio flows.
+ * Immune to line/column hyphen splits (e.g. adela- + ntar → adelantar).
+ */
+export function generateConcordanceIndex(
+  parsed: ParsedManuscript,
+  language?: WitnessLanguage,
+): ConcordanceIndex {
+  return buildConcordance(parsed, { language });
+}
+
+export function computeManuscriptStats(parsed: ParsedManuscript, concordance?: ConcordanceIndex) {
+  const index = concordance ?? getConcordanceForManuscript(parsed);
+  return {
+    totalWords: parsed.stats.totalWords,
+    totalLines: parsed.stats.totalLines,
+    uniqueWords: Object.keys(index).length,
+    rubricCount: parsed.stats.rubricCount,
+    glossCount: parsed.stats.glossCount,
+  };
+}
+
+/**
+ * Lazily build and memoize a concordance. Cache keys include the lemma dictionary
+ * generation, so indexes built from surface forms are rebuilt once lemmas load.
+ * Keyed by source identity + PARSER_VERSION when `sourceText` is given, otherwise by the parsed object reference.
  */
 export function getConcordanceForManuscript(
   parsed: ParsedManuscript,
   sourceText?: string,
+  language?: WitnessLanguage,
 ): ConcordanceIndex {
   if (parsed.concordance) return parsed.concordance;
 
+  const generation = `${lemmaDictionaryGeneration()}:${language ?? "auto"}`;
   const byRef = concordanceByParsed.get(parsed);
-  if (byRef) return byRef;
+  if (byRef && byRef.generation === generation) return byRef.index;
 
   const key =
     sourceText !== undefined
-      ? `${PARSER_VERSION}:${manuscriptIdentityFromSource(sourceText)}`
+      ? `${PARSER_VERSION}:${generation}:${manuscriptIdentityFromSource(sourceText)}`
       : null;
 
   if (key) {
@@ -136,13 +149,13 @@ export function getConcordanceForManuscript(
     if (hit) {
       concordanceBySource.delete(key);
       concordanceBySource.set(key, hit);
-      concordanceByParsed.set(parsed, hit);
+      concordanceByParsed.set(parsed, { generation, index: hit });
       return hit;
     }
   }
 
-  const built = buildConcordance(parsed);
-  concordanceByParsed.set(parsed, built);
+  const built = buildConcordance(parsed, { language });
+  concordanceByParsed.set(parsed, { generation, index: built });
 
   if (key) {
     concordanceBySource.set(key, built);
@@ -155,12 +168,16 @@ export function getConcordanceForManuscript(
   return built;
 }
 
-export function getConcordanceEntriesSorted(index: ConcordanceIndex): Array<{
+export function getConcordanceEntriesSorted(
+  index: ConcordanceIndex,
+  language?: WitnessLanguage,
+): Array<{
   lemma: string;
   count: number;
   occurrences: WordOccurrence[];
 }> {
+  const compare = witnessCollator(language);
   return Object.entries(index)
     .map(([lemma, data]) => ({ lemma, count: data.count, occurrences: data.occurrences }))
-    .sort((a, b) => b.count - a.count || a.lemma.localeCompare(b.lemma));
+    .sort((a, b) => b.count - a.count || compare(a.lemma, b.lemma));
 }

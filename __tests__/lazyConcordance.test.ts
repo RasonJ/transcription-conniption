@@ -1,10 +1,10 @@
 import {
   buildConcordance,
   clearConcordanceCache,
+  computeManuscriptStats,
   getConcordanceForManuscript,
   PARSER_VERSION,
 } from "../utils/concordance";
-import { computeManuscriptStats } from "../utils/analyzeManuscript";
 import { parseHsMsText } from "../utils/manuscriptParser";
 
 const SOURCE = "[fol. 1r]\n{CB1.\n1 adela-\n2 ntar al pueblo adelantar\n}";

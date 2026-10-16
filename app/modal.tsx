@@ -1,6 +1,7 @@
 import { ValidationPanel } from "@/components/ValidationPanel";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
+import { useT } from "@/i18n/runtime";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { X } from "lucide-react-native";
@@ -10,6 +11,7 @@ import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "rea
 export default function ValidationModalScreen() {
   const { parsedManuscript, debouncedText } = useScriptorium();
   const { navigateToLineIndex } = useScrollAnchor();
+  const t = useT();
 
   const handleJump = useCallback(
     (lineIndex: number) => {
@@ -24,8 +26,13 @@ export default function ValidationModalScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Structural validation</Text>
-        <Pressable onPress={() => router.back()} style={styles.closeButton}>
+        <Text style={styles.title}>{t("validation.sheetTitle")}</Text>
+        <Pressable
+          onPress={() => router.back()}
+          style={styles.closeButton}
+          accessibilityRole="button"
+          accessibilityLabel={t("common.close")}
+        >
           <X color="#f6d890" size={22} />
         </Pressable>
       </View>

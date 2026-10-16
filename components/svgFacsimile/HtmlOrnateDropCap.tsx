@@ -1,3 +1,4 @@
+import { t as tNow } from "@/i18n/core";
 import {
   buildDropCapSeed,
   buildOrnateInitialGeometry,
@@ -86,7 +87,7 @@ export function HtmlOrnateDropCap({
     <button
       type="button"
       onClick={onPress}
-      aria-label={`Replace initial ${letter} with facsimile scan`}
+      aria-label={tNow("facsimile.replaceInitial", { letter })}
       style={interactiveStyle}
     >
       <svg

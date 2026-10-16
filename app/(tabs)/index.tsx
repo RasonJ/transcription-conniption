@@ -1,12 +1,11 @@
 import { useScriptorium } from "@/context/ScriptoriumContext";
-import { useT } from "@/i18n/runtime";
+import { t as tNow, useT } from "@/i18n/runtime";
 import { useRegisterLineAnchor, useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { ExportManuscriptSheet } from "@/components/ExportManuscriptSheet";
 import { BlockFigureLayout } from "@/components/BlockFigureLayout";
 import { CompilationOverlay } from "@/components/CompilationOverlay";
-import { ConcordanceDrawer } from "@/components/ConcordanceDrawer";
-import { ManuscriptChatbotDrawer } from "@/components/ManuscriptChatbotDrawer";
-import { IngestPanel } from "@/components/ingest/IngestPanel";
+import { ConcordanceDrawer, IngestPanel, ManuscriptChatbotDrawer } from "@/components/lazy/ScholarPanels";
+import { LocalePickerCompact } from "@/components/LocalePicker";
 import { FigureImageContext, FigurePlaceholder } from "@/components/FigurePlaceholder";
 import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
@@ -268,7 +267,7 @@ export default function TranscriptionConniptionScreen() {
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       } catch (error) {
         console.warn("Figure image upload failed", error);
-        Alert.alert("Upload error", "Could not attach an image to this placeholder slot.");
+        Alert.alert(tNow("alert.uploadError"), tNow("alert.figureAttachFailed"));
       }
     },
     [workspace, updateImageUri],
@@ -281,7 +280,7 @@ export default function TranscriptionConniptionScreen() {
         await Haptics.selectionAsync();
       } catch (error) {
         console.warn("Figure image remove failed", error);
-        Alert.alert("Remove failed", "Could not remove the facsimile from this slot.");
+        Alert.alert(tNow("alert.removeFailed"), tNow("alert.figureRemoveFailed"));
       }
     },
     [removeImageUri],
@@ -310,8 +309,11 @@ export default function TranscriptionConniptionScreen() {
     (result: Parameters<typeof loadBatch>[0]) => {
       loadBatch(result);
       Alert.alert(
-        "Batch complete",
-        `Compiled ${result.summary.completedFiles} of ${result.summary.totalFiles} transcriptions.`,
+        tNow("alert.batchComplete"),
+        tNow("alert.batchCompleteBody", {
+          completed: result.summary.completedFiles,
+          total: result.summary.totalFiles,
+        }),
       );
       setBatchShellVisible(false);
       setIsPreview(true);
@@ -327,7 +329,7 @@ export default function TranscriptionConniptionScreen() {
         title: "TEI-XML export",
       });
     } catch {
-      Alert.alert("Export", "TEI XML generated but could not open the share sheet.");
+      Alert.alert(tNow("common.export"), tNow("alert.teiShareFailed"));
     }
   }, [parsedManuscript]);
 
@@ -356,7 +358,7 @@ export default function TranscriptionConniptionScreen() {
   const handleExportManuscript = useCallback(
     async (fileName: string, format: ManuscriptExportFormat) => {
       if (!parsedManuscript.folios.length && !debouncedText.trim()) {
-        Alert.alert("Nothing to export", "Upload or load a transcription before exporting.");
+        Alert.alert(tNow("alert.nothingToExport"), tNow("alert.nothingToExportBody"));
         return;
       }
 
@@ -372,7 +374,7 @@ export default function TranscriptionConniptionScreen() {
           return;
         }
         console.warn("Export failed", error);
-        Alert.alert("Export failed", "Could not build or save the exported file.");
+        Alert.alert(tNow("alert.exportFailed"), tNow("alert.exportFailedBody"));
       }
     },
     [parsedManuscript.folios.length, debouncedText, buildExportContents],
@@ -392,7 +394,7 @@ export default function TranscriptionConniptionScreen() {
         await Haptics.selectionAsync();
       } catch (error) {
         console.warn("Folio background upload failed", error);
-        Alert.alert("Upload error", "Could not attach a leaf scan for this folio.");
+        Alert.alert(tNow("alert.uploadError"), tNow("alert.leafAttachFailed"));
       }
     },
     [setFolioBackground],
@@ -458,6 +460,7 @@ export default function TranscriptionConniptionScreen() {
                   <Text style={styles.title}>{t("studio.title")}</Text>
                 </View>
               </View>
+              <LocalePickerCompact />
               {!isEditorMode ? (
                 <Text style={styles.subtitle}>
                   {isDragOver ? t("studio.subtitle.readerDrop") : t("studio.subtitle.reader")}
@@ -1024,6 +1027,7 @@ function FolioPage({
   onSetFolioBackground?: (folioId: string) => void;
   remeasureFolio: (folioId: string, folioRef: React.RefObject<View | null>) => void;
 }) {
+  const t = useT();
   const folioRef = useRef<View>(null);
   const { showExpanded, showDeletions, suppressOtioseMarks } = useContext(ReaderStateContext);
 
@@ -1082,8 +1086,12 @@ function FolioPage({
         })}
       </View>
 
-      {folio.catchword ? <Text style={styles.catchwordText}>Reclamo: {folio.catchword}</Text> : null}
-      {folio.signature ? <Text style={styles.signatureText}>Signatura: {folio.signature}</Text> : null}
+      {folio.catchword ? (
+        <Text style={styles.catchwordText}>{t("studio.catchwordLabel", { text: folio.catchword })}</Text>
+      ) : null}
+      {folio.signature ? (
+        <Text style={styles.signatureText}>{t("studio.signatureLabel", { text: folio.signature })}</Text>
+      ) : null}
     </>
   );
 
@@ -1104,7 +1112,7 @@ function FolioPage({
       style={[styles.folioLeaf, folioHighlighted && styles.folioLeafHighlight]}
     >
       <View style={styles.folioMarkerContainer}>
-        <Text style={styles.folioMarker}>Leaf [fol. {folio.id}]</Text>
+        <Text style={styles.folioMarker}>{t("studio.leaf", { folio: folio.id })}</Text>
       </View>
 
       {facsimileCanvasEnabled ? (
@@ -1140,6 +1148,7 @@ function BlockRenderer({
   block: ManuscriptBlock;
   highlight: { folioId: string; lineNumber?: string } | null;
 }) {
+  const t = useT();
   const blockRef = useRef<View>(null);
   const onBlockLayout = useRegisterLineAnchor(folioId, block.lineNumber, blockRef);
   if (block.type === "diagram") {
@@ -1155,7 +1164,7 @@ function BlockRenderer({
     }
     return (
       <View style={styles.diagramContainer}>
-        <Text style={styles.diagramLabel}>[Diagram schema — add caption or upload inline {`{DIAG. …}`}]</Text>
+        <Text style={styles.diagramLabel}>{t("studio.diagramPlaceholder", { mnemonic: "{DIAG. …}" })}</Text>
       </View>
     );
   }

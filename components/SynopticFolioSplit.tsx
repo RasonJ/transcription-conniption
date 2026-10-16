@@ -1,5 +1,6 @@
 import type { FolioSide } from "@/constants/manuscript";
 import { SynopticPane } from "@/components/SynopticPane";
+import { useT } from "@/i18n/runtime";
 import React, { useCallback, useRef, useState } from "react";
 import {
   NativeScrollEvent,
@@ -20,6 +21,7 @@ type Props = {
 };
 
 export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
+  const t = useT();
   const leftScrollRef = useRef<ScrollView>(null);
   const rightScrollRef = useRef<ScrollView>(null);
   const isScrolling = useRef(false);
@@ -55,7 +57,7 @@ export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
           accessibilityState={{ checked: showDiplomaticPanel }}
         >
           <Text style={[styles.toggleText, showDiplomaticPanel && styles.toggleTextActive]}>
-            Diplomatic
+            {t("synoptic.diplomatic")}
           </Text>
         </Pressable>
         <Pressable
@@ -65,7 +67,7 @@ export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
           accessibilityState={{ checked: showNormalizedPanel }}
         >
           <Text style={[styles.toggleText, showNormalizedPanel && styles.toggleTextActive]}>
-            Normalized
+            {t("synoptic.normalized")}
           </Text>
         </Pressable>
       </View>
@@ -81,7 +83,7 @@ export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
             onScroll={(e) => handleScroll("left", e)}
             scrollEventThrottle={16}
           >
-            <Text style={styles.paneTitle}>Diplomatic View</Text>
+            <Text style={styles.paneTitle}>{t("synoptic.diplomaticView")}</Text>
             {diplomatic}
           </ScrollView>
         ) : null}
@@ -101,7 +103,7 @@ export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
         ) : null}
 
         {!showDiplomaticPanel && !showNormalizedPanel ? (
-          <Text style={styles.emptyPaneHint}>Enable at least one synoptic panel.</Text>
+          <Text style={styles.emptyPaneHint}>{t("synoptic.enableOne")}</Text>
         ) : null}
       </View>
     </View>

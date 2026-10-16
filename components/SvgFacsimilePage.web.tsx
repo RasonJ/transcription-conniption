@@ -1,3 +1,4 @@
+import { t as tNow, useT } from "@/i18n/runtime";
 import { FigureImageContext } from "@/components/FigurePlaceholder";
 import {
   CANVAS_W,
@@ -175,7 +176,7 @@ function HtmlLineRow({
             boxSizing: "border-box",
           }}
         >
-          [Diagram]
+          {tNow("facsimile.diagram")}
         </Div>
       ),
     };
@@ -647,6 +648,7 @@ export function SvgFacsimilePage({
   suppressOtioseMarks = false,
   useNormalizedDiacritics = true,
 }: SvgFacsimilePageProps) {
+  const t = useT();
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentH, setContentH] = useState(480);
@@ -695,20 +697,21 @@ export function SvgFacsimilePage({
     if (folio.catchword) {
       rows.push(
         <Div key="cw" style={htmlStyles.footerRight}>
-          Reclamo: {folio.catchword}
+          {t("studio.catchwordLabel", { text: folio.catchword })}
         </Div>,
       );
     }
     if (folio.signature) {
       rows.push(
         <Div key="sg" style={htmlStyles.footerLeft}>
-          Signatura: {folio.signature}
+          {t("studio.signatureLabel", { text: folio.signature })}
         </Div>,
       );
     }
 
     return rows;
-  }, [folio, spatialFolio, settings, uploadedImages, innerW, colW, triggerImagePick]);
+    // t: rebuild rows (diagram label, catchword/signature) when the UI locale changes.
+  }, [folio, spatialFolio, settings, uploadedImages, innerW, colW, triggerImagePick, t]);
 
   useEffect(() => {
     const el = contentRef.current;

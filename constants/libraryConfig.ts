@@ -3,6 +3,11 @@ import { Platform } from "react-native";
 /** Web: files copied by `npm run sync:library` into `public/`. */
 export const LIBRARY_CATALOG_FILENAME = "library-catalog.json";
 export const LIBRARY_ENTRIES_DIR = "library/entries";
+export const LIBRARY_FACETS_DIR = "library/facets";
+export const CORPUS_TFIDF_FILENAME = "corpus-tfidf.json";
+export const CORPUS_STATS_FILENAME = "corpus-stats.json";
+export const CORPUS_POSTINGS_FILENAME = "corpus-term-postings.json";
+export const LIBRARY_GRAPH_FILENAME = "library-graph.json";
 
 function trimTrailingSlash(url: string): string {
   return url.replace(/\/+$/, "");
@@ -23,15 +28,38 @@ export function getLibraryBaseUrl(): string {
   return "";
 }
 
-export function getLibraryCatalogUrl(): string {
+function publicUrl(pathFromRoot: string): string {
   const base = getLibraryBaseUrl();
-  return base ? `${base}/${LIBRARY_CATALOG_FILENAME}` : `/${LIBRARY_CATALOG_FILENAME}`;
+  const path = pathFromRoot.replace(/^\/+/, "");
+  return base ? `${base}/${path}` : `/${path}`;
+}
+
+export function getLibraryCatalogUrl(): string {
+  return publicUrl(LIBRARY_CATALOG_FILENAME);
 }
 
 export function getLibraryEntryUrl(baseName: string): string {
-  const base = getLibraryBaseUrl();
   const file = `${encodeURIComponent(baseName)}.json`;
-  return base
-    ? `${base}/${LIBRARY_ENTRIES_DIR}/${file}`
-    : `/${LIBRARY_ENTRIES_DIR}/${file}`;
+  return publicUrl(`${LIBRARY_ENTRIES_DIR}/${file}`);
+}
+
+export function getLibraryFacetsUrl(baseName: string): string {
+  const file = `${encodeURIComponent(baseName)}.json`;
+  return publicUrl(`${LIBRARY_FACETS_DIR}/${file}`);
+}
+
+export function getCorpusTfidfUrl(): string {
+  return publicUrl(CORPUS_TFIDF_FILENAME);
+}
+
+export function getCorpusStatsUrl(): string {
+  return publicUrl(CORPUS_STATS_FILENAME);
+}
+
+export function getLibraryGraphUrl(): string {
+  return publicUrl(LIBRARY_GRAPH_FILENAME);
+}
+
+export function getCorpusPostingsUrl(): string {
+  return publicUrl(CORPUS_POSTINGS_FILENAME);
 }

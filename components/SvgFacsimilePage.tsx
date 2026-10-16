@@ -1,3 +1,4 @@
+import { useT } from "@/i18n/runtime";
 import { FigureImageContext } from "@/components/FigurePlaceholder";
 import { renderOrnateInitialSvg } from "@/components/svgFacsimile/renderOrnateInitial";
 import { getPrintableBlocks, flattenFolioLayoutGroups, groupFolioLayout } from "@/components/svgFacsimile/folioGroups";
@@ -404,6 +405,7 @@ export function SvgFacsimilePage({
   useNormalizedDiacritics = true,
 }: SvgFacsimilePageProps) {
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
+  const t = useT();
 
   const canvasW = CANVAS_W;
   const innerW = innerCanvasWidth();
@@ -576,7 +578,7 @@ export function SvgFacsimilePage({
         fill={FAINT_FILL}
         textAnchor="end"
       >
-        Reclamo: {folio.catchword}
+        {t("studio.catchwordLabel", { text: folio.catchword })}
       </SvgText>,
     );
     curY += LH + 4;
@@ -593,7 +595,7 @@ export function SvgFacsimilePage({
         fontStyle="italic"
         fill={FAINT_FILL}
       >
-        Signatura: {folio.signature}
+        {t("studio.signatureLabel", { text: folio.signature })}
       </SvgText>,
     );
     curY += LH + 4;

@@ -1,5 +1,7 @@
 import { scriptoriumTheme as t } from "@/constants/scriptoriumTheme";
 import type { ValidationError } from "@/constants/manuscript";
+import { useT } from "@/i18n/runtime";
+import { localizeValidationMessage } from "@/utils/validationMessage";
 import { lintHsmsTranscription } from "@/utils/hsmsLinter";
 import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react-native";
 import React, { useMemo } from "react";
@@ -13,6 +15,7 @@ type Props = {
 const MAX_VISIBLE = 12;
 
 export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
+  const tr = useT();
   const report = useMemo(() => lintHsmsTranscription(transcriptionText), [transcriptionText]);
   const ordered = [...report.criticalErrors, ...report.structuralWarnings];
 
@@ -20,7 +23,7 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
     return (
       <View style={styles.okBanner}>
         <CheckCircle2 color="#a8d4a0" size={16} />
-        <Text style={styles.okText}>Markup verified — ready for parchment / SVG render</Text>
+        <Text style={styles.okText}>{tr("validation.okLinter")}</Text>
       </View>
     );
   }
@@ -36,10 +39,7 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
           <XCircle color="#ef9a9a" size={16} />
         )}
         <Text style={report.isValid ? styles.warnTitle : styles.errTitle}>
-          {report.errorCount} error{report.errorCount !== 1 ? "s" : ""}
-          {report.warningCount > 0
-            ? ` · ${report.warningCount} warning${report.warningCount !== 1 ? "s" : ""}`
-            : ""}
+          {tr("validation.counts", { errors: report.errorCount, warnings: report.warningCount })}
         </Text>
       </View>
 
@@ -47,7 +47,7 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
         {visible.map((issue, idx) => (
           <IssueRow key={`${issue.lineIndex}|${issue.message}|${idx}`} issue={issue} onJumpToLine={onJumpToLine} />
         ))}
-        {overflow > 0 ? <Text style={styles.more}>+{overflow} more — open validation sheet</Text> : null}
+        {overflow > 0 ? <Text style={styles.more}>{tr("validation.moreOpenSheet", { count: overflow })}</Text> : null}
       </ScrollView>
     </View>
   );
@@ -60,6 +60,7 @@ function IssueRow({
   issue: ValidationError;
   onJumpToLine?: (lineIndex: number) => void;
 }) {
+  const tr = useT();
   const isError = issue.severity === "error";
   return (
     <Pressable
@@ -68,10 +69,10 @@ function IssueRow({
       style={({ pressed }) => [styles.issueRow, pressed && onJumpToLine && styles.issueRowPressed]}
     >
       <Text style={[styles.lineMeta, isError ? styles.errMeta : styles.warnMeta]}>
-        L{issue.lineIndex + 1}
+        {tr("validation.lineShort", { line: issue.lineIndex + 1 })}
       </Text>
       <View style={styles.issueBody}>
-        <Text style={styles.issueMessage}>{issue.message}</Text>
+        <Text style={styles.issueMessage}>{localizeValidationMessage(tr, issue)}</Text>
         {issue.rawSnippet ? (
           <Text style={styles.issueSnippet} numberOfLines={1}>
             {issue.rawSnippet.trim()}

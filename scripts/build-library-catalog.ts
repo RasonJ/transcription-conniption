@@ -165,9 +165,12 @@ function main(): void {
   const sec = ((Date.now() - started) / 1000).toFixed(1);
   console.log(`  Facets:        ${result.facetsWritten} witnesses (${sec}s)`);
   console.log(`  TF-IDF terms:  ${Object.keys(result.corpusTfidf.idf).length}`);
+  console.log(`  Postings:      ${Object.keys(result.corpusPostings.postings).length} terms`);
   console.log(`  Graph nodes:   ${result.libraryGraph.nodeCount}`);
   console.log(`  Graph edges:   ${result.libraryGraph.edgeCount}`);
-  console.log(`  Wrote: corpus-tfidf.json, corpus-stats.json, library-graph.json`);
+  console.log(
+    `  Wrote: corpus-tfidf.json, corpus-stats.json, corpus-term-postings.json, library-graph.json`,
+  );
 }
 
 main();

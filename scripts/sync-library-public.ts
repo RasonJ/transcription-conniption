@@ -51,6 +51,7 @@ copyFile(catalogSrc, assetsCatalogDest);
 const corpusArtifacts = [
   "corpus-tfidf.json",
   "corpus-stats.json",
+  "corpus-term-postings.json",
   "library-graph.json",
 ] as const;
 const facetsDir = path.join(publicDir, "library", "facets");

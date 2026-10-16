@@ -1,4 +1,5 @@
 import { FigurePlaceholder } from "@/components/FigurePlaceholder";
+import { useT } from "@/i18n/runtime";
 import { resolveStoredFileUri } from "@/utils/expoFileSystem";
 import type { FacsimilePlacement, FolioSide, Token } from "@/constants/manuscript";
 import React, { useCallback, useMemo, useRef, useState } from "react";
@@ -49,6 +50,7 @@ export function FolioFacsimileCanvas({
   onSetFolioBackground,
   children,
 }: Props) {
+  const t = useT();
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const canvasRef = useRef<View>(null);
 
@@ -125,7 +127,7 @@ export function FolioFacsimileCanvas({
 
       {placementMode ? (
         <View style={[styles.placementHint, { pointerEvents: "none" }]}>
-          <Text style={styles.placementHintText}>Tap to place a facsimile fragment</Text>
+          <Text style={styles.placementHintText}>{t("facsimile.tapToPlace")}</Text>
         </View>
       ) : null}
     </View>

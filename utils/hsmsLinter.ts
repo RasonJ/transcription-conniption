@@ -7,6 +7,10 @@ import {
   unclosedEnvironmentErrors,
   type StructuralEnvFrame,
 } from "./parseValidation";
+import {
+  auditHsmsProoferIncidents,
+  prooferIncidentsAsValidationErrors,
+} from "./prooferIncidents";
 import { tokenizeLineStructural } from "./structuralAssembly";
 
 export interface LintReport {
@@ -44,10 +48,13 @@ function pushLintIssue(
   message: string,
   lineIndex: number,
   snippet: string,
+  params?: ValidationError["params"],
 ): void {
   issues.push({
     severity,
     message: `[${code}] ${message}`,
+    code,
+    ...(params ? { params } : {}),
     lineIndex,
     rawSnippet: snippet.slice(0, 120),
   });
@@ -140,11 +147,22 @@ function runPaleographicContextChecks(
   }
 }
 
+export type LintHsmsOptions = {
+  /** When false, skip Proofer-style editorial/technical incident scan (default true). */
+  includeProofer?: boolean;
+  /** Optional witness filename for `TEXT.SIGLA.txt` checks. */
+  sourceFileName?: string;
+};
+
 /**
  * Fast structural lint of raw HSMS text — no full AST / concordance build.
  * Use before facsimile render, in the editor, or from `npm run lint:hsms`.
+ * Includes Proofer-style incident flags by default ("señala; el editor decide").
  */
-export function lintHsmsTranscription(rawText: string): LintReport {
+export function lintHsmsTranscription(
+  rawText: string,
+  options?: LintHsmsOptions,
+): LintReport {
   if (!rawText.trim()) {
     return validationIssuesToLintReport([
       {
@@ -158,6 +176,15 @@ export function lintHsmsTranscription(rawText: string): LintReport {
 
   const lines = rawText.split(/\r?\n/);
   const issues: ValidationError[] = [];
+  if (options?.includeProofer !== false) {
+    issues.push(
+      ...prooferIncidentsAsValidationErrors(
+        auditHsmsProoferIncidents(rawText, {
+          sourceFileName: options?.sourceFileName,
+        }),
+      ),
+    );
+  }
   let envStack: StructuralEnvFrame[] = [];
   let inColumnBlock = false;
   let columnLineIndex = -1;
@@ -180,6 +207,7 @@ export function lintHsmsTranscription(rawText: string): LintReport {
           `Folio boundary breaks inside open environment {${activeEnv.code}.} (opened on line ${activeEnv.startLine + 1}).`,
           i,
           line,
+          { mnemonic: `{${activeEnv.code}.}`, line: activeEnv.startLine + 1 },
         );
       }
       envStack = [];
@@ -279,6 +307,7 @@ export function lintHsmsTranscription(rawText: string): LintReport {
         `Structural tokenizer failed: ${err instanceof Error ? err.message : String(err)}`,
         i,
         line,
+        { detail: err instanceof Error ? err.message : String(err) },
       );
       continue;
     }

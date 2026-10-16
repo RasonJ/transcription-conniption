@@ -1,5 +1,7 @@
 import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
-import { useT } from "@/i18n/runtime";
+import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
+import { foldForSearch } from "@/utils/witnessLanguage";
+import { formatNumber, useLocale, useT } from "@/i18n/runtime";
 import { getConcordanceEntriesSorted, getConcordanceForManuscript } from "@/utils/concordance";
 import { Search, X } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
@@ -78,18 +80,23 @@ const EMPTY_CONCORDANCE: ConcordanceIndex = {};
 
 export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSelectOccurrence }: Props) {
   const t = useT();
+  const { locale } = useLocale();
   const [query, setQuery] = useState("");
   const [expandedLemma, setExpandedLemma] = useState<string | null>(null);
 
+  const lemmas = useLemmaDictionary(visible);
   const concordance = useMemo(
     () => (visible ? getConcordanceForManuscript(parsed, sourceText) : EMPTY_CONCORDANCE),
-    [visible, parsed, sourceText],
+    // lemmas.generation: rebuild once the lazy dictionary arrives (surface forms until then).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [visible, parsed, sourceText, lemmas.generation],
   );
   const entries = useMemo(() => getConcordanceEntriesSorted(concordance), [concordance]);
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    // Accent-insensitive: "rubricas" matches "rúbricas" (SPEC-I18N §8).
+    const q = foldForSearch(query.trim());
     if (!q) return entries;
-    return entries.filter((e) => e.lemma.includes(q));
+    return entries.filter((e) => foldForSearch(e.lemma).includes(q));
   }, [entries, query]);
 
   const renderItem = useCallback(
@@ -138,10 +145,14 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
             />
           </View>
 
+          {lemmas.loading ? (
+            <Text style={styles.hint}>{t("concordance.lemmatizing")}</Text>
+          ) : null}
+
           <Text style={styles.hint}>
             {t(query.trim() ? "concordance.summaryFiltered" : "concordance.summary", {
-              total: entries.length.toLocaleString(),
-              shown: filtered.length.toLocaleString(),
+              total: formatNumber(entries.length, undefined, locale),
+              shown: formatNumber(filtered.length, undefined, locale),
             })}
           </Text>
 
