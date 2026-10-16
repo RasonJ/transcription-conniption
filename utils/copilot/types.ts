@@ -62,7 +62,8 @@ export interface Recipe<P = Record<string, unknown>> {
   requires: Capability[];
   /** Eager recipes are zero-param and run at idle. */
   precompute: "eager" | "on_demand";
-  run(ctx: RecipeContext, params: P): RecipeResult;  present: {
+  run(ctx: RecipeContext, params: P): RecipeResult;
+  present: {
     view: PresentView;
     chipLabel: string;
   };

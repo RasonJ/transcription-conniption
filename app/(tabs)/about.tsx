@@ -1,4 +1,5 @@
 import { LocalePicker } from "@/components/LocalePicker";
+import { useT } from "@/i18n/runtime";
 import React from "react";
 import {
   StyleSheet,
@@ -49,6 +50,7 @@ const references = [
 ];
 
 export default function AboutScreen() {
+  const t = useT();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 840;
 
@@ -81,22 +83,12 @@ export default function AboutScreen() {
                 <View style={styles.monasteryIconBox}>
                   <ScrollText color="#ffd36e" size={26} />
                 </View>
-                <Text style={styles.kickerText}>Platform Documentation</Text>
+                <Text style={styles.kickerText}>{t("sources.kicker")}</Text>
               </View>
 
-              <Text style={styles.mainTitleText}>Transcription Conniption</Text>
-              <Text style={styles.narrativeParagraphText}>
-                This workstation serves as a real-time vector rendering engine for
-                line-based diplomatic transcriptions adhering to the strict format
-                guidelines established by the Hispanic Seminary of Medieval Studies
-                (HSMS).
-              </Text>
-              <Text style={styles.narrativeParagraphText}>
-                By mapping raw inline diacritic strings, environment codes, and
-                spatial annotations to precise coordinate vector metrics, it
-                replicates the physical nature of historical manuscript layout
-                architectures.
-              </Text>
+              <Text style={styles.mainTitleText}>{t("studio.title")}</Text>
+              <Text style={styles.narrativeParagraphText}>{t("sources.narrative1")}</Text>
+              <Text style={styles.narrativeParagraphText}>{t("sources.narrative2")}</Text>
             </View>
 
             <View

@@ -24,21 +24,51 @@ export function segsLineWidth(segs: Seg[]): number {
   return w;
 }
 
-/** Evenly distribute `remainder` px across inter-character gaps (n−1 gaps for n glyphs). */
+/** Count ASCII spaces used as word separators (justification gaps). */
+export function countWordGaps(segs: Seg[]): number {
+  let n = 0;
+  for (let i = 0; i < segs.length; i++) {
+    const text = segs[i].text;
+    for (let j = 0; j < text.length; j++) {
+      if (text[j] === " ") n++;
+    }
+  }
+  return n;
+}
+
+/**
+ * Extra pixels to add to each inter-word space so the line fills `targetWidth`.
+ *
+ * Uses **word spaces only** (never letter-spacing). Caps expansion so short
+ * lines beside drop caps cannot blow out into character rivers.
+ */
+export function wordGapExtra(
+  segs: Seg[],
+  targetWidth: number,
+  isLastLine: boolean,
+  skipJustify: boolean,
+  maxPerGap: number = 6,
+): number {
+  if (skipJustify || isLastLine) return 0;
+
+  const gaps = countWordGaps(segs);
+  if (gaps <= 0) return 0;
+
+  const remainder = targetWidth - segsLineWidth(segs);
+  if (remainder <= 0) return 0;
+
+  return Math.min(remainder / gaps, maxPerGap);
+}
+
+/**
+ * @deprecated Prefer {@link wordGapExtra}. Kept as a named alias so older call
+ * sites keep compiling; behaviour is now word-gap based (not per-glyph).
+ */
 export function microTrackingSpace(
   segs: Seg[],
   targetWidth: number,
   isLastLine: boolean,
   skipJustify: boolean,
 ): number {
-  if (skipJustify || isLastLine) return 0;
-
-  let totalChars = 0;
-  for (let i = 0; i < segs.length; i++) {
-    totalChars += segs[i].text.length;
-  }
-  if (totalChars <= 1) return 0;
-
-  const remainder = targetWidth - segsLineWidth(segs);
-  return remainder > 0 ? remainder / (totalChars - 1) : 0;
+  return wordGapExtra(segs, targetWidth, isLastLine, skipJustify);
 }

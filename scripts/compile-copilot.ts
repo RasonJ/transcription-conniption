@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import { CATALOG_VERSION, RECIPES } from "../utils/copilot/catalog";
+import type { Recipe, SlotSpec } from "../utils/copilot/types";
 import { normalizeQuery } from "../utils/copilot/router";
 
 const OUT_PATH = path.resolve(__dirname, "../utils/generated/copilotCatalog.ts");
+const MCP_OUT_PATH = path.resolve(__dirname, "../utils/generated/mcpManuscriptTools.ts");
 const ID_RE = /^[a-z]+(\.[a-z0-9_]+)+$/;
 
 export function validateCatalog(): string[] {
@@ -27,6 +29,85 @@ export function validateCatalog(): string[] {
     if (!recipe.method) errors.push(`${recipe.id}: missing method`);
   }
   return errors;
+}
+
+function slotToJsonSchema(slot: SlotSpec): Record<string, unknown> {
+  if (slot.type === "string") {
+    return { type: "string", description: `Slot \`${slot.name}\`` };
+  }
+  if (slot.type === "int") {
+    return {
+      type: "integer",
+      description: `Slot \`${slot.name}\``,
+      ...(typeof slot.default === "number" ? { default: slot.default } : {}),
+      ...(typeof slot.min === "number" ? { minimum: slot.min } : {}),
+      ...(typeof slot.max === "number" ? { maximum: slot.max } : {}),
+    };
+  }
+  if (slot.type === "enum") {
+    return {
+      type: "string",
+      enum: slot.values,
+      description: `Slot \`${slot.name}\``,
+    };
+  }
+  if (slot.type === "folioRange") {
+    return { type: "string", description: "Folio id or range (e.g. 2r, 1v-3r)" };
+  }
+  if (slot.type === "hsmsLang") {
+    return { type: "string", description: "HSMS language tag (LAT, ENG, …)" };
+  }
+  return { type: "string" };
+}
+
+export interface McpToolDefinition {
+  name: string;
+  description: string;
+  inputSchema: {
+    type: "object";
+    properties: Record<string, unknown>;
+    required: string[];
+  };
+  /** Original recipe id (dotted). */
+  recipeId: string;
+  tier: string;
+  category: string;
+}
+
+/** MCP tool declarations for local/desktop agents (Claude Desktop, Cursor, …). */
+export function renderMcpToolDefinitions(
+  recipes: readonly Pick<
+    Recipe,
+    "id" | "tier" | "category" | "method" | "slots" | "present" | "triggers"
+  >[] = RECIPES,
+): McpToolDefinition[] {
+  return recipes.map((r) => {
+    const properties: Record<string, unknown> = {
+      query: {
+        type: "string",
+        description: "Optional free-text query passed to on-demand recipes.",
+      },
+    };
+    const required: string[] = [];
+    for (const slot of r.slots) {
+      properties[slot.name] = slotToJsonSchema(slot);
+      if ("required" in slot && slot.required) required.push(slot.name);
+    }
+
+    const enTriggers = (r.triggers.en ?? []).slice(0, 3).join("; ");
+    return {
+      name: r.id.replace(/\./g, "_"),
+      description: `${r.present.chipLabel}. ${r.method}${enTriggers ? ` Triggers: ${enTriggers}.` : ""} (Precompiled local recipe, no network.)`,
+      inputSchema: {
+        type: "object" as const,
+        properties,
+        required,
+      },
+      recipeId: r.id,
+      tier: r.tier,
+      category: r.category,
+    };
+  });
 }
 
 export function renderCatalogModule(): string {
@@ -65,6 +146,110 @@ export function renderCatalogModule(): string {
   ].join("\n");
 }
 
+/** Precomputed corpus / graph tools (batch sidecars; no AST walk at query time). */
+export function renderMcpGraphTools(): McpToolDefinition[] {
+  return [
+    {
+      name: "query_codicological_graph",
+      description:
+        "Graph search across authors, printers, cities, years, and shared rare vocabulary (out/library-graph.json).",
+      inputSchema: {
+        type: "object",
+        properties: {
+          entityId: {
+            type: "string",
+            description: "Node id (e.g. AUTHOR.pedro_nunes, CITY.lisboa, MS.TEXT.TRS, TERM.sphera)",
+          },
+          relation: {
+            type: "string",
+            enum: ["AUTHORED_BY", "PRINTED_BY", "PUBLISHED_IN", "DATED", "CONTAINS_TERM"],
+            description: "Edge relation to traverse",
+          },
+          neighborType: {
+            type: "string",
+            enum: ["manuscript", "author", "printer", "city", "year", "term"],
+            description: "Optional filter on neighbor node type",
+          },
+        },
+        required: ["relation"],
+      },
+      recipeId: "graph.codicological",
+      tier: "A",
+      category: "corpus",
+    },
+    {
+      name: "get_precompiled_facets",
+      description:
+        "Fetch instant structural counts (rubrics, glosses, drop caps, code-switching) from out/<id>.facets.json.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          witnessId: {
+            type: "string",
+            description: "Base name of manuscript (e.g. TEXT.TRS or 1500__auto1_01)",
+          },
+        },
+        required: ["witnessId"],
+      },
+      recipeId: "corpus.precompiled_facets",
+      tier: "A",
+      category: "corpus",
+    },
+    {
+      name: "rank_witnesses_tfidf",
+      description:
+        "Rank library witnesses for a term using precomputed IDF (out/corpus-tfidf.json) × per-witness TF.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          term: {
+            type: "string",
+            description: "Query lemma / surface (normalized internally)",
+          },
+          topK: {
+            type: "integer",
+            description: "Max witnesses to return",
+            default: 10,
+            minimum: 1,
+            maximum: 50,
+          },
+        },
+        required: ["term"],
+      },
+      recipeId: "corpus.rank_tfidf",
+      tier: "A",
+      category: "corpus",
+    },
+  ];
+}
+
+export function renderMcpToolsModule(
+  tools: McpToolDefinition[] = [...renderMcpToolDefinitions(), ...renderMcpGraphTools()],
+): string {
+  return [
+    "// Generated by scripts/compile-copilot.ts. Do not edit.",
+    "// MCP tool declarations for manuscript recipes + precomputed corpus/graph indexes.",
+    "",
+    "export interface McpManuscriptTool {",
+    "  name: string;",
+    "  description: string;",
+    "  inputSchema: {",
+    '    type: "object";',
+    "    properties: Record<string, unknown>;",
+    "    required: string[];",
+    "  };",
+    "  recipeId: string;",
+    "  tier: string;",
+    "  category: string;",
+    "}",
+    "",
+    `export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = ${JSON.stringify(tools, null, 2)};`,
+    "",
+    `export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = ${JSON.stringify(renderMcpGraphTools(), null, 2)};`,
+    "",
+  ].join("\n");
+}
+
 function main(): void {
   const errors = validateCatalog();
   if (errors.length > 0) {
@@ -73,7 +258,16 @@ function main(): void {
   }
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
   fs.writeFileSync(OUT_PATH, renderCatalogModule(), "utf8");
-  console.log(`copilot catalog: ${RECIPES.length} recipes → ${path.relative(process.cwd(), OUT_PATH)}`);
+  const recipeTools = renderMcpToolDefinitions();
+  const graphTools = renderMcpGraphTools();
+  const tools = [...recipeTools, ...graphTools];
+  fs.writeFileSync(MCP_OUT_PATH, renderMcpToolsModule(tools), "utf8");
+  console.log(
+    `copilot catalog: ${RECIPES.length} recipes → ${path.relative(process.cwd(), OUT_PATH)}`,
+  );
+  console.log(
+    `mcp tools:       ${tools.length} tools (${graphTools.length} corpus/graph) → ${path.relative(process.cwd(), MCP_OUT_PATH)}`,
+  );
 }
 
 if (require.main === module) main();

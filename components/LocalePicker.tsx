@@ -1,4 +1,4 @@
-import { SUPPORTED_LOCALES, useLocale, type Locale } from "@/i18n/runtime";
+import { SUPPORTED_LOCALES, useLocale, useT, type Locale } from "@/i18n/runtime";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -17,10 +17,11 @@ const LOCALE_NATIVE_NAMES: Record<Locale, string> = {
 
 export function LocalePicker() {
   const { locale, setLocale } = useLocale();
+  const t = useT();
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.label}>Language / Idioma</Text>
+      <Text style={styles.label}>{t("common.language")}</Text>
       <View style={styles.row}>
         {SUPPORTED_LOCALES.filter((l) => !["es", "pt"].includes(l)).map((code) => {
           const active = locale === code;

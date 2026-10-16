@@ -93,12 +93,20 @@ function groupBlocksForLayout(blocks: ManuscriptBlock[]): BlockGroup[] {
   let activeTwoColumnGroup: Extract<BlockGroup, { type: "two-column" }> | null = null;
 
   for (const block of blocks) {
+    // Marginal glosses / addenda stay out of the column zipper — they render
+    // as their own rail (GLR/GLL) rather than competing for CB2 tracks.
+    if (block.type === "gloss" || block.type === "addendum") {
+      activeTwoColumnGroup = null;
+      groups.push({ type: "single", block });
+      continue;
+    }
+
     if (block.columns === 2) {
       if (!activeTwoColumnGroup) {
         activeTwoColumnGroup = { type: "two-column", left: [], right: [] };
         groups.push(activeTwoColumnGroup);
       }
-      if (block.type === "gloss" || activeTwoColumnGroup.left.length > activeTwoColumnGroup.right.length) {
+      if (activeTwoColumnGroup.left.length > activeTwoColumnGroup.right.length) {
         activeTwoColumnGroup.right.push(block);
       } else {
         activeTwoColumnGroup.left.push(block);
@@ -417,6 +425,7 @@ export default function TranscriptionConniptionScreen() {
       parsedManuscript.metadata.witness?.library,
   );
   const showReaderTools = isEditorMode;
+  const showCompanionTools = parsedManuscript.folios.length > 0 || isEditorMode;
   const showParchment = isPreview || !isEditorMode;
   const canExportHtml = parsedManuscript.folios.length > 0 || debouncedText.trim().length > 0;
 
@@ -451,14 +460,10 @@ export default function TranscriptionConniptionScreen() {
               </View>
               {!isEditorMode ? (
                 <Text style={styles.subtitle}>
-                  {isDragOver
-                    ? "Drop the file to render on parchment…"
-                    : "Upload a plain-text HSMS transcription to view it on parchment. Drag & drop a .txt file anywhere."}
+                  {isDragOver ? t("studio.subtitle.readerDrop") : t("studio.subtitle.reader")}
                 </Text>
               ) : (
-                <Text style={styles.subtitle}>
-                  Advanced scriptorium: edit HSMS source, validate structure, attach facsimiles, and export bundles.
-                </Text>
+                <Text style={styles.subtitle}>{t("studio.subtitle.editor")}</Text>
               )}
 
               <View style={styles.readerActionBar}>
@@ -472,7 +477,16 @@ export default function TranscriptionConniptionScreen() {
                   style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}
                 >
                   <Upload color={theme.inkDark} size={16} />
-                  <Text style={styles.primaryButtonText}>Upload & Convert</Text>
+                  <Text style={styles.primaryButtonText}>{t("studio.action.upload")}</Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => setAssistantOpen(true)}
+                  style={({ pressed }) => [styles.htmlExportButton, pressed && styles.pressed]}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("studio.tool.ask")}
+                >
+                  <MessageCircle color={theme.gold} size={16} />
+                  <Text style={styles.htmlExportButtonText}>{t("studio.tool.ask")}</Text>
                 </Pressable>
                 <Pressable
                   onPress={() => setIsEditorMode((prev) => !prev)}
@@ -486,7 +500,7 @@ export default function TranscriptionConniptionScreen() {
                   <Text
                     style={[styles.editorModeToggleText, isEditorMode && styles.editorModeToggleTextActive]}
                   >
-                    {isEditorMode ? "Hide editor tools" : "Advanced editor"}
+                    {isEditorMode ? t("studio.action.editorHide") : t("studio.action.editorShow")}
                   </Text>
                 </Pressable>
                 {canExportHtml ? (
@@ -495,7 +509,7 @@ export default function TranscriptionConniptionScreen() {
                     style={({ pressed }) => [styles.htmlExportButton, pressed && styles.pressed]}
                   >
                     <Download color={theme.gold} size={16} />
-                    <Text style={styles.htmlExportButtonText}>Export</Text>
+                    <Text style={styles.htmlExportButtonText}>{t("studio.tool.export")}</Text>
                   </Pressable>
                 ) : null}
               </View>
@@ -504,20 +518,19 @@ export default function TranscriptionConniptionScreen() {
                 <>
                   {workspaceReady ? (
                     <View style={styles.workspaceCard}>
-                      <Text style={styles.workspaceLabel}>Transcription</Text>
+                      <Text style={styles.workspaceLabel}>{t("studio.workspace.label")}</Text>
                       <TextInput
                         value={workspaceTitle}
                         onChangeText={setWorkspaceTitle}
                         onBlur={commitWorkspaceTitle}
                         onSubmitEditing={commitWorkspaceTitle}
-                        placeholder="Manuscript title"
+                        placeholder={t("studio.workspace.titlePlaceholder")}
                         placeholderTextColor="rgba(255,244,210,0.45)"
                         style={styles.workspaceTitleInput}
                         returnKeyType="done"
                       />
                       <Text style={styles.workspaceMeta}>
-                        {Object.keys(uploadedImages).length} facsimile slot
-                        {Object.keys(uploadedImages).length === 1 ? "" : "s"} attached
+                        {t("studio.workspace.slots", { count: Object.keys(uploadedImages).length })}
                       </Text>
                     </View>
                   ) : null}
@@ -533,14 +546,14 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <PlusCircle color={theme.gold} size={16} />
-                      <Text style={styles.secondaryButtonText}>New blank scriptorium</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.workflow.new")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => setBatchShellVisible(true)}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <Layers color={theme.gold} size={16} />
-                      <Text style={styles.secondaryButtonText}>Batch folder</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.workflow.batch")}</Text>
                     </Pressable>
                   </View>
 
@@ -550,7 +563,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <Package color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>Export .hsms</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.action.exportHsms")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => {
@@ -559,7 +572,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <Upload color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>Import .hsms</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.action.importHsms")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => {
@@ -568,7 +581,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <Sparkles color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>Nunes demo</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.demo.nunes")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => {
@@ -577,7 +590,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <FileText color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>Simple</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.demo.simple")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => {
@@ -586,7 +599,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <FileText color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>LAT span</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.demo.latSpan")}</Text>
                     </Pressable>
                     <Pressable
                       onPress={() => {
@@ -595,7 +608,7 @@ export default function TranscriptionConniptionScreen() {
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
                     >
                       <ImageIcon color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>Graphics</Text>
+                      <Text style={styles.secondaryButtonText}>{t("studio.demo.graphics")}</Text>
                     </Pressable>
                   </View>
                 </>
@@ -636,7 +649,7 @@ export default function TranscriptionConniptionScreen() {
             {hasPublicationMeta && showParchment ? (
               <View style={styles.metadataCard}>
                 <Text style={styles.metadataCardTitle}>
-                  {parsedManuscript.metadata.title || "Untitled manuscript"}
+                  {parsedManuscript.metadata.title || t("studio.untitled")}
                 </Text>
                 {parsedManuscript.metadata.author ? (
                   <Text style={styles.metadataCardAuthor}>{parsedManuscript.metadata.author}</Text>
@@ -670,10 +683,10 @@ export default function TranscriptionConniptionScreen() {
                   style={({ pressed }) => [styles.validationModalLink, pressed && styles.pressed]}
                 >
                   <ClipboardList color="#7ba4cc" size={16} />
-                  <Text style={styles.validationModalLinkText}>Open full validation sheet</Text>
+                  <Text style={styles.validationModalLinkText}>{t("editor.validation.openSheet")}</Text>
                 </Pressable>
                 {isParsing ? (
-                  <Text style={styles.parsePendingLabel}>Parsing manuscript structure…</Text>
+                  <Text style={styles.parsePendingLabel}>{t("studio.editor.parsing")}</Text>
                 ) : null}
                 <Text style={styles.sectionLabel}>{t("editor.section.transcription")}</Text>
                 <TextInput
@@ -681,7 +694,7 @@ export default function TranscriptionConniptionScreen() {
                   value={localEditorBuffer}
                   onChangeText={setLocalEditorBuffer}
                   onBlur={commitEditorBuffer}
-                  placeholder="Paste plain-text HSMS layout here..."
+                  placeholder={t("studio.editor.placeholder")}
                   placeholderTextColor="rgba(246,216,144,0.45)"
                   style={styles.editor}
                   textAlignVertical="top"
@@ -694,7 +707,7 @@ export default function TranscriptionConniptionScreen() {
                 {showReaderTools ? (
                 <View style={styles.configStrip}>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Expansions (&lt;&gt;)</Text>
+                    <Text style={styles.toggleLabel}>{t("studio.toggle.expansions")}</Text>
                     <Switch
                       value={showExpanded}
                       onValueChange={setShowExpanded}
@@ -703,7 +716,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Deletions (())</Text>
+                    <Text style={styles.toggleLabel}>{t("studio.toggle.deletions")}</Text>
                     <Switch
                       value={showDeletions}
                       onValueChange={setShowDeletions}
@@ -712,7 +725,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Unicode diacritics</Text>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.diacritics")}</Text>
                     <Switch
                       value={showNormalizedDiacritics}
                       onValueChange={setShowNormalizedDiacritics}
@@ -721,7 +734,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Hide otiose ~</Text>
+                    <Text style={styles.toggleLabel}>{t("studio.toggle.otiose")}</Text>
                     <Switch
                       value={suppressOtioseMarks}
                       onValueChange={setSuppressOtioseMarks}
@@ -730,7 +743,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Reading flow</Text>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.readingFlow")}</Text>
                     <Switch
                       value={showReadingFlow}
                       onValueChange={setShowReadingFlow}
@@ -739,7 +752,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Synoptic pane</Text>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.synoptic")}</Text>
                     <Switch
                       value={showSynoptic}
                       onValueChange={setShowSynoptic}
@@ -748,7 +761,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Facsimile canvas</Text>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.facsimile")}</Text>
                     <Switch
                       value={facsimileCanvasEnabled}
                       onValueChange={setFacsimileCanvasEnabled}
@@ -757,7 +770,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>Place figure</Text>
+                    <Text style={styles.toggleLabel}>{t("studio.toggle.placeFigure")}</Text>
                     <Switch
                       value={placementMode}
                       onValueChange={setPlacementMode}
@@ -766,7 +779,7 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>SVG canvas</Text>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.svg")}</Text>
                     <Switch
                       value={svgModeEnabled}
                       onValueChange={setSvgModeEnabled}
@@ -779,7 +792,7 @@ export default function TranscriptionConniptionScreen() {
 
                 {showReaderTools ? <IngestPanel /> : null}
 
-                {showReaderTools ? (
+                {showCompanionTools ? (
                 <View style={styles.scholarToolbar}>
                   <Pressable
                     onPress={() => setConcordanceOpen(true)}
@@ -800,14 +813,14 @@ export default function TranscriptionConniptionScreen() {
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
                     <FileCode2 color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>TEI export</Text>
+                    <Text style={styles.toolButtonText}>{t("studio.tool.tei")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => setExportSheetVisible(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
                   >
                     <Download color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>Export</Text>
+                    <Text style={styles.toolButtonText}>{t("studio.tool.export")}</Text>
                   </Pressable>
                   <Pressable
                     onPress={() => router.push("/modal")}
@@ -819,10 +832,10 @@ export default function TranscriptionConniptionScreen() {
                   {synopticEnabled ? (
                     <View style={styles.toolBadge}>
                       <LayoutPanelLeft color="#446622" size={14} />
-                      <Text style={styles.toolBadgeText}>Synoptic active</Text>
+                      <Text style={styles.toolBadgeText}>{t("studio.tool.synopticActive")}</Text>
                     </View>
                   ) : showSynoptic ? (
-                    <Text style={styles.toolHint}>Widen window for synoptic split</Text>
+                    <Text style={styles.toolHint}>{t("studio.tool.synopticHint")}</Text>
                   ) : null}
                 </View>
                 ) : null}
@@ -833,16 +846,19 @@ export default function TranscriptionConniptionScreen() {
                     style={styles.anchorBanner}
                   >
                     <Text style={styles.anchorBannerText}>
-                      Focus: [fol. {scrollHighlight.folioId}]
-                      {scrollHighlight.lineNumber ? ` · line ${scrollHighlight.lineNumber}` : ""}
-                      {"  "}× clear
+                      {t("studio.focus.clear", {
+                        folio: scrollHighlight.folioId,
+                        line: scrollHighlight.lineNumber
+                          ? t("studio.focus.line", { line: scrollHighlight.lineNumber })
+                          : "",
+                      })}
                     </Text>
                   </Pressable>
                 ) : null}
 
                 {showReadingFlow && readingFlowText ? (
                   <View style={styles.readingFlowPanel}>
-                    <Text style={styles.readingFlowLabel}>Unified reading (hyphen continuity)</Text>
+                    <Text style={styles.readingFlowLabel}>{t("studio.readingFlow.label")}</Text>
                     <Text style={styles.readingFlowText}>{readingFlowText}</Text>
                   </View>
                 ) : null}
@@ -851,9 +867,7 @@ export default function TranscriptionConniptionScreen() {
                   <View ref={parchmentRef} style={styles.parchmentCanvasReader}>
                     <View ref={parchmentContentRef} style={styles.parchmentContentReader}>
                       {parsedManuscript.folios.length === 0 ? (
-                        <Text style={styles.emptyHint}>
-                          Add a folio marker such as [fol. 1r] to begin rendering leaves.
-                        </Text>
+                        <Text style={styles.emptyHint}>{t("studio.empty.folio")}</Text>
                       ) : (
                         parsedManuscript.folios.map((folio, fIdx) => (
                           <FolioPage
@@ -881,9 +895,7 @@ export default function TranscriptionConniptionScreen() {
                 >
                   <View ref={parchmentContentRef} style={styles.parchmentContent}>
                   {parsedManuscript.folios.length === 0 ? (
-                    <Text style={styles.emptyHint}>
-                      Add a folio marker such as [fol. 1r] to begin rendering leaves.
-                    </Text>
+                    <Text style={styles.emptyHint}>{t("studio.empty.folio")}</Text>
                   ) : (
                     parsedManuscript.folios.map((folio, fIdx) => (
                       <FolioPage
@@ -950,7 +962,7 @@ export default function TranscriptionConniptionScreen() {
           />
           <CompilationOverlay
             visible={isCompiling}
-            message={compilationStatus || "Processing…"}
+            message={compilationStatus || t("studio.processing")}
           />
           <ExportManuscriptSheet
             visible={exportSheetVisible}
@@ -1671,12 +1683,15 @@ const styles = StyleSheet.create({
   },
   rubricText: { color: theme.rubricRed, fontWeight: "bold" },
   glossText: {
-    color: "#1a446c",
+    color: "#4a3060",
     fontSize: 13,
     fontStyle: "italic",
-    paddingLeft: 8,
+    paddingLeft: 10,
     borderLeftWidth: 2,
-    borderLeftColor: "#7ba4cc",
+    borderLeftColor: "rgba(74,48,96,0.35)",
+    alignSelf: "flex-end",
+    maxWidth: "46%",
+    textAlign: "left",
   },
   addendumText: { color: "#446622", paddingLeft: 8 },
   foreignLanguageText: { fontStyle: "italic", color: "#3c5a3c" },

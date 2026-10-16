@@ -1,8 +1,13 @@
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
 import { useScriptorium } from "@/context/ScriptoriumContext";
+import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
 import { useT } from "@/i18n/runtime";
 import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
 import { buildFacetIndex } from "@/utils/copilot/facetIndex";
+import {
+  buildLibraryAwareRouterIndex,
+  matchLibraryEntry,
+} from "@/utils/copilot/libraryIntents";
 import { precomputeEager } from "@/utils/copilot/precompute";
 import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/types";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
@@ -16,6 +21,7 @@ import {
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 
 type Props = {
@@ -23,16 +29,12 @@ type Props = {
   onClose: () => void;
 };
 
-const TIER_LABEL: Record<EvidenceTier, string> = {
-  A: "Exact",
-  B: "Heuristic",
-  C: "Statistic",
-  D: "Needs server",
-};
-
 export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
   const t = useT();
-  const { parsedManuscript } = useScriptorium();
+  const { width } = useWindowDimensions();
+  const isWide = width >= 720;
+  const { parsedManuscript, activeFileName, workspace } = useScriptorium();
+  const { catalog } = useLibraryCatalog();
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState<CopilotAnswer | null>(null);
@@ -47,6 +49,11 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     [visible, parsedManuscript],
   );
 
+  const libraryAwareRouter = useMemo(
+    () => (visible ? buildLibraryAwareRouterIndex(catalog) : undefined),
+    [visible, catalog],
+  );
+
   const overview = useMemo(
     () =>
       facets
@@ -57,10 +64,24 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     [facets, parsedManuscript],
   );
 
+  const libraryHit = useMemo(
+    () =>
+      matchLibraryEntry(
+        catalog,
+        activeFileName ?? workspace?.sourceFileName,
+        parsedManuscript.metadata.title,
+      ),
+    [catalog, activeFileName, workspace?.sourceFileName, parsedManuscript.metadata.title],
+  );
+
   const handleAsk = useCallback(() => {
     if (!query.trim() || !facets) return;
 
-    const result = askCopilot(query, parsedManuscript, { facets, vectorIndex });
+    const result = askCopilot(query, parsedManuscript, {
+      facets,
+      vectorIndex,
+      router: libraryAwareRouter,
+    });
 
     if (result.navigate) {
       navigateToAnchor(result.navigate);
@@ -69,7 +90,15 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
       return;
     }
     setAnswer(result);
-  }, [query, parsedManuscript, facets, vectorIndex, navigateToAnchor, onClose]);
+  }, [
+    query,
+    parsedManuscript,
+    facets,
+    vectorIndex,
+    libraryAwareRouter,
+    navigateToAnchor,
+    onClose,
+  ]);
 
   const handleRecipe = useCallback(
     (recipeId: string) => {
@@ -88,10 +117,16 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
     [navigateToAnchor, onClose],
   );
 
+  const tierLabel = useCallback(
+    (tier: EvidenceTier) => t(`copilot.tier.${tier}` as "copilot.tier.A"),
+    [t],
+  );
+
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.backdrop}>
-        <View style={styles.panel}>
+      <View style={[styles.backdrop, isWide && styles.backdropWide]}>
+        <Pressable style={styles.backdropTap} onPress={onClose} accessibilityRole="button" />
+        <View style={[styles.panel, isWide ? styles.panelSide : styles.panelSheet]}>
           <View style={styles.header}>
             <View style={styles.headerTitleRow}>
               <Sparkles color="#f6d890" size={18} />
@@ -135,9 +170,21 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
           </View>
 
           <ScrollView style={styles.resultsList} keyboardShouldPersistTaps="handled">
+            {libraryHit ? (
+              <View style={styles.overview}>
+                <Text style={styles.sectionLabel}>{t("copilot.librarySection")}</Text>
+                <Text style={styles.libraryTitle}>{libraryHit.title || libraryHit.baseName}</Text>
+                <Text style={styles.libraryMeta}>
+                  {[libraryHit.author, libraryHit.year, libraryHit.city, libraryHit.printer]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </Text>
+              </View>
+            ) : null}
+
             {overview.length > 0 ? (
               <View style={styles.overview}>
-                <Text style={styles.sectionLabel}>Overview</Text>
+                <Text style={styles.sectionLabel}>{t("copilot.overview")}</Text>
                 <View style={styles.chipRow}>
                   {overview.map((entry) => (
                     <Pressable
@@ -160,7 +207,7 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
                 <View style={styles.answerTop}>
                   <View style={styles.tierBadge}>
                     <Text style={styles.tierBadgeText}>
-                      {answer.tier} · {TIER_LABEL[answer.tier]}
+                      {answer.tier} · {tierLabel(answer.tier)}
                     </Text>
                   </View>
                   {answer.confidence !== undefined && answer.confidence < 1 ? (
@@ -182,7 +229,7 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
 
                 {answer.alternatives && answer.alternatives.length > 0 ? (
                   <View style={styles.chipRow}>
-                    <Text style={styles.sectionLabel}>Did you mean</Text>
+                    <Text style={styles.sectionLabel}>{t("copilot.didYouMean")}</Text>
                     {answer.alternatives.map((alt) => (
                       <Pressable
                         key={alt.recipeId}
@@ -239,17 +286,38 @@ export function ManuscriptChatbotDrawer({ visible, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
-  backdrop: { flex: 1, backgroundColor: "rgba(0,0,0,0.55)", justifyContent: "flex-end" },
+  backdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.55)",
+    justifyContent: "flex-end",
+  },
+  backdropWide: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "stretch",
+  },
+  backdropTap: { ...StyleSheet.absoluteFillObject },
   panel: {
-    maxHeight: "82%",
-    minHeight: "45%",
     backgroundColor: "#2a100b",
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    padding: 16,
     borderWidth: 1,
     borderColor: "rgba(246,216,144,0.3)",
+    padding: 16,
     gap: 8,
+    zIndex: 2,
+  },
+  panelSheet: {
+    maxHeight: "82%",
+    minHeight: "45%",
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  panelSide: {
+    width: 400,
+    maxWidth: "92%",
+    height: "100%",
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    borderRightWidth: 0,
   },
   header: {
     flexDirection: "row",
@@ -286,7 +354,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  resultsList: { flexGrow: 0, maxHeight: 420, marginTop: 4 },
+  resultsList: { flexGrow: 1, marginTop: 4 },
   overview: { marginBottom: 10, gap: 6 },
   sectionLabel: {
     color: "rgba(246,216,144,0.65)",
@@ -295,6 +363,8 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.6,
   },
+  libraryTitle: { color: "#fff4d2", fontSize: 14, fontWeight: "800" },
+  libraryMeta: { color: "rgba(246,216,144,0.7)", fontSize: 12 },
   chipRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, alignItems: "center" },
   chip: {
     flexDirection: "row",

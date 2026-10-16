@@ -1,6 +1,7 @@
 import { scriptoriumTheme } from "@/constants/scriptoriumTheme";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
+import { useT } from "@/i18n/runtime";
 import type { LibraryCatalogEntry } from "@/utils/libraryCatalog";
 import { countLibraryByStatus } from "@/utils/libraryCatalog";
 import { LinearGradient } from "expo-linear-gradient";
@@ -29,6 +30,7 @@ function LibraryRow({
   onOpen: (entry: LibraryCatalogEntry) => void;
   opening: boolean;
 }) {
+  const t = useT();
   const disabled = entry.status !== "ok" || opening;
 
   return (
@@ -47,12 +49,12 @@ function LibraryRow({
         </Text>
         {entry.status === "failed" ? (
           <View style={styles.badgeFailed}>
-            <Text style={styles.badgeFailedText}>failed</Text>
+            <Text style={styles.badgeFailedText}>{t("library.failed")}</Text>
           </View>
         ) : null}
       </View>
       <Text style={styles.rowMeta}>
-        {entry.author ? `${entry.author}` : "Unknown author"}
+        {entry.author ? `${entry.author}` : t("library.unknownAuthor")}
         {entry.year ? ` · ${entry.year}` : ""}
       </Text>
       {(entry.city || entry.printer) && (
@@ -62,13 +64,16 @@ function LibraryRow({
       )}
       <Text style={styles.rowFile}>{entry.sourceFileName}</Text>
       {entry.status === "ok" && (
-        <Text style={styles.rowAction}>{opening ? "Opening…" : "Open in Studio →"}</Text>
+        <Text style={styles.rowAction}>
+          {opening ? t("library.opening") : t("library.open")}
+        </Text>
       )}
     </Pressable>
   );
 }
 
 export default function LibraryScreen() {
+  const t = useT();
   const { width } = useWindowDimensions();
   const isWide = width >= 840;
   const { applyTranscription } = useScriptorium();
@@ -102,12 +107,12 @@ export default function LibraryScreen() {
         router.navigate("/(tabs)/");
       } catch (err) {
         const message =
-          err instanceof Error ? err.message : "Could not load this manuscript.";
+          err instanceof Error ? err.message : t("library.loadError");
         setOpenError(message);
-        Alert.alert("Library", message);
+        Alert.alert(t("library.alertTitle"), message);
       }
     },
-    [applyTranscription, loadEntryPayload],
+    [applyTranscription, loadEntryPayload, t],
   );
 
   return (
@@ -123,11 +128,8 @@ export default function LibraryScreen() {
                 <BookMarked color={scriptoriumTheme.gold} size={24} />
               </View>
               <View style={styles.titleTextBlock}>
-                <Text style={styles.heading}>Manuscript Library</Text>
-                <Text style={styles.subheading}>
-                  Browse batch-processed OSTA witnesses. Search by author, year, or keywords,
-                  then open a transcription in the Studio.
-                </Text>
+                <Text style={styles.heading}>{t("library.title")}</Text>
+                <Text style={styles.subheading}>{t("library.subtitle")}</Text>
               </View>
             </View>
             <Pressable
@@ -135,22 +137,22 @@ export default function LibraryScreen() {
               style={({ pressed }) => [styles.refreshBtn, pressed && styles.refreshPressed]}
             >
               <RefreshCw color={scriptoriumTheme.goldMuted} size={18} />
-              <Text style={styles.refreshLabel}>Refresh</Text>
+              <Text style={styles.refreshLabel}>{t("library.refresh")}</Text>
             </Pressable>
           </View>
 
           <View style={[styles.searchPanel, isWide && styles.searchPanelWide]}>
             <View style={styles.searchLabelRow}>
               <Search color={scriptoriumTheme.goldMuted} size={16} />
-              <Text style={styles.searchLabel}>Search catalog</Text>
+              <Text style={styles.searchLabel}>{t("library.searchCatalog")}</Text>
             </View>
             <View style={[styles.searchGrid, isWide && styles.searchGridWide]}>
               <View style={styles.fieldWrap}>
-                <Text style={styles.fieldLabel}>Author</Text>
+                <Text style={styles.fieldLabel}>{t("library.field.author")}</Text>
                 <TextInput
                   value={filters.author ?? ""}
                   onChangeText={(author) => setFilters((prev) => ({ ...prev, author }))}
-                  placeholder="e.g. Christine"
+                  placeholder={t("library.placeholder.author")}
                   placeholderTextColor="rgba(255,253,244,0.35)"
                   style={styles.input}
                   autoCapitalize="none"
@@ -158,22 +160,22 @@ export default function LibraryScreen() {
                 />
               </View>
               <View style={styles.fieldWrap}>
-                <Text style={styles.fieldLabel}>Year</Text>
+                <Text style={styles.fieldLabel}>{t("library.field.year")}</Text>
                 <TextInput
                   value={filters.year ?? ""}
                   onChangeText={(year) => setFilters((prev) => ({ ...prev, year }))}
-                  placeholder="e.g. 1518"
+                  placeholder={t("library.placeholder.year")}
                   placeholderTextColor="rgba(255,253,244,0.35)"
                   style={styles.input}
                   keyboardType="number-pad"
                 />
               </View>
               <View style={[styles.fieldWrap, isWide && styles.fieldWrapWide]}>
-                <Text style={styles.fieldLabel}>Keywords</Text>
+                <Text style={styles.fieldLabel}>{t("library.field.keywords")}</Text>
                 <TextInput
                   value={filters.keywords ?? ""}
                   onChangeText={(keywords) => setFilters((prev) => ({ ...prev, keywords }))}
-                  placeholder="title, city, shelfmark, file id…"
+                  placeholder={t("library.placeholder.keywords")}
                   placeholderTextColor="rgba(255,253,244,0.35)"
                   style={styles.input}
                   autoCapitalize="none"
@@ -186,32 +188,35 @@ export default function LibraryScreen() {
           {loadState === "loading" && (
             <View style={styles.statusBox}>
               <ActivityIndicator color={scriptoriumTheme.gold} />
-              <Text style={styles.statusText}>Loading library catalog…</Text>
+              <Text style={styles.statusText}>{t("library.loading")}</Text>
             </View>
           )}
 
           {loadState === "error" && (
             <View style={styles.errorBox}>
-              <Text style={styles.errorTitle}>Catalog unavailable</Text>
+              <Text style={styles.errorTitle}>{t("library.error.title")}</Text>
               <Text style={styles.errorBody}>{errorMessage}</Text>
-              <Text style={styles.errorHint}>
-                Run `npm run batch:osta`, then `npm run build:library` and `npm run sync:library`
-                before starting the web app.
-              </Text>
+              <Text style={styles.errorHint}>{t("library.error.hint")}</Text>
             </View>
           )}
 
           {loadState === "ready" && catalog && (
             <>
               <Text style={styles.resultsLine}>
-                {filteredEntries.length} of {catalog.entryCount} witnesses
+                {t("library.results", {
+                  shown: filteredEntries.length,
+                  total: catalog.entryCount,
+                })}
                 {statusCounts.failed > 0
-                  ? ` (${statusCounts.ok} ready, ${statusCounts.failed} failed compile)`
+                  ? t("library.resultsFailed", {
+                      ok: statusCounts.ok,
+                      failed: statusCounts.failed,
+                    })
                   : ""}
               </Text>
               {openError ? <Text style={styles.openError}>{openError}</Text> : null}
               {filteredEntries.length === 0 ? (
-                <Text style={styles.empty}>No manuscripts match your search.</Text>
+                <Text style={styles.empty}>{t("library.empty")}</Text>
               ) : (
                 filteredEntries.map((entry) => (
                   <LibraryRow
@@ -261,80 +266,59 @@ const styles = StyleSheet.create({
   iconBadge: {
     width: 48,
     height: 48,
-    borderRadius: 12,
-    backgroundColor: scriptoriumTheme.frostPanel,
-    borderWidth: 1,
-    borderColor: scriptoriumTheme.goldBorder,
+    borderRadius: 14,
+    backgroundColor: "rgba(246,216,144,0.12)",
     alignItems: "center",
     justifyContent: "center",
   },
-  titleTextBlock: { flex: 1, gap: 6 },
+  titleTextBlock: { flex: 1, gap: 4 },
   heading: {
-    color: scriptoriumTheme.textCream,
-    fontSize: 26,
-    fontWeight: "700",
+    color: scriptoriumTheme.gold,
+    fontSize: 24,
+    fontWeight: "900",
   },
   subheading: {
-    color: scriptoriumTheme.textCreamSoft,
-    fontSize: 14,
-    lineHeight: 20,
+    color: "rgba(255,244,210,0.7)",
+    fontSize: 13,
+    lineHeight: 19,
   },
   refreshBtn: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    alignSelf: "flex-start",
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    borderRadius: 10,
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: scriptoriumTheme.goldBorder,
-    backgroundColor: scriptoriumTheme.frostPanel,
+    borderColor: "rgba(246,216,144,0.25)",
   },
-  refreshPressed: { opacity: 0.85 },
-  refreshLabel: {
-    color: scriptoriumTheme.goldMuted,
-    fontSize: 14,
-    fontWeight: "600",
-  },
+  refreshPressed: { opacity: 0.75 },
+  refreshLabel: { color: scriptoriumTheme.goldMuted, fontWeight: "700", fontSize: 13 },
   searchPanel: {
-    backgroundColor: scriptoriumTheme.frostPanel,
-    borderRadius: 14,
+    backgroundColor: "rgba(255,253,244,0.04)",
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: scriptoriumTheme.goldBorder,
-    padding: 16,
-    gap: 12,
+    borderColor: "rgba(246,216,144,0.18)",
+    padding: 14,
+    gap: 10,
   },
-  searchPanelWide: { padding: 20 },
+  searchPanelWide: { padding: 18 },
   searchLabelRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  searchLabel: {
-    color: scriptoriumTheme.goldMuted,
-    fontSize: 13,
-    fontWeight: "600",
-    letterSpacing: 0.4,
-    textTransform: "uppercase",
-  },
-  searchGrid: { gap: 12 },
-  searchGridWide: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  fieldWrap: { gap: 6, flex: 1, minWidth: 160 },
-  fieldWrapWide: { minWidth: 220 },
-  fieldLabel: {
-    color: scriptoriumTheme.textCreamSoft,
-    fontSize: 12,
-    fontWeight: "600",
-  },
+  searchLabel: { color: scriptoriumTheme.goldMuted, fontWeight: "800", fontSize: 12 },
+  searchGrid: { gap: 10 },
+  searchGridWide: { flexDirection: "row", flexWrap: "wrap" },
+  fieldWrap: { gap: 4, flexGrow: 1, minWidth: 140 },
+  fieldWrapWide: { flexBasis: "100%" },
+  fieldLabel: { color: "rgba(255,244,210,0.55)", fontSize: 11, fontWeight: "700" },
   input: {
-    backgroundColor: scriptoriumTheme.frostEditor,
-    borderWidth: 1,
-    borderColor: scriptoriumTheme.goldBorder,
+    backgroundColor: "rgba(0,0,0,0.25)",
     borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.2)",
     paddingHorizontal: 12,
     paddingVertical: 10,
-    color: scriptoriumTheme.textCream,
-    fontSize: 15,
+    color: "#fff4d2",
+    fontSize: 14,
   },
   statusBox: {
     flexDirection: "row",
@@ -342,89 +326,42 @@ const styles = StyleSheet.create({
     gap: 12,
     padding: 16,
   },
-  statusText: { color: scriptoriumTheme.textCreamSoft, fontSize: 14 },
+  statusText: { color: "rgba(255,244,210,0.7)", fontSize: 14 },
   errorBox: {
-    backgroundColor: scriptoriumTheme.frostPanelDeep,
-    borderRadius: 12,
+    backgroundColor: "rgba(155,34,23,0.2)",
+    borderRadius: 14,
+    padding: 14,
+    gap: 6,
     borderWidth: 1,
-    borderColor: "rgba(178, 30, 30, 0.35)",
-    padding: 16,
-    gap: 8,
+    borderColor: "rgba(155,34,23,0.4)",
   },
-  errorTitle: {
-    color: scriptoriumTheme.rubricRed,
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  errorBody: { color: scriptoriumTheme.textCreamSoft, fontSize: 14, lineHeight: 20 },
-  errorHint: {
-    color: "rgba(255,253,244,0.5)",
-    fontSize: 12,
-    lineHeight: 18,
-    fontFamily: "monospace",
-  },
-  resultsLine: {
-    color: scriptoriumTheme.goldMuted,
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  openError: {
-    color: scriptoriumTheme.rubricRed,
-    fontSize: 13,
-  },
-  empty: {
-    color: scriptoriumTheme.textCreamSoft,
-    fontSize: 15,
-    fontStyle: "italic",
-    paddingVertical: 24,
-    textAlign: "center",
-  },
+  errorTitle: { color: "#f6d890", fontWeight: "800", fontSize: 15 },
+  errorBody: { color: "#fff4d2", fontSize: 13 },
+  errorHint: { color: "rgba(255,244,210,0.55)", fontSize: 12, lineHeight: 17 },
+  resultsLine: { color: "rgba(246,216,144,0.7)", fontSize: 13, fontWeight: "600" },
+  openError: { color: "#e88", fontSize: 13 },
+  empty: { color: "rgba(255,244,210,0.55)", fontStyle: "italic", marginTop: 8 },
   rowCard: {
-    backgroundColor: scriptoriumTheme.frostPanel,
-    borderRadius: 12,
+    backgroundColor: "rgba(255,253,244,0.05)",
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: scriptoriumTheme.goldBorder,
+    borderColor: "rgba(246,216,144,0.18)",
     padding: 14,
     gap: 4,
   },
-  rowPressed: { borderColor: scriptoriumTheme.goldBorderStrong },
+  rowPressed: { backgroundColor: "rgba(246,216,144,0.12)" },
   rowDisabled: { opacity: 0.55 },
-  rowHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 8,
-  },
-  rowTitle: {
-    flex: 1,
-    color: scriptoriumTheme.textCream,
-    fontSize: 17,
-    fontWeight: "600",
-  },
+  rowHeader: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
+  rowTitle: { color: "#fff4d2", fontSize: 15, fontWeight: "800", flex: 1 },
   badgeFailed: {
-    backgroundColor: "rgba(178, 30, 30, 0.25)",
+    backgroundColor: "rgba(155,34,23,0.35)",
     borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
   },
-  badgeFailedText: {
-    color: "#f5a8a8",
-    fontSize: 11,
-    fontWeight: "700",
-    textTransform: "uppercase",
-  },
-  rowMeta: { color: scriptoriumTheme.goldMuted, fontSize: 14 },
-  rowSubMeta: { color: scriptoriumTheme.textCreamSoft, fontSize: 13 },
-  rowFile: {
-    color: "rgba(255,253,244,0.45)",
-    fontSize: 12,
-    fontFamily: "monospace",
-    marginTop: 4,
-  },
-  rowAction: {
-    color: scriptoriumTheme.gold,
-    fontSize: 13,
-    fontWeight: "600",
-    marginTop: 6,
-  },
+  badgeFailedText: { color: "#f6a890", fontSize: 10, fontWeight: "800" },
+  rowMeta: { color: scriptoriumTheme.goldMuted, fontSize: 12 },
+  rowSubMeta: { color: "rgba(255,244,210,0.45)", fontSize: 11 },
+  rowFile: { color: "rgba(255,244,210,0.35)", fontSize: 11, fontFamily: "monospace" },
+  rowAction: { color: scriptoriumTheme.gold, fontSize: 12, fontWeight: "800", marginTop: 4 },
 });

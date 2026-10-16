@@ -26,9 +26,9 @@ import {
   GLOSS_FILL,
   seg,
 } from "@/components/svgFacsimile/tokenRendering";
-import { microTrackingSpace } from "@/components/svgFacsimile/glyphMetrics";
+import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import { HtmlOrnateDropCap } from "@/components/svgFacsimile/HtmlOrnateDropCap";
-import type { FolioSide, Token } from "@/constants/manuscript";
+import type { FolioSide, ManuscriptBlock, Token } from "@/constants/manuscript";
 import { blockIsMetadataLeak } from "@/utils/metadataBlocks";
 import { formatRunningHeaderText } from "@/utils/metadataText";
 import {
@@ -42,6 +42,22 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import Svg, { ForeignObject, Line as SvgLine, Rect } from "react-native-svg";
 
 const LINE_NUM_W = 32;
+
+/** HSMS {GLL.}/{GLR.} (and AD*) → which margin rail to use. */
+function glossMarginSide(block: ManuscriptBlock): "left" | "right" | null {
+  if (block.type !== "gloss" && block.type !== "addendum") return null;
+  for (let i = 0; i < block.tokens.length; i++) {
+    const layers = block.tokens[i].envLayers;
+    if (!layers) continue;
+    for (let j = 0; j < layers.length; j++) {
+      const code = layers[j].code?.toUpperCase() ?? "";
+      if (code === "GLL" || code === "ADL") return "left";
+      if (code === "GLR" || code === "ADR") return "right";
+      if (code.startsWith("GL") || code.startsWith("AD")) return "right";
+    }
+  }
+  return "right";
+}
 
 export interface SvgFacsimilePageProps {
   folio: FolioSide;
@@ -75,8 +91,9 @@ function charSpanStyle(s: Seg): React.CSSProperties {
     textDecoration: s.strike ? "line-through" : s.underline ? "underline" : undefined,
     position: "relative",
     top: s.super ? "-0.35em" : undefined,
-    display: "inline-block",
-    whiteSpace: "pre",
+    // Inline — never flex/grid items; those stretch glyphs under justify.
+    display: "inline",
+    whiteSpace: "pre-wrap",
   };
 }
 
@@ -90,37 +107,24 @@ function renderJustifiedCharacters(
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return null;
 
-  const trackingSpace = microTrackingSpace(visible, targetWidth, isLastLine, skipJustify);
+  const gapExtra = wordGapExtra(visible, targetWidth, isLastLine, skipJustify);
 
-  const chars: { char: string; style: React.CSSProperties; key: string }[] = [];
-  let charIdx = 0;
-  for (let si = 0; si < visible.length; si++) {
-    const s = visible[si];
-    for (let ci = 0; ci < s.text.length; ci++) {
-      chars.push({
-        char: s.text[ci],
-        style: charSpanStyle(s),
-        key: `${keyPrefix}-c${charIdx++}`,
-      });
-    }
-  }
-
-  if (chars.length === 0) return null;
-
+  // One inline run of coalesced segments. Word-spacing expands gaps only —
+  // never letter-spacing, never per-glyph flex children.
   return (
-    <>
-      {chars.map((c, idx) => (
-        <span
-          key={c.key}
-          style={{
-            ...c.style,
-            marginRight: idx < chars.length - 1 && trackingSpace > 0 ? `${trackingSpace}px` : undefined,
-          }}
-        >
-          {c.char}
+    <span
+      style={{
+        display: "inline",
+        whiteSpace: "pre-wrap",
+        wordSpacing: gapExtra > 0 ? `${gapExtra}px` : undefined,
+      }}
+    >
+      {visible.map((s, i) => (
+        <span key={`${keyPrefix}-s${i}`} style={charSpanStyle(s)}>
+          {s.text}
         </span>
       ))}
-    </>
+    </span>
   );
 }
 
@@ -182,10 +186,16 @@ function HtmlLineRow({
   let lineSegs = blockToSegs(block, settings);
 
   const isRubric = block.type === "rubric";
-  const isGloss = block.type === "gloss";
+  const isGloss = block.type === "gloss" || block.type === "addendum";
+  const glossSide = glossMarginSide(block);
   const skipJustify = isRubric || isGloss;
   let lineIndent = nextCap.rowsLeft > 0 ? nextCap.padLeft : 0;
   let currentLineWidth = trackWidth;
+  if (glossSide) {
+    // Marginal glosses occupy a side rail, not the full prose measure.
+    currentLineWidth = Math.min(trackWidth * 0.46, trackWidth - 24);
+    lineIndent = 0;
+  }
 
   let dropCapNode: React.ReactNode = null;
   const dropcapId = `dc_${bkey}`;
@@ -222,18 +232,26 @@ function HtmlLineRow({
     fontSize: `${FS}px`,
     lineHeight: `${LH}px`,
     color: PROSE_FILL,
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "nowrap",
-    alignItems: "baseline",
-    justifyContent: isRubric ? "center" : "flex-start",
-    marginLeft: lineIndent > 0 ? `${lineIndent}px` : undefined,
+    display: "block",
+    textAlign: isRubric ? "center" : glossSide === "right" ? "left" : "left",
+    marginLeft: glossSide === "right" ? "auto" : lineIndent > 0 ? `${lineIndent}px` : undefined,
+    marginRight: glossSide === "left" ? "auto" : undefined,
     width: `${currentLineWidth}px`,
+    maxWidth: glossSide ? `${currentLineWidth}px` : undefined,
     boxSizing: "border-box",
     minHeight: `${LH}px`,
-    flex: "0 0 auto",
     ...(isRubric ? { color: RUBRIC_FILL, fontWeight: "bold" } : {}),
-    ...(isGloss ? { color: GLOSS_FILL, fontStyle: "italic", fontSize: `${FS * 0.85}px` } : {}),
+    ...(isGloss
+      ? {
+          color: GLOSS_FILL,
+          fontStyle: "italic",
+          fontSize: `${FS * 0.85}px`,
+          borderLeftWidth: glossSide === "right" ? 2 : undefined,
+          borderLeftStyle: glossSide === "right" ? "solid" : undefined,
+          borderLeftColor: glossSide === "right" ? "rgba(74,48,96,0.35)" : undefined,
+          paddingLeft: glossSide === "right" ? 8 : undefined,
+        }
+      : {}),
   };
 
   const textBody = (
@@ -340,14 +358,10 @@ function renderDropCapSection(
       color: isRubric ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
       fontWeight: isRubric ? "bold" : "normal",
       fontStyle: isGloss ? "italic" : "normal",
-      display: "flex",
-      flexDirection: "row",
-      flexWrap: "nowrap",
-      alignItems: "baseline",
-      justifyContent: isRubric ? "center" : "flex-start",
+      display: "block",
+      textAlign: isRubric ? "center" : "left",
       width: `${bodyW}px`,
       minHeight: `${LH}px`,
-      flex: "0 0 auto",
       boxSizing: "border-box",
       position: line.wrapBackSuffix ? "relative" : undefined,
     };
@@ -443,9 +457,11 @@ function renderDropCapSection2Col(
           color: isRubric ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
           fontWeight: isRubric ? "bold" : "normal",
           fontStyle: isGloss ? "italic" : "normal",
-          display: "flex", flexDirection: "row", flexWrap: "nowrap", alignItems: "baseline",
-          justifyContent: isRubric ? "center" : "flex-start",
-          width: `${bodyW}px`, minHeight: `${LH}px`, flex: "0 0 auto", boxSizing: "border-box",
+          display: "block",
+          textAlign: isRubric ? "center" : "left",
+          width: `${bodyW}px`,
+          minHeight: `${LH}px`,
+          boxSizing: "border-box",
         }}
       >
         {renderJustifiedCharacters(lineSegs, bodyW, isLast, isRubric || isGloss, `b${line.bi}`)}

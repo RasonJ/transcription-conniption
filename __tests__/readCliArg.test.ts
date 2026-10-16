@@ -1,4 +1,4 @@
-import { hasCliFlag, readCliArg } from "../scripts/readCliArg";
+import { hasCliFlag, readAllCliArgs, readCliArg } from "../scripts/readCliArg";
 
 describe("readCliArg", () => {
   const originalArgv = process.argv;
@@ -28,6 +28,17 @@ describe("readCliArg", () => {
   it("returns undefined when missing", () => {
     process.argv = ["node", "script.ts"];
     expect(readCliArg("--out")).toBeUndefined();
+  });
+
+  it("collects repeated and comma-separated --in values", () => {
+    process.argv = [
+      "node",
+      "script.ts",
+      "--in",
+      "C:/osta",
+      "--in=C:/celestina,C:/extra",
+    ];
+    expect(readAllCliArgs("--in")).toEqual(["C:/osta", "C:/celestina", "C:/extra"]);
   });
 });
 

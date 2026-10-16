@@ -7,18 +7,33 @@ import { lintHsmsTranscription } from "@/utils/hsmsLinter";
 import { inferManuscriptTitle } from "@/utils/manuscriptTitle";
 import type { OstaFileIssue, OstaIssueSource } from "@/utils/ostaIssueReport";
 import {
+  buildPrecompiledFacets,
+  runCorpusPrecomputeWithFs,
+} from "@/utils/corpusPrecompute";
+import {
   buildLibraryCatalog,
   buildLibraryCatalogEntry,
   buildLibraryEntryPayload,
   type LibraryCatalogEntry,
 } from "@/utils/libraryCatalog";
+import {
+  canSkipOstaConvert,
+  hashTranscriptionSource,
+  sourceHashPath,
+} from "@/utils/ostaConvertCache";
 import { scanRenderedMarkupLeakage } from "@/utils/renderMarkupLeakage";
 export type { OstaBatchSummary, OstaIssueGroup } from "@/utils/ostaIssueReport";
+export {
+  canSkipOstaConvert,
+  hashTranscriptionSource,
+  sourceHashPath,
+} from "@/utils/ostaConvertCache";
 
 export const HSMS_NATIVE_BUNDLE_FORMAT = "hsms-native-bundle/2";
 
+/** Defaults for CLI scripts. Input roots: see `utils/corpusRoots.ts`. */
 export const DEFAULT_OSTA_PATHS = {
-  input: "C:\\jason\\_dev\\c#\\_gu\\OSTA\\transcriptions",
+  input: "../OSTA/transcriptions",
   output: "out",
 } as const;
 
@@ -35,8 +50,11 @@ export interface HsmsNativeBundle {
 export interface OstaFileResult {
   sourceFileName: string;
   baseName: string;
-  status: "ok" | "failed";
+  status: "ok" | "failed" | "skipped";
   compileError?: string;
+  /** True when SHA-256 matched prior artifacts and conversion was skipped. */
+  skippedUnchanged?: boolean;
+  sourceHash?: string;
   stats?: ParsedManuscript["stats"];
   folioCount?: number;
   issueCount: number;
@@ -57,18 +75,39 @@ export interface OstaFileResult {
 }
 
 export interface OstaBatchConvertOptions {
-  inputDir: string;
+  /** Single corpus root (legacy). Prefer `inputDirs` for multi-corpus runs. */
+  inputDir?: string;
+  /** One or more corpus roots (flat or nested `*.txt` trees). */
+  inputDirs?: string[];
   outputDir: string;
   /** Optional cap for smoke runs (e.g. --limit 5). */
   limit?: number;
+  /** Re-convert even when the source SHA-256 matches prior outputs. */
+  force?: boolean;
   onProgress?: (fileName: string, index: number, total: number) => void;
+  /** Called when an unchanged source hash skips re-parse/export. */
+  onSkip?: (fileName: string, index: number, total: number) => void;
 }
 
 export interface OstaBatchConvertOutput {
   fileResults: OstaFileResult[];
   inputDir: string;
+  inputDirs: string[];
   outputDir: string;
 }
+
+/** A discovered `*.txt` transcription relative to one corpus root. */
+export type DiscoveredTranscription = {
+  rootDir: string;
+  /** Absolute path used for reading. */
+  absolutePath: string;
+  /** Path relative to `rootDir` using `/` separators (e.g. `1500/auto1_01.txt`). */
+  relativePath: string;
+  /** Unique artifact / catalog id (nested dirs become `__` segments). */
+  baseName: string;
+  /** Catalog display name (relative path when nested). */
+  sourceFileName: string;
+};
 
 export { inferManuscriptTitle } from "@/utils/manuscriptTitle";
 
@@ -221,12 +260,14 @@ export default bundle;
 export function processOstaTranscription(
   sourceFileName: string,
   rawText: string,
+  options?: { baseName?: string },
 ): Omit<OstaFileResult, "outputs"> & {
   html: string;
   nativeTs: string;
   issuesLog: string;
+  parsedManuscript?: ParsedManuscript;
 } {
-  const baseName = exportBaseName(sourceFileName);
+  const baseName = options?.baseName ?? exportBaseName(sourceFileName);
   const exportedAt = new Date().toISOString();
 
   const lintReport = lintHsmsTranscription(rawText);
@@ -293,6 +334,7 @@ export function processOstaTranscription(
       html,
       nativeTs,
       issuesLog,
+      parsedManuscript: parsed,
     };
   } catch (err: unknown) {
     const compileError =
@@ -334,29 +376,172 @@ export interface FileSystemWriter {
   readFile(path: string): string;
   readdir(path: string): string[];
   exists(path: string): boolean;
+  /** When provided, discovery walks nested directories (Celestina year folders, etc.). */
+  isDirectory?(path: string): boolean;
 }
 
+/** Stable catalog / artifact id from a corpus-relative path. */
+export function transcriptionExportBaseName(relativePath: string): string {
+  const normalized = relativePath.replace(/\\/g, "/").replace(/^\/+/, "");
+  return exportBaseName(normalized.replace(/\//g, "__"));
+}
+
+/** Year hint from a leading `1500/`-style folder segment. */
+export function yearHintFromRelativePath(relativePath: string): string {
+  const match = relativePath.replace(/\\/g, "/").match(/^(\d{3,4})\//);
+  return match ? match[1] : "";
+}
+
+function enrichCatalogEntryFromPath(
+  entry: LibraryCatalogEntry,
+  relativePath: string,
+  rootDir: string,
+): LibraryCatalogEntry {
+  const yearHint = yearHintFromRelativePath(relativePath);
+  const rootLabel = path.basename(rootDir).toLowerCase();
+  const corpusHint =
+    rootLabel.includes("celestina") || relativePath.toLowerCase().includes("celestina")
+      ? "celestina rojas"
+      : rootLabel === "transcriptions"
+        ? "osta"
+        : rootLabel.replace(/[^\w.\-]+/g, " ");
+
+  if (yearHint && !entry.year) {
+    entry.year = yearHint;
+  }
+  if (!entry.author && corpusHint.includes("celestina")) {
+    entry.author = "Fernando de Rojas";
+  }
+  if (
+    corpusHint.includes("celestina") &&
+    entry.title &&
+    !/celestina/i.test(entry.title) &&
+    !/celestina/i.test(entry.baseName)
+  ) {
+    entry.title = `${entry.title} (Celestina)`;
+  }
+
+  entry.keywords = [entry.keywords, corpusHint, yearHint].filter(Boolean).join(" ").trim();
+  return entry;
+}
+
+/**
+ * Flat discovery (legacy). Prefer `discoverTranscriptionEntries` for nested corpora.
+ */
 export function discoverTranscriptionFiles(inputDir: string, readdir: (dir: string) => string[]): string[] {
   return readdir(inputDir)
     .filter((name) => name.toLowerCase().endsWith(".txt"))
     .sort((a, b) => a.localeCompare(b));
 }
 
+export function discoverTranscriptionEntries(
+  rootDir: string,
+  fs: Pick<FileSystemWriter, "readdir" | "exists" | "isDirectory">,
+): DiscoveredTranscription[] {
+  if (!fs.exists(rootDir)) {
+    return [];
+  }
+
+  const found: DiscoveredTranscription[] = [];
+
+  const walk = (dir: string, relPrefix: string) => {
+    let names: string[];
+    try {
+      names = fs.readdir(dir);
+    } catch {
+      return;
+    }
+
+    for (const name of names.sort((a, b) => a.localeCompare(b))) {
+      if (name === "." || name === ".." || name.startsWith(".")) {
+        continue;
+      }
+      const absolutePath = path.join(dir, name);
+      const relativePath = relPrefix ? `${relPrefix}/${name}` : name;
+      const isDir = fs.isDirectory?.(absolutePath);
+
+      if (isDir === true) {
+        walk(absolutePath, relativePath);
+        continue;
+      }
+
+      // Without isDirectory, only scan the root (legacy flat mock FS / OSTA layout).
+      if (isDir === undefined && relPrefix) {
+        continue;
+      }
+
+      if (!name.toLowerCase().endsWith(".txt")) {
+        continue;
+      }
+
+      found.push({
+        rootDir,
+        absolutePath,
+        relativePath: relativePath.replace(/\\/g, "/"),
+        baseName: transcriptionExportBaseName(relativePath),
+        sourceFileName: relativePath.replace(/\\/g, "/"),
+      });
+    }
+  };
+
+  walk(rootDir, "");
+  return found.sort((a, b) => a.relativePath.localeCompare(b.relativePath));
+}
+
+function resolveBatchInputDirs(options: OstaBatchConvertOptions): string[] {
+  const dirs = [
+    ...(options.inputDirs ?? []),
+    ...(options.inputDir ? [options.inputDir] : []),
+  ].filter(Boolean);
+  // Dedupe while preserving order
+  const seen = new Set<string>();
+  const unique: string[] = [];
+  for (const dir of dirs) {
+    const key = path.normalize(dir);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    unique.push(dir);
+  }
+  return unique;
+}
+
 export function runOstaBatchConvertWithFs(
   options: OstaBatchConvertOptions,
   fs: FileSystemWriter,
 ): OstaBatchConvertOutput {
-  if (!fs.exists(options.inputDir)) {
-    throw new Error(`OSTA transcriptions directory not found: ${options.inputDir}`);
+  const inputDirs = resolveBatchInputDirs(options);
+  if (inputDirs.length === 0) {
+    throw new Error("No corpus input directories configured (inputDir / inputDirs).");
   }
 
+  const missing = inputDirs.filter((dir) => !fs.exists(dir));
+  if (missing.length === inputDirs.length) {
+    throw new Error(`Corpus transcription directories not found: ${missing.join(", ")}`);
+  }
+  if (missing.length > 0) {
+    console.warn(`Skipping missing corpus roots: ${missing.join(", ")}`);
+  }
+
+  const activeDirs = inputDirs.filter((dir) => fs.exists(dir));
   fs.mkdir(options.outputDir);
 
-  const allFiles = discoverTranscriptionFiles(options.inputDir, (dir) => fs.readdir(dir));
+  const allEntries = activeDirs.flatMap((dir) => discoverTranscriptionEntries(dir, fs));
+  // Prefer first occurrence when baseNames collide across roots.
+  const deduped: DiscoveredTranscription[] = [];
+  const seenBase = new Set<string>();
+  for (const entry of allEntries) {
+    if (seenBase.has(entry.baseName)) {
+      console.warn(`Skipping duplicate baseName ${entry.baseName} (${entry.absolutePath})`);
+      continue;
+    }
+    seenBase.add(entry.baseName);
+    deduped.push(entry);
+  }
+
   const targetFiles =
     typeof options.limit === "number" && options.limit > 0
-      ? allFiles.slice(0, options.limit)
-      : allFiles;
+      ? deduped.slice(0, options.limit)
+      : deduped;
 
   const fileResults: OstaFileResult[] = [];
   const catalogEntries: LibraryCatalogEntry[] = [];
@@ -364,52 +549,145 @@ export function runOstaBatchConvertWithFs(
   const exportedAt = new Date().toISOString();
 
   for (let i = 0; i < targetFiles.length; i++) {
-    const sourceFileName = targetFiles[i];
+    const discovered = targetFiles[i];
+    const { sourceFileName, baseName, absolutePath, relativePath, rootDir } = discovered;
     options.onProgress?.(sourceFileName, i + 1, targetFiles.length);
 
-    const rawText = fs.readFile(path.join(options.inputDir, sourceFileName));
-    const processed = processOstaTranscription(sourceFileName, rawText);
+    const rawText = fs.readFile(absolutePath);
+    const sourceHash = hashTranscriptionSource(rawText);
+    const htmlPath = path.join(options.outputDir, `${baseName}.html`);
+    const nativePath = path.join(options.outputDir, `${baseName}.native.ts`);
+    const libraryPath = path.join(options.outputDir, `${baseName}.library.json`);
+    const logPath = path.join(options.outputDir, `${baseName}.issues.log`);
+    const hashPath = sourceHashPath(options.outputDir, baseName);
 
-    const htmlPath = path.join(options.outputDir, `${processed.baseName}.html`);
-    const nativePath = path.join(options.outputDir, `${processed.baseName}.native.ts`);
-    const logPath = path.join(options.outputDir, `${processed.baseName}.issues.log`);
+    let storedHash: string | null = null;
+    if (fs.exists(hashPath)) {
+      try {
+        storedHash = fs.readFile(hashPath).trim();
+      } catch {
+        storedHash = null;
+      }
+    }
+
+    if (
+      canSkipOstaConvert({
+        sourceHash,
+        storedHash,
+        hasHtml: fs.exists(htmlPath),
+        hasNative: fs.exists(nativePath),
+        hasLibrary: fs.exists(libraryPath),
+        force: options.force,
+      })
+    ) {
+      options.onSkip?.(sourceFileName, i + 1, targetFiles.length);
+
+      let folioCount: number | undefined;
+      let wordCount: number | undefined;
+      let manuscriptTitle: string | undefined;
+      try {
+        const libraryRaw = fs.readFile(libraryPath);
+        const libraryJson = JSON.parse(libraryRaw) as {
+          folioCount?: number;
+          wordCount?: number;
+          title?: string;
+        };
+        folioCount = libraryJson.folioCount;
+        wordCount = libraryJson.wordCount;
+        manuscriptTitle = libraryJson.title;
+      } catch {
+        // Catalog entry still records ok/skipped with available metadata.
+      }
+
+      catalogEntries.push(
+        enrichCatalogEntryFromPath(
+          buildLibraryCatalogEntry({
+            baseName,
+            sourceFileName,
+            status: "ok",
+            exportedAt,
+            transcriptionText: rawText,
+            manuscriptTitle: manuscriptTitle ?? inferManuscriptTitle(rawText, sourceFileName),
+            folioCount,
+            wordCount,
+          }),
+          relativePath,
+          rootDir,
+        ),
+      );
+
+      fileResults.push({
+        sourceFileName,
+        baseName,
+        status: "skipped",
+        skippedUnchanged: true,
+        sourceHash,
+        folioCount,
+        issueCount: 0,
+        errorCount: 0,
+        warningCount: 0,
+        lintErrorCount: 0,
+        lintWarningCount: 0,
+        parseErrorCount: 0,
+        parseWarningCount: 0,
+        renderErrorCount: 0,
+        renderWarningCount: 0,
+        issues: [],
+        outputs: {
+          html: htmlPath,
+          nativeTs: nativePath,
+          issuesLog: logPath,
+        },
+      });
+      continue;
+    }
+
+    const processed = processOstaTranscription(sourceFileName, rawText, { baseName });
 
     if (processed.status === "ok") {
       fs.writeFile(htmlPath, processed.html);
       fs.writeFile(nativePath, processed.nativeTs);
+      const payload = buildLibraryEntryPayload({
+        baseName: processed.baseName,
+        sourceFileName: processed.sourceFileName,
+        exportedAt,
+        transcriptionText: rawText,
+        manuscriptTitle: inferManuscriptTitle(rawText, processed.sourceFileName),
+      });
+      enrichCatalogEntryFromPath(payload, relativePath, rootDir);
+      fs.writeFile(libraryPath, JSON.stringify(payload, null, 2));
+      fs.writeFile(hashPath, `${sourceHash}\n`);
 
-      const libraryPath = path.join(options.outputDir, `${processed.baseName}.library.json`);
-      fs.writeFile(
-        libraryPath,
-        JSON.stringify(
-          buildLibraryEntryPayload({
-            baseName: processed.baseName,
-            sourceFileName: processed.sourceFileName,
-            exportedAt,
-            transcriptionText: rawText,
-            manuscriptTitle: inferManuscriptTitle(rawText, processed.sourceFileName),
-          }),
-          null,
-          2,
-        ),
-      );
+      if (processed.parsedManuscript) {
+        const facets = buildPrecompiledFacets(processed.parsedManuscript, processed.baseName, {
+          sourceText: rawText,
+        });
+        fs.writeFile(
+          path.join(options.outputDir, `${processed.baseName}.facets.json`),
+          JSON.stringify(facets),
+        );
+      }
     }
     fs.writeFile(logPath, processed.issuesLog);
 
     catalogEntries.push(
-      buildLibraryCatalogEntry({
-        baseName: processed.baseName,
-        sourceFileName: processed.sourceFileName,
-        status: processed.status,
-        exportedAt,
-        transcriptionText: processed.status === "ok" ? rawText : undefined,
-        manuscriptTitle:
-          processed.status === "ok"
-            ? inferManuscriptTitle(rawText, processed.sourceFileName)
-            : undefined,
-        folioCount: processed.folioCount,
-        wordCount: processed.stats?.totalWords,
-      }),
+      enrichCatalogEntryFromPath(
+        buildLibraryCatalogEntry({
+          baseName: processed.baseName,
+          sourceFileName: processed.sourceFileName,
+          status: processed.status,
+          exportedAt,
+          transcriptionText: processed.status === "ok" ? rawText : undefined,
+          manuscriptTitle:
+            processed.status === "ok"
+              ? inferManuscriptTitle(rawText, processed.sourceFileName)
+              : undefined,
+          folioCount: processed.folioCount,
+          wordCount: processed.stats?.totalWords,
+        }),
+        relativePath,
+        rootDir,
+      ),
     );
 
     fileResults.push({
@@ -417,6 +695,7 @@ export function runOstaBatchConvertWithFs(
       baseName: processed.baseName,
       status: processed.status,
       compileError: processed.compileError,
+      sourceHash,
       stats: processed.stats,
       folioCount: processed.folioCount,
       issueCount: processed.issueCount,
@@ -443,9 +722,28 @@ export function runOstaBatchConvertWithFs(
     JSON.stringify(catalog, null, 2),
   );
 
+  // Global TF-IDF, corpus stats, and codicological graph (uses sidecars; fills missing facets).
+  try {
+    runCorpusPrecomputeWithFs(
+      {
+        outputDir: options.outputDir,
+        catalog,
+        skipExistingFacets: true,
+      },
+      fs,
+      path.join,
+    );
+  } catch (err) {
+    console.warn(
+      "Corpus precompute skipped:",
+      err instanceof Error ? err.message : String(err),
+    );
+  }
+
   return {
     fileResults,
-    inputDir: options.inputDir,
+    inputDir: activeDirs[0] ?? "",
+    inputDirs: activeDirs,
     outputDir: options.outputDir,
   };
 }

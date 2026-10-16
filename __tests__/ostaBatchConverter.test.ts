@@ -1,11 +1,13 @@
 import path from "node:path";
 import { compileManuscriptTree } from "../utils/compiler";
 import {
+  discoverTranscriptionEntries,
   formatIssueLog,
   generateNativeTypeScriptModule,
   processOstaTranscription,
   runOstaBatchConvertWithFs,
   splitLintAndParseIssues,
+  transcriptionExportBaseName,
   type FileSystemWriter,
 } from "../utils/ostaBatchConverter";
 import { runOstaIssueReportWithFs } from "../utils/ostaIssueReport";
@@ -33,14 +35,18 @@ describe("ostaBatchConverter", () => {
 
   it("writes per-file artifacts without aggregate reports", () => {
     const written = new Map<string, string>();
+    const existing = new Set<string>();
     const fs: FileSystemWriter = {
       mkdir: () => {},
       writeFile: (filePath, contents) => {
-        written.set(path.normalize(filePath), contents);
+        const key = path.normalize(filePath);
+        written.set(key, contents);
+        existing.add(key);
       },
       readFile: () => SAMPLE,
       readdir: () => ["TEXT.DEMO.txt"],
-      exists: () => true,
+      exists: (filePath) =>
+        filePath === "/in" || existing.has(path.normalize(filePath)),
     };
 
     const output = runOstaBatchConvertWithFs(
@@ -53,10 +59,46 @@ describe("ostaBatchConverter", () => {
     expect(written.has(path.join(out, "TEXT.DEMO.native.ts"))).toBe(true);
     expect(written.has(path.join(out, "TEXT.DEMO.issues.log"))).toBe(true);
     expect(written.has(path.join(out, "TEXT.DEMO.library.json"))).toBe(true);
+    expect(written.has(path.join(out, "TEXT.DEMO.source.sha256"))).toBe(true);
     expect(written.has(path.join(out, "library-catalog.json"))).toBe(true);
     expect(written.has(path.join(out, "issues-summary.json"))).toBe(false);
     expect(output.fileResults).toHaveLength(1);
     expect(output.fileResults[0].status).toBe("ok");
+  });
+
+  it("skips re-convert when the source SHA-256 matches prior artifacts", () => {
+    const store = new Map<string, string>();
+    const rewritten = new Set<string>();
+    const fs: FileSystemWriter = {
+      mkdir: () => {},
+      writeFile: (filePath, contents) => {
+        const key = path.normalize(filePath);
+        store.set(key, contents);
+        rewritten.add(key);
+      },
+      readFile: (filePath) => {
+        const key = path.normalize(filePath);
+        if (store.has(key)) return store.get(key)!;
+        return SAMPLE;
+      },
+      readdir: () => ["TEXT.DEMO.txt"],
+      exists: (filePath) =>
+        filePath === "/in" || store.has(path.normalize(filePath)),
+    };
+
+    runOstaBatchConvertWithFs({ inputDir: "/in", outputDir: "/out", limit: 1 }, fs);
+    expect(store.has(path.normalize(path.join("/out", "TEXT.DEMO.source.sha256")))).toBe(true);
+    rewritten.clear();
+
+    const second = runOstaBatchConvertWithFs(
+      { inputDir: "/in", outputDir: "/out", limit: 1 },
+      fs,
+    );
+    expect(second.fileResults[0].status).toBe("skipped");
+    expect(second.fileResults[0].skippedUnchanged).toBe(true);
+    // Catalog is always rewritten; html/native/library should not be rewritten.
+    expect(rewritten.has(path.normalize(path.join("/out", "TEXT.DEMO.html")))).toBe(false);
+    expect(rewritten.has(path.normalize(path.join("/out", "library-catalog.json")))).toBe(true);
   });
 
   it("records compile failures in the issue log without html/native outputs", () => {
@@ -139,5 +181,64 @@ cerrado}`;
     expect(report.stats.totalFiles).toBe(1);
     expect(written.has(path.normalize("/out/issues.json"))).toBe(true);
     expect(written.has(path.normalize("/out/issues-summary.txt"))).toBe(true);
+  });
+
+  it("builds nested baseNames from relative paths", () => {
+    expect(transcriptionExportBaseName("1500/auto1_01.txt")).toBe("1500__auto1_01");
+    expect(transcriptionExportBaseName("TEXT.ABC.txt")).toBe("TEXT.ABC");
+  });
+
+  it("recursively discovers nested corpus txt files across multiple roots", () => {
+    const tree: Record<string, string[]> = {
+      [path.normalize("/osta")]: ["TEXT.A.txt"],
+      [path.normalize("/celestina")]: ["1500", "1514"],
+      [path.normalize("/celestina/1500")]: ["auto1.txt"],
+      [path.normalize("/celestina/1514")]: ["auto1.txt"],
+    };
+    const dirs = new Set(Object.keys(tree));
+    const fs: Pick<FileSystemWriter, "readdir" | "exists" | "isDirectory"> = {
+      readdir: (dir) => tree[path.normalize(dir)] ?? [],
+      exists: (p) => dirs.has(path.normalize(p)) || p.toLowerCase().endsWith(".txt"),
+      isDirectory: (p) => dirs.has(path.normalize(p)),
+    };
+
+    const osta = discoverTranscriptionEntries("/osta", fs);
+    const cel = discoverTranscriptionEntries("/celestina", fs);
+    expect(osta.map((e) => e.baseName)).toEqual(["TEXT.A"]);
+    expect(cel.map((e) => e.baseName).sort()).toEqual(["1500__auto1", "1514__auto1"]);
+
+    const files = new Map<string, string>([
+      [path.normalize("/osta/TEXT.A.txt"), SAMPLE],
+      [path.normalize("/celestina/1500/auto1.txt"), SAMPLE],
+      [path.normalize("/celestina/1514/auto1.txt"), SAMPLE],
+    ]);
+    const written = new Map<string, string>();
+    const batchFs: FileSystemWriter = {
+      mkdir: () => {},
+      writeFile: (filePath, contents) => {
+        written.set(path.normalize(filePath), contents);
+      },
+      readFile: (filePath) => files.get(path.normalize(filePath)) ?? SAMPLE,
+      readdir: (dir) => tree[path.normalize(dir)] ?? [],
+      exists: (p) =>
+        dirs.has(path.normalize(p)) ||
+        files.has(path.normalize(p)) ||
+        path.normalize(p).startsWith(path.normalize("/out")),
+      isDirectory: (p) => dirs.has(path.normalize(p)),
+    };
+
+    const output = runOstaBatchConvertWithFs(
+      { inputDirs: ["/osta", "/celestina"], outputDir: "/out" },
+      batchFs,
+    );
+    expect(output.fileResults).toHaveLength(3);
+    expect(output.inputDirs).toEqual(["/osta", "/celestina"]);
+    expect(written.has(path.normalize("/out/1500__auto1.library.json"))).toBe(true);
+    expect(written.has(path.normalize("/out/1514__auto1.library.json"))).toBe(true);
+    const catalog = JSON.parse(written.get(path.normalize("/out/library-catalog.json"))!);
+    expect(catalog.entryCount).toBe(3);
+    expect(catalog.entries.some((e: { keywords: string }) => /celestina/i.test(e.keywords))).toBe(
+      true,
+    );
   });
 });

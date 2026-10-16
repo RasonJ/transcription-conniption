@@ -1,4 +1,4 @@
-﻿import { formatMessage } from "../i18n/messageFormat";
+import { formatMessage } from "../i18n/messageFormat";
 import { pluralCategory, pluralCategoryFallback } from "../i18n/plural";
 import {
   FALLBACK_CHAINS,

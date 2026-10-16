@@ -1,4 +1,4 @@
-import { gw, microTrackingSpace } from "@/components/svgFacsimile/glyphMetrics";
+import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import type { Seg } from "@/components/svgFacsimile/tokenRendering";
 import { coalesceSegs, FS } from "@/components/svgFacsimile/tokenRendering";
 import React from "react";
@@ -17,8 +17,8 @@ export type JustifiedNativeLineProps = {
 };
 
 /**
- * Renders one micro-tracked line using one {@link TSpan} per segment with a compact
- * `dx` offset array (not one React node per glyph).
+ * Renders one line using one {@link TSpan} per segment with a compact `dx`
+ * array. Extra advance applies only to word spaces.
  */
 export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): React.ReactNode | null {
   const {
@@ -36,25 +36,24 @@ export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): Reac
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return null;
 
-  const trackingSpace = microTrackingSpace(visible, trackWidth, isLastLine, skipJustify);
+  const gapExtra = wordGapExtra(visible, trackWidth, isLastLine, skipJustify);
 
   const tspans: React.ReactNode[] = [];
-  let charGlobalIdx = 0;
   let baselineShift = 0;
 
   for (let segIdx = 0; segIdx < visible.length; segIdx++) {
     const s = visible[segIdx];
-    const dxValues: number[] = [];
-
-    for (let i = 0; i < s.text.length; i++) {
-      const ch = s.text[i];
-      const charWidth = gw(ch, s.fs);
-      if (charGlobalIdx === 0) {
-        dxValues.push(0);
-      } else {
-        dxValues.push(charWidth + trackingSpace);
+    // SVG `dx` adds to natural advance — only space glyphs get justification extras.
+    let dxValues: number[] | undefined;
+    if (gapExtra > 0) {
+      const values: number[] = [];
+      let anyExtra = false;
+      for (let i = 0; i < s.text.length; i++) {
+        const extra = s.text[i] === " " ? gapExtra : 0;
+        if (extra > 0) anyExtra = true;
+        values.push(extra);
       }
-      charGlobalIdx++;
+      if (anyExtra) dxValues = values;
     }
 
     let dy = 0;

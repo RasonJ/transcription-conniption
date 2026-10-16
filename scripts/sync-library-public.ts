@@ -48,7 +48,27 @@ fs.mkdirSync(entriesDir, { recursive: true });
 copyFile(catalogSrc, catalogDest);
 copyFile(catalogSrc, assetsCatalogDest);
 
+const corpusArtifacts = [
+  "corpus-tfidf.json",
+  "corpus-stats.json",
+  "library-graph.json",
+] as const;
+const facetsDir = path.join(publicDir, "library", "facets");
+const assetsFacetsDir = path.join(projectRoot, "assets", "library", "facets");
+fs.mkdirSync(facetsDir, { recursive: true });
+fs.mkdirSync(assetsFacetsDir, { recursive: true });
+
+let corpusSynced = 0;
+for (const name of corpusArtifacts) {
+  const src = path.join(outputDir, name);
+  if (!fs.existsSync(src)) continue;
+  copyFile(src, path.join(publicDir, name));
+  copyFile(src, path.join(projectRoot, "assets", "library", name));
+  corpusSynced++;
+}
+
 let synced = 0;
+let facetsSynced = 0;
 
 for (const entry of catalog.entries) {
   if (entry.status !== "ok") {
@@ -61,25 +81,31 @@ for (const entry of catalog.entries) {
   if (fs.existsSync(sidecarPath)) {
     copyFile(sidecarPath, destPath);
     synced++;
-    continue;
+  } else {
+    const nativePath = path.join(outputDir, `${entry.baseName}.native.ts`);
+    const transcriptionText = fs.existsSync(nativePath)
+      ? readNativeTranscription(nativePath)
+      : undefined;
+
+    if (transcriptionText) {
+      const payload: LibraryEntryPayload = {
+        format: LIBRARY_ENTRY_FORMAT,
+        ...entry,
+        transcriptionText,
+      };
+      fs.writeFileSync(destPath, JSON.stringify(payload), "utf8");
+      synced++;
+    }
   }
 
-  const nativePath = path.join(outputDir, `${entry.baseName}.native.ts`);
-  const transcriptionText = fs.existsSync(nativePath)
-    ? readNativeTranscription(nativePath)
-    : undefined;
-
-  if (!transcriptionText) {
-    continue;
+  const facetsSrc = path.join(outputDir, `${entry.baseName}.facets.json`);
+  if (fs.existsSync(facetsSrc)) {
+    copyFile(facetsSrc, path.join(facetsDir, `${entry.baseName}.json`));
+    copyFile(facetsSrc, path.join(assetsFacetsDir, `${entry.baseName}.json`));
+    facetsSynced++;
   }
-
-  const payload: LibraryEntryPayload = {
-    format: LIBRARY_ENTRY_FORMAT,
-    ...entry,
-    transcriptionText,
-  };
-  fs.writeFileSync(destPath, JSON.stringify(payload), "utf8");
-  synced++;
 }
 
-console.log(`Synced library catalog (${catalog.entryCount} entries, ${synced} payloads) to public/ and assets/library/`);
+console.log(
+  `Synced library catalog (${catalog.entryCount} entries, ${synced} payloads, ${facetsSynced} facets, ${corpusSynced} corpus indexes) to public/ and assets/library/`,
+);

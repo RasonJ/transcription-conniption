@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Rebuild out/library-catalog.json from existing *.library.json sidecars
- * (or from *.native.ts when sidecars are missing).
+ * (or from *.native.ts when sidecars are missing), then precompute corpus
+ * TF-IDF, facet sidecars, stats, and the codicological library graph.
  *
  * Usage:
  *   npm run build:library
@@ -10,6 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { runCorpusPrecomputeWithFs } from "../utils/corpusPrecompute";
 import { DEFAULT_OSTA_PATHS } from "../utils/ostaBatchConverter";
 import {
   LIBRARY_ENTRY_FORMAT,
@@ -20,11 +22,13 @@ import {
   type LibraryEntryPayload,
 } from "../utils/libraryCatalog";
 import { parseNativeBundleMeta, parseNativeTranscriptionSource } from "./readNativeBundle";
-import { readCliArg } from "./readCliArg";
+import { hasCliFlag, readCliArg } from "./readCliArg";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, "..");
 const outputDir = path.resolve(projectRoot, readCliArg("--out") ?? DEFAULT_OSTA_PATHS.output);
+const skipPrecompute = hasCliFlag("--no-precompute");
+const forceFacets = hasCliFlag("--force-facets");
 
 function entryFromSidecar(filePath: string): LibraryCatalogEntry | null {
   try {
@@ -126,6 +130,44 @@ function main(): void {
 
   console.log(`Library catalog: ${catalogPath}`);
   console.log(`  Entries: ${catalog.entryCount}`);
+
+  if (skipPrecompute) {
+    console.log("  Precompute: skipped (--no-precompute)");
+    return;
+  }
+
+  console.log("  Precomputing facets / TF-IDF / library graph…");
+  const started = Date.now();
+  const nodeFs = {
+    readdir: (dir: string) => fs.readdirSync(dir),
+    readFile: (filePath: string) => fs.readFileSync(filePath, "utf8"),
+    writeFile: (filePath: string, contents: string) => {
+      fs.writeFileSync(filePath, contents, "utf8");
+    },
+    exists: (filePath: string) => fs.existsSync(filePath),
+  };
+
+  const result = runCorpusPrecomputeWithFs(
+    {
+      outputDir,
+      catalog,
+      skipExistingFacets: !forceFacets,
+      onProgress(baseName, index, total) {
+        if (index % 50 === 0 || index === 1 || index === total) {
+          console.log(`    [${index}/${total}] ${baseName}`);
+        }
+      },
+    },
+    nodeFs,
+    path.join,
+  );
+
+  const sec = ((Date.now() - started) / 1000).toFixed(1);
+  console.log(`  Facets:        ${result.facetsWritten} witnesses (${sec}s)`);
+  console.log(`  TF-IDF terms:  ${Object.keys(result.corpusTfidf.idf).length}`);
+  console.log(`  Graph nodes:   ${result.libraryGraph.nodeCount}`);
+  console.log(`  Graph edges:   ${result.libraryGraph.edgeCount}`);
+  console.log(`  Wrote: corpus-tfidf.json, corpus-stats.json, library-graph.json`);
 }
 
 main();

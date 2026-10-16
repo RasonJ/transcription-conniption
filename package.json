@@ -21,6 +21,7 @@
     "test:osta": "jest --config jest.osta.config.js --verbose --runInBand",
     "batch:osta": "npx tsx scripts/batch-convert-osta.ts",
     "build:library": "npx tsx scripts/build-library-catalog.ts",
+    "precompute:corpus": "npx tsx scripts/build-library-catalog.ts",
     "sync:library": "npx tsx scripts/sync-library-public.ts",
     "report:osta": "npx tsx scripts/aggregate-osta-issues.ts",
     "compile:copilot": "npx tsx scripts/compile-copilot.ts",

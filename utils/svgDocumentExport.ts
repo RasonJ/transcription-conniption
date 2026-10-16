@@ -117,7 +117,7 @@ function serializeOrnateInitial(
   return parts;
 }
 
-/** Micro-tracked line — compact `<tspan dx="…">` groups (matches SvgFacsimilePage). */
+/** Word-gap justified line — compact `<tspan>` groups (matches SvgFacsimilePage). */
 function renderJustifiedSegs(
   segs: Seg[],
   targetWidth: number,
@@ -264,7 +264,7 @@ function paintBlockRow(
 
 /**
  * Standalone SVG document for all folios (export / rasterization source).
- * Uses spatial column blocks and per-glyph micro-tracking — same model as facsimile preview.
+ * Uses spatial column blocks and word-gap justification — same model as facsimile preview.
  */
 export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExportOptions = {}): string {
   const opts: ResolvedOpts = { ...DEFAULT_OPTS, ...options };

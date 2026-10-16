@@ -1,4 +1,4 @@
-import { gw, microTrackingSpace } from "@/components/svgFacsimile/glyphMetrics";
+import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import type { Seg } from "@/components/svgFacsimile/tokenRendering";
 import { coalesceSegs, FS } from "@/components/svgFacsimile/tokenRendering";
 
@@ -19,6 +19,7 @@ function segmentDecoration(s: Seg): string {
 
 /**
  * Compact SVG line: one `<tspan>` per segment with space-separated `dx` offsets.
+ * Extra advance is applied only on word spaces (never letter-spacing).
  */
 export function renderJustifiedSvgLine(
   segs: Seg[],
@@ -31,17 +32,24 @@ export function renderJustifiedSvgLine(
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return "";
 
-  const trackingSpace = microTrackingSpace(visible, targetWidth, isLastLine, skipJustify);
+  const gapExtra = wordGapExtra(visible, targetWidth, isLastLine, skipJustify);
   const parts: string[] = [];
-  let charGlobalIdx = 0;
   let baselineShift = 0;
 
   for (const s of visible) {
-    const dxList: string[] = [];
-    for (let i = 0; i < s.text.length; i++) {
-      const w = gw(s.text[i], s.fs);
-      dxList.push((charGlobalIdx === 0 ? 0 : w + trackingSpace).toFixed(2));
-      charGlobalIdx++;
+    // SVG `dx` is an *additional* offset on top of natural glyph advance.
+    // Only inject extras on word spaces — never push full glyph widths (that
+    // double-advances and creates letter rivers).
+    let dxAttr = "";
+    if (gapExtra > 0) {
+      const dxList: string[] = [];
+      let anyExtra = false;
+      for (let i = 0; i < s.text.length; i++) {
+        const extra = s.text[i] === " " ? gapExtra : 0;
+        if (extra > 0) anyExtra = true;
+        dxList.push(extra.toFixed(2));
+      }
+      if (anyExtra) dxAttr = ` dx="${dxList.join(" ")}"`;
     }
 
     let dyAttr = "";
@@ -55,7 +63,7 @@ export function renderJustifiedSvgLine(
     }
 
     parts.push(
-      `<tspan dx="${dxList.join(" ")}" font-size="${s.fs.toFixed(1)}" fill="${s.fill}"` +
+      `<tspan${dxAttr} font-size="${s.fs.toFixed(1)}" fill="${s.fill}"` +
         ` font-style="${s.italic ? "italic" : "normal"}" font-weight="${s.bold ? "bold" : "normal"}"` +
         `${dyAttr}${segmentDecoration(s)}>${escapeXml(s.text)}</tspan>`,
     );

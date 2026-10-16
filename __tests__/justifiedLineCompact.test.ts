@@ -16,9 +16,14 @@ describe("compact justified line export", () => {
       false,
       false,
     );
-    expect(xml).toContain("<tspan dx=");
     expect(xml).toContain("muyto");
     expect((xml.match(/<tspan /g) ?? []).length).toBe(1);
     expect(xml).not.toMatch(/<tspan[^>]*>m<\/tspan>/);
+    // Justification extras only — values must stay in the per-gap cap, not glyph widths.
+    const dx = xml.match(/dx="([^"]+)"/);
+    if (dx) {
+      const vals = dx[1].split(/\s+/).map(Number);
+      expect(vals.every((v) => v <= 6)).toBe(true);
+    }
   });
 });

@@ -79,7 +79,7 @@ utils/
   folioMarkers.ts       # [fol. 42rA] suffix; COLUMN_LAYOUT_MAP for track suffixes
   lexicalPatterns.ts    # Shared regex patterns (lexer + validation)
   parseValidation.ts    # Parse-time lexical/structural error collection
-  analyzeManuscript.ts  # enrichParsedManuscript (concordance + validation merge)
+  analyzeManuscript.ts  # enrichParsedManuscript (validation merge; concordance is lazy)
   concordance.ts        # O(N) KWIC index via RegExp.exec on reconstructedFlow
   embeddings/           # hashEmbed + intentClassifier (local micro-vectors)
   manuscriptVectorIndex.ts # ParsedManuscript → contiguous Float32 embed matrix
@@ -354,7 +354,7 @@ Figure slots stay keyed by stable `figureId` (per folio) inside `assetMap`, so e
 
 | Module | Role |
 |--------|------|
-| `buildConcordance` | Lemma index from each folio’s `reconstructedFlow` (single-pass `RegExp.exec`; hyphen joins preserved) |
+| `buildConcordance` / `getConcordanceForManuscript` | Lemma index from each folio’s `reconstructedFlow` (single-pass `RegExp.exec`; hyphen joins preserved). Not built during compile; memoized lazily by source identity + `PARSER_VERSION` when the concordance drawer or stats need it |
 | `validateTranscription` | Multi-line `{ENV.}` continuation, folio-before-`}`, dangling `+`, stray `}` |
 | `scanLineLexicalIssues` / `scanStructuralTokenIssues` | Parse-time checks using shared `lexicalPatterns` (no regex drift) |
 | `validateTranscription` / `lintHsmsTranscription` | Fast pre-render lint (folio leaks, env stack, lexical brackets); CLI: `npm run lint:hsms` |
