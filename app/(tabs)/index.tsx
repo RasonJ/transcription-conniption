@@ -48,6 +48,7 @@ import {
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import {
   AlertCircle,
   BookOpen,
@@ -141,6 +142,7 @@ function handSuperscriptLabel(hand: string): string {
 }
 
 export default function TranscriptionConniptionScreen() {
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const {
     parchmentRef,
@@ -984,6 +986,13 @@ export default function TranscriptionConniptionScreen() {
                 <EditorLinterBanner
                   transcriptionText={localEditorBuffer}
                   onJumpToLine={handleValidationJump}
+                  onRepaired={(repaired) => {
+                    setLocalEditorBuffer(repaired);
+                    applyTranscription(repaired, {
+                      sourceFileName: activeFileName ?? undefined,
+                    });
+                    void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+                  }}
                 />
                 <ValidationPanel
                   errors={parsedManuscript.validationErrors ?? []}

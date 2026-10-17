@@ -229,6 +229,9 @@ Supported inline tokens include `<expansion>`, `(^scribal deletion)`, `(editoria
 | `bun run start:web` | Dev server for web |
 | `bun run lint` | Run ESLint |
 | `npm test` | Unit tests only — parser, spatial AST, concordance, Copilot/Proofer/Azure helpers, paleography, render leakage (never touches OSTA files) |
+| `npm run preflight` | Full asset/codegen preflight: HSMS indexes, i18n, Copilot catalog, agent memory, library sidecars (if `out/` exists), tier + size gates, lint, tests |
+| `npm run build:all` | `preflight` then Expo web export (`build:web`) |
+| `npm run build:web` | Expo web export only (no asset regen) |
 | `npm run lint:hsms` | Paleographic lint of `.txt` / `.hsms` (folio leaks, Proofer incidents, env stack) |
 | `npm run lint:project` | Recursive OSTA-style batch lint (defaults to sibling `OSTA/transcriptions/` when present) |
 | `npm run test:osta` | OSTA integration suite under `__tests__/integration/osta/` (~650+ files; requires sibling `OSTA/transcriptions/`) |
@@ -237,6 +240,18 @@ Supported inline tokens include `<expansion>`, `(^scribal deletion)`, `(editoria
 | `npm run compile:copilot` | Regenerate Copilot catalog + MCP tool declarations (`compile:graph-intents` alias) |
 | `npm run generate:dictionary` | Rebuild lemma + POS indexes from `assets/dic/hsms.src` |
 | `npm run report:osta` | Re-aggregate existing `out/*.issues.log` → `issues-summary.txt` and `issues.json` (lint, parse, and render counts) |
+
+Ship a web build with regenerated embeddings / catalogs:
+
+```bash
+npm run batch:osta          # optional — populate out/ corpus sidecars first
+npm run build:all           # preflight + Expo web export
+# or:
+npm run preflight           # assets + checks only
+npm run build:web
+```
+
+`preflight` / `build:all` flags (pass after `--`): `--skip-tests`, `--skip-lint`, `--skip-library`.
 
 `jest.config.js` excludes `__tests__/integration/` so default `npm test` is safe without a local OSTA clone. `npm run test:osta` uses `jest.osta.config.js` and sets `OSTA_INTEGRATION=1`. Optional: `OSTA_WRITE_REPORTS=1` with `npm run test:osta` writes validation logs under `reports/`.
 
@@ -275,7 +290,7 @@ npx jest __tests__/pedroNunesTrsParity.test.ts
 | File | Role |
 |------|------|
 | `assets/dic/hsms.src` | HSMS **DB_MAP** lemmatization dictionary (~280k entries) — lemmas + EAGLES-style POS |
-| `utils/generated/hsmsDiacriticMap.ts` | Generated from `HSMSTools/HSMSParser/settings.ini` `[RegexReplaces]` (legacy `CharRegexReplacements`) |
+| `utils/generated/hsmsDiacriticMap.ts` | Generated from `assets/legacy_hsms_settings.ini` `[RegexReplaces]` (vendored HSMSParser settings) |
 | `utils/generated/hsmsLemmaIndex.json` | Compact surface→lemma index built from `hsms.src` |
 | `utils/generated/hsmsPosIndex.json` | Surface→POS index (`lookupHsmsPos`) |
 | `public/dic/hsmsLemmaIndex.v2.tsv` / `hsmsPosIndex.json` | Lazy web dictionary assets |

@@ -1198,15 +1198,26 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
       "properties": {
         "image_uri": {
           "type": "string",
-          "description": "Base64 data URI or storage URL of the page scan / PDF (often first ~25 leaves)."
+          "description": "Image data URI / file URI, or a PDF URI. PDFs are sliced client-side to PNG/JPEG before vision calls (never uploaded as PDF)."
         },
         "folio_id": {
           "type": "string",
-          "description": "Target folio marker, e.g., '1r' or '3v'."
+          "description": "Target folio marker for a single leaf, e.g., '1r' or '3v'."
         },
         "language_hint": {
           "type": "string",
           "description": "Ibero-Romance language hint (POR, SPA, CAT, LAT)."
+        },
+        "max_pages": {
+          "type": "integer",
+          "description": "Max PDF pages to slice (default 25).",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 50
+        },
+        "mime_type": {
+          "type": "string",
+          "description": "Optional MIME (application/pdf triggers client slicer)."
         }
       },
       "required": [
@@ -1214,6 +1225,32 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
       ]
     },
     "recipeId": "transcription.vision_ocr",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "convert_htr_to_hsms",
+    "description": "Cleans Handwritten Text Recognition exports (Transkribus / eScriptorium) into HSMS ASCII using the ordered 80+ substitution rules from HSMS-tools/HTR_to_HSMS.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "htrText": {
+          "type": "string",
+          "description": "Raw HTR / OCR plain text to convert."
+        },
+        "text": {
+          "type": "string",
+          "description": "Alias for htrText."
+        },
+        "skip_space_cleanup": {
+          "type": "boolean",
+          "description": "If true, skip the trailing whitespace normalization pass.",
+          "default": false
+        }
+      },
+      "required": []
+    },
+    "recipeId": "transcription.convert_htr",
     "tier": "A",
     "category": "paleography"
   }
@@ -1347,15 +1384,26 @@ export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = [
       "properties": {
         "image_uri": {
           "type": "string",
-          "description": "Base64 data URI or storage URL of the page scan / PDF (often first ~25 leaves)."
+          "description": "Image data URI / file URI, or a PDF URI. PDFs are sliced client-side to PNG/JPEG before vision calls (never uploaded as PDF)."
         },
         "folio_id": {
           "type": "string",
-          "description": "Target folio marker, e.g., '1r' or '3v'."
+          "description": "Target folio marker for a single leaf, e.g., '1r' or '3v'."
         },
         "language_hint": {
           "type": "string",
           "description": "Ibero-Romance language hint (POR, SPA, CAT, LAT)."
+        },
+        "max_pages": {
+          "type": "integer",
+          "description": "Max PDF pages to slice (default 25).",
+          "default": 25,
+          "minimum": 1,
+          "maximum": 50
+        },
+        "mime_type": {
+          "type": "string",
+          "description": "Optional MIME (application/pdf triggers client slicer)."
         }
       },
       "required": [
@@ -1363,6 +1411,32 @@ export const MCP_GRAPH_TOOLS: McpManuscriptTool[] = [
       ]
     },
     "recipeId": "transcription.vision_ocr",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "convert_htr_to_hsms",
+    "description": "Cleans Handwritten Text Recognition exports (Transkribus / eScriptorium) into HSMS ASCII using the ordered 80+ substitution rules from HSMS-tools/HTR_to_HSMS.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "htrText": {
+          "type": "string",
+          "description": "Raw HTR / OCR plain text to convert."
+        },
+        "text": {
+          "type": "string",
+          "description": "Alias for htrText."
+        },
+        "skip_space_cleanup": {
+          "type": "boolean",
+          "description": "If true, skip the trailing whitespace normalization pass.",
+          "default": false
+        }
+      },
+      "required": []
+    },
+    "recipeId": "transcription.convert_htr",
     "tier": "A",
     "category": "paleography"
   }

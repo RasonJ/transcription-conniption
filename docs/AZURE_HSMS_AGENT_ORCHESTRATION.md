@@ -245,6 +245,8 @@ Calls `runHybridTranscriptionPipeline` / `transcribePageScan` (Pass 1 + **condit
 
 **Multi-page PDF** — same entry; client slicer; Pass 1 per leaf with `skipSyntaxRepair`; clean folios stream immediately; one batched Pass 2 for flagged leaves; `TranscriptionProgressBar` (no full-screen overlay). Cap: ~25 pages. Expo Web recommended.
 
+**Advanced editor (manual HSMS)** — `EditorLinterBanner` runs `lintHsmsTranscription` live. When **critical** errors exist, **Fix with syntax agent** calls `runPassTwoRepair` (same Pass 2 / `gpt-5.4-mini` path) and replaces the editor buffer. Warnings alone do not offer Pass 2 (avoids orthographic drift).
+
 ## Data flow (incremental async)
 
 ```

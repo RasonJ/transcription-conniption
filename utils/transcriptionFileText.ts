@@ -1,9 +1,11 @@
 /**
  * Extract plain HSMS / transcription text from Studio uploads.
- * Supported: .txt, .hsms (ASCII or scriptorium JSON bundle), .docx (mammoth).
+ * Supported: .txt, .hsms (ASCII or scriptorium JSON bundle), .docx (OOXML via JSZip).
  * Legacy binary .doc is rejected with a clear convert-to-.docx/.txt message.
+ *
+ * Note: do not use `mammoth` here — its Node entry (`options-reader`) fails under Expo Metro.
  */
-import mammoth from "mammoth";
+import JSZip from "jszip";
 import { EncodingType, readAsStringAsync } from "@/utils/expoFileSystem";
 import { HSMS_BUNDLE_FORMAT } from "@/utils/hsmsBundle";
 import { isBundleV2 } from "@/utils/ingest/bundleV2";
@@ -73,9 +75,36 @@ export function transcriptionTextFromHsmsPayload(raw: string): string | null {
   return null;
 }
 
+function decodeXmlEntities(value: string): string {
+  return value
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+}
+
+/** Extract raw paragraph text from Word OOXML `word/document.xml`. */
+export function extractTextFromWordDocumentXml(xml: string): string {
+  const paragraphs = xml.match(/<w:p[\s>][\s\S]*?<\/w:p>/g) ?? [];
+  const lines = paragraphs.map((paragraph) => {
+    const runs = [...paragraph.matchAll(/<w:t(?:\s[^>]*)?>([^<]*)<\/w:t>/g)].map((m) =>
+      decodeXmlEntities(m[1]),
+    );
+    return runs.join("");
+  });
+  return lines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 async function extractDocxText(arrayBuffer: ArrayBuffer): Promise<string> {
-  const result = await mammoth.extractRawText({ arrayBuffer });
-  const text = (result.value ?? "").replace(/\r\n/g, "\n").trim();
+  const zip = await JSZip.loadAsync(arrayBuffer);
+  const docFile = zip.file("word/document.xml");
+  if (!docFile) {
+    throw new Error("Word .docx is missing word/document.xml");
+  }
+  const xml = await docFile.async("string");
+  const text = extractTextFromWordDocumentXml(xml);
   if (!text) {
     throw new Error("Word document contained no extractable text.");
   }

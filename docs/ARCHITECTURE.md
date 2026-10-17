@@ -600,6 +600,7 @@ Planned or natural evolution paths (also noted on the About screen):
 - **TypeScript** — strict typing for domain models; Expo Router typed routes experiment enabled in `app.json`.
 - **Lint** — `expo lint` via ESLint 9 + `eslint-config-expo`.
 - **New Architecture** — `newArchEnabled: true` in Expo config.
+- **Full preflight** — `npm run preflight` regenerates HSMS dictionary/diacritic indexes, i18n types, Copilot catalog, agent-memory rules, library/corpus sidecars (when `out/` exists), then runs tier + size gates, ESLint, and unit tests. `npm run build:all` runs that pipeline and then `build:web`. See `scripts/preflight.ts`.
 
 ## Security and privacy
 

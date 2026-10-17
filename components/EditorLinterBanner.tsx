@@ -1,23 +1,75 @@
 import { scriptoriumTheme as t } from "@/constants/scriptoriumTheme";
 import type { ValidationError } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
+import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
+import {
+  formatDiagnosticsForRepair,
+  runPassTwoRepair,
+} from "@/services/passTwoRepairService";
 import { localizeValidationMessage } from "@/utils/validationMessage";
 import { lintHsmsTranscription } from "@/utils/hsmsLinter";
-import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react-native";
-import React, { useMemo } from "react";
-import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { AlertTriangle, CheckCircle2, Sparkles, XCircle } from "lucide-react-native";
+import React, { useCallback, useMemo, useState } from "react";
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 type Props = {
   transcriptionText: string;
   onJumpToLine?: (lineIndex: number) => void;
+  /** Apply Pass 2 repaired HSMS into the editor / workspace. */
+  onRepaired?: (repairedText: string) => void;
 };
 
 const MAX_VISIBLE = 12;
 
-export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
+export function EditorLinterBanner({ transcriptionText, onJumpToLine, onRepaired }: Props) {
   const tr = useT();
   const report = useMemo(() => lintHsmsTranscription(transcriptionText), [transcriptionText]);
   const ordered = [...report.criticalErrors, ...report.structuralWarnings];
+  const [repairing, setRepairing] = useState(false);
+  const azureReady = isAzureAgentConfigured();
+  const canRepair =
+    Boolean(onRepaired) && report.criticalErrors.length > 0 && transcriptionText.trim().length > 0;
+
+  const handlePassTwoRepair = useCallback(async () => {
+    if (!canRepair || repairing) return;
+    if (!azureReady) {
+      Alert.alert(tr("validation.repairNeedAzureTitle"), tr("validation.repairNeedAzureBody"));
+      return;
+    }
+    setRepairing(true);
+    try {
+      const diagnostics = formatDiagnosticsForRepair(report.criticalErrors);
+      const repaired = await runPassTwoRepair(transcriptionText, diagnostics);
+      if (!repaired.trim()) {
+        throw new Error("Syntax agent returned empty HSMS");
+      }
+      onRepaired?.(repaired);
+    } catch (err) {
+      console.warn("Editor Pass 2 repair failed", err);
+      Alert.alert(
+        tr("validation.repairErrorTitle"),
+        err instanceof Error ? err.message : tr("validation.repairErrorBody"),
+      );
+    } finally {
+      setRepairing(false);
+    }
+  }, [
+    azureReady,
+    canRepair,
+    onRepaired,
+    repairing,
+    report.criticalErrors,
+    tr,
+    transcriptionText,
+  ]);
 
   if (report.issues.length === 0) {
     return (
@@ -27,6 +79,7 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
       </View>
     );
   }
+
   const visible = ordered.slice(0, MAX_VISIBLE);
   const overflow = ordered.length - visible.length;
 
@@ -41,6 +94,30 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine }: Props) {
         <Text style={report.isValid ? styles.warnTitle : styles.errTitle}>
           {tr("validation.counts", { errors: report.errorCount, warnings: report.warningCount })}
         </Text>
+        {canRepair ? (
+          <Pressable
+            onPress={() => {
+              void handlePassTwoRepair();
+            }}
+            disabled={repairing}
+            style={({ pressed }) => [
+              styles.repairButton,
+              repairing && styles.repairButtonBusy,
+              pressed && !repairing && styles.repairButtonPressed,
+            ]}
+            accessibilityRole="button"
+            accessibilityLabel={tr("validation.repairWithAgent")}
+          >
+            {repairing ? (
+              <ActivityIndicator size="small" color={t.inkDark} />
+            ) : (
+              <Sparkles color={t.inkDark} size={14} />
+            )}
+            <Text style={styles.repairButtonText}>
+              {repairing ? tr("validation.repairBusy") : tr("validation.repairWithAgent")}
+            </Text>
+          </Pressable>
+        ) : null}
       </View>
 
       <ScrollView style={styles.issueList} nestedScrollEnabled>
@@ -115,6 +192,22 @@ const styles = StyleSheet.create({
   warnBanner: { backgroundColor: "rgba(181, 124, 0, 0.18)" },
   errTitle: { color: "#ef9a9a", fontSize: 12, fontWeight: "800", flex: 1 },
   warnTitle: { color: t.goldMuted, fontSize: 12, fontWeight: "800", flex: 1 },
+  repairButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: t.gold,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  repairButtonBusy: { opacity: 0.75 },
+  repairButtonPressed: { opacity: 0.9 },
+  repairButtonText: {
+    color: t.inkDark,
+    fontSize: 11,
+    fontWeight: "800",
+  },
   issueList: { maxHeight: 140, paddingHorizontal: 8, borderTopWidth: 1, borderTopColor: t.goldBorder },
   issueRow: {
     flexDirection: "row",

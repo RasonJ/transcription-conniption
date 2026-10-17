@@ -1,4 +1,5 @@
 import {
+  extractTextFromWordDocumentXml,
   isLegacyBinaryWordDoc,
   isTranscriptionDocumentFile,
   isWordTranscriptionFile,
@@ -49,5 +50,16 @@ describe("transcriptionFileText", () => {
     expect(classifyStudioUpload({ name: "a.hsms" })).toBe("text");
     expect(classifyStudioUpload({ name: "a.docx" })).toBe("text");
     expect(classifyStudioUpload({ name: "a.pdf" })).toBe("vision");
+  });
+
+  it("extracts paragraph text from Word document.xml", () => {
+    const xml = `<?xml version="1.0"?>
+      <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        <w:body>
+          <w:p><w:r><w:t>[fol. 1r]</w:t></w:r></w:p>
+          <w:p><w:r><w:t>{CB1.</w:t></w:r><w:r><w:t> hello</w:t></w:r></w:p>
+        </w:body>
+      </w:document>`;
+    expect(extractTextFromWordDocumentXml(xml)).toBe("[fol. 1r]\n{CB1. hello");
   });
 });

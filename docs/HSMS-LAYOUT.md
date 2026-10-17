@@ -132,7 +132,7 @@ Important behaviours:
 - **`ReadCB`** extracts column body text up to the closing `}`; nested mnemonics (`{RUB.}`, `{LAT.}`, `{ILL.}`, gloss tags) are pre-processed before HTML insertion.
 - **`{INn.}`** regex replaces the mnemonic with a sized, bold, capitalized span; depth `n` scales font size (legacy HTML uses ~`n × 16px`).
 - **Two-column `{CB2.}`** alternates `<td>` cells via `LastColumnNum` until both columns of a row pair are filled, then starts a new table row — the same **zip-at-equal-Y** idea the SVG renderer uses.
-- **Diacritics** are normalized through `[RegexReplaces]` in `settings.ini` (ported to `utils/generated/hsmsDiacriticMap.ts` by `scripts/generate-diacritic-map.mjs`).
+- **Diacritics** are normalized through `[RegexReplaces]` in `assets/legacy_hsms_settings.ini` (ported to `utils/generated/hsmsDiacriticMap.ts` by `scripts/generate-diacritic-map.mjs`).
 
 The parser does **not** re-wrap lines; each transcription line becomes one HTML table cell row (or one half of a two-column row).
 
@@ -183,7 +183,7 @@ Within each line, sticky rules tokenize (order matters for brackets):
 - Diacritic clusters `o~`, `a@'`, `c<r>on@~` → optional `token.normalized` Unicode
 - Figure anchors `{ILL.}`, `{MIN.}`, `{DIAG.}`, `{SYMB.}` with stable `figureId`
 
-**Diacritics:** `scripts/generate-diacritic-map.mjs` reads legacy `HSMSTools/HSMSParser/settings.ini` and emits `utils/generated/hsmsDiacriticMap.ts`. Regenerate with `npm run generate:hsms-assets`.
+**Diacritics:** `scripts/generate-diacritic-map.mjs` reads vendored `assets/legacy_hsms_settings.ini` (`[RegexReplaces]`) and emits `utils/generated/hsmsDiacriticMap.ts`. Regenerate with `npm run generate:hsms-assets`.
 
 **Dictionary index:** `scripts/generate-hsms-dictionary-index.mjs` builds `hsmsLemmaIndex.json` (surface→lemma) and `hsmsPosIndex.json` (surface→EAGLES-style POS) from `assets/dic/hsms.src`. Runtime: `lookupHsmsLemma` / `lookupHsmsPos` in `utils/hsmsDictionary.ts`. Not character mapping — see diacritic map above.
 

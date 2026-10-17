@@ -55,7 +55,7 @@ flowchart LR
 
 **Upload (unified):** One Studio **Upload** control (also drag-drop / paste on web). Routing via `classifyStudioUpload`:
 
-- **Transcription docs** (`.txt`, `.hsms`, Word `.docx`, pasted HSMS ASCII) → local extract + `applyTranscription` only (no Azure). `.hsms` JSON bundles yield the witness text; legacy binary `.doc` must be re-saved as `.docx` / `.txt`.
+- **Transcription docs** (`.txt`, `.hsms`, Word `.docx`, pasted HSMS ASCII) → local extract + `applyTranscription` only (no Azure). `.docx` text is pulled from OOXML via JSZip (`utils/transcriptionFileText.ts`); `.hsms` JSON bundles yield the witness text; legacy binary `.doc` must be re-saved as `.docx` / `.txt`.
 - **Image / PDF** → `useBatchTranscription` → `runHybridTranscriptionPipeline`. PDFs are sliced to upright PNG/JPEG on the client (`utils/pdfPageExtractor.web.ts`) so Azure never sees PDF bytes. **Pass 1** (`gpt-4o`) per leaf; clean folios stream via `onFolioComplete`; flagged leaves share one **batched Pass 2** (`runBatchPassTwoRepair` / `gpt-5.4-mini`). Progress: slicing → transcribing → repairing → merging.
 
 Manuscript Assistant can still attach an image and ask “transcribe this into HSMS”. Agent prompt: [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md). Requires hybrid Azure env for vision only (see [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md)). Cap: 25 pages. Expo Web recommended for PDF batches.
@@ -70,7 +70,8 @@ Best for: checking an OSTA file, Pedro Nunes regression corpus, a finished trans
    - **Import .hsms** — restores transcription + embedded base64 assets
    - **Upload & Convert** / samples — loads text into the active workspace
 3. Switch to **Transcription code** to edit HSMS source; **Parchment sheet** to preview layout.
-4. Fix validation issues, attach facsimiles, tune display toggles, export.
+4. The live **EditorLinterBanner** re-lints as you type. When there are **critical** structural errors and Azure is configured, tap **Fix with syntax agent** to run Pass 2 (`runPassTwoRepair` / `gpt-5.4-mini`) — orthography is left untouched; only braces / `{CB.}` envelopes are repaired. The repaired ASCII replaces the editor buffer and recompiles.
+5. Attach facsimiles, tune display toggles, export.
 
 Best for: authoring, correcting structure, attaching figure scans, batch-validating OSTA folders.
 
