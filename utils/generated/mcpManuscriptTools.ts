@@ -696,6 +696,29 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
     "category": "linguistics"
   },
   {
+    "name": "stats_term_frequency",
+    "description": "Word count. Exact surface-form count (accents folded) with a per-folio breakdown. Triggers: how many times is; how many times does; count occurrences of. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        },
+        "word": {
+          "type": "string",
+          "description": "Slot `word`"
+        }
+      },
+      "required": [
+        "word"
+      ]
+    },
+    "recipeId": "stats.term_frequency",
+    "tier": "A",
+    "category": "corpus"
+  },
+  {
     "name": "stats_ttr_hapax",
     "description": "TTR & hapax. Body-text word forms (accents folded): TTR, STTR over 1,000-token windows, hapax and dis legomena, per quire. Triggers: type token ratio and hapax legomena; lexical richness of this manuscript; ttr per quire. (Precompiled local recipe, no network.)",
     "inputSchema": {
@@ -1013,6 +1036,57 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
     "recipeId": "ml.aljamiado_density",
     "tier": "D",
     "category": "corpus"
+  },
+  {
+    "name": "meta_witness",
+    "description": "Witness metadata. Reads author, title, imprint, and holding library/shelfmark from parsed {RMK:} / catalog metadata. Triggers: what is the shelfmark for this manuscript; which library holds the physical copy; what year was this text printed or copied. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "meta.witness",
+    "tier": "A",
+    "category": "navigation"
+  },
+  {
+    "name": "codex_catchwords",
+    "description": "Catchwords. Lists every folio side that carries a {CW.} catchword at the foot. Triggers: locate all catchwords at the foot of pages; list catchwords in this witness; show every catchword. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "codex.catchwords",
+    "tier": "A",
+    "category": "paleography"
+  },
+  {
+    "name": "ui_control",
+    "description": "UI control. Maps display/export requests to local toolbar and export controls (no network). Triggers: toggle modern orthography for this page; show line numbers in the gutter; hide marginal notes and glosses. (Precompiled local recipe, no network.)",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Optional free-text query passed to on-demand recipes."
+        }
+      },
+      "required": []
+    },
+    "recipeId": "ui.control",
+    "tier": "A",
+    "category": "navigation"
   },
   {
     "name": "search_kwic",

@@ -1,0 +1,148 @@
+{
+  "backend": "hash",
+  "domain": "hsms_scriptorium",
+  "corpus_hash": "dc021cea0df403eb",
+  "eval_report": "reports/eval_coverage.json",
+  "gates_green": true,
+  "generated_at": "2026-10-19T16:04:28.591Z",
+  "defaults": {
+    "min_support": 8,
+    "min_precision": 0.8,
+    "fallback_threshold": 0.7
+  },
+  "intents": {
+    "edit:folio:navigate": {
+      "current": 0.95,
+      "calibrated": 0.92,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 120
+    },
+    "analyze:stats:term_frequency": {
+      "current": 0.9,
+      "calibrated": 0.85,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 64
+    },
+    "analyze:concordance:kwic": {
+      "current": 0.88,
+      "calibrated": 0.86,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 58
+    },
+    "codex:catchwords:list": {
+      "current": 0.9,
+      "calibrated": 0.87,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 40
+    },
+    "paleography:corr:scribal_vs_editorial": {
+      "current": 0.88,
+      "calibrated": 0.85,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 45
+    },
+    "paleography:illum:initials": {
+      "current": 0.86,
+      "calibrated": 0.84,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 38
+    },
+    "paleography:abbr:nasal_tilde": {
+      "current": 0.84,
+      "calibrated": 0.82,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 28
+    },
+    "meta:witness:shelfmark": {
+      "current": 0.9,
+      "calibrated": 0.88,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 32
+    },
+    "edit:display:toggle_orthography": {
+      "current": 0.92,
+      "calibrated": 0.9,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 50
+    },
+    "analyze:controversy:explain": {
+      "current": 0.92,
+      "calibrated": 0.9,
+      "promoted": true,
+      "reason": "precompiled_graph_chain",
+      "support": 24
+    },
+    "validate:barrier:repair_flow": {
+      "current": 0.93,
+      "calibrated": 0.91,
+      "promoted": true,
+      "reason": "precompiled_graph_chain",
+      "support": 30
+    },
+    "learn:prerequisite:pathway": {
+      "current": 0.9,
+      "calibrated": 0.88,
+      "promoted": true,
+      "reason": "precompiled_graph_chain",
+      "support": 20
+    },
+    "validate:lint:run_preflight": {
+      "current": 0.78,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "insufficient_support_or_precision",
+      "support": 6
+    },
+    "validate:barrier:inspect": {
+      "current": 0.72,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "insufficient_support_or_precision",
+      "support": 4
+    },
+    "export:tei:download": {
+      "current": 0.8,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "high_impact_requires_barrier_clearance",
+      "support": 12
+    },
+    "export:svg:download": {
+      "current": 0.8,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "high_impact_requires_barrier_clearance",
+      "support": 10
+    },
+    "edit:pass_two:repair": {
+      "current": 0.75,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "insufficient_support_or_precision",
+      "support": 5
+    },
+    "ingest:sidecar:review_progress": {
+      "current": 0.85,
+      "calibrated": 0.83,
+      "promoted": true,
+      "reason": "sufficient_precision",
+      "support": 22
+    },
+    "library:corpus:search": {
+      "current": 0.7,
+      "calibrated": null,
+      "promoted": false,
+      "reason": "insufficient_support_or_precision",
+      "support": 3
+    }
+  }
+}

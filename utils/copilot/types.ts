@@ -142,6 +142,8 @@ export interface CopilotAnswer {
    */
   body?: string;
   breakdown?: BreakdownEntry[];
+  /** Primary numeric answer (word counts, hit totals). */
+  count?: number;
   rows: EvidenceRow[];
   method: string;
   /** Parameters actually used (slots), for the method line and exports. */
@@ -157,4 +159,29 @@ export interface CopilotAnswer {
   slotPrompt?: string;
   /** The fallback answered because no recipe matched confidently. */
   lowConfidence?: boolean;
+  /**
+   * Executable follow-ups bound to the taxonomy intent (dental-RCM doActions adapted).
+   * UI chips invoke these without another LLM turn.
+   */
+  doActions?: string[];
+  /** Taxonomy id `domain:entity:action` when one maps to this recipe. */
+  taxonomyId?: string;
+  /** Jargon / multilingual aliases applied before routing. */
+  jargonApplied?: Array<{ from: string; to: string }>;
+  /**
+   * Calibrated threshold gate refused auto-dispatch of doActions
+   * (unpromoted intent or score below calibrated cutoff).
+   */
+  dispatchBlocked?: {
+    reason: string;
+    detail: string;
+    threshold: number;
+  };
+  /** Tier-1 precompiled graph chain (zero GDB multi-hop at runtime). */
+  precompiledChain?: {
+    intentId: string;
+    patternId?: string;
+    steps: Array<{ step: number; action: string; detail: string; ok: boolean }>;
+    mcp_tool?: string;
+  };
 }

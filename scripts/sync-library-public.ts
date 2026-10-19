@@ -28,9 +28,19 @@ const catalogSrc = path.join(outputDir, "library-catalog.json");
 const catalogDest = path.join(publicDir, "library-catalog.json");
 const assetsCatalogDest = path.join(projectRoot, "assets", "library", "catalog.json");
 
-function copyFile(src: string, dest: string) {
+/** Write via temp + rename so Expo web reloads never observe a half-written asset. */
+function atomicWriteFile(dest: string, contents: string | Buffer): void {
   fs.mkdirSync(path.dirname(dest), { recursive: true });
-  fs.copyFileSync(src, dest);
+  const tmp = `${dest}.tmp.${process.pid}.${Date.now()}`;
+  fs.writeFileSync(tmp, contents);
+  fs.renameSync(tmp, dest);
+}
+
+function atomicCopyFile(src: string, dest: string): void {
+  fs.mkdirSync(path.dirname(dest), { recursive: true });
+  const tmp = `${dest}.tmp.${process.pid}.${Date.now()}`;
+  fs.copyFileSync(src, tmp);
+  fs.renameSync(tmp, dest);
 }
 
 if (!fs.existsSync(catalogSrc)) {
@@ -45,8 +55,17 @@ if (catalog.format !== LIBRARY_CATALOG_FORMAT) {
 }
 
 fs.mkdirSync(entriesDir, { recursive: true });
-copyFile(catalogSrc, catalogDest);
-copyFile(catalogSrc, assetsCatalogDest);
+atomicCopyFile(catalogSrc, catalogDest);
+atomicCopyFile(catalogSrc, assetsCatalogDest);
+
+// Guard: refuse to leave a truncated catalog in public/ after a bad read.
+{
+  const verify = JSON.parse(fs.readFileSync(catalogDest, "utf8")) as LibraryCatalog;
+  if (verify.format !== LIBRARY_CATALOG_FORMAT || verify.entryCount !== catalog.entryCount) {
+    console.error("Catalog verification failed after atomic sync; aborting.");
+    process.exit(1);
+  }
+}
 
 const corpusArtifacts = [
   "corpus-tfidf.json",
@@ -63,8 +82,8 @@ let corpusSynced = 0;
 for (const name of corpusArtifacts) {
   const src = path.join(outputDir, name);
   if (!fs.existsSync(src)) continue;
-  copyFile(src, path.join(publicDir, name));
-  copyFile(src, path.join(projectRoot, "assets", "library", name));
+  atomicCopyFile(src, path.join(publicDir, name));
+  atomicCopyFile(src, path.join(projectRoot, "assets", "library", name));
   corpusSynced++;
 }
 
@@ -80,7 +99,7 @@ for (const entry of catalog.entries) {
   const sidecarPath = path.join(outputDir, `${entry.baseName}.library.json`);
 
   if (fs.existsSync(sidecarPath)) {
-    copyFile(sidecarPath, destPath);
+    atomicCopyFile(sidecarPath, destPath);
     synced++;
   } else {
     const nativePath = path.join(outputDir, `${entry.baseName}.native.ts`);
@@ -94,15 +113,15 @@ for (const entry of catalog.entries) {
         ...entry,
         transcriptionText,
       };
-      fs.writeFileSync(destPath, JSON.stringify(payload), "utf8");
+      atomicWriteFile(destPath, JSON.stringify(payload));
       synced++;
     }
   }
 
   const facetsSrc = path.join(outputDir, `${entry.baseName}.facets.json`);
   if (fs.existsSync(facetsSrc)) {
-    copyFile(facetsSrc, path.join(facetsDir, `${entry.baseName}.json`));
-    copyFile(facetsSrc, path.join(assetsFacetsDir, `${entry.baseName}.json`));
+    atomicCopyFile(facetsSrc, path.join(facetsDir, `${entry.baseName}.json`));
+    atomicCopyFile(facetsSrc, path.join(assetsFacetsDir, `${entry.baseName}.json`));
     facetsSynced++;
   }
 }

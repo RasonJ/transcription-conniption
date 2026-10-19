@@ -73,14 +73,24 @@ export function FigurePlaceholder({ token }: Props) {
         </View>
         <View style={styles.canvasControlOverlay}>
           <Pressable
-            onPress={() => triggerImagePick(figureId)}
+            onPress={() => {
+              void triggerImagePick(figureId).catch((err) => console.warn("Replace figure failed", err));
+            }}
             style={({ pressed }) => [styles.controlBadge, pressed && styles.controlPressed]}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.replace")}
+            hitSlop={8}
           >
             <Text style={styles.controlBadgeText}>{t("common.replace")}</Text>
           </Pressable>
           <Pressable
-            onPress={() => removeImage(figureId)}
+            onPress={() => {
+              void removeImage(figureId).catch((err) => console.warn("Remove figure failed", err));
+            }}
             style={({ pressed }) => [styles.controlBadge, styles.dangerBadge, pressed && styles.controlPressed]}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.remove")}
+            hitSlop={8}
           >
             <Trash2 color="#fff4d2" size={12} />
             <Text style={styles.controlBadgeText}>{t("common.remove")}</Text>

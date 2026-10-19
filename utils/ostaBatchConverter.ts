@@ -84,9 +84,16 @@ export interface OstaBatchConvertOptions {
   limit?: number;
   /** Re-convert even when the source SHA-256 matches prior outputs. */
   force?: boolean;
+  /**
+   * Process this many files before an optional GC hint (default 100).
+   * Helps large corpora (2,500+) avoid V8 heap pressure.
+   */
+  chunkSize?: number;
   onProgress?: (fileName: string, index: number, total: number) => void;
   /** Called when an unchanged source hash skips re-parse/export. */
   onSkip?: (fileName: string, index: number, total: number) => void;
+  /** Called at the end of each chunk (after optional GC). */
+  onChunk?: (chunkIndex: number, processedInChunk: number, elapsedMs: number) => void;
 }
 
 export interface OstaBatchConvertOutput {
@@ -547,6 +554,32 @@ export function runOstaBatchConvertWithFs(
   const catalogEntries: LibraryCatalogEntry[] = [];
 
   const exportedAt = new Date().toISOString();
+  const chunkSize =
+    typeof options.chunkSize === "number" && options.chunkSize > 0 ? options.chunkSize : 100;
+  let chunkStarted = Date.now();
+  let chunkIndex = 0;
+
+  const maybeFinishChunk = (i: number) => {
+    const processed = i + 1;
+    if (processed % chunkSize !== 0 && processed !== targetFiles.length) return;
+    const elapsedMs = Date.now() - chunkStarted;
+    chunkIndex++;
+    // Drop heavy per-issue payloads from older results once logs are on disk.
+    const clearThrough = Math.max(0, fileResults.length - chunkSize);
+    for (let j = 0; j < clearThrough; j++) {
+      if (fileResults[j].issues.length > 0) fileResults[j].issues = [];
+    }
+    const gc = (globalThis as { gc?: () => void }).gc;
+    if (typeof gc === "function") {
+      try {
+        gc();
+      } catch {
+        // --expose-gc optional
+      }
+    }
+    options.onChunk?.(chunkIndex, Math.min(chunkSize, processed - (chunkIndex - 1) * chunkSize), elapsedMs);
+    chunkStarted = Date.now();
+  };
 
   for (let i = 0; i < targetFiles.length; i++) {
     const discovered = targetFiles[i];
@@ -639,6 +672,7 @@ export function runOstaBatchConvertWithFs(
           issuesLog: logPath,
         },
       });
+      maybeFinishChunk(i);
       continue;
     }
 
@@ -714,6 +748,7 @@ export function runOstaBatchConvertWithFs(
         issuesLog: logPath,
       },
     });
+    maybeFinishChunk(i);
   }
 
   const catalog = buildLibraryCatalog(catalogEntries, options.outputDir);

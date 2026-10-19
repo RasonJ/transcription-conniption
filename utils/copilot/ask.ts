@@ -10,8 +10,16 @@ import { buildFacetIndex, type FacetIndex } from "./facetIndex";
 import { runCached } from "./precompute";
 import { routeQuery, type RouterIndex } from "./router";
 import { canServeEagerFromPrecompiled, runEagerFromPrecompiled } from "./sidecarRecipes";
+import { decideAutoDispatch } from "./calibratedThresholds";
+import { canonicalizeJargon } from "./jargonLexicon";
+import { doActionsForRecipe, taxonomyIntentIdForRecipe } from "./lifecycle";
+import {
+  executePrecompiledChain,
+  matchPrecompiledIntent,
+} from "./precompiledChains";
 import { extractSlots, missingSlots } from "./slots";
 import type { CopilotAnswer, Recipe, RecipeContext, RecipeParams, RecipeResult, RegistryWitness } from "./types";
+import type { ReasoningGraphDoc } from "../reasoningGraph/types";
 
 export interface AskOptions {
   facets?: FacetIndex;
@@ -29,6 +37,8 @@ export interface AskOptions {
   registry?: RegistryWitness[];
   /** Ingest sidecar for machine-transcribed witnesses. */
   sidecar?: HsmsFacsSidecar;
+  /** Optional reasoning graph for bound precompiled-chain execution. */
+  reasoningGraph?: ReasoningGraphDoc;
 }
 
 const FALLBACK_ID = "search.passages";
@@ -60,6 +70,14 @@ function toAnswer(
     } else usedParams[k] = v as string | number;
   }
   const hasParams = Object.keys(usedParams).length > 0;
+  const taxonomyId = taxonomyIntentIdForRecipe(recipe.id);
+  const score = typeof extra?.confidence === "number" ? extra.confidence : 1;
+  const gate = decideAutoDispatch(recipe.id, score);
+  const rawActions = doActionsForRecipe(recipe.id);
+  const doActions = gate.allow ? rawActions : [];
+  const dispatchBlocked = gate.allow
+    ? undefined
+    : { reason: gate.reason, detail: gate.detail, threshold: gate.threshold };
   return {
     recipeId: recipe.id,
     recipeVersion: recipe.version,
@@ -69,13 +87,18 @@ function toAnswer(
     messageKey: result.messageKey,
     needsServer: result.needsServer,
     breakdown: result.breakdown,
+    count: result.count,
     rows: result.rows,
     method: recipe.method,
     dsl: hasParams || !recipe.dsl ? formatRecipeExpression(recipe.id, explicitParams(used)) : recipe.dsl,
     usedParams: hasParams ? usedParams : undefined,
     elapsedMs: now() - t0,
     navigate: result.navigate,
+    taxonomyId,
     ...extra,
+    // Gate wins over caller extras so unpromoted intents cannot force doActions.
+    doActions: doActions.length ? doActions : undefined,
+    dispatchBlocked,
   };
 }
 
@@ -153,8 +176,8 @@ export function runRecipeById(
  */
 export function askCopilot(query: string, parsed: ParsedManuscript, options: AskOptions = {}): CopilotAnswer {
   const t0 = now();
-  const q = query.trim();
-  if (!q) {
+  const raw = query.trim();
+  if (!raw) {
     return {
       recipeId: "none",
       recipeVersion: 0,
@@ -164,6 +187,59 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
       rows: [],
       method: "",
       elapsedMs: 0,
+    };
+  }
+
+  // Tier-0 jargon / multilingual alias pre-pass (Spanglish lexicon adapted).
+  const jargon = canonicalizeJargon(raw);
+  const q = jargon.canonical;
+  const jargonExtra: Partial<CopilotAnswer> =
+    jargon.replacements.length > 0 ? { jargonApplied: jargon.replacements } : {};
+
+  // Tier-1 precompiled graph chains (offline subgraph → flat recipe; <1ms).
+  const chainHit = matchPrecompiledIntent(q);
+  if (chainHit && chainHit.score >= 0.9) {
+    const exec = executePrecompiledChain(
+      chainHit.chain,
+      chainHit.slots,
+      options.reasoningGraph,
+    );
+    const gate = decideAutoDispatch(chainHit.chain.recipeId, chainHit.score);
+    const doActions = gate.allow ? exec.doActions : [];
+    return {
+      recipeId: chainHit.chain.recipeId,
+      recipeVersion: 1,
+      tier: "A",
+      headline: exec.headline,
+      rows: exec.steps.map((s) => ({
+        folioId: exec.navigate?.folioId ?? "",
+        label: `step ${s.step}: ${s.action}`,
+        detail: s.detail,
+      })),
+      count: exec.steps.length,
+      method:
+        "Precompiled intent chain from reasoning-graph subgraph (no runtime multi-hop GDB traversal).",
+      elapsedMs: now() - t0,
+      confidence: chainHit.score,
+      taxonomyId: chainHit.chain.intentId,
+      navigate: exec.navigate,
+      usedParams: Object.keys(chainHit.slots).length ? chainHit.slots : undefined,
+      doActions: doActions.length ? doActions : undefined,
+      dispatchBlocked: gate.allow
+        ? undefined
+        : { reason: gate.reason, detail: gate.detail, threshold: gate.threshold },
+      precompiledChain: {
+        intentId: exec.intentId,
+        patternId: chainHit.chain.pattern_id,
+        steps: exec.steps.map((s) => ({
+          step: s.step,
+          action: s.action,
+          detail: s.detail,
+          ok: s.ok,
+        })),
+        mcp_tool: exec.mcp_tool,
+      },
+      ...jargonExtra,
     };
   }
 
@@ -181,6 +257,7 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
       method: "Evaluated a query expression directly over the parsed token stream.",
       dsl: formatDsl(dsl),
       elapsedMs: now() - t0,
+      ...jargonExtra,
     };
   }
 
@@ -189,7 +266,7 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
     const recipe = getRecipe(expression.recipeId);
     if (recipe) {
       const result = runRecipe(recipe, parsed, options, expression.params);
-      return toAnswer(recipe, result, t0, { confidence: 1 }, expression.params);
+      return toAnswer(recipe, result, t0, { confidence: 1, ...jargonExtra }, expression.params);
     }
   }
 
@@ -203,6 +280,7 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
       return toAnswer(recipe, result, t0, {
         navigate: result.navigate ?? route.folioJump,
         confidence: 1,
+        ...jargonExtra,
       });
     }
   }
@@ -217,7 +295,7 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
         recipe,
         result,
         t0,
-        { confidence: route.top.score, slotPrompt: missing[0] },
+        { confidence: route.top.score, slotPrompt: missing[0], ...jargonExtra },
         params,
       );
     }
@@ -242,6 +320,7 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
       method: "",
       elapsedMs: now() - t0,
       alternatives,
+      ...jargonExtra,
     };
   }
   const result = fallback.run(contextFor(parsed, options, resolveLiveFacets(parsed, options)), { query: q });
@@ -250,5 +329,6 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
     confidence: route.kind === "recipe" ? route.bestScore : undefined,
     headline: `No confident recipe match. ${result.headline}`,
     lowConfidence: true,
+    ...jargonExtra,
   });
 }

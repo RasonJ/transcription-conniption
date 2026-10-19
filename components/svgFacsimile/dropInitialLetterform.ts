@@ -1,5 +1,7 @@
 /** Deterministic illuminated drop-cap letterform generator (seeded PRNG). */
 
+import { mufiSerifStack } from "@/utils/mufiFonts";
+
 export type LetterformMatrix =
   | "romanesque"
   | "gothic_textura"
@@ -80,48 +82,49 @@ export const ILLUMINATED_THEMES: LetterformTheme[] = [
   { field: "#e8dcc0", inner: "#d4c490", letter: "#2d1800",   gold: "#6a3808" },    // 14 vellum + sepia
 ];
 
+/** Andron Scriptor (MUFI font 53) led stacks — https://mufi.info/q.php?p=mufi/fonts/fonts/53 */
 const MATRIX_FONTS: Record<LetterformMatrix, string[]> = {
   romanesque: [
-    "'Palatino Linotype', Palatino, 'Book Antiqua', Georgia, serif",
-    "Georgia, 'Times New Roman', serif",
-    "Garamond, Baskerville, Georgia, serif",
-    "'Didot', 'Bodoni MT', Georgia, serif",
-    "Baskerville, Georgia, serif",
+    mufiSerifStack(["Palatino Linotype", "Palatino", "Book Antiqua"]),
+    mufiSerifStack([]),
+    mufiSerifStack(["Garamond", "Baskerville"]),
+    mufiSerifStack(["Didot", "Bodoni MT"]),
+    mufiSerifStack(["Baskerville"]),
   ],
   gothic_textura: [
-    "'Times New Roman', Georgia, serif",
+    mufiSerifStack(["Times New Roman"]),
     "'Courier New', Courier, monospace",
-    "Georgia, 'Times New Roman', serif",
-    "Impact, 'Arial Black', sans-serif",
-    "Baskerville, Georgia, serif",
+    mufiSerifStack([]),
+    mufiSerifStack(["Impact", "Arial Black"]),
+    mufiSerifStack(["Baskerville"]),
   ],
   lombardic: [
-    "Georgia, 'Times New Roman', serif",
-    "'Palatino Linotype', Palatino, Georgia, serif",
-    "'Bookman Old Style', Bookman, Georgia, serif",
-    "Baskerville, Georgia, serif",
-    "'Book Antiqua', Palatino, Georgia, serif",
+    mufiSerifStack([]),
+    mufiSerifStack(["Palatino Linotype", "Palatino"]),
+    mufiSerifStack(["Bookman Old Style", "Bookman"]),
+    mufiSerifStack(["Baskerville"]),
+    mufiSerifStack(["Book Antiqua", "Palatino"]),
   ],
   renaissance_foliated: [
-    "'Palatino Linotype', Palatino, Georgia, serif",
-    "Garamond, Georgia, serif",
-    "Georgia, 'Times New Roman', serif",
-    "Baskerville, Georgia, serif",
-    "'Times New Roman', Georgia, serif",
+    mufiSerifStack(["Palatino Linotype", "Palatino"]),
+    mufiSerifStack(["Garamond"]),
+    mufiSerifStack([]),
+    mufiSerifStack(["Baskerville"]),
+    mufiSerifStack(["Times New Roman"]),
   ],
   pen_flourish: [
-    "'Times New Roman', Georgia, serif",
-    "Georgia, serif",
-    "'Palatino Linotype', Palatino, Georgia, serif",
-    "Baskerville, Georgia, serif",
-    "Garamond, Georgia, serif",
+    mufiSerifStack(["Times New Roman"]),
+    mufiSerifStack([]),
+    mufiSerifStack(["Palatino Linotype", "Palatino"]),
+    mufiSerifStack(["Baskerville"]),
+    mufiSerifStack(["Garamond"]),
   ],
   diaper_ground: [
-    "'Palatino Linotype', Palatino, Georgia, serif",
-    "Garamond, Georgia, serif",
-    "Baskerville, Georgia, serif",
-    "Georgia, serif",
-    "'Times New Roman', Georgia, serif",
+    mufiSerifStack(["Palatino Linotype", "Palatino"]),
+    mufiSerifStack(["Garamond"]),
+    mufiSerifStack(["Baskerville"]),
+    mufiSerifStack([]),
+    mufiSerifStack(["Times New Roman"]),
   ],
 };
 

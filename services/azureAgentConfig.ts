@@ -34,8 +34,30 @@ const DEFAULT_SYNTAX_DEPLOYMENT = "gpt-5.4-mini";
 const DEFAULT_VISION_AGENT = "hsms-agent-q0rwhx433x-gpt-4o";
 const DEFAULT_SYNTAX_AGENT = "hsms-agent-607kfp6kw1-gpt5-mini";
 
-function env(name: string): string {
-  return (process.env[name] ?? "").trim();
+/**
+ * Literal `process.env.EXPO_PUBLIC_*` reads only — Metro inlines these at export time.
+ * Dynamic `process.env[name]` stays empty in the browser and breaks static deploys.
+ */
+const PUBLIC_ENV = {
+  EXPO_PUBLIC_AZURE_PROJECT_ENDPOINT: process.env.EXPO_PUBLIC_AZURE_PROJECT_ENDPOINT,
+  EXPO_PUBLIC_AZURE_AGENT_ENDPOINT: process.env.EXPO_PUBLIC_AZURE_AGENT_ENDPOINT,
+  EXPO_PUBLIC_AZURE_OPENAI_ENDPOINT: process.env.EXPO_PUBLIC_AZURE_OPENAI_ENDPOINT,
+  EXPO_PUBLIC_AZURE_DEPLOYMENT_VISION: process.env.EXPO_PUBLIC_AZURE_DEPLOYMENT_VISION,
+  EXPO_PUBLIC_AZURE_MODEL_VISION: process.env.EXPO_PUBLIC_AZURE_MODEL_VISION,
+  EXPO_PUBLIC_AZURE_DEPLOYMENT_SYNTAX: process.env.EXPO_PUBLIC_AZURE_DEPLOYMENT_SYNTAX,
+  EXPO_PUBLIC_AZURE_MODEL_SYNTAX: process.env.EXPO_PUBLIC_AZURE_MODEL_SYNTAX,
+  EXPO_PUBLIC_AZURE_AGENT_VISION: process.env.EXPO_PUBLIC_AZURE_AGENT_VISION,
+  EXPO_PUBLIC_AZURE_AGENT_1: process.env.EXPO_PUBLIC_AZURE_AGENT_1,
+  EXPO_PUBLIC_AZURE_AGENT_SYNTAX: process.env.EXPO_PUBLIC_AZURE_AGENT_SYNTAX,
+  EXPO_PUBLIC_AZURE_AGENT_2: process.env.EXPO_PUBLIC_AZURE_AGENT_2,
+  EXPO_PUBLIC_AZURE_AGENT_API_KEY: process.env.EXPO_PUBLIC_AZURE_AGENT_API_KEY,
+  EXPO_PUBLIC_AZURE_OPENAI_API_KEY: process.env.EXPO_PUBLIC_AZURE_OPENAI_API_KEY,
+  EXPO_PUBLIC_AZURE_DEMO_MODE: process.env.EXPO_PUBLIC_AZURE_DEMO_MODE,
+  EXPO_PUBLIC_AZURE_TRANSPORT: process.env.EXPO_PUBLIC_AZURE_TRANSPORT,
+} as const;
+
+function env(name: keyof typeof PUBLIC_ENV): string {
+  return (PUBLIC_ENV[name] ?? "").trim();
 }
 
 /** Project root (Agents UI / A2A). */

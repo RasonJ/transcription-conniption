@@ -1,5 +1,5 @@
 /**
- * Pass 2 — HSMS structural syntax repair (Agent 2 / gpt-5-mini Foundry agent).
+ * Pass 2 — HSMS structural syntax repair (Agent 2 / gpt-5.4-mini Foundry agent).
  *
  * Called only when local ingest/lint finds critical errors after Pass 1 vision.
  * Does not modernize orthography.
@@ -25,8 +25,6 @@ export function formatDiagnosticsForRepair(errors: ValidationError[]): string[] 
 
 /**
  * Agent 2: Fix structural syntax errors flagged by local hsmsLinter / prooferIncidents.
- * Query shape matches the Studio pipeline sketch:
- *   Fix errors:\n{messages}\n\n{rawHsms}
  */
 export async function runPassTwoRepair(
   rawHsmsText: string,
@@ -42,6 +40,7 @@ export async function runPassTwoRepair(
     query:
       `Fix errors:\n${errorMessages.join("\n")}\n\n${rawHsmsText}\n\n` +
       `Repair ONLY structural markup (braces {}, {CB.} envelopes, EMPTY_COLUMN_ENVELOPE, TEXT_OUTSIDE_COLUMN). ` +
+      `Ensure {INn.} is correctly attached to the first word (e.g. {IN4.} Dzbo bem auenturado). ` +
       `Do NOT alter or modernize 16th-century spelling. Output ONLY repaired HSMS ASCII text.`,
     screen: "Studio",
     persona: "linter_corrector",
@@ -114,7 +113,8 @@ ${pageSections.join("\n\n")}
 2. Maintain the === PAGE N [fol. X] === section wrappers around each page so outputs can be split cleanly.
 3. DO NOT alter, modernize, or rephrase any transcribed 16th-century words or spelling.
 4. Keep all text strictly inside column envelopes ({CB1. ...} or {CB2. ...}).
-5. Output ONLY the repaired HSMS ASCII sections without Markdown code blocks or preambles.`;
+5. Ensure {INn.} is correctly attached to the first word (e.g. {IN4.} Dzbo bem auenturado).
+6. Output ONLY the repaired HSMS ASCII sections without Markdown code blocks or preambles.`;
 
   const repairResult = await chatWithAzureAgent({
     query: batchPrompt,

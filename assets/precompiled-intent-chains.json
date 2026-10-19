@@ -1,0 +1,144 @@
+{
+  "version": 1,
+  "domain": "hsms_scriptorium",
+  "description": "Offline-precompiled intent chains derived from reasoning-graph subgraphs. Tier-1 deterministic match (<1ms).",
+  "generated_at": "2026-10-19T17:06:00.462Z",
+  "dag_hash": "3c13e28e455311dfc61a4d43af3db8391e9b21fff91b8906228872f0c38167e3",
+  "chains": [
+    {
+      "intentId": "analyze:controversy:explain",
+      "recipeId": "discourse.explain_controversy",
+      "stage": "ANALYZE",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_DISCOURSE_VIEW",
+        "HIGHLIGHT_REFUTATION_NODE"
+      ],
+      "mcp_tool": "query_codicological_graph",
+      "slots": [
+        "topic"
+      ],
+      "examples": [
+        "is there a debate about {topic|What are catchwords in a manuscript?}",
+        "why do studies conflict on {topic|catchwords}",
+        "show contesting papers for {topic|scribal hands}"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "FETCH_FAQ_ANSWER",
+          "node_type": "AnswerSnippet",
+          "bound_node_id": "ANS:catchwords"
+        },
+        {
+          "step": 2,
+          "action": "GET_PRIMARY_MANUSCRIPT",
+          "node_type": "Manuscript",
+          "bound_node_id": "MANUSCRIPT:demo-a"
+        },
+        {
+          "step": 3,
+          "action": "TRAVERSE_REFUTATIONS",
+          "relation": "refuted",
+          "target_type": "Manuscript",
+          "bound_node_id": "MANUSCRIPT:demo-b"
+        },
+        {
+          "step": 4,
+          "action": "SURFACE_CONTRADICTION_CHIP",
+          "ui_target": "discourse_panel"
+        }
+      ],
+      "pattern_id": "faq_answered_by_refuted",
+      "source_graph_hash": "3c13e28e455311dfc61a4d43af3db8391e9b21fff91b8906228872f0c38167e3"
+    },
+    {
+      "intentId": "validate:barrier:repair_flow",
+      "recipeId": "diag.audit_hsms_syntax",
+      "stage": "VALIDATE",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_VALIDATION",
+        "RUN_LINT",
+        "PASS_TWO_REPAIR",
+        "JUMP_FOLIO"
+      ],
+      "mcp_tool": "audit_hsms_syntax",
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "why is folio {folio_id|3v} blocked from export",
+        "fix validation errors on {folio_id|3v}",
+        "clear export barriers for {folio_id|3v}"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "INSPECT_BARRIER",
+          "node_type": "AdministrativeBarrierNode",
+          "bound_node_id": "BARRIER:EMPTY_COLUMN_ENVELOPE"
+        },
+        {
+          "step": 2,
+          "action": "JUMP_TO_FOLIO",
+          "slot": "folio_id"
+        },
+        {
+          "step": 3,
+          "action": "DISPATCH_MCP_REPAIR",
+          "mcp_tool": "pass_two_repair_folio"
+        },
+        {
+          "step": 4,
+          "action": "CLEAR_BARRIER",
+          "doAction": "PASS_TWO_REPAIR",
+          "bound_node_id": "MANUSCRIPT:demo-a"
+        }
+      ],
+      "pattern_id": "manuscript_stalled_by_barrier",
+      "source_graph_hash": "3c13e28e455311dfc61a4d43af3db8391e9b21fff91b8906228872f0c38167e3"
+    },
+    {
+      "intentId": "learn:prerequisite:pathway",
+      "recipeId": "learn.prerequisite_pathway",
+      "stage": "LIBRARY",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_LEARNING_PATH",
+        "HIGHLIGHT_CONCEPT"
+      ],
+      "slots": [
+        "concept"
+      ],
+      "examples": [
+        "what should I read before studying {concept|catchwords}",
+        "prerequisites for understanding {concept|catchwords}",
+        "explain {concept|catchwords} in plain terms"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_CONCEPT_NODE",
+          "node_type": "Concept",
+          "bound_node_id": "CONCEPT:catchwords"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_PREREQUISITES",
+          "relation": "prerequisite_for",
+          "direction": "INCOMING",
+          "bound_node_id": "CONCEPT:paleography"
+        },
+        {
+          "step": 3,
+          "action": "FETCH_LAY_EXPLANATION",
+          "node_type": "LayExplanation",
+          "bound_node_id": "LAY:catchwords"
+        }
+      ],
+      "pattern_id": "concept_prerequisite_pathway",
+      "source_graph_hash": "3c13e28e455311dfc61a4d43af3db8391e9b21fff91b8906228872f0c38167e3"
+    }
+  ]
+}

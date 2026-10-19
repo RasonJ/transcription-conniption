@@ -29,11 +29,40 @@ function load(name: string): Record<string, unknown> {
   return JSON.parse(raw) as Record<string, unknown>;
 }
 
-function placeholders(message: string): string[] {
+/**
+ * Collect ICU / MessageFormat argument names.
+ * Walks `{name}` and `{name, plural|select, …}` forms; ignores `#` and bare
+ * branch-body braces so regional catalogs (es-MX, pt-BR) validate cleanly.
+ */
+export function placeholders(message: string): string[] {
   const names = new Set<string>();
-  // An argument is `{name}` or `{name, plural|select, …}`; plural branch bodies like
-  // `{Errore #}` are text, not arguments.
-  for (const match of message.matchAll(/\{\s*([A-Za-z_][\w:]*)\s*(?=[,}])/g)) names.add(match[1]);
+  let i = 0;
+  while (i < message.length) {
+    if (message[i] !== "{") {
+      i++;
+      continue;
+    }
+    let j = i + 1;
+    while (j < message.length && /\s/.test(message[j])) j++;
+    // Bare `#` inside plural branches is not an argument.
+    if (message[j] === "#") {
+      i = j + 1;
+      continue;
+    }
+    const start = j;
+    if (!/[A-Za-z_]/.test(message[j] ?? "")) {
+      i++;
+      continue;
+    }
+    j++;
+    while (j < message.length && /[\w:]/.test(message[j])) j++;
+    const name = message.slice(start, j);
+    while (j < message.length && /\s/.test(message[j])) j++;
+    const next = message[j];
+    // `{name}` or `{name, plural|select|number, …}`
+    if (next === "}" || next === ",") names.add(name);
+    i = j;
+  }
   return [...names].sort();
 }
 

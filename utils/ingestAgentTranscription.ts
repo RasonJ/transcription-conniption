@@ -29,6 +29,69 @@ export type IngestAgentTranscriptionResult = {
   issues: ValidationError[];
 };
 
+/** Vision models are instructed to terminate with this sentinel. */
+export const END_FOLIO_SENTINEL = "=== END FOLIO ===";
+
+/**
+ * Compare HSMS body lines by content, ignoring leading line numbers (`14 text` → `text`).
+ */
+function lineContentKey(line: string): string {
+  return line
+    .replace(/^\s*\d+\s+/, "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+/**
+ * Cut runaway vision completions: END FOLIO sentinel, fence strip, consecutive
+ * duplicate-line prune (line-number–aware), and close a truncated `{CB1.` brace.
+ */
+export function sanitizeVisionOutput(rawOutput: string): string {
+  if (!rawOutput) return "";
+
+  // 1. Cut off output at the end sentinel if present
+  let cleaned = rawOutput.split(/===\s*END FOLIO\s*===/i)[0].trim();
+
+  // 2. Strip Markdown code fences if the model emitted them
+  cleaned = cleaned
+    .replace(/^```(?:hsms|text|txt)?\s*\n?/i, "")
+    .replace(/\n?```\s*$/i, "")
+    .trim();
+
+  // 3. Repetition trap: prune consecutive duplicate *content* lines
+  //    (HSMS line numbers differ while the model loops on the same phrase).
+  const lines = cleaned.split("\n");
+  const sanitizedLines: string[] = [];
+  let consecutiveDuplicates = 0;
+  let lastKey = "";
+
+  for (const line of lines) {
+    const key = lineContentKey(line);
+    if (key.length > 0 && key === lastKey) {
+      consecutiveDuplicates++;
+      // Keep at most two identical content lines; drop further repetitions.
+      if (consecutiveDuplicates >= 2) {
+        continue;
+      }
+    } else {
+      consecutiveDuplicates = 0;
+      lastKey = key;
+    }
+    sanitizedLines.push(line);
+  }
+
+  // 4. Ensure closing column brace `}` exists if it was cut off mid-loop
+  let result = sanitizedLines.join("\n").trim();
+  const openCb = (result.match(/\{CB[12]\./g) ?? []).length;
+  const closeBraces = (result.match(/^\}/gm) ?? []).length;
+  if (openCb > closeBraces) {
+    result += "\n}";
+  }
+
+  return result;
+}
+
 /**
  * Strip agent chatter, lint, compile to AST, and attach validation diagnostics.
  * Does not mutate Scriptorium state — callers pass `hsmsAscii` to `applyTranscription`.
@@ -37,7 +100,8 @@ export function ingestAgentTranscription(
   rawHsmsFromAgent: string,
   options?: LintHsmsOptions,
 ): IngestAgentTranscriptionResult {
-  const hsmsAscii = extractHsmsAsciiPayload(rawHsmsFromAgent);
+  const sanitized = sanitizeVisionOutput(rawHsmsFromAgent);
+  const hsmsAscii = extractHsmsAsciiPayload(sanitized);
   const lintReport = lintHsmsTranscription(hsmsAscii, options);
   const parsedManuscript = compileManuscriptTree(hsmsAscii);
   const enriched = enrichParsedManuscript(parsedManuscript, hsmsAscii, lintReport.issues);

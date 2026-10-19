@@ -101,6 +101,8 @@ export async function convertPdfToPageImages(
         }
         page.cleanup();
       }
+      // Micro-yield so long PDFs do not starve the UI thread between pages.
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
     }
 
     if (pageImages.length === 0) {

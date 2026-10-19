@@ -1,3 +1,6 @@
+import type { ParsedManuscript } from "../../constants/manuscript";
+import { getLineIndex } from "./lineIndex";
+
 const RE_EDGE_PUNCT = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
 
 /** Lowercase, strip combining marks and edge punctuation. */
@@ -7,6 +10,73 @@ export function normalizeWord(word: string): string {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(RE_EDGE_PUNCT, "");
+}
+
+export interface WordOccurrenceResult {
+  count: number;
+  folioCount: number;
+  byFolio: Record<string, number>;
+}
+
+/** Exact token count for a surface form (accents folded). */
+export function countWordOccurrences(
+  manuscript: ParsedManuscript,
+  targetWord: string,
+): WordOccurrenceResult {
+  const needle = normalizeWord(targetWord);
+  const byFolio: Record<string, number> = {};
+  let totalCount = 0;
+  if (!needle) return { count: 0, folioCount: 0, byFolio };
+
+  for (const line of getLineIndex(manuscript)) {
+    for (const w of line.words) {
+      if (normalizeWord(w.reading) !== needle) continue;
+      totalCount++;
+      byFolio[line.folioId] = (byFolio[line.folioId] ?? 0) + 1;
+    }
+  }
+
+  return {
+    count: totalCount,
+    folioCount: Object.keys(byFolio).length,
+    byFolio,
+  };
+}
+
+export interface KwicMatch {
+  folioId: string;
+  lineNumber?: string;
+  prefix: string;
+  keyword: string;
+  suffix: string;
+}
+
+/** KWIC rows for a surface form (accents folded). */
+export function buildKwicConcordance(
+  manuscript: ParsedManuscript,
+  targetWord: string,
+  windowSize: number = 5,
+): KwicMatch[] {
+  const needle = normalizeWord(targetWord);
+  const matches: KwicMatch[] = [];
+  if (!needle) return matches;
+
+  for (const line of getLineIndex(manuscript)) {
+    const readings = line.words.map((w) => w.reading);
+    readings.forEach((w, i) => {
+      if (normalizeWord(w) !== needle) return;
+      const lo = Math.max(0, i - windowSize);
+      const hi = Math.min(readings.length, i + 1 + windowSize);
+      matches.push({
+        folioId: line.folioId,
+        lineNumber: line.lineNumber,
+        prefix: readings.slice(lo, i).join(" "),
+        keyword: line.words[i].diplomatic || targetWord,
+        suffix: readings.slice(i + 1, hi).join(" "),
+      });
+    });
+  }
+  return matches;
 }
 
 export function frequencyMap(words: readonly string[], normalize: boolean = true): Map<string, number> {

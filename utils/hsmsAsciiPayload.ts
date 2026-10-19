@@ -37,6 +37,15 @@ export function extractHsmsAsciiPayload(raw: string): string {
 
 const FOLIO_SPLIT = /(?=\[\s*fol(?:io)?\.?\s*[^\]]+\])/i;
 
+/** Strip HSMS margin line numbers so "14 text" / "15 text" loops still dedupe. */
+export function lineContentKey(line: string): string {
+  return line
+    .replace(/^\s*\d+\s+/, "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
 /** Drop exact duplicate `[fol. …]` segments (common gpt-4o echo). */
 export function dedupeRepeatedFolioBlocks(text: string): string {
   const trimmed = text.trim();
@@ -55,8 +64,12 @@ export function dedupeRepeatedFolioBlocks(text: string): string {
   for (const seg of segments) {
     const folioMatch = seg.match(/^\[\s*fol(?:io)?\.?\s*([^\]]+)\]/i);
     const folioId = folioMatch?.[1]?.replace(/\s+/g, " ").trim().toLowerCase() ?? "";
-    // Normalize all whitespace so trailing spaces / blank lines do not defeat dedupe.
-    const normalizedContent = seg.replace(/\s+/g, " ").trim().toLowerCase();
+    // Normalize line-by-line ignoring incremental margin numbers.
+    const normalizedContent = seg
+      .split("\n")
+      .map(lineContentKey)
+      .filter(Boolean)
+      .join("\n");
     const key = folioId ? `${folioId}::${normalizedContent}` : `::${normalizedContent}`;
     if (seen.has(key)) continue;
     seen.add(key);

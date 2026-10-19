@@ -17,6 +17,8 @@
  *   npm run batch:osta -- --out ./out --in "C:\\path\\to\\OSTA\\transcriptions"
  *   npm run batch:osta -- --in "C:\\jason\\dev\\dev\\OSTA\\transcriptions" --in "C:\\jason\\dev\\dev\\estilometria-celestina"
  *   npm run batch:osta -- --no-report   # skip aggregate report step
+ *   npm run batch:osta -- --chunk-size=50
+ *   node --expose-gc ./node_modules/tsx/dist/cli.mjs scripts/batch-convert-osta.ts
  *
  * Environment:
  *   LIBRARY_CORPUS_PATHS — semicolon/comma list of corpus roots (overrides defaults)
@@ -45,6 +47,8 @@ const inputDirs = resolveCorpusRoots({
 const outputDir = path.resolve(projectRoot, readCliArg("--out") ?? DEFAULT_OSTA_PATHS.output);
 const limitRaw = readCliArg("--limit");
 const limit = limitRaw ? Number.parseInt(limitRaw, 10) : undefined;
+const chunkRaw = readCliArg("--chunk-size");
+const chunkSize = chunkRaw ? Number.parseInt(chunkRaw, 10) : 100;
 
 const nodeFs = {
   mkdir(dir: string) {
@@ -86,6 +90,9 @@ if (limit) {
 if (force) {
   console.log("  Force:  re-convert (ignore source hash cache)");
 }
+if (chunkSize) {
+  console.log(`  Chunk:  ${chunkSize} file(s) (GC hint between chunks; use node --expose-gc)`);
+}
 if (skipReport) {
   console.log("  Report: skipped (--no-report)");
 }
@@ -99,10 +106,16 @@ const convertResult = runOstaBatchConvertWithFs(
     outputDir,
     limit,
     force,
+    chunkSize,
     onProgress(fileName, index, total) {
       if (index % 25 === 0 || index === 1 || index === total) {
         console.log(`  [${index}/${total}] ${fileName}`);
       }
+    },
+    onChunk(chunkIndex, processedInChunk, elapsedMs) {
+      console.log(
+        `  chunk ${chunkIndex}: ${processedInChunk} file(s) in ${(elapsedMs / 1000).toFixed(1)}s`,
+      );
     },
   },
   nodeFs,

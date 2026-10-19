@@ -1,0 +1,26 @@
+[
+  {
+    "codepoint": "U+0026",
+    "hsms": ["&"],
+    "html": "&amp;",
+    "note": "HSMS ampersand / Tironian et surrogate"
+  },
+  {
+    "codepoint": "U+00B6",
+    "hsms": ["%"],
+    "html": "&para;",
+    "note": "HSMS calderón (%)"
+  },
+  {
+    "codepoint": "U+017F",
+    "hsms": ["s~"],
+    "html": "&#383;",
+    "note": "Optional long s (HSMS Manual §3.21)"
+  },
+  {
+    "codepoint": "U+0027",
+    "hsms": ["&'"],
+    "html": "&#39;",
+    "note": "Capital ampersand distinguished with apostrophe in HSMS"
+  }
+]

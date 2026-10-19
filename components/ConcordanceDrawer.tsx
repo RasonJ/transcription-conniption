@@ -68,10 +68,12 @@ const ConcordanceEntryRow = React.memo(
     );
   },
   (prevProps, nextProps) =>
-    prevProps.t === nextProps.t &&
     prevProps.entry.lemma === nextProps.entry.lemma &&
     prevProps.expanded === nextProps.expanded &&
-    prevProps.entry.count === nextProps.entry.count,
+    prevProps.entry.count === nextProps.entry.count &&
+    prevProps.t === nextProps.t &&
+    prevProps.onSelectOccurrence === nextProps.onSelectOccurrence &&
+    prevProps.onClose === nextProps.onClose,
 );
 
 ConcordanceEntryRow.displayName = "ConcordanceEntryRow";
@@ -99,18 +101,22 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
     return entries.filter((e) => foldForSearch(e.lemma).includes(q));
   }, [entries, query]);
 
+  const toggleLemma = useCallback((lemma: string) => {
+    setExpandedLemma((prev) => (prev === lemma ? null : lemma));
+  }, []);
+
   const renderItem = useCallback(
     ({ item }: { item: ConcordanceEntry }) => (
       <ConcordanceEntryRow
         entry={item}
         expanded={expandedLemma === item.lemma}
-        onToggle={() => setExpandedLemma((prev) => (prev === item.lemma ? null : item.lemma))}
+        onToggle={() => toggleLemma(item.lemma)}
         onSelectOccurrence={onSelectOccurrence}
         onClose={onClose}
         t={t}
       />
     ),
-    [expandedLemma, onSelectOccurrence, onClose, t],
+    [expandedLemma, onSelectOccurrence, onClose, t, toggleLemma],
   );
 
   const keyExtractor = useCallback(

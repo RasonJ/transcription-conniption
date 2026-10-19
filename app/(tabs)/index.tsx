@@ -90,11 +90,17 @@ const ReaderStateContext = createContext<{
   showDeletions: boolean;
   showNormalizedDiacritics: boolean;
   suppressOtioseMarks: boolean;
+  useMufiGraphemes: boolean;
+  usePuaFont: boolean;
+  showLineNumbers: boolean;
 }>({
   showExpanded: true,
   showDeletions: true,
   showNormalizedDiacritics: true,
   suppressOtioseMarks: false,
+  useMufiGraphemes: false,
+  usePuaFont: true,
+  showLineNumbers: true,
 });
 
 type BlockGroup =
@@ -190,6 +196,9 @@ export default function TranscriptionConniptionScreen() {
   const [showDeletions, setShowDeletions] = useState(true);
   const [showReadingFlow, setShowReadingFlow] = useState(false);
   const [showNormalizedDiacritics, setShowNormalizedDiacritics] = useState(true);
+  const [useMufiGraphemes, setUseMufiGraphemes] = useState(false);
+  const [usePuaFont, setUsePuaFont] = useState(true);
+  const [showLineNumbers, setShowLineNumbers] = useState(true);
   const [suppressOtioseMarks, setSuppressOtioseMarks] = useState(false);
   const [showSynoptic, setShowSynoptic] = useState(false);
   const [concordanceOpen, setConcordanceOpen] = useState(false);
@@ -725,7 +734,15 @@ export default function TranscriptionConniptionScreen() {
     <LinearGradient colors={[...theme.gradient]} style={styles.root}>
       <SafeAreaView style={styles.safeArea} edges={["top"]}>
         <ReaderStateContext.Provider
-          value={{ showExpanded, showDeletions, showNormalizedDiacritics, suppressOtioseMarks }}
+          value={{
+            showExpanded,
+            showDeletions,
+            showNormalizedDiacritics,
+            suppressOtioseMarks,
+            useMufiGraphemes,
+            usePuaFont,
+            showLineNumbers,
+          }}
         >
           <FigureImageContext.Provider
             value={{
@@ -1054,6 +1071,33 @@ export default function TranscriptionConniptionScreen() {
                     />
                   </View>
                   <View style={styles.toggleCell}>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.mufiGraphemes")}</Text>
+                    <Switch
+                      value={useMufiGraphemes}
+                      onValueChange={setUseMufiGraphemes}
+                      thumbColor="#9b2217"
+                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
+                    />
+                  </View>
+                  <View style={styles.toggleCell}>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.mufiPua")}</Text>
+                    <Switch
+                      value={usePuaFont}
+                      onValueChange={setUsePuaFont}
+                      thumbColor="#9b2217"
+                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
+                    />
+                  </View>
+                  <View style={styles.toggleCell}>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.lineNumbers")}</Text>
+                    <Switch
+                      value={showLineNumbers}
+                      onValueChange={setShowLineNumbers}
+                      thumbColor="#9b2217"
+                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
+                    />
+                  </View>
+                  <View style={styles.toggleCell}>
                     <Text style={styles.toggleLabel}>{t("studio.toggle.otiose")}</Text>
                     <Switch
                       value={suppressOtioseMarks}
@@ -1201,6 +1245,9 @@ export default function TranscriptionConniptionScreen() {
                             placementMode={false}
                             svgMode={svgModeEnabled}
                             useNormalizedDiacritics={showNormalizedDiacritics}
+                            useMufiGraphemes={useMufiGraphemes}
+                            usePuaFont={usePuaFont}
+                            showLineNumbers={showLineNumbers}
                             remeasureFolio={remeasureFolio}
                           />
                         ))
@@ -1229,6 +1276,9 @@ export default function TranscriptionConniptionScreen() {
                         placementMode={placementMode}
                         svgMode={svgModeEnabled}
                         useNormalizedDiacritics={showNormalizedDiacritics}
+                        useMufiGraphemes={useMufiGraphemes}
+                        usePuaFont={usePuaFont}
+                        showLineNumbers={showLineNumbers}
                         onCanvasPress={handleCanvasPress}
                         onSetFolioBackground={handleSetFolioBackground}
                         remeasureFolio={remeasureFolio}
@@ -1328,6 +1378,9 @@ function FolioPage({
   placementMode,
   svgMode,
   useNormalizedDiacritics,
+  useMufiGraphemes,
+  usePuaFont,
+  showLineNumbers,
   onCanvasPress,
   onSetFolioBackground,
   remeasureFolio,
@@ -1341,6 +1394,9 @@ function FolioPage({
   placementMode: boolean;
   svgMode?: boolean;
   useNormalizedDiacritics?: boolean;
+  useMufiGraphemes?: boolean;
+  usePuaFont?: boolean;
+  showLineNumbers?: boolean;
   onCanvasPress?: (folioId: string, relX: number, relY: number) => void;
   onSetFolioBackground?: (folioId: string) => void;
   remeasureFolio: (folioId: string, folioRef: React.RefObject<View | null>) => void;
@@ -1420,6 +1476,9 @@ function FolioPage({
       showDeletions={showDeletions}
       suppressOtioseMarks={suppressOtioseMarks}
       useNormalizedDiacritics={useNormalizedDiacritics}
+      useMufiGraphemes={useMufiGraphemes}
+      usePuaFont={usePuaFont}
+      showLineNumbers={showLineNumbers !== false}
     />
   ) : diplomaticBody;
 
@@ -1467,6 +1526,7 @@ function BlockRenderer({
   highlight: { folioId: string; lineNumber?: string } | null;
 }) {
   const t = useT();
+  const { showLineNumbers } = useContext(ReaderStateContext);
   const blockRef = useRef<View>(null);
   const onBlockLayout = useRegisterLineAnchor(folioId, block.lineNumber, blockRef);
   if (block.type === "diagram") {
@@ -1500,6 +1560,7 @@ function BlockRenderer({
   const blockStyle = [
     styles.blockText,
     block.type === "rubric" && styles.rubricText,
+    block.type === "heading" && styles.headingText,
     block.type === "gloss" && styles.glossText,
     block.type === "addendum" && styles.addendumText,
     block.type === "language_span" && styles.foreignLanguageText,
@@ -1511,6 +1572,7 @@ function BlockRenderer({
         block={block}
         highlight={highlight}
         blockStyle={blockStyle}
+        showLineNumbers={showLineNumbers}
         renderTokenStream={(tokens, blockType) => (
           <TokenStream tokens={tokens} blockType={blockType} />
         )}
@@ -1550,7 +1612,9 @@ function TokenStream({
           token.type === "text" && SIBILANT_PATTERN.test(token.value) ? styles.sibilantText : null;
         const inlineLang = innerLanguageCode(token);
         const nestedForeignStyle = inlineLang ? styles.foreignLanguageText : null;
-        const nestedRubricStyle = token.envLayers?.some((l) => l.type === "rubric")
+        const nestedRubricStyle = token.envLayers?.some(
+          (l) => l.type === "rubric" || l.type === "heading",
+        )
           ? styles.nestedRubricText
           : null;
 
@@ -1975,7 +2039,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingVertical: 4,
   },
-  runningHeader: { fontSize: 13, fontWeight: "bold", color: "#6d5339", textAlign: "center", letterSpacing: 1, marginBottom: 8 },
+  runningHeader: { fontSize: 14, fontWeight: "bold", color: "#9b2217", textAlign: "center", letterSpacing: 1, marginTop: 6, marginBottom: 6 },
   blocksSpace: { marginTop: 8, width: "100%" },
   columnsWrapperRow: { flexDirection: "row", width: "100%", justifyContent: "space-between" },
   columnTrackColumn: { width: "48%", flexDirection: "column" },
@@ -2011,6 +2075,14 @@ const styles = StyleSheet.create({
     marginRight: 4,
   },
   rubricText: { color: theme.rubricRed, fontWeight: "bold" },
+  headingText: {
+    color: theme.rubricRed,
+    fontWeight: "bold",
+    textAlign: "center",
+    fontSize: 15,
+    marginTop: 6,
+    marginBottom: 6,
+  },
   glossText: {
     color: "#4a3060",
     fontSize: 13,

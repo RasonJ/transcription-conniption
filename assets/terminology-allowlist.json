@@ -1,0 +1,24 @@
+{
+  "entries": [
+    {
+      "name": "/sample/refresh (manuscript-sql proxy)",
+      "replacement": "/offline/refresh",
+      "removeBy": "2026-12-31"
+    },
+    {
+      "name": "npm run sample:fixtures",
+      "replacement": "npm run offline:bundle",
+      "removeBy": "2026-12-31"
+    },
+    {
+      "name": "OPENDENTAL_SQL_URL",
+      "replacement": "MANUSCRIPT_SQL_URL",
+      "removeBy": "2026-12-31"
+    },
+    {
+      "name": "dental-rcm-offline.json",
+      "replacement": "scriptorium-offline.json",
+      "removeBy": "2026-12-31"
+    }
+  ]
+}

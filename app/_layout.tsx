@@ -4,6 +4,7 @@ import { ScrollAnchorProvider } from "@/context/ScrollAnchorContext";
 import { ScriptoriumProvider } from "@/context/ScriptoriumContext";
 import { registerServiceWorker } from "@/utils/registerServiceWorker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
@@ -27,10 +28,20 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  // Junicode (OFL) — MUFI v4-tracking face for PUA / medieval graphemes.
+  // Andron Scriptor (MUFI font 53) may be dropped in as AndronScriptorWeb.ttf later.
+  const [fontsLoaded] = useFonts({
+    Junicode: require("../assets/mufi/fonts/Junicode-Regular.ttf"),
+    JunicodeItalic: require("../assets/mufi/fonts/Junicode-Italic.ttf"),
+  });
+
   useEffect(() => {
+    if (!fontsLoaded) return;
     SplashScreen.hideAsync();
     registerServiceWorker();
-  }, []);
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) return null;
 
   return (
     <I18nProvider>

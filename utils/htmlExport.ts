@@ -1,12 +1,23 @@
 import type { ParsedManuscript, Token } from "../constants/manuscript";
+import { convertHsmsToMufiGlyphs } from "./mufiCharacterMap";
 import { formatRunningHeaderText } from "./metadataText";
 import { buildSpatialFolio, zipColumnBlockRows, type SpatialLine } from "./spatialAst";
+
+/** Andron → Junicode → Georgia (mirrors `mufiSerifStack` without importing react-native). */
+const MUFI_HTML_SERIF_STACK =
+  "'Andron Scriptor Web', 'Andron Scriptor', Junicode, Georgia, 'Times New Roman', serif";
 
 export type LegacyHtmlExportOptions = {
   showExpanded?: boolean;
   showDeletions?: boolean;
   useNormalizedDiacritics?: boolean;
   suppressOtioseMarks?: boolean;
+  /** Tier-2 MUFI paleographic glyphs (display-only; HSMS source unchanged). */
+  useMufiGlyphs?: boolean;
+  /** When MUFI glyphs are on: prefer PUA/precomposed forms over decomposed Unicode. */
+  usePuaFont?: boolean;
+  /** Scholarly line numbers in a left gutter (not prepended into body text). */
+  showLineNumbers?: boolean;
 };
 
 const DEFAULT_OPTIONS: Required<LegacyHtmlExportOptions> = {
@@ -14,6 +25,9 @@ const DEFAULT_OPTIONS: Required<LegacyHtmlExportOptions> = {
   showDeletions: true,
   useNormalizedDiacritics: true,
   suppressOtioseMarks: false,
+  useMufiGlyphs: true,
+  usePuaFont: true,
+  showLineNumbers: true,
 };
 
 function escapeHtml(text: string): string {
@@ -25,10 +39,19 @@ function escapeHtml(text: string): string {
 }
 
 function displayTokenValue(token: Token, options: Required<LegacyHtmlExportOptions>): string {
+  let val = token.value ?? "";
   if (token.type === "text" && token.normalized && options.useNormalizedDiacritics) {
-    return token.normalized;
+    val = token.normalized;
   }
-  return token.value ?? "";
+  if (options.useMufiGlyphs) {
+    // Prefer raw when it still carries abbreviation markup the display value dropped.
+    const source =
+      token.raw && /[<~'&%]/.test(token.raw) && token.raw.length >= (token.value ?? "").length
+        ? token.raw
+        : val;
+    return convertHsmsToMufiGlyphs(source, options.usePuaFont);
+  }
+  return val;
 }
 
 function renderTokensToHtml(
@@ -148,14 +171,21 @@ function renderTokensToHtml(
   return pieces.join("");
 }
 
-function renderDropInitial(token: Token): string {
+function renderDropInitial(
+  token: Token,
+  options: Required<LegacyHtmlExportOptions>,
+): string {
   const depth = token.initialDepth ?? 3;
   const fontSize = Math.max(depth * 15, 32);
+  let letter = token.value ?? "";
+  if (options.useMufiGlyphs) {
+    letter = convertHsmsToMufiGlyphs(letter, options.usePuaFont);
+  }
   return (
     `<span class="drop-initial-cap" style="font-size: ${fontSize}px; font-weight: bold; ` +
-    `font-family: Georgia, serif; text-transform: capitalize; color: #9b2217; float: left; ` +
+    `font-family: ${MUFI_HTML_SERIF_STACK}; text-transform: capitalize; color: #9b2217; float: left; ` +
     `margin-right: 6px; margin-top: 2px; line-height: 0.85em; border: 1px solid #d4af37; padding: 2px 4px; background: #fffdf5; border-radius: 4px;">` +
-    `${escapeHtml(token.value)}</span>`
+    `${escapeHtml(letter)}</span>`
   );
 }
 
@@ -210,22 +240,45 @@ function renderSpatialLine(line: SpatialLine, options: Required<LegacyHtmlExport
   }
 
   let cellClass = "text-content-cell";
-  if (block.type === "rubric") cellClass += " rubric-style";
+  if (block.type === "rubric" || block.type === "heading") cellClass += " rubric-style";
   else if (block.type === "gloss") cellClass += " gloss-style";
   else if (block.type === "language_span") cellClass += " foreign-style";
 
-  let html = `<div class="line-row-container" style="position: relative; display: flex; width: 100%; align-items: flex-start; margin-bottom: 2px;">`;
-  html += `<span class="line-number-cell">${block.lineNumber ? escapeHtml(block.lineNumber) : ""}</span>`;
-  html += `<div class="${cellClass}" style="flex: 1; min-width: 0; text-align: ${block.type === "rubric" ? "center" : "justify"};">`;
+  const isLeftGloss =
+    block.type === "gloss" &&
+    block.tokens.some((t) =>
+      t.envLayers?.some((l) => {
+        const c = l.code?.toUpperCase() ?? "";
+        return c === "GLL" || c === "ADL";
+      }),
+    );
+  const glossLabel = isLeftGloss
+    ? bodyTokens
+        .map((t) => t.value ?? "")
+        .join(" ")
+        .replace(/^\[|\]$/g, "")
+        .trim()
+    : "";
+
+  let html = `<div class="line-row-container">`;
+  if (options.showLineNumbers) {
+    html += `<div class="left-line-gutter" aria-hidden="true">`;
+    if (glossLabel) {
+      html += `<span class="marginalia-label">${escapeHtml(glossLabel)}</span>`;
+    }
+    html += `<span class="gutter-line-num">${block.lineNumber ? escapeHtml(block.lineNumber) : ""}</span>`;
+    html += `</div>`;
+  }
+  html += `<div class="${cellClass} main-text-column" style="text-align: ${block.type === "rubric" || block.type === "heading" ? "center" : "justify"};">`;
 
   if (dropInitial) {
-    html += renderDropInitial(dropInitial);
+    html += renderDropInitial(dropInitial, options);
   }
 
   html += renderTokensToHtml(bodyTokens, block.type, options);
 
   if (line.wrapBackSuffix) {
-    html += `<span class="wrap-back-overlay" style="position: absolute; right: 0; top: 0; font-style: italic; color: #1a0a05; opacity: 0.85; pointer-events: none;">${escapeHtml(line.wrapBackSuffix)}</span>`;
+    html += `<span class="wrap-back-overlay">${escapeHtml(line.wrapBackSuffix)}</span>`;
   }
 
   html += `</div></div>`;
@@ -244,6 +297,10 @@ export function exportToLegacyHTML(
   const title = escapeHtml(parsed.metadata.title || "Transcription Conniption");
   const author = escapeHtml(parsed.metadata.author || "");
 
+  const bodyFont = opts.useMufiGlyphs
+    ? MUFI_HTML_SERIF_STACK
+    : `'Georgia', 'Times New Roman', Times, serif`;
+
   let html = `<!DOCTYPE html>
 <html>
 <head>
@@ -251,8 +308,14 @@ export function exportToLegacyHTML(
   <meta charset="utf-8">
   <title>${title}</title>
   <style>
+    @font-face {
+      font-family: 'Junicode';
+      src: local('Junicode'), local('Junicode Regular');
+      font-weight: normal;
+      font-style: normal;
+    }
     body {
-      font-family: 'Georgia', 'Times New Roman', Times, serif;
+      font-family: ${bodyFont};
       background-color: #f4ebd0;
       color: #1a0a05;
       padding: 40px 20px;
@@ -268,8 +331,23 @@ export function exportToLegacyHTML(
     .folio-header-row td { padding: 8px 16px; font-size: 13px; }
     .running-header { text-align: center; font-weight: bold; font-style: italic; padding: 6px 16px; background-color: #f4ebd0; color: #9b2217; border-bottom: 1px solid #dfd3b6; }
     .parchment-sheet-card { padding: 24px 28px; background: #fffdf5; }
-    .line-number-cell { width: 36px; font-family: monospace; font-size: 11px; color: #a08060; font-weight: bold; vertical-align: top; padding-top: 4px; text-align: right; padding-right: 8px; user-select: none; }
-    .text-content-cell { font-size: 16px; line-height: 24px; color: #1a0a05; }
+    .line-row-container { position: relative; display: flex; width: 100%; align-items: flex-start; margin-bottom: 2px; gap: 0; }
+    .left-line-gutter {
+      width: 48px; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end;
+      padding-right: 8px; border-right: 1px solid #dfd3b6; box-sizing: border-box;
+      user-select: none; -webkit-user-select: none; position: relative; min-height: 24px;
+    }
+    .gutter-line-num {
+      font-family: monospace; font-size: 11px; color: #a08060; font-weight: bold;
+      height: 24px; line-height: 24px; text-align: right; user-select: none;
+    }
+    .marginalia-label {
+      writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10px; letter-spacing: 2px;
+      color: #5a2317; text-transform: uppercase; font-family: Georgia, serif;
+      position: absolute; left: 2px; top: 4px; max-height: 120px; overflow: hidden; user-select: none;
+    }
+    .main-text-column, .text-content-cell { flex: 1; min-width: 0; font-size: 16px; line-height: 24px; color: #1a0a05; padding-left: 12px; position: relative; }
+    .wrap-back-overlay { position: absolute; right: 0; top: 0; font-style: italic; color: #1a0a05; opacity: 0.85; pointer-events: none; }
     .rubric-style { color: #9b2217; font-weight: bold; }
     .gloss-style { color: #4a3060; font-size: 13px; font-style: italic; }
     .foreign-style { font-style: italic; color: #1a3a5a; }

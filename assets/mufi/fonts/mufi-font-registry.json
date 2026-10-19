@@ -1,0 +1,41 @@
+{
+  "format": "mufi-font-registry/v1",
+  "preferredFontId": 53,
+  "fonts": [
+    {
+      "mufiFontId": 53,
+      "mufiUrl": "https://mufi.info/q.php?p=mufi/fonts/fonts/53",
+      "family": "Andron Scriptor",
+      "cssFamily": "Andron Scriptor Web",
+      "aliases": ["Andron Scriptor", "AndronScriptorWeb", "Andron Scriptor Web"],
+      "designer": "Andreas Stötzner",
+      "version": "4.2.3",
+      "mufiRecommendation": "4.1",
+      "license": "Free for scholarly editing; credit Andreas Stötzner and MUFI in colophons; do not alter glyphs or redistribute modified copies.",
+      "attribution": "Andron Scriptor by Andreas Stötzner; issued via the Medieval Unicode Font Initiative (NFR / University of Bergen).",
+      "downloadPage": "https://mufi.info/q.php?p=mufi/fonts/fontfamily/1",
+      "localFiles": [
+        "assets/mufi/fonts/AndronScriptorWeb.ttf",
+        "assets/mufi/fonts/AndronScriptorWeb.otf",
+        "assets/mufi/fonts/AndronScriptorWeb.woff2"
+      ],
+      "role": "primary-mufi",
+      "notes": "Canonical glyph source for the MUFI v4 recommendation charts; preferred face for ornate initials and MUFI Unicode display."
+    },
+    {
+      "mufiFontId": null,
+      "family": "Junicode",
+      "cssFamily": "Junicode",
+      "aliases": ["Junicode Two", "Junicode VF"],
+      "designer": "Peter S. Baker",
+      "license": "SIL Open Font License 1.1",
+      "downloadPage": "https://github.com/psb1558/Junicode-font/releases",
+      "localFiles": [
+        "assets/mufi/fonts/Junicode-Regular.ttf",
+        "assets/mufi/fonts/Junicode-Italic.ttf"
+      ],
+      "role": "fallback-mufi",
+      "notes": "OFL MUFI-tracking face bundled for Expo; used when Andron Scriptor is not installed."
+    }
+  ]
+}

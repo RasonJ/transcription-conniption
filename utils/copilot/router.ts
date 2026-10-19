@@ -27,20 +27,25 @@ const OUT_OF_SCOPE: Partial<Record<CopilotLocale, string[]>> = {
     "when was it composed", "summarize the story", "what happens in the plot", "write me a sonnet",
     "explain what this means", "tell me a joke", "what is your opinion of the book", "recommend similar books",
     "who wrote the original text", "render the folio in another language",
+    "who wrote this manuscript", "what is the weather today", "write a poem about the king",
+    "summarize the plot", "translate folio into english",
   ],
   es: [
     "traduce este pasaje al español moderno", "dame una traducción", "quién es el autor de la obra",
     "cuándo se compuso", "resume la historia", "qué pasa en la trama", "escríbeme un soneto",
     "explica qué significa", "cuéntame un chiste", "qué opinas del libro",
     "quién escribió el texto original", "pasa la hoja a otro idioma",
+    "quién escribió este manuscrito", "resume el argumento", "traduce el folio al inglés",
   ],
   pt: [
     "traduz esta passagem para português moderno", "quem é o autor da obra", "resume a história",
     "o que acontece no enredo", "escreve-me um soneto", "explica o que significa",
+    "qual é o enredo",
   ],
   ca: [
     "tradueix aquest passatge al català modern", "qui és l'autor de l'obra", "resumeix la història",
     "què passa a la trama", "escriu-me un sonet", "explica què vol dir",
+    "escriu un poema", "escriu-me un poema",
   ],
   gl: [
     "traduce esta pasaxe ao galego moderno", "quen é o autor da obra", "resume a historia",

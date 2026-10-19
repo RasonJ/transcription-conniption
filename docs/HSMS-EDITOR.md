@@ -107,6 +107,9 @@ Available when `showReaderTools` is true:
 | Expansions (`<>`) | Show or hide `<expansion>` text (brown italic in SVG) |
 | Deletions (`()`) | Strikethrough scribal/editorial deletions |
 | Unicode diacritics | Prefer `token.normalized` (`õ`) over diplomatic (`o~`) |
+| MUFI graphemes | Display-only map of HSMS ASCII → MUFI glyphs (`convertHsmsToMufiGlyphs`); storage/lint stay ASCII |
+| MUFI PUA font | When MUFI graphemes are on: prefer precomposed/PUA chars; off uses decomposed Unicode |
+| Line numbers | Scholarly numbers in a left gutter (`user-select: none`); body text stays clean/copyable |
 | Hide otiose `~` | Suppress standalone tilde marks |
 | Reading flow | Show hyphen-stitched continuous prose panel |
 | Synoptic pane | Split diplomatic + normalized columns (viewport ≥ 640 px) |
@@ -114,7 +117,7 @@ Available when `showReaderTools` is true:
 | Place figure | Enable free `FacsimilePlacement` pins on canvas |
 | SVG canvas | Use `SvgFacsimilePage` instead of RN `Text` layout |
 
-Toggle values flow through `ReaderStateContext` into `TokenStream`, `BlockFigureLayout`, and `SvgFacsimilePage*`.
+Toggle values flow through `ReaderStateContext` into `TokenStream`, `BlockFigureLayout`, and `SvgFacsimilePage*` (`useMufiGraphemes` / `usePuaFont` → `tokenRendering.ts` / `formatTokenDisplayGrapheme`). See [HSMS-TYPOGRAPHY.md §7](HSMS-TYPOGRAPHY.md) and [assets/mufi/README.md](../assets/mufi/README.md).
 
 ### 3.3 Paleographic brackets and lacunae
 
@@ -399,7 +402,7 @@ Integration tests that compile the same corpus live under `__tests__/integration
 | Tool | Component / module | Notes |
 |------|-------------------|-------|
 | **Concordance** | `ConcordanceDrawer` + `utils/concordance.ts` | Virtualized KWIC; tap → scroll to folio/line |
-| **Ask / Copilot** | `ManuscriptChatbotDrawer` + `utils/copilot/*` | Tier‑A paleography + Voyant-style recipes; MCP sidecars |
+| **Ask / Copilot** | `ManuscriptChatbotDrawer` + `utils/copilot/*` | Tier‑A recipes + Tier‑1 precompiled intent chains; MCP sidecars ([REASONING-GRAPH.md](REASONING-GRAPH.md)) |
 | **Proofer audit** | `utils/prooferIncidents.ts` / MCP `audit_hsms_syntax` | Technical / editorial / structural flags + TSV |
 | **Synoptic split** | `SynopticFolioSplit` + `utils/normalizedText.ts` | Diplomatic left, normalized right (wide layout) |
 | **Reading flow** | `reconstructManuscriptFlow` | Hyphen-stitched prose across folio boundaries |
@@ -413,7 +416,8 @@ On web (`npm run start:web`):
 
 - **Drag-and-drop** `.txt` anywhere on the Studio screen → same path as Upload & Convert
 - **SVG facsimile** resolves to `SvgFacsimilePage.web.tsx` (HTML rows inside an SVG parchment shell)
-- **Ornate drop caps** — one grapheme per `{INn.}` (e.g. `{IN4.} AO` → cap **A**, body **O…**); web: `HtmlOrnateDropCap`; native SVG facsimile: `renderOrnateInitialSvg` with four seeded style matrices (vines, criblé stipple, ribbon interlace, damask tessellation) — see [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md); tap to replace with an uploaded folio scan
+- **Ornate drop caps** — one grapheme per `{INn.}` (e.g. `{IN4.} AO` → cap **A**, body **O…**); web: `HtmlOrnateDropCap`; native SVG facsimile: `renderOrnateInitialSvg` with four seeded style matrices (vines, criblé stipple, ribbon interlace, damask tessellation) and Andron-led stacks — see [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md); optional static SVG under `assets/mufi/ornate-initials/`; tap to replace with an uploaded folio scan
+- **MUFI display** — optional parchment overlay (ASCII source unchanged); see [HSMS-TYPOGRAPHY.md §7](HSMS-TYPOGRAPHY.md)
 - Export uses browser download when the File System Access API is unavailable
 - UI card shadows use `utils/platformShadow.ts` (`boxShadow` on web) to avoid React Native Web deprecation warnings
 

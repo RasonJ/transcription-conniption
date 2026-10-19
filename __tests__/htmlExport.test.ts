@@ -47,10 +47,51 @@ describe("htmlExport", () => {
     expect(html).toContain("right body");
   });
 
-  it("escapes raw ampersands in token text", () => {
+  it("escapes raw ampersands when MUFI glyphs are off", () => {
+    const ast = compileManuscriptTree(`[fol. 1r]\n{CB1.\n1 foo & bar here}`);
+    const html = exportToLegacyHTML(ast, { useMufiGlyphs: false });
+    expect(html).toContain("foo &amp; bar");
+  });
+
+  it("maps Tironian et via MUFI glyphs by default", () => {
     const ast = compileManuscriptTree(`[fol. 1r]\n{CB1.\n1 foo & bar here}`);
     const html = exportToLegacyHTML(ast);
-    expect(html).toContain("foo &amp; bar");
+    expect(html).toContain("foo ⁊ bar");
+    expect(html).not.toContain("foo &amp; bar");
+  });
+
+  it("can prefer decomposed MUFI forms over PUA", () => {
+    const ast = compileManuscriptTree(`[fol. 1r]\n{CB1.\n1 c'ielo}`);
+    const pua = exportToLegacyHTML(ast, {
+      useMufiGlyphs: true,
+      usePuaFont: true,
+      useNormalizedDiacritics: false,
+    });
+    const decomposed = exportToLegacyHTML(ast, {
+      useMufiGlyphs: true,
+      usePuaFont: false,
+      useNormalizedDiacritics: false,
+    });
+    expect(pua).toContain("çielo");
+    expect(decomposed).toContain("c\u0327ielo");
+  });
+
+  it("places line numbers in a left gutter outside copyable body text", () => {
+    const ast = compileManuscriptTree(`[fol. 1r]\n{CB1.\n1 first line\n2 second line}`);
+    const html = exportToLegacyHTML(ast);
+    expect(html).toContain('class="left-line-gutter"');
+    expect(html).toContain('class="gutter-line-num"');
+    expect(html).toContain("user-select: none");
+    expect(html).toMatch(/gutter-line-num">1</);
+    expect(html).toMatch(/gutter-line-num">2</);
+    expect(html).toContain("first line");
+  });
+
+  it("can hide the line-number gutter", () => {
+    const ast = compileManuscriptTree(`[fol. 1r]\n{CB1.\n1 first line}`);
+    const html = exportToLegacyHTML(ast, { showLineNumbers: false });
+    expect(html).not.toContain('class="left-line-gutter"');
+    expect(html).toContain("first line");
   });
 
   it("derives .html filename from witness name", () => {

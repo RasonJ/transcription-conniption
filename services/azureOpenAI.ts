@@ -46,7 +46,13 @@ export type CreateResponsesParams = {
 };
 
 const DEFAULT_TIMEOUT_MS = 120_000;
-const VISION_TIMEOUT_MS = 180_000;
+/**
+ * Vision fail-fast: runaway repetition loops must not burn the old 180s ceiling.
+ * A clean folio usually finishes well under this; aborted turns retry as transient.
+ */
+export const VISION_TIMEOUT_MS = 45_000;
+/** Cap Pass 1 completion length so autoregressive loops cannot emit 4k+ garbage tokens. */
+export const VISION_MAX_OUTPUT_TOKENS = 1_500;
 /** Retries for transient Azure rate-limits / gateway blips in multi-page queues. */
 const MAX_TRANSIENT_RETRIES = 3;
 const TRANSIENT_RETRY_BASE_MS = 1_200;
@@ -143,6 +149,12 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function retryDelayMs(attempt: number): number {
+  const base = TRANSIENT_RETRY_BASE_MS * Math.pow(2, attempt);
+  const jitter = Math.floor(Math.random() * 250);
+  return base + jitter;
+}
+
 /**
  * POST /openai/v1/responses — Azure OpenAI Responses API.
  * Retries transient 429/5xx so multi-page vision queues do not reject on one blip.
@@ -207,7 +219,7 @@ export async function createOpenAIResponse(
         const error = new Error(`Azure OpenAI responses failed: ${res.status} ${errMsg}`);
         if (isTransientHttpStatus(res.status) && attempt < MAX_TRANSIENT_RETRIES - 1) {
           lastError = error;
-          await sleep(TRANSIENT_RETRY_BASE_MS * Math.pow(2, attempt));
+          await sleep(retryDelayMs(attempt));
           continue;
         }
         throw error;
@@ -227,7 +239,7 @@ export async function createOpenAIResponse(
         /network|fetch failed|Failed to fetch/i.test(asError.message);
       if (networkish && attempt < MAX_TRANSIENT_RETRIES - 1) {
         lastError = asError;
-        await sleep(TRANSIENT_RETRY_BASE_MS * Math.pow(2, attempt));
+        await sleep(retryDelayMs(attempt));
         continue;
       }
       throw asError;

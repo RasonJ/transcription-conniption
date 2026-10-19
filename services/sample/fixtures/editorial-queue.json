@@ -1,0 +1,21 @@
+{
+  "source": "bootstrap",
+  "date": "2026-10-19",
+  "items": [
+    {
+      "folio_id": "1r",
+      "status": "unreviewed",
+      "confidence_cents": 4200
+    },
+    {
+      "folio_id": "3v",
+      "status": "lint_blocked",
+      "barrier": "EMPTY_COLUMN_ENVELOPE"
+    },
+    {
+      "folio_id": "5r",
+      "status": "unreviewed",
+      "confidence_cents": 6100
+    }
+  ]
+}

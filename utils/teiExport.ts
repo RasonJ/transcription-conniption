@@ -99,6 +99,8 @@ function blockToTei(block: ManuscriptBlock): string {
   switch (block.type) {
     case "rubric":
       return `<head rend="rubric"${colAttr}>${inner}</head>\n`;
+    case "heading":
+      return `<head rend="running"${colAttr}>${inner}</head>\n`;
     case "gloss":
       return `<note type="gloss"${colAttr}>${inner}</note>\n`;
     case "addendum":
@@ -122,13 +124,36 @@ export function exportToTEIXML(parsed: ParsedManuscript): string {
   const title = escapeXml(parsed.metadata.title || "Untitled");
   const author = escapeXml(parsed.metadata.author || "Unknown");
 
+  const folioCount = parsed.folios.length;
+  const wordCount = parsed.stats?.totalWords ?? 0;
+  const imprintDate = escapeXml(parsed.metadata.imprint?.date ?? "");
+  const library = escapeXml(parsed.metadata.witness?.library ?? "");
+  const shelfmark = escapeXml(parsed.metadata.witness?.shelfmark ?? "");
+
   chunks.push(
     `<?xml version="1.0" encoding="UTF-8"?>\n`,
     `<TEI xmlns="http://www.tei-c.org/ns/1.0">\n`,
     `  <teiHeader>\n`,
     `    <fileDesc>\n`,
-    `      <titleStmt><title>${title}</title><author>${author}</author></titleStmt>\n`,
-    `      <sourceDesc><p>Exported from Transcription Conniption (HSMS transcription)</p></sourceDesc>\n`,
+    `      <titleStmt>\n`,
+    `        <title>${title}</title>\n`,
+    `        <author>${author}</author>\n`,
+    `      </titleStmt>\n`,
+    `      <editionStmt>\n`,
+    `        <edition>HSMS diplomatic transcription (Transcription Conniption)</edition>\n`,
+    `      </editionStmt>\n`,
+    `      <extent>${folioCount} folio side(s); ${wordCount} words</extent>\n`,
+    `      <publicationStmt>\n`,
+    `        <publisher>Transcription Conniption</publisher>\n`,
+    `        <availability><p>Licensed under CC BY-SA 4.0</p></availability>\n`,
+    imprintDate ? `        <date>${imprintDate}</date>\n` : "",
+    `      </publicationStmt>\n`,
+    `      <sourceDesc>\n`,
+    `        <p>Exported from HSMS ASCII transcription engine</p>\n`,
+    library || shelfmark
+      ? `        <msIdentifier><repository>${library}</repository><idno>${shelfmark}</idno></msIdentifier>\n`
+      : "",
+    `      </sourceDesc>\n`,
     `    </fileDesc>\n`,
     `  </teiHeader>\n`,
     `  <text xml:lang="osp">\n    <body>\n`,

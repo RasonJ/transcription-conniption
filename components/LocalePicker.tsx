@@ -8,7 +8,7 @@ import {
   type Locale,
 } from "@/i18n/runtime";
 import { Globe } from "lucide-react-native";
-import React, { useCallback } from "react";
+import React, { memo, useCallback, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
 /** Each language in its own name (SPEC-I18N §2); these are never translated. */
@@ -43,15 +43,26 @@ const CACHED_LOCALES: Locale[] = (() => {
   return list;
 })();
 
-function LocaleOption({ code, active, onPress }: { code: Locale; active: boolean; onPress: () => void }) {
+const LocaleOption = memo(function LocaleOption({
+  code,
+  active,
+  onPress,
+}: {
+  code: Locale;
+  active: boolean;
+  onPress: (code: Locale) => void;
+}) {
   const t = useT();
+  const handlePress = useCallback(() => onPress(code), [code, onPress]);
+
   return (
     <Pressable
-      onPress={onPress}
-      style={[styles.chip, active && styles.chipActive]}
+      onPress={handlePress}
+      style={({ pressed }) => [styles.chip, active && styles.chipActive, pressed && styles.chipPressed]}
       accessibilityRole="button"
       accessibilityState={{ selected: active }}
       accessibilityLanguage={code === PSEUDO_LOCALE ? "en" : code}
+      hitSlop={4}
     >
       <Text style={[styles.chipText, active && styles.chipTextActive]}>{LOCALE_NATIVE_NAMES[code]}</Text>
       {isCommunityLocale(code) ? (
@@ -59,7 +70,7 @@ function LocaleOption({ code, active, onPress }: { code: Locale; active: boolean
       ) : null}
     </Pressable>
   );
-}
+});
 
 /** Full chip list (Sources tab). */
 export function LocalePicker() {
@@ -68,10 +79,12 @@ export function LocalePicker() {
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.label}>{t("common.language")}</Text>
+      <Text style={styles.label} accessibilityRole="header">
+        {t("common.language")}
+      </Text>
       <View style={styles.row}>
         {CACHED_LOCALES.map((code) => (
-          <LocaleOption key={code} code={code} active={locale === code} onPress={() => setLocale(code)} />
+          <LocaleOption key={code} code={code} active={locale === code} onPress={setLocale} />
         ))}
       </View>
     </View>
@@ -82,20 +95,23 @@ export function LocalePicker() {
 export function LocalePickerCompact() {
   const { locale, setLocale } = useLocale();
   const t = useT();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+
+  const handleSelect = useCallback(
+    (code: Locale) => {
+      setLocale(code);
+      setOpen(false);
+    },
+    [setLocale],
+  );
+
+  const close = useCallback(() => setOpen(false), []);
 
   const renderItem = useCallback(
     ({ item: code }: { item: Locale }) => (
-      <LocaleOption
-        code={code}
-        active={locale === code}
-        onPress={() => {
-          setLocale(code);
-          setOpen(false);
-        }}
-      />
+      <LocaleOption code={code} active={locale === code} onPress={handleSelect} />
     ),
-    [locale, setLocale],
+    [locale, handleSelect],
   );
 
   return (
@@ -110,15 +126,18 @@ export function LocalePickerCompact() {
         <Globe color="#f6d890" size={14} />
         <Text style={styles.compactText}>{LOCALE_NATIVE_NAMES[locale]}</Text>
       </Pressable>
-      <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
         <Pressable
           style={styles.backdrop}
-          onPress={() => setOpen(false)}
+          onPress={close}
           accessibilityRole="button"
           accessibilityLabel={t("common.close")}
+          accessibilityHint={t("common.close")}
         >
-          <Pressable style={styles.sheet} onPress={() => undefined}>
-            <Text style={styles.label}>{t("studio.languagePicker")}</Text>
+          <View style={styles.sheet} onStartShouldSetResponder={() => true}>
+            <Text style={styles.label} accessibilityRole="header">
+              {t("studio.languagePicker")}
+            </Text>
             <FlatList
               data={CACHED_LOCALES}
               keyExtractor={(code) => code}
@@ -126,7 +145,7 @@ export function LocalePickerCompact() {
               contentContainerStyle={styles.row}
               keyboardShouldPersistTaps="handled"
             />
-          </Pressable>
+          </View>
         </Pressable>
       </Modal>
     </>
@@ -149,6 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f6d890",
     borderColor: "#f6d890",
   },
+  chipPressed: { opacity: 0.75 },
   chipText: { color: "#fff4d2", fontSize: 12, fontWeight: "600" },
   chipTextActive: { color: "#1a0a05" },
   community: { color: "rgba(246,216,144,0.7)", fontSize: 10, fontWeight: "600" },

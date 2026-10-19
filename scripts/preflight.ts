@@ -21,6 +21,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.join(__dirname, "..");
 const outDir = path.join(projectRoot, "out");
 const hsmsToolsSettings = path.join(projectRoot, "assets", "legacy_hsms_settings.ini");
+const mufiCharsJson = path.join(projectRoot, "assets", "mufi", "mufi-chars.json");
 
 type Step = {
   name: string;
@@ -43,6 +44,13 @@ const steps: Step[] = [
     when: () => existsSync(hsmsToolsSettings),
     skipReason:
       "assets/legacy_hsms_settings.ini missing — keep existing utils/generated/hsmsDiacriticMap.ts",
+  },
+  {
+    name: "MUFI 3-way char map + ornate inventory",
+    script: "generate:mufi",
+    when: () => existsSync(mufiCharsJson),
+    skipReason:
+      "assets/mufi/mufi-chars.json missing — run npm run fetch:mufi (keep existing generated maps)",
   },
   { name: "HSMS lemma + POS dictionary indexes", script: "generate:dictionary" },
   { name: "i18n TypeScript catalogs", script: "i18n:types" },
@@ -88,13 +96,28 @@ if (includeWeb) {
 }
 
 function runNpmScript(script: string): number {
-  const npm = process.platform === "win32" ? "npm.cmd" : "npm";
-  const result = spawnSync(npm, ["run", script], {
-    cwd: projectRoot,
-    stdio: "inherit",
-    env: process.env,
-    shell: process.platform === "win32",
-  });
+  // Hardcoded step names only — reject anything unexpected before shell fallback.
+  if (!/^[a-zA-Z0-9:_-]+$/.test(script)) {
+    console.error(`Refusing unsafe npm script name: ${script}`);
+    return 1;
+  }
+
+  // Prefer npm_execpath (set when launched via npm/npx) so we never need
+  // shell:true + args — that combo triggers Node DEP0190 on Windows.
+  const npmExecPath = process.env.npm_execpath;
+  const nodeExecPath = process.env.npm_node_execpath || process.execPath;
+  const result = npmExecPath
+    ? spawnSync(nodeExecPath, [npmExecPath, "run", script], {
+        cwd: projectRoot,
+        stdio: "inherit",
+        env: process.env,
+      })
+    : spawnSync(process.platform === "win32" ? `npm.cmd run ${script}` : `npm run ${script}`, {
+        cwd: projectRoot,
+        stdio: "inherit",
+        env: process.env,
+        shell: true,
+      });
   if (result.error) {
     console.error(result.error);
     return 1;

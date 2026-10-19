@@ -42,7 +42,8 @@ import React, { createElement, useContext, useEffect, useMemo, useRef, useState 
 import { ScrollView, StyleSheet, View } from "react-native";
 import Svg, { ForeignObject, Line as SvgLine, Rect } from "react-native-svg";
 
-const LINE_NUM_W = 32;
+/** Fixed left gutter for scholarly line numbers (outside copyable body text). */
+const LINE_NUM_W = 40;
 
 /** HSMS {GLL.}/{GLR.} (and AD*) → which margin rail to use. */
 function glossMarginSide(block: ManuscriptBlock): "left" | "right" | null {
@@ -60,12 +61,47 @@ function glossMarginSide(block: ManuscriptBlock): "left" | "right" | null {
   return "right";
 }
 
+/** Plain gloss label for vertical left-margin print (e.g. SEVILLA). */
+function leftGlossGutterLabel(block: ManuscriptBlock): string | undefined {
+  if (glossMarginSide(block) !== "left") return undefined;
+  const parts: string[] = [];
+  for (const tok of block.tokens) {
+    if (tok.type === "env_open" || tok.type === "env_close") continue;
+    const v = (tok.value ?? "").trim();
+    if (v) parts.push(v);
+  }
+  const label = parts.join(" ").replace(/^\[|\]$/g, "").trim();
+  return label || undefined;
+}
+
+function LineNumberGutter(props: {
+  lineNumber?: string;
+  show: boolean;
+  glossLabel?: string;
+}): React.ReactNode {
+  if (!props.show) {
+    return <span style={htmlStyles.lineNumberSpacerHidden} aria-hidden />;
+  }
+  return (
+    <span style={htmlStyles.leftLineGutter} aria-hidden>
+      {props.glossLabel ? (
+        <span style={htmlStyles.marginaliaLabel}>{props.glossLabel}</span>
+      ) : null}
+      <span style={htmlStyles.gutterLineNum}>{props.lineNumber ?? ""}</span>
+    </span>
+  );
+}
+
 export interface SvgFacsimilePageProps {
   folio: FolioSide;
   showExpanded?: boolean;
   showDeletions?: boolean;
   suppressOtioseMarks?: boolean;
   useNormalizedDiacritics?: boolean;
+  useMufiGraphemes?: boolean;
+  usePuaFont?: boolean;
+  /** Left-gutter scholarly line numbers (default true). */
+  showLineNumbers?: boolean;
 }
 
 interface HtmlCapState {
@@ -81,10 +117,12 @@ function stripMnemonics(raw: string): string {
   return raw.replace(/\{[^}]+\}/g, " ").replace(/\s+/g, " ").trim();
 }
 
-function charSpanStyle(s: Seg): React.CSSProperties {
+function charSpanStyle(s: Seg, useMufiFont?: boolean): React.CSSProperties {
   return {
     color: s.fill,
-    fontFamily: "Georgia, 'Times New Roman', serif",
+    fontFamily: useMufiFont
+      ? "'Junicode', 'Andron Scriptor Web', 'Andron Scriptor', Georgia, 'Times New Roman', serif"
+      : "Georgia, 'Times New Roman', serif",
     fontStyle: s.italic ? "italic" : "normal",
     fontWeight: s.bold ? "bold" : "normal",
     fontSize: `${s.fs}px`,
@@ -104,6 +142,7 @@ function renderJustifiedCharacters(
   isLastLine: boolean,
   skipJustify: boolean,
   keyPrefix: string,
+  useMufiFont?: boolean,
 ): React.ReactNode {
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return null;
@@ -121,7 +160,7 @@ function renderJustifiedCharacters(
       }}
     >
       {visible.map((s, i) => (
-        <span key={`${keyPrefix}-s${i}`} style={charSpanStyle(s)}>
+        <span key={`${keyPrefix}-s${i}`} style={charSpanStyle(s, useMufiFont)}>
           {s.text}
         </span>
       ))}
@@ -187,9 +226,10 @@ function HtmlLineRow({
   let lineSegs = blockToSegs(block, settings);
 
   const isRubric = block.type === "rubric";
+  const isHeading = block.type === "heading";
   const isGloss = block.type === "gloss" || block.type === "addendum";
   const glossSide = glossMarginSide(block);
-  const skipJustify = isRubric || isGloss;
+  const skipJustify = isRubric || isHeading || isGloss;
   let lineIndent = nextCap.rowsLeft > 0 ? nextCap.padLeft : 0;
   let currentLineWidth = trackWidth;
   if (glossSide) {
@@ -230,18 +270,20 @@ function HtmlLineRow({
 
   const textStyle: React.CSSProperties = {
     fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: `${FS}px`,
-    lineHeight: `${LH}px`,
+    fontSize: `${isHeading ? FS * 1.1 : FS}px`,
+    lineHeight: `${isHeading ? LH * 1.2 : LH}px`,
     color: PROSE_FILL,
     display: "block",
-    textAlign: isRubric ? "center" : glossSide === "right" ? "left" : "left",
+    textAlign: isRubric || isHeading ? "center" : glossSide === "right" ? "left" : "left",
     marginLeft: glossSide === "right" ? "auto" : lineIndent > 0 ? `${lineIndent}px` : undefined,
     marginRight: glossSide === "left" ? "auto" : undefined,
-    width: `${currentLineWidth}px`,
+    width: `${isHeading ? trackWidth : currentLineWidth}px`,
     maxWidth: glossSide ? `${currentLineWidth}px` : undefined,
     boxSizing: "border-box",
     minHeight: `${LH}px`,
-    ...(isRubric ? { color: RUBRIC_FILL, fontWeight: "bold" } : {}),
+    ...(isRubric || isHeading
+      ? { color: RUBRIC_FILL, fontWeight: "bold", marginTop: isHeading ? 6 : undefined, marginBottom: isHeading ? 6 : undefined }
+      : {}),
     ...(isGloss
       ? {
           color: GLOSS_FILL,
@@ -257,7 +299,14 @@ function HtmlLineRow({
 
   const textBody = (
     <>
-      {renderJustifiedCharacters(lineSegs, currentLineWidth, isLastLine, skipJustify, bkey)}
+      {renderJustifiedCharacters(
+        lineSegs,
+        currentLineWidth,
+        isLastLine,
+        skipJustify,
+        bkey,
+        settings.useMufiGraphemes,
+      )}
       {figToks.map((ft, i) => (
         <span
           key={`${bkey}-fig${i}`}
@@ -272,15 +321,17 @@ function HtmlLineRow({
     </>
   );
 
+  const showNums = settings.showLineNumbers !== false;
+
   return {
     nextCap,
     node: (
       <Div key={bkey} style={htmlStyles.blockRow}>
-        {block.lineNumber ? (
-          <span style={htmlStyles.lineNumberLabel}>{block.lineNumber}</span>
-        ) : (
-          <span style={htmlStyles.lineNumberSpacer} />
-        )}
+        <LineNumberGutter
+          lineNumber={block.lineNumber}
+          show={showNums}
+          glossLabel={leftGlossGutterLabel(block)}
+        />
         {dropCapNode ? (
           <Div
             style={{
@@ -340,12 +391,28 @@ function renderDropCapSection(
   const firstLine = lines[0];
   const dropcapId = `dc_b${firstLine.bi}`;
 
+  const showNums = settings.showLineNumbers !== false;
+
+  const gutterColumn = (
+    <Div style={htmlStyles.dropCapGutterCol} aria-hidden>
+      {lines.map((line) => (
+        <LineNumberGutter
+          key={`ln-b${line.bi}`}
+          lineNumber={line.block.lineNumber}
+          show={showNums}
+          glossLabel={undefined}
+        />
+      ))}
+    </Div>
+  );
+
   const bodyLineNodes = lines.map((line, di) => {
     const block = line.block;
     if (blockIsMetadataLeak(block)) return null;
 
     const isLast = di === lines.length - 1;
     const isRubric = block.type === "rubric";
+    const isHeading = block.type === "heading";
     const isGloss = block.type === "gloss";
     const figToks = block.tokens.filter((t) => t.type === "figure_anchor");
 
@@ -354,13 +421,13 @@ function renderDropCapSection(
 
     const lineStyle: React.CSSProperties = {
       fontFamily: "Georgia, 'Times New Roman', serif",
-      fontSize: isGloss ? `${FS * 0.85}px` : `${FS}px`,
+      fontSize: isGloss ? `${FS * 0.85}px` : isHeading ? `${FS * 1.1}px` : `${FS}px`,
       lineHeight: `${LH}px`,
-      color: isRubric ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
-      fontWeight: isRubric ? "bold" : "normal",
+      color: isRubric || isHeading ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
+      fontWeight: isRubric || isHeading ? "bold" : "normal",
       fontStyle: isGloss ? "italic" : "normal",
       display: "block",
-      textAlign: isRubric ? "center" : "left",
+      textAlign: isRubric || isHeading ? "center" : "left",
       width: `${bodyW}px`,
       minHeight: `${LH}px`,
       boxSizing: "border-box",
@@ -369,7 +436,14 @@ function renderDropCapSection(
 
     return (
       <Div key={`b${line.bi}`} style={lineStyle}>
-        {renderJustifiedCharacters(lineSegs, bodyW, isLast, isRubric || isGloss, `b${line.bi}`)}
+        {renderJustifiedCharacters(
+          lineSegs,
+          bodyW,
+          isLast,
+          isRubric || isHeading || isGloss,
+          `b${line.bi}`,
+          settings.useMufiGraphemes,
+        )}
         {figToks.map((ft, i) => (
           <span
             key={`b${line.bi}-fig${i}`}
@@ -387,11 +461,7 @@ function renderDropCapSection(
 
   return (
     <Div key={`dropcap-${blockIdx}`} style={htmlStyles.blockRow}>
-      {firstLine.block.lineNumber ? (
-        <span style={htmlStyles.lineNumberLabel}>{firstLine.block.lineNumber}</span>
-      ) : (
-        <span style={htmlStyles.lineNumberSpacer} />
-      )}
+      {gutterColumn}
       <Div
         style={{
           display: "flex",
@@ -444,6 +514,7 @@ function renderDropCapSection2Col(
     if (blockIsMetadataLeak(block)) return null;
     const isLast = di === capLines.length - 1;
     const isRubric = block.type === "rubric";
+    const isHeading = block.type === "heading";
     const isGloss = block.type === "gloss";
     const figToks = block.tokens.filter((t) => t.type === "figure_anchor");
     let lineSegs = blockToSegs(block, settings);
@@ -453,19 +524,26 @@ function renderDropCapSection2Col(
         key={`b${line.bi}`}
         style={{
           fontFamily: "Georgia, 'Times New Roman', serif",
-          fontSize: isGloss ? `${FS * 0.85}px` : `${FS}px`,
+          fontSize: isGloss ? `${FS * 0.85}px` : isHeading ? `${FS * 1.1}px` : `${FS}px`,
           lineHeight: `${LH}px`,
-          color: isRubric ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
-          fontWeight: isRubric ? "bold" : "normal",
+          color: isRubric || isHeading ? RUBRIC_FILL : isGloss ? GLOSS_FILL : PROSE_FILL,
+          fontWeight: isRubric || isHeading ? "bold" : "normal",
           fontStyle: isGloss ? "italic" : "normal",
           display: "block",
-          textAlign: isRubric ? "center" : "left",
+          textAlign: isRubric || isHeading ? "center" : "left",
           width: `${bodyW}px`,
           minHeight: `${LH}px`,
           boxSizing: "border-box",
         }}
       >
-        {renderJustifiedCharacters(lineSegs, bodyW, isLast, isRubric || isGloss, `b${line.bi}`)}
+        {renderJustifiedCharacters(
+          lineSegs,
+          bodyW,
+          isLast,
+          isRubric || isHeading || isGloss,
+          `b${line.bi}`,
+          settings.useMufiGraphemes,
+        )}
         {figToks.map((ft, i) => (
           <span key={`b${line.bi}-fig${i}`} style={{ color: "#1a3a5a", fontStyle: "italic", fontSize: `${FS}px` }}>
             [{ft.figureType ?? "FIG"}]
@@ -491,15 +569,24 @@ function renderDropCapSection2Col(
     return result.node;
   });
 
+  const showNums = settings.showLineNumbers !== false;
+  const gutterColumn = (
+    <Div style={htmlStyles.dropCapGutterCol} aria-hidden>
+      {capLines.map((line) => (
+        <LineNumberGutter
+          key={`ln2-b${line.bi}`}
+          lineNumber={line.block.lineNumber}
+          show={showNums}
+        />
+      ))}
+    </Div>
+  );
+
   return (
     <Div key={`dropcap2col-${blockIdx}`} style={htmlStyles.rowLayout}>
       <Div style={{ ...htmlStyles.columnTrack, width: `${colW}px` }}>
         <Div style={htmlStyles.blockRow}>
-          {firstLine.block.lineNumber ? (
-            <span style={htmlStyles.lineNumberLabel}>{firstLine.block.lineNumber}</span>
-          ) : (
-            <span style={htmlStyles.lineNumberSpacer} />
-          )}
+          {gutterColumn}
           <Div style={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
             <Div style={{ marginRight: `${CAP_GUTTER}px`, flexShrink: 0 }}>
               <HtmlOrnateDropCap
@@ -647,6 +734,9 @@ export function SvgFacsimilePage({
   showDeletions = true,
   suppressOtioseMarks = false,
   useNormalizedDiacritics = true,
+  useMufiGraphemes = false,
+  usePuaFont = true,
+  showLineNumbers = true,
 }: SvgFacsimilePageProps) {
   const t = useT();
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
@@ -690,8 +780,19 @@ export function SvgFacsimilePage({
       showDeletions,
       suppressOtioseMarks,
       useNormalizedDiacritics,
+      useMufiGraphemes,
+      usePuaFont,
+      showLineNumbers,
     }),
-    [showExpanded, showDeletions, suppressOtioseMarks, useNormalizedDiacritics],
+    [
+      showExpanded,
+      showDeletions,
+      suppressOtioseMarks,
+      useNormalizedDiacritics,
+      useMufiGraphemes,
+      usePuaFont,
+      showLineNumbers,
+    ],
   );
 
   const spatialFolio = useMemo(() => buildSpatialFolio(folio), [folio]);
@@ -831,11 +932,13 @@ const htmlStyles: Record<string, React.CSSProperties> = {
   heading: {
     textAlign: "center",
     fontFamily: "Georgia, 'Times New Roman', serif",
-    fontSize: `${FS}px`,
-    lineHeight: `${LH}px`,
-    fontStyle: "italic",
+    fontSize: `${FS * 1.1}px`,
+    lineHeight: `${LH * 1.2}px`,
+    fontWeight: "bold",
+    fontStyle: "normal",
     color: RUBRIC_FILL,
-    marginBottom: "10px",
+    marginTop: "6px",
+    marginBottom: "6px",
     boxSizing: "border-box",
   },
   blockRow: {
@@ -844,19 +947,80 @@ const htmlStyles: Record<string, React.CSSProperties> = {
     alignItems: "flex-start",
     width: "100%",
   },
+  leftLineGutter: {
+    width: `${LINE_NUM_W}px`,
+    flexShrink: 0,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "flex-end",
+    justifyContent: "flex-start",
+    paddingRight: "8px",
+    borderRight: `1px solid ${RULE_STROKE}`,
+    boxSizing: "border-box",
+    userSelect: "none",
+    WebkitUserSelect: "none",
+    position: "relative",
+    minHeight: `${LH}px`,
+  },
+  gutterLineNum: {
+    fontFamily: "monospace",
+    fontSize: "11px",
+    lineHeight: `${LH}px`,
+    height: `${LH}px`,
+    color: FAINT_FILL,
+    fontWeight: 700,
+    textAlign: "right",
+    userSelect: "none",
+  },
+  marginaliaLabel: {
+    writingMode: "vertical-rl",
+    transform: "rotate(180deg)",
+    fontSize: "10px",
+    letterSpacing: "2px",
+    color: "#5a2317",
+    textTransform: "uppercase",
+    fontFamily: "Georgia, 'Times New Roman', serif",
+    position: "absolute",
+    left: "2px",
+    top: "4px",
+    maxHeight: `${LH * 5}px`,
+    overflow: "hidden",
+    userSelect: "none",
+  },
+  dropCapGutterCol: {
+    display: "flex",
+    flexDirection: "column",
+    flexShrink: 0,
+    width: `${LINE_NUM_W}px`,
+  },
+  lineNumberSpacerHidden: {
+    width: 0,
+    flexShrink: 0,
+    display: "inline-block",
+    overflow: "hidden",
+  },
+  // Legacy aliases kept for any residual references
   lineNumberLabel: {
-    width: "32px",
+    width: `${LINE_NUM_W}px`,
     flexShrink: 0,
     fontFamily: "monospace",
-    fontSize: "10px",
+    fontSize: "11px",
     lineHeight: `${LH}px`,
     color: FAINT_FILL,
     textAlign: "right",
-    paddingRight: "6px",
+    paddingRight: "8px",
+    borderRight: `1px solid ${RULE_STROKE}`,
     userSelect: "none",
     display: "inline-block",
+    boxSizing: "border-box",
   },
-  lineNumberSpacer: { width: "32px", flexShrink: 0, display: "inline-block" },
+  lineNumberSpacer: {
+    width: `${LINE_NUM_W}px`,
+    flexShrink: 0,
+    display: "inline-block",
+    borderRight: `1px solid ${RULE_STROKE}`,
+    boxSizing: "border-box",
+  },
   rowLayout: {
     display: "flex",
     flexDirection: "row",

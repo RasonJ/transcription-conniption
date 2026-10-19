@@ -24,6 +24,32 @@ describe("HSMS Parser Engine Core Tests", () => {
     expect(prose?.tokens.some((t) => t.value.startsWith("Phera"))).toBe(true);
   });
 
+  it("extracts numbered {HD.} lines inside {CB.} into folio.headings (not body prose)", () => {
+    const demo = `[fol. 1r]
+{CB1.
+1 {HD. AO SERENISSIMO E EXCELLENTISSIMO PRINCIPE}
+2 {HD. HO IFANTE DOM LVYS.:.}
+3 {IN4.} Dzbo bem auenturado
+4 doutor sancto Agustinho
+}`;
+    const ast = parseHsMsText(demo);
+    const folio = ast.folios[0];
+    expect(folio?.headings).toEqual([
+      "AO SERENISSIMO E EXCELLENTISSIMO PRINCIPE",
+      "HO IFANTE DOM LVYS.:.",
+    ]);
+    const bodyJoined = (folio?.blocks ?? [])
+      .flatMap((b) => b.tokens.map((t) => t.value))
+      .join(" ");
+    expect(bodyJoined).not.toMatch(/\{HD/);
+    expect(bodyJoined).not.toMatch(/SERENISSIMO/);
+    const drop = folio?.blocks.find((b) => b.tokens.some((t) => t.type === "drop_initial"));
+    expect(drop?.tokens[0]?.value).toBe("D");
+    expect(drop?.tokens.some((t) => t.value.startsWith("zbo") || t.raw?.startsWith("zbo"))).toBe(
+      true,
+    );
+  });
+
   it("strips and records complex alphanumeric line numbers", () => {
     const ast = parseHsMsText("[fol. 1r]\n{CB1.\n1 {RUB. Test}\n}");
     expect(ast.stats.totalLines).toBe(1);

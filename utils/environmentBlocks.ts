@@ -8,15 +8,23 @@ export const ENV_OPEN_RE = /^\{\s*([A-Za-z]{2,5})(?:\.|\s+)\s*/i;
 const ENVELOPE_MAP: Record<string, BlockType> = {
   RUB: "rubric",
   AD: "addendum",
+  HD: "heading",
+  HD1: "heading",
+  HD2: "heading",
 };
 
 export function isLanguageCode(code: string): boolean {
   return LANGUAGE_TAG_CODES.includes(code.toUpperCase());
 }
 
+function isHeadingCode(code: string): boolean {
+  return /^HD[12]?$/.test(code.toUpperCase());
+}
+
 export function blockTypeForEnvCode(code: string): BlockType {
   const upper = code.toUpperCase();
   if (ENVELOPE_MAP[upper]) return ENVELOPE_MAP[upper];
+  if (isHeadingCode(upper)) return "heading";
   if (upper.startsWith("GL")) return "gloss";
   if (isLanguageCode(upper)) return "language_span";
   return "prose";
@@ -24,7 +32,13 @@ export function blockTypeForEnvCode(code: string): BlockType {
 
 export function isKnownEnvironmentCode(code: string): boolean {
   const upper = code.toUpperCase();
-  return upper === "RUB" || upper === "AD" || upper.startsWith("GL") || isLanguageCode(upper);
+  return (
+    upper === "RUB" ||
+    upper === "AD" ||
+    isHeadingCode(upper) ||
+    upper.startsWith("GL") ||
+    isLanguageCode(upper)
+  );
 }
 
 export function parseEnvironmentOpen(line: string): { code: string; rest: string } | null {

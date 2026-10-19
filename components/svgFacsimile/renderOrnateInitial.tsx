@@ -5,44 +5,19 @@ import {
   seededRng,
   type LetterformTheme,
 } from "@/components/svgFacsimile/dropInitialLetterform";
+import { MUFI_ORNATE_FONT_STACKS } from "@/utils/mufiFonts";
 import React from "react";
 import { Circle, G, Image as SvgImage, Line, Path, Rect, Text as SvgText } from "react-native-svg";
 
 const GOLD_LEAF = "#d4af37";
 
-/** Style 0 — Lombardic / historiated */
-const FONTS_VINES = [
-  "Georgia, 'Times New Roman', serif",
-  "'Palatino Linotype', Palatino, Georgia, serif",
-  "'Bookman Old Style', Bookman, Georgia, serif",
-  "Baskerville, Georgia, serif",
-];
-
-/** Style 1 — Gothic Textura / criblé */
-const FONTS_CRIBLE = [
-  "'Times New Roman', Georgia, serif",
-  "Impact, 'Arial Black', sans-serif",
-  "Georgia, 'Times New Roman', serif",
-  "'Trajan Pro', Trajan, Georgia, serif",
-];
-
-/** Style 2 — Roman / Antiqua ribbon */
-const FONTS_RIBBON = [
-  "'Palatino Linotype', Palatino, Georgia, serif",
-  "Garamond, 'EB Garamond', Georgia, serif",
-  "Georgia, 'Times New Roman', serif",
-  "Baskerville, Georgia, serif",
-];
-
-/** Style 3 — calligraphic damask */
-const FONTS_DAMASK = [
-  "Georgia, serif",
-  "Garamond, 'EB Garamond', serif",
-  "'Palatino Linotype', Palatino, serif",
-  "'Book Antiqua', Palatino, Georgia, serif",
-];
-
-const STYLE_FONTS = [FONTS_VINES, FONTS_CRIBLE, FONTS_RIBBON, FONTS_DAMASK] as const;
+/** Andron Scriptor (MUFI font 53) led stacks — see utils/mufiFonts.ts */
+const STYLE_FONTS = [
+  MUFI_ORNATE_FONT_STACKS.historiated_vines,
+  MUFI_ORNATE_FONT_STACKS.geometrical_crible,
+  MUFI_ORNATE_FONT_STACKS.renaissance_ribbon,
+  MUFI_ORNATE_FONT_STACKS.minstrel_damask,
+] as const;
 
 const STYLE_LABELS = [
   "historiated_vines",

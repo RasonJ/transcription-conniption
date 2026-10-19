@@ -456,6 +456,15 @@ export function parseHsMsText(rawText: string): ParsedManuscript {
       result.stats.totalLines++;
     }
 
+    // Numbered running headers inside {CB.}: `1 {HD. …}` must not become body prose.
+    if (line.startsWith("{HD")) {
+      const headMatch = line.match(RE_HEADING_EXTRACT);
+      const headText = headMatch ? headMatch[1] : "";
+      folio.headings.push(headText.replace(RE_HEADING_TRAILING_PLUS, "").trim());
+      pendingLineNumber = undefined;
+      continue;
+    }
+
     let lineDropInitial: Token | null = null;
     const lineInitial = parseDropInitialPrefix(line);
     if (lineInitial.token) {

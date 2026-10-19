@@ -4,12 +4,18 @@ import { pathToFileURL } from "node:url";
 import { CATALOG_VERSION, RECIPES } from "../utils/copilot/catalog";
 import type { Recipe, SlotSpec } from "../utils/copilot/types";
 import { normalizeQuery } from "../utils/copilot/router";
+import {
+  extractI18nTriggersForRecipe,
+  mergeI18nTriggerSeeds,
+} from "../utils/copilot/i18nTriggerSeeds";
 import en from "../i18n/locales/en.json";
 import es from "../i18n/locales/es.json";
 import pt from "../i18n/locales/pt.json";
 import ca from "../i18n/locales/ca.json";
 import gl from "../i18n/locales/gl.json";
 import eu from "../i18n/locales/eu.json";
+
+export { extractI18nTriggersForRecipe };
 
 /** SPEC-COPILOT §5: ≥ 6 trigger phrases per Tier 1 locale; templates in every base catalog. */
 export const MIN_TRIGGERS_PER_LOCALE = 6;
@@ -56,32 +62,34 @@ export function validateCatalog(): string[] {
 }
 
 function slotToJsonSchema(slot: SlotSpec): Record<string, unknown> {
-  if (slot.type === "string") {
-    return { type: "string", description: `Slot \`${slot.name}\`` };
+  switch (slot.type) {
+    case "string":
+      return { type: "string", description: `Slot \`${slot.name}\`` };
+    case "int":
+      return {
+        type: "integer",
+        description: `Slot \`${slot.name}\``,
+        ...(typeof slot.default === "number" ? { default: slot.default } : {}),
+        ...(typeof slot.min === "number" ? { minimum: slot.min } : {}),
+        ...(typeof slot.max === "number" ? { maximum: slot.max } : {}),
+      };
+    case "enum":
+      return {
+        type: "string",
+        enum: slot.values,
+        description: `Slot \`${slot.name}\``,
+      };
+    case "folioRange":
+      return { type: "string", description: "Folio id or range (e.g. 2r, 1v-3r)" };
+    case "hsmsLang":
+      return { type: "string", description: "HSMS language tag (LAT, ENG, …)" };
+    default: {
+      const exhaustive: never = slot;
+      throw new Error(
+        `Unrecognized slot type in catalog: ${JSON.stringify(exhaustive)} — fix SlotSpec before generating MCP tools.`,
+      );
+    }
   }
-  if (slot.type === "int") {
-    return {
-      type: "integer",
-      description: `Slot \`${slot.name}\``,
-      ...(typeof slot.default === "number" ? { default: slot.default } : {}),
-      ...(typeof slot.min === "number" ? { minimum: slot.min } : {}),
-      ...(typeof slot.max === "number" ? { maximum: slot.max } : {}),
-    };
-  }
-  if (slot.type === "enum") {
-    return {
-      type: "string",
-      enum: slot.values,
-      description: `Slot \`${slot.name}\``,
-    };
-  }
-  if (slot.type === "folioRange") {
-    return { type: "string", description: "Folio id or range (e.g. 2r, 1v-3r)" };
-  }
-  if (slot.type === "hsmsLang") {
-    return { type: "string", description: "HSMS language tag (LAT, ENG, …)" };
-  }
-  return { type: "string" };
 }
 
 export interface McpToolDefinition {
@@ -136,9 +144,11 @@ export function renderMcpToolDefinitions(
 
 export function renderCatalogModule(): string {
   const entries = RECIPES.map((r) => {
+    // RECIPES already include locale + i18n chip seeds; normalize for the generated module.
+    const seeded = mergeI18nTriggerSeeds(r.id, r.triggers, CATALOGS);
     const triggers: Record<string, string[]> = {};
-    for (const [locale, phrases] of Object.entries(r.triggers)) {
-      triggers[locale] = (phrases ?? []).map(normalizeQuery);
+    for (const [locale, phrases] of Object.entries(seeded)) {
+      triggers[locale] = [...new Set((phrases ?? []).map(normalizeQuery).filter(Boolean))];
     }
     return {
       id: r.id,
@@ -377,18 +387,19 @@ export function renderMcpToolsModule(
   ].join("\n");
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const errors = validateCatalog();
   if (errors.length > 0) {
     for (const e of errors) console.error(`error: ${e}`);
     process.exit(1);
   }
+  const { writeAtomicSync } = await import("./lib/fsutil.mjs");
   fs.mkdirSync(path.dirname(OUT_PATH), { recursive: true });
-  fs.writeFileSync(OUT_PATH, renderCatalogModule(), "utf8");
+  writeAtomicSync(OUT_PATH, renderCatalogModule());
   const recipeTools = renderMcpToolDefinitions();
   const graphTools = renderMcpGraphTools();
   const tools = [...recipeTools, ...graphTools];
-  fs.writeFileSync(MCP_OUT_PATH, renderMcpToolsModule(tools), "utf8");
+  writeAtomicSync(MCP_OUT_PATH, renderMcpToolsModule(tools));
   console.log(
     `copilot catalog: ${RECIPES.length} recipes → ${path.relative(process.cwd(), OUT_PATH)}`,
   );
@@ -404,4 +415,9 @@ const isDirectRun =
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     import.meta.url === pathToFileURL(path.resolve(process.argv[1] ?? "")).href);
 
-if (isDirectRun) main();
+if (isDirectRun) {
+  void main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

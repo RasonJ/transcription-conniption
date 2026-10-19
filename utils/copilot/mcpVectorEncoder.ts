@@ -47,7 +47,7 @@ function packSemanticHash(text: string, bytes = 32): Uint8Array {
 
 export function featureFlagsForBlock(block: ManuscriptBlock): number {
   let flags = 0;
-  if (block.type === "rubric") flags |= MCP_FLAG.RUBRIC;
+  if (block.type === "rubric" || block.type === "heading") flags |= MCP_FLAG.RUBRIC;
   if (block.type === "gloss" || block.type === "addendum") flags |= MCP_FLAG.GLOSS;
   if (block.type === "language_span") flags |= MCP_FLAG.LANGUAGE_SPAN;
 

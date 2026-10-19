@@ -180,12 +180,14 @@ The historiated letter is **one grapheme** (`utils/dropInitial.ts`). Multi-lette
 
 `renderOrnateInitialSvg` (`components/svgFacsimile/renderOrnateInitial.tsx`) picks a **deterministic** variant from `buildDropCapSeed(folioId, letter, blockIndex)` via `seededRng` (`dropInitialLetterform.ts`). Each witness location gets a stable combination of **field colour** (from `ILLUMINATED_THEMES`), **font stack**, and **background doodles** clipped to the inner panel (8% pad) so vines and hatch lines do not bleed into adjacent lines.
 
+**Preferred face:** [Andron Scriptor](https://mufi.info/q.php?p=mufi/fonts/fonts/53) (MUFI font id **53**, Andreas Stötzner) — the chart face for the MUFI recommendation. Font stacks are built by `utils/mufiFonts.ts` (`Andron Scriptor Web` → Junicode → Georgia). Optional static SVG overrides live under `assets/mufi/ornate-initials/{LETTER}/{style}.svg`; inventory: `utils/generated/ornateInitialInventory.ts`.
+
 | Style | Name | Background | Typography |
 |-------|------|------------|------------|
-| 0 | Historiated vines | Acanthus curves and leaf nodes | Lombardic serif stack |
-| 1 | Geometrical criblé | Gold stipple on deep field | Heavy Gothic (`fontWeight: 900`) |
-| 2 | Renaissance ribbon | Double-ruled interlace bands | Palatino / Garamond Roman |
-| 3 | Minstrel damask | Checkerboard or cross-hatch tessellation | Calligraphic serif stack |
+| 0 | Historiated vines | Acanthus curves and leaf nodes | Andron-led Lombardic stack |
+| 1 | Geometrical criblé | Gold stipple on deep field | Andron-led heavy Gothic (`fontWeight: 900`) |
+| 2 | Renaissance ribbon | Double-ruled interlace bands | Andron → Palatino / Garamond |
+| 3 | Minstrel damask | Checkerboard or cross-hatch tessellation | Andron-led calligraphic stack |
 
 Tap the cap box to replace the procedural design with a **localized folio scan** (`uploadedUri`); border and hit target are preserved. Web facsimile rows use the parallel `HtmlOrnateDropCap` component inside HTML `ForeignObject` cells.
 
@@ -210,7 +212,21 @@ Failure mode to avoid: peeling the entire particle **AO** into the cap so **O** 
 | `&` | Tironian et glyph | Never two glyphs |
 | `~` alone (otiose) | Faint tilde | Optional hide |
 
-**Principle:** toggles change **how much markup is visible**, not **where** the line sits on the grid.
+### 7.1 MUFI tiers (interchange vs display)
+
+HSMS ASCII remains the **canonical interchange** format for storage, lint, Azure agents, and export sources. MUFI is a **display overlay**:
+
+| Tier | Role | Modules |
+|------|------|---------|
+| **1 — HSMS ASCII** | Source of truth (`c'`, `q<ue>`, `&`, `p<er>`) | Lexer, linter, agents |
+| **2 — MUFI catalog** | Scholarly HSMS → HTML entity → Unicode triples | `utils/mufiChars.ts`, `assets/mufi/mufi-chars.json`, overlays |
+| **3 — Canvas glyphs** | Optional parchment rendering of PUA / precomposed / decomposed forms | `utils/mufiCharacterMap.ts` (`convertHsmsToMufiGlyphs`), `formatTokenDisplayGrapheme.ts` |
+
+When **MUFI graphemes** is on, `tokenRendering.ts` rewrites segment text for the facsimile only. **MUFI PUA font** (default on with graphemes) chooses precomposed/PUA (`entry.char`) vs decomposed combining marks (`entry.decomposed`). Never emit Private Use Area code points into HSMS source.
+
+**Preferred face:** [Andron Scriptor](https://mufi.info/q.php?p=mufi/fonts/fonts/53) (MUFI font **53**); Junicode OFL is vendored under `assets/mufi/fonts/` and loaded in `app/_layout.tsx`. See [assets/mufi/README.md](../assets/mufi/README.md) and [fonts/README.md](../assets/mufi/fonts/README.md).
+
+**Principle:** toggles change **how much markup is visible** (and which glyph repertoire paints the ink), not **where** the line sits on the grid.
 
 ---
 
@@ -237,11 +253,13 @@ Optional **folio leaf scan** (`FolioFacsimileCanvas`) places the diplomatic grid
 | Expansions `<>` | Show scribal/supplied letters the manuscript compresses |
 | Deletions `()` | Show struck or bracketed removal |
 | Unicode diacritics | Modern normalized vowels for readers unfamiliar with tildes |
+| MUFI graphemes | Paint MUFI / paleographic glyphs on the leaf (ASCII source unchanged) |
+| MUFI PUA font | Prefer chart PUA/precomposed forms over decomposed Unicode |
 | Otiose `~` | Hide mechanical tildes that are not phonemic |
 | Reading flow | Reconstruct continuous text in synoptic pane only |
 | SVG canvas | Enable fixed-grid facsimile renderer |
 
-Defaults favour a **clean diplomatic leaf** (expansions and deletions off, tildes visible) for first impression; scholars enable layers as needed.
+Defaults favour a **clean diplomatic leaf** (expansions and deletions off, tildes visible, MUFI graphemes off) for first impression; scholars enable layers as needed.
 
 ---
 
@@ -266,11 +284,12 @@ Use this list beside the printed or manuscript facsimile (or `text-TRS.txt_cc-te
 
 | Limit | Reason |
 |-------|--------|
-| No licensed Blackletter webfont per witness | Legal and bundle size; spacing + caps carry parity |
-| Ornate cap is generative SVG unless user uploads scan | Four seeded matrices on native; web uses `HtmlOrnateDropCap`; TRS uses maroon float in legacy HTML |
+| No per-witness Blackletter webfont | Bundle size; Andron (optional local) + Junicode OFL cover MUFI chart glyphs; spacing + caps still carry parity |
+| Ornate cap is generative SVG unless user uploads scan | Four seeded matrices on native; web uses `HtmlOrnateDropCap`; optional static SVG under `assets/mufi/ornate-initials/`; TRS uses maroon float in legacy HTML |
 | RN path not fully justified | React Native `Text` does not implement incunable letter-spacing model |
 | Zoom ≠ reflow | Zoom scales pixels; baselines remain tied to source lines |
 | Stains and foxing | Only via background scan overlay, not simulated per token |
+| MUFI PUA requires a supporting face | Without Andron/Junicode, some Private Use glyphs may tofu; decomposed mode mitigates |
 
 Future work (see [ARCHITECTURE.md](ARCHITECTURE.md) roadmap): image pane in synoptic view, deeper font pairing per script, print-specific justification metrics derived from facsimile metrology.
 
@@ -280,25 +299,32 @@ Future work (see [ARCHITECTURE.md](ARCHITECTURE.md) roadmap): image pane in syno
 
 | File | Typography / aesthetics |
 |------|-------------------------|
-| `components/svgFacsimile/tokenRendering.ts` | `FS`, `LH`, fills, `tokenToSegs`, paleographic cases |
+| `components/svgFacsimile/tokenRendering.ts` | `FS`, `LH`, fills, `tokenToSegs`, MUFI display hooks |
 | `components/svgFacsimile/pageLayout.ts` | `PARCHMENT_BG`, margins, `dropCapBoxWidth` |
 | `components/svgFacsimile/HtmlOrnateDropCap.tsx` | Web historiated cap geometry |
 | `components/svgFacsimile/renderOrnateInitial.tsx` | Native historiated cap (`renderOrnateInitialSvg`) |
 | `components/svgFacsimile/dropInitialLetterform.ts` | `seededRng`, `ILLUMINATED_THEMES`, matrix fonts |
 | `utils/dropInitial.ts` | `{INn.}` grapheme peel |
+| `utils/mufiChars.ts` | MUFI catalog lookup + ornate inventory accessors |
+| `utils/mufiCharacterMap.ts` | Tier-2 paleographic map + `convertHsmsToMufiGlyphs` |
+| `utils/formatTokenDisplayGrapheme.ts` | Per-token display rewrite for MUFI toggles |
+| `utils/mufiFonts.ts` | Andron → Junicode → Georgia stacks |
 | `utils/renderMarkupLeakage.ts` | Post-export HTML leakage (batch omits lacuna `[ ]` checks) |
 | `utils/hsmsLexer.ts` | Bracket and lacuna token boundaries |
 | `constants/scriptoriumTheme.ts` | App-wide vellum palette |
 | `utils/htmlExport.ts` | Legacy floated-cap HTML |
+| `assets/mufi/` | Catalog, overlays, fonts, ornate SVG slots |
 
 ---
 
 ## 13. Further reading
 
 - Mackenzie & Harris-Northall, *A Manual of Manuscript Transcription* — §3.232 Initials, §3.226 Editorial procedures, §3.12 Word division.
+- [Medieval Unicode Font Initiative](https://mufi.info/q.php?p=mufi/chars) — character recommendation v4.0; [Andron Scriptor](https://mufi.info/q.php?p=mufi/fonts/fonts/53) (font 53).
+- [assets/mufi/README.md](../assets/mufi/README.md) — vendored catalog, overlays, regenerate scripts.
 - [OSTA transcription guide](https://hispanicseminary.org/osta-en.htm) — corpus-specific paleographic conventions.
 - [HSMS-LAYOUT.md](HSMS-LAYOUT.md) — AST, `{CB.}` zip, baseline grid, parity tests.
-- Transcription Conniption: `npm test` (158 tests) · Pedro Nunes: `npx jest __tests__/pedroNunesTrsParity.test.ts`
+- Transcription Conniption: `npm test` · Pedro Nunes: `npx jest __tests__/pedroNunesTrsParity.test.ts`
 
 ---
 

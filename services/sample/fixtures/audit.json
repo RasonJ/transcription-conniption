@@ -1,0 +1,7 @@
+{
+  "source": "bootstrap",
+  "barriers": [
+    "EMPTY_COLUMN_ENVELOPE"
+  ],
+  "lint_errors": 1
+}

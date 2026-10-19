@@ -1,0 +1,542 @@
+{
+  "version": 1,
+  "domain": "hsms_scriptorium",
+  "lifecycle": [
+    "INGEST",
+    "VALIDATE",
+    "EDIT",
+    "ANALYZE",
+    "EXPORT",
+    "LIBRARY"
+  ],
+  "slot_legend": {
+    "word": {
+      "type": "string",
+      "description": "Surface form / lemma needle"
+    },
+    "folio_id": {
+      "type": "string",
+      "description": "Leaf id e.g. 1r, 12v"
+    },
+    "range": {
+      "type": "folioRange",
+      "description": "Inclusive folio span"
+    },
+    "window": {
+      "type": "int",
+      "unit": "tokens",
+      "default": 5
+    },
+    "n": {
+      "type": "int",
+      "description": "N-gram order",
+      "default": 3
+    },
+    "top": {
+      "type": "int",
+      "description": "Rank list size",
+      "default": 10
+    },
+    "lang": {
+      "type": "hsmsLang",
+      "description": "HSMS language mnemonic LAT/ARB/…"
+    },
+    "hand": {
+      "type": "int",
+      "description": "Secondary hand index"
+    }
+  },
+  "barriers": {
+    "EMPTY_COLUMN_ENVELOPE": {
+      "stage": "VALIDATE",
+      "severity": "Column tag {CBn.} has no body before closing }",
+      "blocks": [
+        "EXPORT_TEI",
+        "EXPORT_HTML"
+      ]
+    },
+    "MISSING_FOLIO_MARKER": {
+      "stage": "VALIDATE",
+      "severity": "No [fol. …] marker in the witness",
+      "blocks": [
+        "JUMP_FOLIO"
+      ]
+    },
+    "UNREVIEWED_SIDECAR": {
+      "stage": "INGEST",
+      "severity": "Machine-transcribed folio sides still unreviewed",
+      "blocks": [
+        "MARK_REVIEWED"
+      ]
+    },
+    "LOW_CONFIDENCE_LINES": {
+      "stage": "INGEST",
+      "severity": "Recognition confidence below threshold",
+      "blocks": [
+        "PASS_TWO_REPAIR"
+      ]
+    }
+  },
+  "intents": {
+    "ingest:sidecar:review_progress": {
+      "recipeId": "ingest.unreviewed",
+      "stage": "INGEST",
+      "doActions": [
+        "OPEN_INGEST_PANEL",
+        "JUMP_FOLIO"
+      ],
+      "slots": [],
+      "examples": [
+        "folios still unreviewed",
+        "review progress for machine transcription",
+        "which folio sides need human review"
+      ]
+    },
+    "ingest:sidecar:low_confidence": {
+      "recipeId": "ingest.low_confidence",
+      "stage": "INGEST",
+      "doActions": [
+        "JUMP_FOLIO",
+        "PASS_TWO_REPAIR"
+      ],
+      "slots": [],
+      "examples": [
+        "low confidence lines",
+        "which lines recognition struggled with"
+      ]
+    },
+    "validate:lint:run_preflight": {
+      "recipeId": "search.passages",
+      "stage": "VALIDATE",
+      "doActions": [
+        "OPEN_VALIDATION",
+        "RUN_LINT"
+      ],
+      "slots": [
+        "query"
+      ],
+      "mcp_tool": "audit_hsms_syntax",
+      "examples": [
+        "run structural lint on this witness",
+        "show validation errors",
+        "preflight this transcription"
+      ]
+    },
+    "edit:folio:navigate": {
+      "recipeId": "nav.folio",
+      "stage": "EDIT",
+      "doActions": [
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "folio_id",
+        "range"
+      ],
+      "examples": [
+        "go to folio 1v",
+        "jump to leaf 12r",
+        "open fol. 3r"
+      ]
+    },
+    "edit:display:toggle_orthography": {
+      "recipeId": "ui.control",
+      "stage": "EDIT",
+      "doActions": [
+        "TOGGLE_ORTHOGRAPHY"
+      ],
+      "slots": [],
+      "examples": [
+        "toggle modern orthography",
+        "show normalized spelling",
+        "activar ortografía moderna"
+      ]
+    },
+    "edit:display:line_numbers": {
+      "recipeId": "ui.control",
+      "stage": "EDIT",
+      "doActions": [
+        "TOGGLE_LINE_NUMBERS"
+      ],
+      "slots": [],
+      "examples": [
+        "show line numbers in the gutter",
+        "mostrar números de línea"
+      ]
+    },
+    "analyze:stats:term_frequency": {
+      "recipeId": "stats.term_frequency",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_KWIC",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "word"
+      ],
+      "examples": [
+        "how many times is muito in this",
+        "cuántas veces aparece dios",
+        "count occurrences of principe"
+      ]
+    },
+    "analyze:concordance:kwic": {
+      "recipeId": "search.kwic",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_CONCORDANCE",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "word",
+        "window"
+      ],
+      "examples": [
+        "show me where muito appears",
+        "concordance for sancto",
+        "kwic for rey"
+      ]
+    },
+    "analyze:stats:ttr_hapax": {
+      "recipeId": "stats.ttr_hapax",
+      "stage": "ANALYZE",
+      "doActions": [
+        "EXPORT_CSV"
+      ],
+      "slots": [
+        "scope"
+      ],
+      "examples": [
+        "calculate type token ratio",
+        "how many hapax legomena",
+        "total word count of this page"
+      ]
+    },
+    "paleography:abbr:nasal_tilde": {
+      "recipeId": "abbr.nasal_tilde_vs_geminate",
+      "stage": "ANALYZE",
+      "doActions": [
+        "HIGHLIGHT_TOKENS",
+        "JUMP_FOLIO"
+      ],
+      "slots": [],
+      "examples": [
+        "highlight nasal suspension tildes",
+        "filter nn versus n tilde",
+        "list scribal contractions"
+      ]
+    },
+    "paleography:abbr:superscripts": {
+      "recipeId": "abbr.superscripts",
+      "stage": "ANALYZE",
+      "doActions": [
+        "HIGHLIGHT_TOKENS"
+      ],
+      "slots": [],
+      "examples": [
+        "show superscript vowel contractions",
+        "highlight abbreviation macrons"
+      ]
+    },
+    "paleography:corr:scribal_vs_editorial": {
+      "recipeId": "corr.deletions_scribal_vs_editorial",
+      "stage": "ANALYZE",
+      "doActions": [
+        "HIGHLIGHT_TOKENS",
+        "JUMP_FOLIO"
+      ],
+      "slots": [],
+      "examples": [
+        "highlight scribal expunctions",
+        "show editorial cancellations"
+      ]
+    },
+    "paleography:illum:initials": {
+      "recipeId": "illum.initial_hierarchy",
+      "stage": "ANALYZE",
+      "doActions": [
+        "ZOOM_INITIAL",
+        "JUMP_FOLIO"
+      ],
+      "slots": [],
+      "examples": [
+        "find the next illuminated drop cap",
+        "list major initials"
+      ]
+    },
+    "codex:catchwords:list": {
+      "recipeId": "codex.catchwords",
+      "stage": "ANALYZE",
+      "doActions": [
+        "JUMP_FOLIO"
+      ],
+      "slots": [],
+      "examples": [
+        "locate all catchwords",
+        "list reclamos at folio feet"
+      ]
+    },
+    "meta:witness:shelfmark": {
+      "recipeId": "meta.witness",
+      "stage": "LIBRARY",
+      "doActions": [
+        "OPEN_LIBRARY"
+      ],
+      "slots": [],
+      "examples": [
+        "what is the shelfmark",
+        "which library holds this manuscript"
+      ]
+    },
+    "export:tei:download": {
+      "recipeId": "ui.control",
+      "stage": "EXPORT",
+      "doActions": [
+        "EXPORT_TEI"
+      ],
+      "slots": [],
+      "examples": [
+        "export current view to tei xml",
+        "download tei"
+      ]
+    },
+    "export:svg:download": {
+      "recipeId": "ui.control",
+      "stage": "EXPORT",
+      "doActions": [
+        "EXPORT_SVG"
+      ],
+      "slots": [],
+      "examples": [
+        "download page rendering as svg",
+        "export svg"
+      ]
+    },
+    "validate:barrier:inspect": {
+      "recipeId": "search.passages",
+      "stage": "VALIDATE",
+      "doActions": [
+        "OPEN_VALIDATION",
+        "RUN_LINT"
+      ],
+      "slots": [
+        "query"
+      ],
+      "mcp_tool": "audit_hsms_syntax",
+      "examples": [
+        "why is this witness blocked from export",
+        "inspect empty column envelope barriers",
+        "show validation blockers before TEI export"
+      ]
+    },
+    "edit:pass_two:repair": {
+      "recipeId": "ingest.low_confidence",
+      "stage": "EDIT",
+      "doActions": [
+        "PASS_TWO_REPAIR",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "folio_id"
+      ],
+      "mcp_tool": "pass_two_repair_folio",
+      "examples": [
+        "run pass two repair on low confidence lines",
+        "repair recognition errors on folio 1v",
+        "fix machine transcription with pass-two"
+      ]
+    },
+    "analyze:stats:word_count": {
+      "recipeId": "stats.term_frequency",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_KWIC",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "word"
+      ],
+      "examples": [
+        "how many times appears {word|muito}",
+        "cuántas veces aparece {word|dios}",
+        "contagem de {word|principe}"
+      ]
+    },
+    "analyze:concordance:open": {
+      "recipeId": "search.kwic",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_CONCORDANCE",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "word",
+        "window"
+      ],
+      "examples": [
+        "open concordance for {word|sancto}",
+        "donde aparece {word|rey}",
+        "kwic window for {word|deus}"
+      ]
+    },
+    "library:corpus:search": {
+      "recipeId": "meta.witness",
+      "stage": "LIBRARY",
+      "doActions": [
+        "OPEN_LIBRARY"
+      ],
+      "slots": [
+        "query"
+      ],
+      "mcp_tool": "library_search_corpus",
+      "examples": [
+        "search the library corpus for this shelfmark",
+        "find related witnesses in the catalog",
+        "open library graph for this manuscript"
+      ]
+    },
+    "export:csv:download": {
+      "recipeId": "ui.control",
+      "stage": "EXPORT",
+      "doActions": [
+        "EXPORT_CSV"
+      ],
+      "slots": [],
+      "examples": [
+        "export hapax list as csv",
+        "download concordance csv",
+        "export token frequency table"
+      ]
+    },
+    "analyze:controversy:explain": {
+      "recipeId": "discourse.explain_controversy",
+      "stage": "ANALYZE",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_DISCOURSE_VIEW",
+        "HIGHLIGHT_REFUTATION_NODE"
+      ],
+      "mcp_tool": "query_codicological_graph",
+      "slots": [
+        "topic"
+      ],
+      "examples": [
+        "is there a debate about {topic|What are catchwords in a manuscript?}",
+        "why do studies conflict on {topic|catchwords}",
+        "show contesting papers for {topic|scribal hands}",
+        "is there a debate about {topic|catchwords}",
+        "why do studies conflict on {topic|scribal hands}",
+        "show contesting papers for {topic|quire structure}"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "FETCH_FAQ_ANSWER",
+          "node_type": "AnswerSnippet",
+          "bound_node_id": "ANS:catchwords"
+        },
+        {
+          "step": 2,
+          "action": "GET_PRIMARY_MANUSCRIPT",
+          "node_type": "Manuscript",
+          "bound_node_id": "MANUSCRIPT:demo-a"
+        },
+        {
+          "step": 3,
+          "action": "TRAVERSE_REFUTATIONS",
+          "relation": "refuted",
+          "target_type": "Manuscript",
+          "bound_node_id": "MANUSCRIPT:demo-b"
+        },
+        {
+          "step": 4,
+          "action": "SURFACE_CONTRADICTION_CHIP",
+          "ui_target": "discourse_panel"
+        }
+      ]
+    },
+    "validate:barrier:repair_flow": {
+      "recipeId": "diag.audit_hsms_syntax",
+      "stage": "VALIDATE",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_VALIDATION",
+        "RUN_LINT",
+        "PASS_TWO_REPAIR",
+        "JUMP_FOLIO"
+      ],
+      "mcp_tool": "audit_hsms_syntax",
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "why is folio {folio_id|3v} blocked from export",
+        "fix validation errors on {folio_id|3v}",
+        "clear export barriers for {folio_id|3v}"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "INSPECT_BARRIER",
+          "node_type": "AdministrativeBarrierNode",
+          "bound_node_id": "BARRIER:EMPTY_COLUMN_ENVELOPE"
+        },
+        {
+          "step": 2,
+          "action": "JUMP_TO_FOLIO",
+          "slot": "folio_id"
+        },
+        {
+          "step": 3,
+          "action": "DISPATCH_MCP_REPAIR",
+          "mcp_tool": "pass_two_repair_folio"
+        },
+        {
+          "step": 4,
+          "action": "CLEAR_BARRIER",
+          "doAction": "PASS_TWO_REPAIR",
+          "bound_node_id": "MANUSCRIPT:demo-a"
+        }
+      ]
+    },
+    "learn:prerequisite:pathway": {
+      "recipeId": "learn.prerequisite_pathway",
+      "stage": "LIBRARY",
+      "precompute": "eager",
+      "doActions": [
+        "OPEN_LEARNING_PATH",
+        "HIGHLIGHT_CONCEPT"
+      ],
+      "slots": [
+        "concept"
+      ],
+      "examples": [
+        "what should I read before studying {concept|catchwords}",
+        "prerequisites for understanding {concept|catchwords}",
+        "explain {concept|catchwords} in plain terms",
+        "prerequisites for understanding {concept|paleography}",
+        "explain {concept|drop initials} in plain terms"
+      ],
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_CONCEPT_NODE",
+          "node_type": "Concept",
+          "bound_node_id": "CONCEPT:catchwords"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_PREREQUISITES",
+          "relation": "prerequisite_for",
+          "direction": "INCOMING",
+          "bound_node_id": "CONCEPT:paleography"
+        },
+        {
+          "step": 3,
+          "action": "FETCH_LAY_EXPLANATION",
+          "node_type": "LayExplanation",
+          "bound_node_id": "LAY:catchwords"
+        }
+      ]
+    }
+  }
+}

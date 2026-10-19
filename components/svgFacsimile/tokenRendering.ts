@@ -1,5 +1,11 @@
 import type { ManuscriptBlock, Token } from "@/constants/manuscript";
+import { formatTokenDisplayGrapheme } from "@/utils/formatTokenDisplayGrapheme";
 import { normalizeDisplayDiacritics } from "@/utils/legacyDiacritics";
+import {
+  convertHsmsToMufiGlyphs,
+  MUFI_PALEOGRAPHIC_MAP,
+  PATTERN_KEYS_LONGEST_FIRST,
+} from "@/utils/mufiCharacterMap";
 
 export const FS = 16;
 export const LH = 24;
@@ -17,6 +23,15 @@ export interface DisplaySettings {
   showDeletions: boolean;
   suppressOtioseMarks: boolean;
   useNormalizedDiacritics: boolean;
+  /** Tier-2 MUFI graphemes on the parchment canvas (HSMS ASCII stays in storage). */
+  useMufiGraphemes?: boolean;
+  /** Prefer PUA/precomposed MUFI chars when a MUFI font is loaded; else decomposed. */
+  usePuaFont?: boolean;
+  /**
+   * Scholarly line numbers in the left gutter (never prepended into copyable body text).
+   * Defaults to true when omitted.
+   */
+  showLineNumbers?: boolean;
 }
 
 export interface Seg {
@@ -44,19 +59,23 @@ export function seg(overrides: Partial<Seg> & { text: string; fill: string }): S
 }
 
 function blockFill(t: ManuscriptBlock["type"]): string {
-  if (t === "rubric") return RUBRIC_FILL;
+  if (t === "rubric" || t === "heading") return RUBRIC_FILL;
   if (t === "gloss") return GLOSS_FILL;
   if (t === "language_span") return FOREIGN_FILL;
   return PROSE_FILL;
 }
 
 function applyTokenEnvLayers(s: Seg, tok: Token, blockType: ManuscriptBlock["type"]): Seg {
+  if (tok.envLayers?.some((l) => l.type === "heading")) {
+    return { ...s, fill: RUBRIC_FILL, bold: true, fs: FS * 1.15 };
+  }
   if (tok.envLayers?.some((l) => l.type === "rubric")) {
     return { ...s, fill: RUBRIC_FILL, bold: true };
   }
   if (tok.envLayers?.some((l) => l.type === "language_span")) {
     return { ...s, fill: FOREIGN_FILL, italic: true };
   }
+  if (blockType === "heading") return { ...s, fill: RUBRIC_FILL, bold: true, fs: FS * 1.15 };
   if (blockType === "rubric") return { ...s, fill: RUBRIC_FILL, bold: true };
   if (blockType === "language_span") return { ...s, fill: FOREIGN_FILL, italic: true };
   if (blockType === "gloss") return { ...s, fill: GLOSS_FILL, italic: true, fs: FS * 0.85 };
@@ -66,6 +85,38 @@ function applyTokenEnvLayers(s: Seg, tok: Token, blockType: ManuscriptBlock["typ
 function tokenDisplayValue(tok: Token, s: DisplaySettings): string {
   if (s.useNormalizedDiacritics && tok.normalized) return tok.normalized;
   return tok.value ?? "";
+}
+
+function applyMufiDisplay(text: string, s: DisplaySettings, raw?: string): string {
+  if (!s.useMufiGraphemes) return text;
+  return formatTokenDisplayGrapheme(text, s, raw);
+}
+
+/**
+ * Consume a paleographic HSMS pattern starting at `start` by matching concatenated
+ * `token.raw` values (text + <expansions> + <<supers>>). Returns glyph + tokens used.
+ */
+function matchMufiPatternAt(
+  tokens: Token[],
+  start: number,
+  s: DisplaySettings,
+): { glyph: string; consume: number } | null {
+  if (!s.useMufiGraphemes) return null;
+  let window = "";
+  const maxLook = Math.min(tokens.length, start + 6);
+  for (let end = start; end < maxLook; end++) {
+    window += tokens[end].raw ?? tokens[end].value ?? "";
+    for (const pattern of PATTERN_KEYS_LONGEST_FIRST) {
+      if (window === pattern && MUFI_PALEOGRAPHIC_MAP[pattern]) {
+        const entry = MUFI_PALEOGRAPHIC_MAP[pattern];
+        const glyph = (s.usePuaFont ?? true) ? entry.char : entry.decomposed;
+        return { glyph, consume: end - start + 1 };
+      }
+    }
+    // Prefix check — if no pattern starts with window, stop early
+    if (!PATTERN_KEYS_LONGEST_FIRST.some((p) => p.startsWith(window))) break;
+  }
+  return null;
 }
 
 export function tokenToSegs(
@@ -78,6 +129,7 @@ export function tokenToSegs(
   if (s.useNormalizedDiacritics) {
     v = normalizeDisplayDiacritics(v);
   }
+  v = applyMufiDisplay(v, s, tok.raw);
 
   switch (tok.type) {
     case "text": {
@@ -215,12 +267,31 @@ export function blockToSegs(block: ManuscriptBlock, settings: DisplaySettings): 
   );
   const lineSegs: Seg[] = [];
 
-  for (let i = 0; i < bodyToks.length; i++) {
+  for (let i = 0; i < bodyToks.length; ) {
+    const mufiHit = matchMufiPatternAt(bodyToks, i, settings);
+    if (mufiHit) {
+      lineSegs.push(
+        applyTokenEnvLayers(
+          seg({ text: mufiHit.glyph, fill: blockFill(block.type) }),
+          bodyToks[i],
+          block.type,
+        ),
+      );
+      i += mufiHit.consume;
+      continue;
+    }
     lineSegs.push(...tokenToSegs(bodyToks[i], block.type, settings));
+    i += 1;
   }
 
   if (block.type === "rubric") {
     return lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true }));
   }
+  if (block.type === "heading") {
+    return lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true, fs: FS * 1.15 }));
+  }
   return lineSegs;
 }
+
+/** Re-export for callers / tests that convert whole HSMS lines for canvas display. */
+export { convertHsmsToMufiGlyphs };

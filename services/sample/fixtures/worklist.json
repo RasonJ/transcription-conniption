@@ -1,0 +1,15 @@
+{
+  "source": "bootstrap",
+  "stages": [
+    "INGEST",
+    "VALIDATE",
+    "EDIT",
+    "ANALYZE",
+    "EXPORT",
+    "LIBRARY"
+  ],
+  "open": [
+    "ingest:sidecar:review_progress",
+    "validate:lint:run_preflight"
+  ]
+}

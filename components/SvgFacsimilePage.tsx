@@ -273,14 +273,16 @@ function layoutBlock(
     nextCapState = { ...nextCapState, rowsLeft: nextCapState.rowsLeft - 1 };
   }
 
-  if (block.lineNumber) {
+  if (block.lineNumber && settings.showLineNumbers !== false) {
+    // Left margin gutter — outside the prose measure so body text stays copyable.
     elems.push(
       <SvgText
         key={`${bkey}-ln`}
-        x={colX - 14}
+        x={colX - 10}
         y={baselineY}
         fontFamily="monospace"
         fontSize={11}
+        fontWeight="700"
         fill={FAINT_FILL}
         textAnchor="end"
       >
@@ -290,10 +292,11 @@ function layoutBlock(
   }
 
   const isRubric = block.type === "rubric";
+  const isHeading = block.type === "heading";
   const isGloss = block.type === "gloss";
   const trackWidth = colW - (textX - colX);
 
-  if (isRubric || isGloss) {
+  if (isRubric || isHeading || isGloss) {
     elems.push(
       ...renderPhysicalLine(
         lineSegs,
@@ -301,7 +304,7 @@ function layoutBlock(
         textX,
         trackWidth,
         bkey,
-        isRubric,
+        isRubric || isHeading,
         wrapBackSuffix,
       ),
     );
@@ -395,6 +398,10 @@ export interface SvgFacsimilePageProps {
   showDeletions?: boolean;
   suppressOtioseMarks?: boolean;
   useNormalizedDiacritics?: boolean;
+  useMufiGraphemes?: boolean;
+  usePuaFont?: boolean;
+  /** Left-gutter scholarly line numbers (default true). */
+  showLineNumbers?: boolean;
 }
 
 export function SvgFacsimilePage({
@@ -403,6 +410,9 @@ export function SvgFacsimilePage({
   showDeletions = true,
   suppressOtioseMarks = false,
   useNormalizedDiacritics = true,
+  useMufiGraphemes = false,
+  usePuaFont = true,
+  showLineNumbers = true,
 }: SvgFacsimilePageProps) {
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const t = useT();
@@ -444,8 +454,19 @@ export function SvgFacsimilePage({
       showDeletions,
       suppressOtioseMarks,
       useNormalizedDiacritics,
+      useMufiGraphemes,
+      usePuaFont,
+      showLineNumbers,
     }),
-    [showExpanded, showDeletions, suppressOtioseMarks, useNormalizedDiacritics],
+    [
+      showExpanded,
+      showDeletions,
+      suppressOtioseMarks,
+      useNormalizedDiacritics,
+      useMufiGraphemes,
+      usePuaFont,
+      showLineNumbers,
+    ],
   );
 
   const printableBlocks = useMemo(() => getPrintableBlocks(folio), [folio]);

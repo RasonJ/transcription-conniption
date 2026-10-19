@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/42f4cd7e-7596-4e8b-a0fc-c151680b60ef/resourceGroups/rg-jasonrobinson-1907/providers/Microsoft.Web/sites/hsms",
+    "appService.deploySubpath": "dist"
+}

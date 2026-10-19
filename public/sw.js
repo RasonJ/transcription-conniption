@@ -1,11 +1,12 @@
 /*
  * Offline support for the web export (SPEC-LIGHTWEIGHT §4.5, "PWA-lite").
- * - Hashed bundles under /_expo/static/ and the lemma dictionary under /dic/ are cache-first.
- * - Navigations and other same-origin GETs are network-first with a cache fallback, so a
- *   researcher who opened the app once can keep working offline.
+ * - Hashed bundles under /_expo/static/, MUFI fonts under /assets/mufi/, and the lemma
+ *   dictionary under /dic/ are cache-first.
+ * - Library sidecars under /library/ use stale-while-revalidate.
+ * - Navigations and other same-origin GETs are network-first with a cache fallback.
  * No background sync and no push. Bump CACHE_VERSION to drop old caches.
  */
-const CACHE_VERSION = "tc-v1";
+const CACHE_VERSION = "tc-v2";
 const SHELL = ["/", "/index.html"];
 
 self.addEventListener("install", (event) => {
@@ -22,13 +23,30 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches
       .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k))))
+      .then((keys) =>
+        Promise.all(keys.filter((k) => k !== CACHE_VERSION).map((k) => caches.delete(k))),
+      )
       .then(() => self.clients.claim()),
   );
 });
 
 function isImmutable(url) {
-  return url.pathname.startsWith("/_expo/static/") || url.pathname.startsWith("/dic/");
+  return (
+    url.pathname.startsWith("/_expo/static/") ||
+    url.pathname.startsWith("/dic/") ||
+    url.pathname.startsWith("/assets/mufi/")
+  );
+}
+
+function isLibrarySidecar(url) {
+  return (
+    url.pathname.startsWith("/library/") ||
+    url.pathname === "/library-catalog.json" ||
+    url.pathname === "/library-graph.json" ||
+    url.pathname === "/corpus-tfidf.json" ||
+    url.pathname === "/corpus-stats.json" ||
+    url.pathname === "/corpus-term-postings.json"
+  );
 }
 
 self.addEventListener("fetch", (event) => {
@@ -37,6 +55,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
+  // Cache-first for static immutable assets
   if (isImmutable(url)) {
     event.respondWith(
       caches.open(CACHE_VERSION).then(async (cache) => {
@@ -50,6 +69,27 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Stale-while-revalidate for library sidecars / corpus indexes
+  if (isLibrarySidecar(url)) {
+    event.respondWith(
+      caches.open(CACHE_VERSION).then(async (cache) => {
+        const cachedResponse = await cache.match(request);
+        const fetchPromise = fetch(request)
+          .then((networkResponse) => {
+            if (networkResponse.ok) {
+              cache.put(request, networkResponse.clone());
+            }
+            return networkResponse;
+          })
+          .catch(() => cachedResponse);
+
+        return cachedResponse || fetchPromise;
+      }),
+    );
+    return;
+  }
+
+  // Network-first for navigations and dynamic endpoints
   event.respondWith(
     fetch(request)
       .then((response) => {

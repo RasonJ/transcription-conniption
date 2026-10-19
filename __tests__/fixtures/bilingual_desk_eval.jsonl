@@ -1,0 +1,36 @@
+{"id":"en-tf-1","lang":"en","text":"how many times is muito in this","expected_intent":"term_frequency"}
+{"id":"en-kwic-1","lang":"en","text":"show me where muito appears","expected_intent":"kwic_search"}
+{"id":"en-catch-1","lang":"en","text":"locate all catchwords","expected_intent":"catchwords"}
+{"id":"en-folio-1","lang":"en","text":"go to folio 1v","expected_intent":"folio_nav"}
+{"id":"en-ortho-1","lang":"en","text":"toggle modern orthography","expected_intent":"orthography_toggle"}
+{"id":"en-shelf-1","lang":"en","text":"what is the shelfmark","expected_intent":"shelfmark"}
+{"id":"en-illum-1","lang":"en","text":"find the next illuminated drop cap","expected_intent":"illuminated_initials"}
+{"id":"en-del-1","lang":"en","text":"highlight scribal expunctions","expected_intent":"scribal_deletions"}
+{"id":"en-nasal-1","lang":"en","text":"highlight nasal suspension tildes","expected_intent":"nasal_tilde"}
+{"id":"en-pre-1","lang":"en","text":"run structural lint on this witness","expected_intent":"preflight_check"}
+{"id":"es-tf-1","lang":"es","text":"cuántas veces aparece dios","expected_intent":"term_frequency"}
+{"id":"es-kwic-1","lang":"es","text":"concordancia de rey","expected_intent":"kwic_search"}
+{"id":"es-catch-1","lang":"es","text":"listar reclamos al pie del folio","expected_intent":"catchwords"}
+{"id":"es-folio-1","lang":"es","text":"ir al folio 1v","expected_intent":"folio_nav"}
+{"id":"es-ortho-1","lang":"es","text":"activar ortografía moderna","expected_intent":"orthography_toggle"}
+{"id":"es-shelf-1","lang":"es","text":"cuál es la signatura","expected_intent":"shelfmark"}
+{"id":"es-illum-1","lang":"es","text":"buscar iniciales iluminadas","expected_intent":"illuminated_initials"}
+{"id":"es-del-1","lang":"es","text":"mostrar tachaduras del copista","expected_intent":"scribal_deletions"}
+{"id":"es-nasal-1","lang":"es","text":"resaltar tildes nasales","expected_intent":"nasal_tilde"}
+{"id":"es-pre-1","lang":"es","text":"preflight de esta transcripción","expected_intent":"preflight_check"}
+{"id":"pt-tf-1","lang":"pt","text":"quantas vezes aparece principe","expected_intent":"term_frequency"}
+{"id":"pt-kwic-1","lang":"pt","text":"concordância para muito","expected_intent":"kwic_search"}
+{"id":"pt-catch-1","lang":"pt","text":"localizar todos os catchwords","expected_intent":"catchwords"}
+{"id":"pt-folio-1","lang":"pt","text":"ir para o folio 1v","expected_intent":"folio_nav"}
+{"id":"pt-ortho-1","lang":"pt","text":"mostrar ortografia moderna","expected_intent":"orthography_toggle"}
+{"id":"pt-shelf-1","lang":"pt","text":"qual é a cota deste testemunho","expected_intent":"shelfmark"}
+{"id":"pt-illum-1","lang":"pt","text":"encontrar iniciais iluminadas","expected_intent":"illuminated_initials"}
+{"id":"pt-del-1","lang":"pt","text":"mostrar tachaduras scribal","expected_intent":"scribal_deletions"}
+{"id":"pt-nasal-1","lang":"pt","text":"destacar tildes nasais","expected_intent":"nasal_tilde"}
+{"id":"pt-pre-1","lang":"pt","text":"correr lint estrutural neste testemunho","expected_intent":"preflight_check"}
+{"id":"mx-tf-1","lang":"mixed","text":"cuántas veces aparece muito in this folio","expected_intent":"term_frequency"}
+{"id":"mx-kwic-1","lang":"mixed","text":"show concordance for sancto por favor","expected_intent":"kwic_search"}
+{"id":"mx-catch-1","lang":"mixed","text":"list reclamos / catchwords","expected_intent":"catchwords"}
+{"id":"mx-ortho-1","lang":"mixed","text":"toggle ortografía moderna please","expected_intent":"orthography_toggle"}
+{"id":"mx-shelf-1","lang":"mixed","text":"what is the signatura / shelfmark","expected_intent":"shelfmark"}
+{"id":"mx-nasal-1","lang":"mixed","text":"highlight tildes nasales vs nn","expected_intent":"nasal_tilde"}

@@ -18,6 +18,8 @@ type Props = {
   highlight: ScrollHighlight;
   blockStyle: object[];
   renderTokenStream: (tokens: Token[], blockType?: ManuscriptBlock["type"]) => React.ReactNode;
+  /** Left-gutter scholarly line numbers (default true). */
+  showLineNumbers?: boolean;
 };
 
 function renderFlowSegments(
@@ -66,7 +68,13 @@ function renderFlowSegments(
   return nodes;
 }
 
-export function BlockFigureLayout({ block, highlight, blockStyle, renderTokenStream }: Props) {
+export function BlockFigureLayout({
+  block,
+  highlight,
+  blockStyle,
+  renderTokenStream,
+  showLineNumbers = true,
+}: Props) {
   const segments = useMemo(() => segmentTokensForRender(block.tokens), [block.tokens]);
   const { marginFigures, fullWidthFigures, flowSegments } = useMemo(
     () => partitionFigureSegments(segments),
@@ -105,32 +113,31 @@ export function BlockFigureLayout({ block, highlight, blockStyle, renderTokenStr
 
   return (
     <View style={[styles.blockRow, lineHit && styles.blockRowHighlight]}>
-      {block.lineNumber ? (
-        <Text style={styles.lineNumberLabel} numberOfLines={2}>
-          {block.lineNumber}
-        </Text>
+      {showLineNumbers ? (
+        <View style={styles.leftLineGutter} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+          <Text style={styles.lineNumberLabel} numberOfLines={2} selectable={false}>
+            {block.lineNumber ?? ""}
+          </Text>
+        </View>
       ) : null}
 
-      {marginFigures.length === 0 ? (
-        <View style={styles.blockBody}>
-          {headerLabel}
-          {textBody}
-        </View>
-      ) : (
-        <View style={styles.blockWithMargin}>
-          <View style={styles.marginTrack}>
-            {marginFigures.map((token, idx) => (
-              <View key={token.figureId ?? `m-${idx}`} style={styles.marginFigureSlot}>
-                <FigurePlaceholder token={token} />
-              </View>
-            ))}
+      <View style={styles.blockBody}>
+        {headerLabel}
+        {marginFigures.length === 0 ? (
+          textBody
+        ) : (
+          <View style={styles.blockWithMargin}>
+            <View style={styles.marginTrack}>
+              {marginFigures.map((token, idx) => (
+                <View key={token.figureId ?? `m-${idx}`} style={styles.marginFigureSlot}>
+                  <FigurePlaceholder token={token} />
+                </View>
+              ))}
+            </View>
+            <View style={styles.textTrack}>{textBody}</View>
           </View>
-          <View style={styles.textTrack}>
-            {headerLabel}
-            {textBody}
-          </View>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 }
@@ -143,14 +150,20 @@ const styles = StyleSheet.create({
     marginHorizontal: -2,
     paddingHorizontal: 2,
   },
+  leftLineGutter: {
+    width: 40,
+    paddingRight: 8,
+    borderRightWidth: 1,
+    borderRightColor: "#dfd3b6",
+    alignItems: "flex-end",
+    marginRight: 10,
+  },
   lineNumberLabel: {
-    width: 28,
     fontSize: 11,
-    color: "#99836a",
+    color: "#a08060",
     fontWeight: "700",
     paddingTop: 4,
-    marginRight: 4,
-    textAlign: "left",
+    textAlign: "right",
     fontFamily: "monospace",
   },
   blockBody: { flex: 1 },

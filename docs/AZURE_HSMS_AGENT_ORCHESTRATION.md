@@ -48,6 +48,7 @@ LLMs excel at visual decipherment and paleographic resolution; they are weak at 
 | Structural invariants (`{CB.}`, `{INn.}` single space, gloss forms) | Column zip / wrap-back layout (`spatialAst.ts`) |
 | Proofer incident *guidelines* & edge cases | Final bracket-depth / unclosed-env audit (`hsmsLinter.ts`) |
 | Self-check reminders before returning ASCII | Parchment / SvgFacsimile rendering |
+| MUFI scribal expansions as HSMS ASCII only (never PUA code points) | Optional MUFI glyph overlay (`mufiCharacterMap.ts`, display toggles) |
 | Pass 2 batch section wrappers (`=== PAGE N [fol. X] ===`) | Split / align repaired folios (`parseBatchRepairResponse`) |
 
 **Never** outsource tokenization or AST rendering to the LLM. Always run `lintHsmsTranscription` (via `ingestAgentTranscription`) on the client after each agent reply.
@@ -74,6 +75,16 @@ Overrides: `EXPO_PUBLIC_AZURE_TRANSPORT=openai` (both roles on resource Response
 4. **Client lint gate** — `ingestAgentTranscription` runs locally (~2 ms). If `isValid` / no critical errors → stream to parchment; **skip Pass 2**.
 5. **Pass 2** — only on critical errors (see below).
 6. **PDF slicer** — `utils/pdfPageExtractor.web.ts` applies page `/Rotate`, exports PNG/JPEG, then tears down canvas (`width/height = 0`) + `page.cleanup()` so long manuscripts do not retain GPU handles.
+
+### Runaway repetition control (Pass 1)
+
+Vision models can fall into autoregressive loops (same line repeated dozens of times), burning 4k+ tokens and 15–30 s. Mitigations:
+
+| Layer | Control |
+|-------|---------|
+| Prompt | `=== END FOLIO ===` sentinel; single-pass + no-repeat directives (`hsmsOpenAIInstructions.ts` / `prompt-hsms-transcriber.md`) |
+| API | `max_output_tokens: 1500`, `temperature: 0`, vision timeout **45 s** (`VISION_MAX_OUTPUT_TOKENS` / `VISION_TIMEOUT_MS` in `azureOpenAI.ts`) |
+| Client | `sanitizeVisionOutput` truncates at the sentinel, prunes consecutive duplicate *content* lines (line-number–aware), closes a truncated `{CB1.` brace — then `extractHsmsAsciiPayload` + lint |
 
 ## Two-pass pipeline (single leaf)
 

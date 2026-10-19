@@ -36,7 +36,8 @@ export type BlockType =
   | "addendum"
   | "language_span"
   | "diagram"
-  | "initial_container";
+  | "initial_container"
+  | "heading";
 
 export type EnvLayer = {
   type: BlockType;

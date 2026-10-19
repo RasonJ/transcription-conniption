@@ -23,18 +23,23 @@ function main(): void {
   const issues = result.issues ?? [];
   const extra = issues.filter((e) => /extra structural closing/i.test(e.message));
 
-  console.log({
-    file: baseName,
-    status: result.status,
-    issueCount: issues.length,
-    errorCount: result.errorCount,
-    warningCount: result.warningCount,
-    extraClose: extra.length,
-    sample: extra.slice(0, 5).map((e) => ({
-      line: e.lineIndex + 1,
-      snippet: e.rawSnippet?.trim(),
-    })),
-  });
+  console.log("═".repeat(60));
+  console.log(` Witness Diagnostic: ${baseName}`);
+  console.log("═".repeat(60));
+  console.log(` Status:        ${result.status.toUpperCase()}`);
+  console.log(` Issues Total:  ${issues.length}`);
+  console.log(` Errors:        ${result.errorCount}`);
+  console.log(` Warnings:      ${result.warningCount}`);
+  console.log(` Extra Closes:  ${extra.length}`);
+  console.log("─".repeat(60));
+
+  if (extra.length > 0) {
+    console.log(" Sample Unmatched Structural Closures:");
+    extra.slice(0, 5).forEach((e, idx) => {
+      console.log(`   ${idx + 1}. Line ${e.lineIndex + 1}: "${e.rawSnippet?.trim() ?? ""}"`);
+    });
+    console.log("─".repeat(60));
+  }
 
   const outLog = path.resolve(
     __dirname,
@@ -43,7 +48,7 @@ function main(): void {
   );
   fs.mkdirSync(path.dirname(outLog), { recursive: true });
   fs.writeFileSync(outLog, result.issuesLog, "utf8");
-  console.log(`Wrote issue log: ${outLog}`);
+  console.log(` Wrote issue log: ${outLog}\n`);
 }
 
 main();

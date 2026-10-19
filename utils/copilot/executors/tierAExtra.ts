@@ -8,6 +8,7 @@ import { getLineIndex, isBodyLine, type LineRecord } from "../lineIndex";
 import { inferQuires } from "../quires";
 import { SPEECH_VERBS } from "../graphPatterns";
 import type { BreakdownEntry, EvidenceRow, RecipeContext, RecipeResult } from "../types";
+import { countWordOccurrences } from "../stats";
 import { ROW_LIMIT, kwic, lineRow, plural, readingKey, snippet, witnessLanguageOf } from "./common";
 
 /** `abbr.expansion_by_quire`: abbreviated (expansion) vs written-out forms, early vs late quires. */
@@ -528,19 +529,72 @@ export function kwicSearch(ctx: RecipeContext, word: string | undefined): Recipe
   }
   const lines = getLineIndex(ctx.parsed);
   const rows: EvidenceRow[] = [];
+  const byFolio = new Map<string, number>();
   let total = 0;
   for (const line of lines) {
     const words = line.words.map((w) => w.reading);
     words.forEach((w, i) => {
       if (readingKey(w) !== needle) return;
       total++;
+      byFolio.set(line.folioId, (byFolio.get(line.folioId) ?? 0) + 1);
       if (rows.length < ROW_LIMIT) rows.push(lineRow(line, line.words[i].diplomatic, kwic(words, i, 5)));
     });
   }
   return {
     headline: `${plural(total, "occurrence")} of “${word}”.`,
-    params: { total, word: word ?? "" },
+    params: { total, word: word ?? "", folios: byFolio.size },
     count: total,
+    breakdown: [...byFolio.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([folio, value]) => ({
+        label: `fol. ${folio}`,
+        value,
+        key: "folioHit",
+        labelParams: { folio },
+      })),
+    rows,
+  };
+}
+
+/** `stats.term_frequency`: count a single surface form with per-folio breakdown. */
+export function termFrequencyCount(ctx: RecipeContext, word: string | undefined): RecipeResult {
+  const needle = readingKey(word ?? "");
+  if (!needle) {
+    return {
+      headline: "Which word? Put it in quotes, e.g. \"muito\".",
+      params: {},
+      messageKey: "needWord",
+      count: 0,
+      rows: [],
+    };
+  }
+  const occ = countWordOccurrences(ctx.parsed, word ?? "");
+  const breakdown = Object.entries(occ.byFolio)
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([folio, value]) => ({
+      label: `fol. ${folio}`,
+      value,
+      key: "folioHit",
+      labelParams: { folio },
+    }));
+  const rows: EvidenceRow[] = breakdown.map((b) => ({
+    folioId: String(b.labelParams!.folio),
+    label: String(b.value),
+    detail: `${b.value}× on fol. ${b.labelParams!.folio}`,
+  }));
+  return {
+    headline:
+      occ.count === 0
+        ? `No occurrences of “${word}”.`
+        : `Occurrences of “${word}”: ${occ.count} across ${plural(occ.folioCount, "folio")}.`,
+    params: {
+      total: occ.count,
+      word: word ?? "",
+      folios: occ.folioCount,
+    },
+    messageKey: occ.count === 0 ? "none" : undefined,
+    count: occ.count,
+    breakdown,
     rows,
   };
 }
@@ -600,5 +654,178 @@ export function ingestUnreviewed(ctx: RecipeContext): RecipeResult {
     count: total,
     breakdown: [...byState.entries()].map(([state, value]) => ({ label: state, value, key: `review_${state}` })),
     rows,
+  };
+}
+
+/** `meta.witness`: author / title / imprint / shelfmark from parsed metadata. */
+export function witnessMetadata(ctx: RecipeContext, query?: string): RecipeResult {
+  const m = ctx.parsed.metadata;
+  const fields: Array<{ key: string; label: string; value: string }> = [
+    { key: "author", label: "Author", value: (m.author ?? "").trim() },
+    { key: "title", label: "Title", value: (m.title ?? "").trim() },
+    { key: "date", label: "Date", value: (m.imprint?.date ?? "").trim() },
+    { key: "city", label: "Imprint city", value: (m.imprint?.city ?? "").trim() },
+    { key: "printer", label: "Printer", value: (m.imprint?.printer ?? "").trim() },
+    { key: "library", label: "Library", value: (m.witness?.library ?? "").trim() },
+    { key: "shelfmark", label: "Shelfmark", value: (m.witness?.shelfmark ?? "").trim() },
+    { key: "witnessCity", label: "Witness city", value: (m.witness?.city ?? "").trim() },
+  ].filter((f) => f.value);
+
+  if (!fields.length) {
+    return {
+      headline: "This witness has no {RMK:} / imprint metadata yet.",
+      params: {},
+      messageKey: "none",
+      count: 0,
+      rows: [],
+    };
+  }
+
+  const q = (query ?? "").toLowerCase();
+  const want =
+    /\bshelfmark|signatura|cota\b/.test(q) ? "shelfmark"
+    : /\blibrary|biblioteca|holds|holding\b/.test(q) ? "library"
+    : /\byear|date|printed|copied|año|ano|data\b/.test(q) ? "date"
+    : /\bauthor|autor|scribe|escriba\b/.test(q) ? "author"
+    : /\btitle|título|titulo\b/.test(q) ? "title"
+    : /\bprinter|impresor|impressor\b/.test(q) ? "printer"
+    : /\bdedicatee|dedicat|dedicado|principe|príncipe\b/.test(q) ? "author"
+    : null;
+
+  const picked = want ? fields.find((f) => f.key === want) : undefined;
+  if (picked) {
+    return {
+      headline: `${picked.label}: ${picked.value}.`,
+      params: { field: picked.key, value: picked.value },
+      count: 1,
+      breakdown: fields.map((f) => ({ label: f.label, value: 1, key: f.key, labelParams: { value: f.value } })),
+      rows: [{ folioId: ctx.parsed.folios[0]?.id ?? "1r", label: picked.label, detail: picked.value }],
+    };
+  }
+
+  const summary = fields.map((f) => `${f.label}: ${f.value}`).join(" · ");
+  return {
+    headline: summary,
+    params: {
+      author: m.author || "",
+      title: m.title || "",
+      date: m.imprint?.date || "",
+      library: m.witness?.library || "",
+      shelfmark: m.witness?.shelfmark || "",
+    },
+    count: fields.length,
+    breakdown: fields.map((f) => ({ label: `${f.label}: ${f.value}`, value: 1, key: f.key })),
+    rows: fields.map((f) => ({
+      folioId: ctx.parsed.folios[0]?.id ?? "1r",
+      label: f.label,
+      detail: f.value,
+    })),
+  };
+}
+
+/** `codex.catchwords`: every `{CW.}` at folio feet. */
+export function listCatchwords(ctx: RecipeContext): RecipeResult {
+  const rows: EvidenceRow[] = [];
+  for (const folio of ctx.parsed.folios) {
+    if (!folio.catchword) continue;
+    rows.push({
+      folioId: folio.id,
+      label: folio.catchword,
+      detail: `{CW. ${folio.catchword}}`,
+    });
+  }
+  return {
+    headline:
+      rows.length === 0
+        ? "No catchwords ({CW.}) in this witness."
+        : `${plural(rows.length, "catchword")} at folio feet.`,
+    params: { total: rows.length },
+    messageKey: rows.length === 0 ? "none" : undefined,
+    count: rows.length,
+    breakdown: rows.map((r) => ({
+      label: `fol. ${r.folioId}`,
+      value: 1,
+      key: "folioHit",
+      labelParams: { folio: r.folioId },
+    })),
+    rows: rows.slice(0, ROW_LIMIT),
+  };
+}
+
+/** `ui.control`: local toolbar / export hints (no Azure). */
+export function uiControlHint(ctx: RecipeContext, query?: string): RecipeResult {
+  const q = (query ?? "").toLowerCase();
+  const hints: Array<{ re: RegExp; key: string; headline: string }> = [
+    {
+      re: /orthograph|modern spelling|ortograf|grafia moderna/,
+      key: "orthography",
+      headline: "Use the modern-orthography toggle in the facsimile toolbar for this page.",
+    },
+    {
+      re: /line number|gutter|números? de l[ií]nea|numeros de linea/,
+      key: "lineNumbers",
+      headline: "Toggle line numbers in the left gutter from the facsimile display options.",
+    },
+    {
+      re: /marginal|gloss|glosa|hide notes/,
+      key: "marginalia",
+      headline: "Hide or show marginal notes and glosses with the marginalia visibility control; or ask “glosses versus addenda” for a local count.",
+    },
+    {
+      re: /zoom|illuminat|drop cap|inicial/,
+      key: "zoomInitial",
+      headline: "Select the illuminated initial on the folio canvas to zoom; or ask “initial hierarchy” for a local inventory.",
+    },
+    {
+      re: /single.?column|una columna|coluna única|coluna unica/,
+      key: "singleColumn",
+      headline: "Switch to single-column view in the layout / synoptic controls.",
+    },
+    {
+      re: /bounding box|svg overlay|overlay|cajas de dise[nñ]o/,
+      key: "overlay",
+      headline: "Turn on layout bounding boxes / SVG overlay from the facsimile debug overlay control.",
+    },
+    {
+      re: /tei|export.*xml|xml/,
+      key: "exportTei",
+      headline: "Open Export and choose TEI-XML for the current view.",
+    },
+    {
+      re: /download.*svg|export.*svg|svg$/,
+      key: "exportSvg",
+      headline: "Open Export and choose SVG to download the page rendering.",
+    },
+    {
+      re: /clipboard|copy plain|copiar texto|texto plano/,
+      key: "copyPlain",
+      headline: "Use Copy plain text in the export / share menu to put the diplomatic transcription on the clipboard.",
+    },
+    {
+      re: /macron|tilde|abbreviation.*highlight|resaltar.*abrev/,
+      key: "highlightAbbr",
+      headline: "Ask “nasal tildes versus geminate nn” or “superscript abbreviations” for a local highlight inventory.",
+    },
+  ];
+
+  const hit = hints.find((h) => h.re.test(q));
+  if (hit) {
+    return {
+      headline: hit.headline,
+      params: { control: hit.key },
+      messageKey: hit.key,
+      count: 1,
+      rows: [],
+    };
+  }
+
+  void ctx;
+  return {
+    headline:
+      "UI controls available locally: orthography toggle, line-number gutter, marginalia visibility, layout overlay, single-column view, and Export (TEI / SVG / plain text).",
+    params: {},
+    messageKey: "menu",
+    count: 0,
+    rows: [],
   };
 }

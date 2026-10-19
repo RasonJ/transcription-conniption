@@ -111,6 +111,10 @@ utils/
   figureAnchors.ts      # Figure ID allocation and {ILL|MIN|DIAG|SYMB} patterns
   legacyDiacritics.ts   # Precompiled cluster regex; @-notation word units
   dropInitial.ts        # {INn.} → single-grapheme drop_initial + body remainder
+  mufiChars.ts          # MUFI catalog lookup; HSMS→HTML→Unicode triples; ornate inventory
+  mufiCharacterMap.ts   # Tier-2 paleographic map; convertHsmsToMufiGlyphs (display-only)
+  formatTokenDisplayGrapheme.ts # Per-token MUFI rewrite for parchment toggles
+  mufiFonts.ts          # Andron Scriptor (font 53) → Junicode → Georgia stacks
   braceBlocks.ts        # Balanced-brace figure / multi-line open tags
   metadataText.ts       # Normalize RMK title strings for display
   expoFileSystem.ts     # Web shims; chunked base64; Blob URL revoke on web
@@ -121,6 +125,8 @@ utils/
 scripts/
   batch-convert-osta.ts   # npm run batch:osta
   aggregate-osta-issues.ts # npm run report:osta
+  fetch-mufi-catalog.mjs  # npm run fetch:mufi — PDF chart → mufi-chars.json
+  generate-mufi-char-map.mjs # npm run generate:mufi — mufiCharMap + ornateInitialInventory
 
 out/                    # Batch output (gitignored): *.html, *.native.ts, *.issues.log, summaries
 
@@ -133,7 +139,7 @@ components/
   svgFacsimile/
     pageLayout.ts         # CANVAS_W=800, MARGIN, gutter, column width helpers (shared web/native)
     folioGroups.ts        # buildSpatialFolio → column-block layout groups
-    tokenRendering.ts     # LH, FS; token → styled segments (immutable; coalesceSegs)
+    tokenRendering.ts     # LH, FS; token → styled segments; MUFI display hooks
     HtmlOrnateDropCap.tsx   # Web ornate drop cap (SVG inside HTML facsimile rows)
     renderOrnateInitial.tsx # Native ornate drop cap (four seeded style matrices)
     dropInitialLetterform.ts # Seeded RNG, illuminated themes, geometry helpers
@@ -156,12 +162,13 @@ constants/
   stopwords.ts          # Spanish function words excluded from index
 
 assets/images/          # App icon, splash, favicons
+assets/mufi/            # MUFI v4 catalog, hsms-overlays, fonts/, ornate-initials/ (see README)
 
 docs/
   HSMS-manual.md        # HSMS transcription manual (Markdown, from HSMS-manual.txt)
   HSMS-EDITOR.md        # Editor/builder workflows, workspace, export, batch compile
   HSMS-LAYOUT.md              # HSMS → physical page coordinates (parse + SVG/HTML layout)
-  HSMS-TYPOGRAPHY.md          # Visual fidelity: ink, caps, paleography, material surface
+  HSMS-TYPOGRAPHY.md          # Visual fidelity: ink, caps, paleography, MUFI display tiers
   ARCHITECTURE.md       # This file
 ```
 
@@ -324,7 +331,7 @@ Two render paths share the same `ParsedManuscript` but differ in typography mech
 
 #### 4a. React Native parchment (`app/(tabs)/index.tsx`)
 
-- **`ReaderStateContext`** — toggles expansion, deletion, normalized diacritics, and otiose marks in preview.
+- **`ReaderStateContext`** — toggles expansion, deletion, normalized diacritics, MUFI graphemes / PUA font, and otiose marks in preview.
 - **Publication metadata** — `hasPublicationMeta` card above the parchment `ScrollView`; removed from inside the leaf so `{RMK:}` content is not duplicated in the transcription column.
 - **`FolioPage`** — renders headings, blocks, catchword/signature per folio; optional `SvgFacsimilePage` when `svgModeEnabled` is on (Metro resolves `.web.tsx` on web).
 - **`groupBlocksForLayout`** — sequential blocks with `columns === 2` are split into left/right vertical tracks (not horizontal flex-wrap).
@@ -342,7 +349,7 @@ When **SVG canvas** is enabled in the advanced editor, each folio renders throug
 3. **Shared layout** (`components/svgFacsimile/pageLayout.ts`) — fixed `CANVAS_W = 800`, margins, gutter, and column width helpers; both renderers sit in a horizontal `ScrollView` on narrow viewports.
 4. **Web** (`SvgFacsimilePage.web.tsx`): SVG parchment shell (ruling lines, margins) plus HTML rows inside `<ForeignObject>` — `HtmlOrnateDropCap` for `{INn.}` caps (ornate SVG or uploaded scan), micro-tracking justification, cap gutter via `HtmlCapState`, `%2` wrap-back overlay. After `blockToSegs`, `stripDropCapPrefixFromSegs()` removes any duplicated cap grapheme from the first body segment before justification. Line height `LH` comes from `tokenRendering.ts` (not `pageLayout.ts`). `useEffect` + `ResizeObserver` measure dynamic parchment height.
 5. **Native** (`SvgFacsimilePage.tsx`): one ruled baseline row per `ManuscriptBlock`; auto-flowing `<TSpan>` siblings inside a single `<SvgText>` (no manual `dx`/`dy`); `%2` suffix painted at measured main-text width; same `stripDropCapPrefixFromSegs` guard as web. Drop caps use `renderOrnateInitialSvg` (four seeded style matrices — vines, criblé, ribbon, damask — or uploaded scan); see [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md).
-6. Token styling is shared via `components/svgFacsimile/tokenRendering.ts` (`tokenToSegs`, `coalesceSegs`, `blockToSegs`, `stripDropCapPrefixFromSegs` — rubric segments cloned, not mutated in place).
+6. Token styling is shared via `components/svgFacsimile/tokenRendering.ts` (`tokenToSegs`, `coalesceSegs`, `blockToSegs`, `stripDropCapPrefixFromSegs` — rubric segments cloned, not mutated in place). Optional `useMufiGraphemes` / `usePuaFont` rewrite segment text through `formatTokenDisplayGrapheme` / `convertHsmsToMufiGlyphs` without changing the parsed AST.
 
 Cap state (`{INn.}` depth) persists across consecutive single-column lines until the next initial or column change. Multi-letter cap boxes widen via `dropCapBoxWidth(capH, letterCount)` when needed. Two-column `{CB2.}` blocks zip left/right rows at equal index (not all-left-then-all-right). Full divergence notes (drop caps, `%2` wrap-back, `coalesceSegs`): [HSMS-LAYOUT.md §6.5](HSMS-LAYOUT.md).
 
@@ -436,11 +443,16 @@ Concordance and validation rows call scroll navigation via `ScrollAnchorProvider
 | `utils/copilot/facetIndex.ts` | Lazy per-witness facets (token types, hands, languages, initials) |
 | `utils/copilot/catalog` + `executors/tierA.ts` | Deterministic Tier A recipes (deletions, glosses, damage, …) |
 | `utils/copilot/executors/voyant.ts` | Distant-reading recipes: `corpus.term_frequency`, `corpus.ngrams`, `corpus.vocab_density` |
-| `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → recipe cosine routing → answer cards; eager recipes may use precompiled facets |
+| `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → **precompiled intent chains** (Tier‑1) → recipe cosine routing → answer cards |
+| `utils/copilot/precompiledChains.ts` | Offline graph subgraphs → flat recipes; deterministic match in `askCopilot` |
+| `utils/copilot/lifecycle.ts` | Intent taxonomy stages + doActions |
 | `utils/copilot/sidecarRecipes.ts` / `mcpSidecarRuntime.ts` | Library sidecars + MCP tools (TF-IDF rank, graph, facets, Proofer audit, vision transcribe) |
 | `utils/embeddings/*` | Shared FNV-1a hash-embed + prototype classifier |
 | `utils/manuscriptVectorIndex.ts` | Passage-search fallback (`search.passages`) |
+| `utils/reasoningGraph/*` | Manuscript scholarly graph (LOD tiers, Claim/Evidence, Pearlian causal, spatial MICRO layer) |
+| `schemas/manuscript-reasoning-graph-v1.json` | Sole JSON Schema (`schema_version` 1.0) — see [REASONING-GRAPH.md](REASONING-GRAPH.md) |
 | `scripts/compile-copilot.ts` | Regenerates `utils/generated/copilotCatalog.ts` + `mcpManuscriptTools.ts` (`npm run compile:copilot`) |
+| `scripts/precompile-graph-intents.ts` | Graph → `assets/precompiled-intent-chains.json` + taxonomy merge (`npm run precompile:graph-intents`) |
 
 **Azure paleography backoff** (hybrid OpenAI Responses; optional A2A):
 
@@ -462,6 +474,21 @@ Concordance and validation rows call scroll navigation via `ScrollAnchorProvider
 | Env | `EXPO_PUBLIC_AZURE_TRANSPORT=hybrid` (vision `gpt-4o` + syntax agent / model `gpt-5.4-mini`); see `.env.example` |
 
 Local Tier‑A recipes stay on-device. Azure is only used for vision OCR → HSMS (and conditional syntax repair) when configured. Multi-page PDFs are **never** uploaded as PDF — only per-page PNG/JPEG vision frames. Pass 2 is skipped when the client linter reports zero critical errors.
+
+**Reasoning graph & precompiled intents** ([REASONING-GRAPH.md](REASONING-GRAPH.md)):
+
+```
+seedFromWitness / facets / FAQ
+        │
+        ▼
+ReasoningGraphDoc (LOD: MACRO / MESO / MICRO)
+        │  npm run precompile:graph-intents
+        ▼
+intent-taxonomy.json + precompiled-intent-chains.json
+        │  Tier-1 match in askCopilot (<1ms)
+        ▼
+doActions / JUMP_FOLIO / MCP tool hints (no runtime multi-hop GDB)
+```
 
 **Library / corpus sidecars** (`npm run build:library` + `sync:library`): `corpus-tfidf.json`, `corpus-stats.json`, `corpus-term-postings.json`, `library-graph.json`, per-witness `*.facets.json` under `assets/library/` / `public/`.
 
@@ -508,16 +535,19 @@ Import failures surface `Alert` dialogs; parse errors are not distinguished (mal
 |-------|---------|
 | `assets/dic/hsms.src` | DB_MAP lemmatization dictionary (surface forms → lemmas + EAGLES-style POS) |
 | `utils/generated/hsmsDiacriticMap.ts` | Character rules from legacy `settings.ini` `[RegexReplaces]` |
+| `assets/mufi/mufi-chars.json` | Full [MUFI](https://mufi.info/q.php?p=mufi/chars) v4.0 catalog (CC BY-SA 4.0) |
+| `utils/generated/mufiCharMap.ts` | MUFI entries with HSMS→HTML→Unicode filled where conventions exist |
+| `utils/generated/ornateInitialInventory.ts` | Ornate `{INn.}` inventory (4 procedural styles + optional static SVG paths) |
 | `utils/generated/hsmsLemmaIndex.json` | Compact surface→lemma index built from `hsms.src` |
 | `utils/generated/hsmsPosIndex.json` | Surface→POS tag index (analizador / EAGLES-style; `lookupHsmsPos`) |
 | `public/dic/hsmsLemmaIndex.v2.tsv` | Front-coded web lemma asset (lazy fetch) |
 | `public/dic/hsmsPosIndex.json` | Web POS asset (lazy fetch) |
 
-Regenerate: `npm run generate:hsms-assets` (or `npm run generate:dictionary` for lemma/POS only).
+Regenerate: `npm run generate:hsms-assets` (or `npm run generate:dictionary` for lemma/POS only; `npm run fetch:mufi` then `generate:mufi` for the MUFI map).
 
-Runtime: `utils/hsmsDictionary.ts` (`lookupHsmsLemma`, `lookupHsmsPos`, `ensureLemmaDictionary`).
+Runtime: `utils/hsmsDictionary.ts` (`lookupHsmsLemma`, `lookupHsmsPos`, `ensureLemmaDictionary`); `utils/mufiChars.ts` (`lookupMufiByHsms`, `hsmsHtmlUnicodeTriple`, `getOrnateInitialInventory`); **Tier-2 display** via `utils/mufiCharacterMap.ts` (`convertHsmsToMufiGlyphs`) + parchment toggles `useMufiGraphemes` / `usePuaFont` in `tokenRendering.ts`. HSMS ASCII remains the interchange format for storage, lint, and Azure agents; MUFI PUA/decomposed glyphs are canvas-only. Fonts: Junicode OFL under `assets/mufi/fonts/` (loaded in `app/_layout.tsx`); Andron Scriptor ([font 53](https://mufi.info/q.php?p=mufi/fonts/fonts/53)) optional.
 
-Note: `hsms.src` does **not** use `code+unicode` lines; diacritic mappings come from the C# parser’s `CharRegexReplacements` / INI configuration, expanded into literal keys by `scripts/generate-diacritic-map.mjs`.
+Note: `hsms.src` does **not** use `code+unicode` lines; diacritic mappings come from the C# parser’s `CharRegexReplacements` / INI configuration, expanded into literal keys by `scripts/generate-diacritic-map.mjs`. MUFI HTML entities are joined from the same INI plus `assets/mufi/hsms-overlays.json`.
 
 ## Testing
 
@@ -572,7 +602,7 @@ Planned or natural evolution paths (also noted on the About screen):
 3. **React Query** — load transcriptions or TEI from remote catalogs.
 4. ~~**TEI export**~~ — `exportToTEIXML` + share sheet (basic header/body mapping).
 5. ~~**Dual view**~~ — synoptic diplomatic + normalized panes (wide layout).
-6. **Typography** — selectable script hands (fonts) per manuscript tradition.
+6. **Typography** — ~~MUFI Andron/Junicode stacks + display grapheme toggles~~ (see [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md)); remaining: selectable script hands per manuscript tradition.
 7. **Concordance tuning** — configurable frequency thresholds, custom stopword lists, export appendix.
 8. ~~**Inline figure upload**~~ — `figure_anchor` tokens + `FigurePlaceholder`; workspace-scoped assets via `figureAssetStorage` (replace/remove controls).
 9. **Image pane** — third synoptic column for full-leaf facsimile URLs.
@@ -588,12 +618,15 @@ Planned or natural evolution paths (also noted on the About screen):
 | [SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md) | Load tiers, bundle/startup budgets, lazy lemma dictionary, `AnalysisProvider` backend boundary |
 | [SPEC-I18N.md](SPEC-I18N.md) | Instant UI i18n for Iberian and Latin American locales; witness-language stopwords and collation |
 | [SPEC-COPILOT.md](SPEC-COPILOT.md) | Multilingual research copilot with precompiled, evidence-tiered recipes |
+| [REASONING-GRAPH.md](REASONING-GRAPH.md) | Manuscript reasoning graph schema v1 + offline intent-chain precompile |
 | [SPEC-PDF-INGEST.md](SPEC-PDF-INGEST.md) | PDF/IIIF ingest → HSMS draft → image-aligned, geometry-calibrated digital witness |
 | [AZURE_HSMS_AGENT_ORCHESTRATION.md](AZURE_HSMS_AGENT_ORCHESTRATION.md) | Hybrid vision → lint → batched Pass 2; env vars; MCP `transcribe_manuscript_image` |
 | [prompt-hsms-transcriber.md](prompt-hsms-transcriber.md) | Paste-ready Foundry agent instructions |
 | [azure_hsms_transcriber_prompt.md](azure_hsms_transcriber_prompt.md) | Stub → canonical prompt (compat link) |
 | [OSTA-guide.md](OSTA-guide.md) | Citation, wildcards, tag crosswalk (About tab cards) |
 | [PORTING-FROM-HSMS-MANUALS.md](PORTING-FROM-HSMS-MANUALS.md) | Proofer / analizador / OSTA / Voyant port matrix |
+| [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md) | Facsimile ink, ornate initials, MUFI tier-2 display |
+| [../assets/mufi/README.md](../assets/mufi/README.md) | MUFI catalog assets, fonts, regenerate (`fetch:mufi` / `generate:mufi`) |
 
 ## Build and quality
 

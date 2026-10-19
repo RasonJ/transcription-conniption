@@ -142,9 +142,12 @@ export async function transcribePageScan(params: {
   const prompt =
     `TRANSCRIBE PAGE: ${folioLabel}\n` +
     `Hint language: ${lang}.\n` +
-    `Emit [fol. ${folioMarker}] once, then ONE multiline column envelope:\n` +
+    `Emit [fol. ${folioMarker}] once, then ONE multiline column envelope with line numbers 1…N:\n` +
     `[fol. ${folioMarker}]\n{CB1.\n1 {IN4.} …first line…\n2 …\n}\n` +
+    `=== END FOLIO ===\n` +
     `Never emit an empty {CB1.} tag. Keep {RUB.}/{INn.}/{ILL.} inside the envelope.\n` +
+    `Read ornate drop caps carefully (Iberian illuminated D/E/S are often misread as I/Z).\n` +
+    `Do NOT repeat lines that are not on the leaf. Stop at the bottom margin, then === END FOLIO ===.\n` +
     `Return only raw HSMS markup.`;
 
   // ── Pass 1: Agent 1 (gpt-4o vision) ─────────────────────────────────────

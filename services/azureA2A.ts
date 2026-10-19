@@ -4,7 +4,7 @@
  * Wire flow (non-streaming, A2A v0.3):
  *   1. GET  {base}/agentCard/v0.3
  *   2. POST {agentCard.url}  → JSON-RPC message/send → Task
- *   3. Poll tasks/get until completed (demo ≤6 × 1.5 s / prod ≤30 × 1.5 s)
+ *   3. Poll tasks/get until completed (demo ≤6 / prod ≤40, exponential backoff)
  *   4. Extract text from artifacts → status.message → history
  */
 
@@ -73,6 +73,8 @@ export type A2AConfig = {
   demoMode?: boolean;
   /** Override message/send timeout (vision jobs need longer). */
   sendTimeoutMs?: number;
+  /** Optional AbortSignal for user cancellation / unmount. */
+  signal?: AbortSignal;
 };
 
 export const A2A_CARD_TIMEOUT_MS = 8_000;
@@ -105,18 +107,46 @@ function headers(cfg: A2AConfig): Record<string, string> {
   return { "Content-Type": "application/json", "api-key": (cfg.apiKey ?? "").trim() };
 }
 
-async function fetchWithTimeout(url: string, init: RequestInit, timeoutMs: number): Promise<Response> {
+function throwIfUserAborted(signal?: AbortSignal): void {
+  if (!signal?.aborted) return;
+  const err = new Error("A2A request aborted by user");
+  err.name = "AbortError";
+  throw err;
+}
+
+async function fetchWithTimeout(
+  url: string,
+  init: RequestInit,
+  timeoutMs: number,
+  userSignal?: AbortSignal,
+): Promise<Response> {
+  throwIfUserAborted(userSignal);
+
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  const onUserAbort = () => controller.abort();
+  if (userSignal) {
+    userSignal.addEventListener("abort", onUserAbort, { once: true });
+  }
+
   try {
     return await fetch(url, { ...init, signal: controller.signal });
   } catch (err) {
+    if (userSignal?.aborted) {
+      const abortErr = new Error("A2A request aborted by user");
+      abortErr.name = "AbortError";
+      throw abortErr;
+    }
     if (err instanceof Error && err.name === "AbortError") {
       throw new Error(`Azure A2A request timed out after ${timeoutMs} ms`);
     }
     throw err;
   } finally {
     clearTimeout(timer);
+    if (userSignal) {
+      userSignal.removeEventListener("abort", onUserAbort);
+    }
   }
 }
 
@@ -136,6 +166,7 @@ export async function getA2AAgentCard(
     `${baseUrl}/agentCard/v0.3`,
     { method: "GET", headers: { "api-key": (cfg.apiKey ?? "").trim() } },
     A2A_CARD_TIMEOUT_MS,
+    cfg.signal,
   );
   if (!res.ok) {
     const body = await res.text().catch(() => "");
@@ -175,6 +206,7 @@ export async function sendA2AMessage(
     agentUrl,
     { method: "POST", headers: headers(cfg), body: JSON.stringify(body) },
     timeout,
+    cfg.signal,
   );
   if (!res.ok) {
     const errText = await res.text().catch(() => "");
@@ -186,15 +218,23 @@ export async function sendA2AMessage(
   return rpc.result;
 }
 
-export async function pollA2ATask(cfg: A2AConfig, agentUrl: string, taskId: string): Promise<A2ATask> {
+export async function pollA2ATask(
+  cfg: A2AConfig,
+  agentUrl: string,
+  taskId: string,
+): Promise<A2ATask> {
   const maxPolls = cfg.demoMode ? 6 : 40;
-  const pollMs = 1_500;
+  let pollMs = 1_200;
+
   for (let i = 0; i < maxPolls; i++) {
+    throwIfUserAborted(cfg.signal);
+
     const body = { jsonrpc: "2.0", method: "tasks/get", params: { id: taskId }, id: makeId() };
     const res = await fetchWithTimeout(
       agentUrl,
       { method: "POST", headers: headers(cfg), body: JSON.stringify(body) },
       A2A_POLL_TIMEOUT_MS,
+      cfg.signal,
     );
     if (!res.ok) throw new Error(`tasks/get failed: ${res.status}`);
     const rpc = (await res.json()) as JsonRpcResponse<A2ATask>;
@@ -205,6 +245,9 @@ export async function pollA2ATask(cfg: A2AConfig, agentUrl: string, taskId: stri
     if (state === "failed" || state === "canceled") {
       throw new Error(`A2A task ended with state: ${state}`);
     }
+
+    // Exponential backoff capped at 3s with minor jitter.
+    pollMs = Math.min(3_000, Math.floor(pollMs * 1.25) + Math.floor(Math.random() * 200));
     await new Promise<void>((resolve) => setTimeout(resolve, pollMs));
   }
   throw new Error(`A2A task polling timed out (${cfg.demoMode ? "9 s / demo" : "~60 s"})`);

@@ -95,7 +95,7 @@ export function lineToAstNodes(block: ManuscriptBlock): SpatialNode[] {
   if (block.type === "diagram") {
     return [{ type: "Diagram", props: { columns: block.columns } }];
   }
-  if (block.type === "rubric") {
+  if (block.type === "rubric" || block.type === "heading") {
     nodes.push({ type: "Rubric", children: [] });
   } else if (block.type === "gloss") {
     nodes.push({ type: "Gloss", children: [] });

@@ -1,0 +1,2921 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://transcription-conniption.local/schemas/manuscript-reasoning-graph-v1.json",
+  "title": "Manuscript Scholarly & Public Knowledge Reasoning Graph v1.0",
+  "description": "Multi-layer scholarly + philological reasoning graph. LOD tiers, non-overlapping node/edge attributes, relation-level source_type/target_type gates, explicit FAQ/Causal bindings. schema_version=1.0.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "nodes",
+    "edges"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "dag_hash": {
+      "type": "string",
+      "description": "Stable SHA-256 lock over sorted nodes/edges (audit lineage)."
+    },
+    "domain": {
+      "type": "string",
+      "const": "hsms_scriptorium"
+    },
+    "lifecycle_stages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "INGEST",
+          "VALIDATE",
+          "EDIT",
+          "ANALYZE",
+          "EXPORT",
+          "LIBRARY"
+        ]
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReasoningNode"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ReasoningEdge"
+      }
+    }
+  },
+  "$defs": {
+    "GlossaryTerm": {
+      "type": "object",
+      "required": [
+        "term",
+        "definition"
+      ],
+      "properties": {
+        "term": {
+          "type": "string"
+        },
+        "definition": {
+          "type": "string"
+        }
+      }
+    },
+    "ManuscriptAttributes": {
+      "type": "object",
+      "description": "Bibliographic, scholarly, lay-accessibility, and graph-dynamics attributes for Manuscript nodes.",
+      "properties": {
+        "manuscript_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "doi": {
+          "type": "string"
+        },
+        "publication_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "journal_or_venue": {
+          "type": "string"
+        },
+        "license": {
+          "type": "string"
+        },
+        "shelfmark": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "dateCreated": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "language": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "supportMaterial": {
+          "type": "string"
+        },
+        "folio_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "baseName": {
+          "type": "string"
+        },
+        "witnessHash": {
+          "type": "string"
+        },
+        "wordCount": {
+          "type": "integer"
+        },
+        "typeCount": {
+          "type": "integer"
+        },
+        "ttr": {
+          "type": "number"
+        },
+        "sttr": {
+          "type": "number"
+        },
+        "hapax": {
+          "type": "integer"
+        },
+        "blockCounts": {
+          "type": "object"
+        },
+        "tokenCounts": {
+          "type": "object"
+        },
+        "abstract": {
+          "type": "string"
+        },
+        "paper_type": {
+          "type": "string",
+          "enum": [
+            "Empirical Study",
+            "Meta-Analysis",
+            "Systematic Review",
+            "Pre-print",
+            "Editorial",
+            "Replication Study",
+            "Critical Edition",
+            "Transcription"
+          ]
+        },
+        "peer_review_status": {
+          "type": "string",
+          "enum": [
+            "Peer-Reviewed",
+            "Pre-Print / Unreviewed",
+            "Retracted",
+            "Transcription"
+          ]
+        },
+        "methodology_type": {
+          "type": "string"
+        },
+        "sample_size": {
+          "type": "string"
+        },
+        "field_of_study": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lay_summary": {
+          "type": "string"
+        },
+        "key_takeaway": {
+          "type": "string"
+        },
+        "reading_comprehension_level": {
+          "type": "string",
+          "enum": [
+            "General Public",
+            "High School Science",
+            "Undergraduate",
+            "Specialist"
+          ]
+        },
+        "practical_implications": {
+          "type": "string"
+        },
+        "glossary_terms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GlossaryTerm"
+          }
+        },
+        "consensus_alignment": {
+          "type": "string",
+          "enum": [
+            "Consensus-Conforming",
+            "Contrarian / Frontier",
+            "Superseded",
+            "Disproven"
+          ]
+        },
+        "evidence_strength_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "claim_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retraction_flag": {
+          "type": "boolean"
+        },
+        "open_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "AuthorAttributes": {
+      "type": "object",
+      "description": "Identity, expertise, impact, and social/reasoning attributes for Author nodes.",
+      "properties": {
+        "author_id": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "name_variants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "orcid": {
+          "type": "string"
+        },
+        "primary_affiliation": {
+          "type": "string"
+        },
+        "affiliation_history": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "primary_fields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "subfields_and_topics": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lay_expertise_summary": {
+          "type": "string"
+        },
+        "active_years_range": {
+          "type": "string"
+        },
+        "publication_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "citation_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "h_index": {
+          "type": "number",
+          "minimum": 0
+        },
+        "peer_review_contributions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notable_awards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "frequent_collaborators": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mentorship_links": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "science_communicator_flag": {
+          "type": "boolean"
+        },
+        "conflict_of_interest_disclosures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "FrequentQuestionAttributes": {
+      "type": "object",
+      "properties": {
+        "question_id": {
+          "type": "string"
+        },
+        "canonical_text": {
+          "type": "string"
+        },
+        "alternate_phrasings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "target_audience": {
+          "type": "string",
+          "enum": [
+            "lay",
+            "scholar",
+            "all"
+          ]
+        },
+        "search_frequency_tier": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "AnswerSnippetAttributes": {
+      "type": "object",
+      "properties": {
+        "answer_text": {
+          "type": "string"
+        },
+        "reading_level": {
+          "type": "string",
+          "enum": [
+            "General Public",
+            "High School Science",
+            "Undergraduate",
+            "Specialist",
+            "grade_school",
+            "general_public",
+            "undergraduate",
+            "specialist"
+          ]
+        },
+        "last_updated_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "verified_by_editor": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "FolioAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "folioNumber": {
+          "type": "string"
+        },
+        "side": {
+          "type": "string",
+          "enum": [
+            "recto",
+            "verso"
+          ]
+        },
+        "sequenceIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "catchword": {
+          "type": "string"
+        },
+        "signature": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ColumnAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "columnIndex": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "layoutType": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LineAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "lineNumber": {
+          "type": "string"
+        },
+        "sequenceIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "yPosition": {
+          "type": "number"
+        },
+        "boundingBox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon_coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "DropInitialAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "letter": {
+          "type": "string"
+        },
+        "depthInLines": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "style": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "boundingBox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon_coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "FigureAnchorAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "figureId": {
+          "type": "string"
+        },
+        "mnemonicType": {
+          "type": "string",
+          "enum": [
+            "ILL",
+            "MIN",
+            "DIAG",
+            "SYMB"
+          ]
+        },
+        "caption": {
+          "type": "string"
+        },
+        "imageUri": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "BlockAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "prose",
+            "rubric",
+            "gloss",
+            "addendum",
+            "heading"
+          ]
+        },
+        "language": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "integer"
+        },
+        "boundingBox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon_coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "TokenAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "raw": {
+          "type": "string"
+        },
+        "diplomaticValue": {
+          "type": "string"
+        },
+        "normalizedValue": {
+          "type": "string"
+        },
+        "posTag": {
+          "type": "string"
+        },
+        "tokenType": {
+          "type": "string"
+        },
+        "hand": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ExpansionAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "suppliedText": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "abbreviation",
+            "ligature"
+          ]
+        },
+        "abbreviation_type": {
+          "type": "string",
+          "enum": [
+            "suspension",
+            "contraction",
+            "superscript_letter",
+            "brevigraph"
+          ]
+        },
+        "graphemic_source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "EditorialInterventionAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "interventionType": {
+          "type": "string",
+          "enum": [
+            "scribal_deletion",
+            "scribal_insertion",
+            "editorial_deletion",
+            "editorial_insertion"
+          ]
+        },
+        "hand": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "PunctuationAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "scribal_punctuation",
+            "calderon",
+            "calderon_two"
+          ]
+        },
+        "raw": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LemmaNodeAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "lemma": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ReasoningNodeType": {
+      "type": "string",
+      "enum": [
+        "Manuscript",
+        "Author",
+        "Claim",
+        "Evidence",
+        "Concept",
+        "LayExplanation",
+        "AnswerSnippet",
+        "Question",
+        "FrequentQuestion",
+        "Actor",
+        "Journal_Venue",
+        "Folio",
+        "Witness",
+        "Column",
+        "Line",
+        "Block",
+        "Token",
+        "DropInitial",
+        "FigureAnchor",
+        "Expansion",
+        "EditorialIntervention",
+        "Punctuation",
+        "LemmaNode",
+        "AdministrativeBarrierNode",
+        "CounterfactualIntervention",
+        "Person",
+        "Agent",
+        "Work",
+        "WitnessStats",
+        "Hand",
+        "LanguageSpan",
+        "Confounder",
+        "Mediator",
+        "InstrumentalVariable",
+        "OutcomeVariable",
+        "Event",
+        "DamageRegion",
+        "PhysicalAnomaly",
+        "VariantForm"
+      ]
+    },
+    "WitnessStatsAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "baseName": {
+          "type": "string"
+        },
+        "witnessHash": {
+          "type": "string"
+        },
+        "wordCount": {
+          "type": "integer"
+        },
+        "typeCount": {
+          "type": "integer"
+        },
+        "ttr": {
+          "type": "number"
+        },
+        "sttr": {
+          "type": "number"
+        },
+        "hapax": {
+          "type": "integer"
+        },
+        "rubricCount": {
+          "type": "integer"
+        },
+        "glossCount": {
+          "type": "integer"
+        },
+        "dropInitialCount": {
+          "type": "integer"
+        },
+        "blockCounts": {
+          "type": "object"
+        },
+        "tokenCounts": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    },
+    "HandAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "hand": {
+          "type": "string"
+        },
+        "count": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LanguageSpanAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "lang": {
+          "type": "string"
+        },
+        "words": {
+          "type": "integer"
+        },
+        "tokens": {
+          "type": "integer"
+        },
+        "spans": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": true
+    },
+    "AgentAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "author",
+            "scribe",
+            "translator",
+            "commentator",
+            "patron",
+            "editor"
+          ]
+        },
+        "birthYear": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "deathYear": {
+          "oneOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "flourishedPeriod": {
+          "type": "string"
+        },
+        "geographicOrigin": {
+          "type": "string"
+        },
+        "orcid": {
+          "type": "string"
+        },
+        "name_variants": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "WorkAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "originalLanguage": {
+          "type": "string"
+        },
+        "compositionDate": {
+          "type": "string"
+        },
+        "genre": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ReasoningRelation": {
+      "type": "string",
+      "enum": [
+        "authored",
+        "coauthored",
+        "translated",
+        "attributed_to",
+        "composed_gloss_on",
+        "patronized",
+        "dedicated_work_to",
+        "contains_work",
+        "influenced_by",
+        "contemporary_of",
+        "corresponded_with",
+        "studied_under",
+        "criticized_by",
+        "refuted",
+        "cites_work",
+        "supports",
+        "confirms",
+        "refutes",
+        "contradicts",
+        "replicates",
+        "supersedes",
+        "extends",
+        "builds_upon",
+        "reviews_and_summarizes",
+        "rebuts",
+        "replies_to_rebuttal",
+        "comments_on",
+        "corrects_erratum",
+        "dedicated_to",
+        "acknowledges_discussion_with",
+        "funded_by_grant_of",
+        "intellectual_descendant_of",
+        "coauthored_with",
+        "mentored",
+        "advised",
+        "frequent_collaborator_of",
+        "peer_reviewed_work_by",
+        "in_formal_debate_with",
+        "defines_concept",
+        "applies_concept",
+        "specializes_in",
+        "prerequisite_for",
+        "defines_term",
+        "contains",
+        "supports_claim",
+        "refutes_claim",
+        "evidence_of",
+        "translates_to_lay",
+        "simplified_from",
+        "answers_question",
+        "explores_topic",
+        "annotated_claim",
+        "bookmarked_work",
+        "queries_graph",
+        "answered_by",
+        "supported_by_manuscript",
+        "supported_by_evidence",
+        "mapped_to_concept",
+        "addressed_by_author",
+        "addressed_in",
+        "spurs_question",
+        "has_consensus_answer",
+        "has_contested_answer",
+        "summarizes_claim",
+        "asserts",
+        "has_folio",
+        "has_column",
+        "contains_block",
+        "contains_line",
+        "contains_token",
+        "has_heading",
+        "has_footer",
+        "next_folio",
+        "next_line",
+        "next_token",
+        "hyphenated_to",
+        "indents",
+        "glosses_line",
+        "has_expansion",
+        "has_intervention",
+        "maps_to_lemma",
+        "located_at",
+        "has_stats",
+        "contains_term",
+        "has_hapax_term",
+        "exhibits_hand",
+        "uses_block_type",
+        "uses_token_type",
+        "code_switches_to",
+        "has_rubric_hit",
+        "has_gloss_hit",
+        "has_drop_initial_hit",
+        "stalled_by_barrier",
+        "bypasses_barrier",
+        "causally_influences",
+        "confounds",
+        "mediates",
+        "blocks_causal_path",
+        "performed_event",
+        "affected_target",
+        "clobbers_text",
+        "has_variant_form",
+        "standardized_to"
+      ]
+    },
+    "ReasoningNode": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "attributes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uri": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/ReasoningNodeType"
+        },
+        "lod_tier": {
+          "$ref": "#/$defs/LodTier"
+        },
+        "subgraph": {
+          "type": "string",
+          "description": "Optional document-structure / discourse subgraph id (e.g. 'docstruct:WITNESS:TRS') for LOD isolation."
+        },
+        "attributes": {
+          "type": "object",
+          "description": "Polymorphic bag; validated by allOf if/then on type (no catch-all)."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Manuscript"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ManuscriptAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Author"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/AuthorAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Claim"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ClaimAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Evidence"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/EvidenceAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "FrequentQuestion"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/FrequentQuestionAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "AnswerSnippet"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/AnswerSnippetAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Line"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/LineAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Block"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/BlockAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "DropInitial"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/DropInitialAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Token"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/TokenAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Folio"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/FolioAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Column"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ColumnAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Expansion"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ExpansionAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "EditorialIntervention"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/EditorialInterventionAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Punctuation"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/PunctuationAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "FigureAnchor"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/FigureAnchorAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Agent"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/AgentAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Work"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/WorkAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "WitnessStats"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/WitnessStatsAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Hand"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/HandAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "LanguageSpan"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/LanguageSpanAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "CounterfactualIntervention"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/CausalInterventionAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Event"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/EventAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "DamageRegion"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/DamageRegionAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "PhysicalAnomaly"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/DamageRegionAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "VariantForm"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/VariantFormAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Confounder"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/CausalVariableAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Mediator"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/CausalVariableAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "InstrumentalVariable"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/CausalVariableAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "OutcomeVariable"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/CausalVariableAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "LemmaNode"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/LemmaNodeAttributes"
+              },
+              "lod_tier": {
+                "default": "MICRO_PHILOLOGICAL"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ReasoningEdge": {
+      "type": "object",
+      "required": [
+        "source",
+        "target",
+        "relation"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "relation": {
+          "$ref": "#/$defs/ReasoningRelation"
+        },
+        "properties": {
+          "type": "object",
+          "properties": {
+            "created_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "confidence_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Edge-only: strength of this relational assertion (not a node intrinsic)."
+            },
+            "citation_intent": {
+              "type": "string",
+              "enum": [
+                "background",
+                "methodology_use",
+                "contradiction",
+                "confirmation",
+                "extends",
+                "comparative_discussion"
+              ]
+            },
+            "frequency_in_text": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "replication_outcome": {
+              "type": "string",
+              "enum": [
+                "successful",
+                "failed",
+                "inconclusive"
+              ]
+            },
+            "author_order": {
+              "type": "string",
+              "enum": [
+                "1st_author",
+                "last_author",
+                "corresponding",
+                "middle"
+              ]
+            },
+            "contribution_type": {
+              "type": "string"
+            },
+            "collaboration_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "first_coauthored_year": {
+              "type": "integer"
+            },
+            "latest_coauthored_year": {
+              "type": "integer"
+            },
+            "mentorship_role": {
+              "type": "string"
+            },
+            "institution": {
+              "type": "string"
+            },
+            "point_of_contention": {
+              "type": "string",
+              "enum": [
+                "methodology",
+                "data_interpretation",
+                "statistical_power",
+                "ethics",
+                "general"
+              ]
+            },
+            "tone": {
+              "type": "string"
+            },
+            "dedication_text": {
+              "type": "string"
+            },
+            "acknowledgment_type": {
+              "type": "string",
+              "enum": [
+                "conceptual_feedback",
+                "data_sharing",
+                "informal_review",
+                "lab_support",
+                "informal_peer_review"
+              ]
+            },
+            "reading_level": {
+              "type": "string"
+            },
+            "verified_by_author": {
+              "type": "boolean"
+            },
+            "is_mutilated_edge": {
+              "type": "boolean"
+            },
+            "interventional_action_applied": {
+              "type": "string"
+            },
+            "do_action": {
+              "type": "string",
+              "description": "Edge-only interventional label; CounterfactualIntervention nodes hold SEM fields."
+            },
+            "weight": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "estimated_days_saved": {
+              "type": "number"
+            },
+            "expected_net_roi": {
+              "type": "number"
+            },
+            "barrier_id": {
+              "type": "string"
+            },
+            "relevance_score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Edge-only: how strongly source answers / relates to target question."
+            },
+            "consensus_status": {
+              "type": "string",
+              "enum": [
+                "settled_consensus",
+                "emerging_hypothesis",
+                "actively_contested"
+              ],
+              "description": "Edge-only: consensus state of this relational answer/link."
+            },
+            "influenceType": {
+              "type": "string",
+              "enum": [
+                "direct_quote",
+                "paraphrase",
+                "conceptual"
+              ]
+            },
+            "degreeOfCertainty": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "sharedLocation": {
+              "type": "string"
+            },
+            "timeWindow": {
+              "type": "string"
+            },
+            "tf": {
+              "type": "number"
+            },
+            "count": {
+              "type": "number"
+            },
+            "folioId": {
+              "type": "string"
+            },
+            "line": {
+              "type": "string"
+            },
+            "valid_from": {
+              "type": "string"
+            },
+            "valid_until": {
+              "type": "string"
+            },
+            "intervened_variable": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": true
+        },
+        "source_type": {
+          "$ref": "#/$defs/ReasoningNodeType"
+        },
+        "target_type": {
+          "$ref": "#/$defs/ReasoningNodeType"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "rebuts"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Manuscript"
+              },
+              "target_type": {
+                "const": "Manuscript"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "replies_to_rebuttal"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Manuscript"
+              },
+              "target_type": {
+                "const": "Manuscript"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "supports_claim"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Claim"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "refutes_claim"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Claim"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "evidence_of"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Evidence"
+              },
+              "target_type": {
+                "const": "Claim"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "authored"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Author"
+              },
+              "target_type": {
+                "const": "Manuscript"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "coauthored_with"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Author"
+              },
+              "target_type": {
+                "const": "Author"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "mentored"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Author"
+              },
+              "target_type": {
+                "const": "Author"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "has_folio"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Manuscript"
+              },
+              "target_type": {
+                "const": "Folio"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "contains_line"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Line"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "contains_token"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Token"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "answered_by"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "FrequentQuestion"
+              },
+              "target_type": {
+                "enum": [
+                  "AnswerSnippet",
+                  "LayExplanation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "supported_by_evidence"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Evidence"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "has_variant_form"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Token"
+              },
+              "target_type": {
+                "const": "VariantForm"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "standardized_to"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "VariantForm"
+              },
+              "target_type": {
+                "const": "LemmaNode"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "clobbers_text"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "DamageRegion"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "performed_event"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Event"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "affected_target"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Event"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "prerequisite_for"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "Concept"
+              },
+              "target_type": {
+                "const": "Concept"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "answers_question"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "Claim",
+                  "Evidence",
+                  "Manuscript",
+                  "LayExplanation"
+                ]
+              },
+              "target_type": {
+                "enum": [
+                  "Question",
+                  "FrequentQuestion"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "mapped_to_concept"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Concept"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "has_consensus_answer"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "FrequentQuestion"
+              },
+              "target_type": {
+                "enum": [
+                  "Claim",
+                  "AnswerSnippet",
+                  "LayExplanation"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "has_contested_answer"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "FrequentQuestion"
+              },
+              "target_type": {
+                "enum": [
+                  "Claim",
+                  "AnswerSnippet"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "supported_by_manuscript"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Manuscript"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "spurs_question"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "enum": [
+                  "Question",
+                  "FrequentQuestion"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "addressed_by_author"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "enum": [
+                  "Author",
+                  "Agent"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "defines_concept"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "Manuscript",
+                  "Claim",
+                  "Author"
+                ]
+              },
+              "target_type": {
+                "const": "Concept"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "applies_concept"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "Concept"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "specializes_in"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "Author",
+                  "Agent"
+                ]
+              },
+              "target_type": {
+                "const": "Concept"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "enum": [
+                  "causally_influences",
+                  "confounds",
+                  "mediates",
+                  "blocks_causal_path"
+                ]
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "Confounder",
+                  "Mediator",
+                  "InstrumentalVariable",
+                  "OutcomeVariable",
+                  "Claim",
+                  "Manuscript",
+                  "CounterfactualIntervention",
+                  "AdministrativeBarrierNode"
+                ]
+              },
+              "target_type": {
+                "enum": [
+                  "Confounder",
+                  "Mediator",
+                  "InstrumentalVariable",
+                  "OutcomeVariable",
+                  "Claim",
+                  "Manuscript",
+                  "CounterfactualIntervention",
+                  "AdministrativeBarrierNode"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "translates_to_lay"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "target_type": {
+                "const": "LayExplanation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "simplified_from"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "const": "LayExplanation"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "BoundingBox": {
+      "type": "object",
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "width": {
+          "type": "number"
+        },
+        "height": {
+          "type": "number"
+        }
+      }
+    },
+    "CausalInterventionAttributes": {
+      "type": "object",
+      "required": [
+        "intervened_variable",
+        "do_action"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "intervened_variable": {
+          "type": "string"
+        },
+        "do_action": {
+          "type": "string"
+        },
+        "treatment_value": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "counterfactual_state": {
+          "type": "string"
+        },
+        "backdoor_adjusted": {
+          "type": "boolean"
+        },
+        "estimated_days_saved": {
+          "type": "number"
+        },
+        "labor_cost_units": {
+          "type": "number"
+        },
+        "expected_net_roi": {
+          "type": "number"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "CausalVariableAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "variable_name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "EventAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "subtype": {
+          "type": "string",
+          "enum": [
+            "Production",
+            "Insolvency_Sale",
+            "Rebinding",
+            "Shelfmark_Reassignment",
+            "Digitization",
+            "Scribal_Correction"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "date_fuzzy": {
+          "type": "string"
+        },
+        "place": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "DamageRegionAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "damage_type": {
+          "type": "string"
+        },
+        "boundingBox": {
+          "$ref": "#/$defs/BoundingBox"
+        },
+        "polygon_coordinates": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "severity": {
+          "type": "number"
+        }
+      },
+      "additionalProperties": true
+    },
+    "VariantFormAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "surface": {
+          "type": "string"
+        },
+        "orthographic_class": {
+          "type": "string"
+        },
+        "phonological_notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "LodTier": {
+      "type": "string",
+      "enum": [
+        "MACRO_REASONING",
+        "MESO_DISCOURSE",
+        "MICRO_PHILOLOGICAL"
+      ],
+      "description": "Level-of-detail tier so GDB engines can exclude MICRO_PHILOLOGICAL containment from macro epistemic traversals."
+    },
+    "ClaimAttributes": {
+      "type": "object",
+      "required": [
+        "proposition_text"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "claim_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "proposition_text": {
+          "type": "string"
+        },
+        "truth_value": {
+          "type": "string",
+          "enum": [
+            "true",
+            "false",
+            "unknown",
+            "partial"
+          ]
+        },
+        "epistemic_status": {
+          "type": "string",
+          "enum": [
+            "accepted",
+            "accepted_consensus",
+            "emerging_hypothesis",
+            "actively_contested",
+            "contested",
+            "refuted",
+            "unverified",
+            "superseded"
+          ]
+        },
+        "certainty_degree": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "is_lay_accessible": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "EvidenceAttributes": {
+      "type": "object",
+      "required": [
+        "evidence_type"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "evidence_id": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "evidence_type": {
+          "type": "string",
+          "enum": [
+            "empirical_data",
+            "philological_witness",
+            "citation",
+            "citation_aggregate",
+            "statistical_result",
+            "archival_record"
+          ]
+        },
+        "description": {
+          "type": "string"
+        },
+        "sample_size": {
+          "type": "string"
+        },
+        "p_value_or_effect_size": {
+          "type": "string"
+        },
+        "statistical_significance": {
+          "type": "string"
+        },
+        "source_locator": {
+          "type": "string"
+        },
+        "location_in_source": {
+          "type": "string"
+        },
+        "methodology_type": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -31,6 +31,9 @@ npm-debug.*
 yarn-debug.*
 yarn-error.*
 
+# local eval reports
+scripts/.eval/
+
 # macOS
 .DS_Store
 *.pem
@@ -59,3 +62,13 @@ out/
 core
 node_modules
 .expo
+
+# MUFI source PDF is large; JSON/TXT snapshot is committed
+assets/mufi/MUFI-v4.0-chart.pdf
+# Optional local Andron Scriptor install (download from MUFI font 53)
+assets/mufi/fonts/AndronScriptorWeb.*
+# Keep OFL Junicode faces + registry docs
+!assets/mufi/fonts/Junicode-*.ttf
+!assets/mufi/fonts/mufi-font-registry.json
+!assets/mufi/fonts/README.md
+!assets/mufi/fonts/.gitkeep

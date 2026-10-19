@@ -131,12 +131,19 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     };
   }, [visible, parsedManuscript, catalog, locale]);
 
-  // Cancel in-flight vision OCR when the drawer closes.
+  // Cancel in-flight vision OCR when the drawer closes or unmounts.
   useEffect(() => {
     if (visible) return;
     visionAbortRef.current?.abort();
     visionAbortRef.current = null;
   }, [visible]);
+
+  useEffect(() => {
+    return () => {
+      visionAbortRef.current?.abort();
+      visionAbortRef.current = null;
+    };
+  }, []);
 
   const resolveLiveFacets = useCallback((): FacetIndex => {
     if (liveFacetsRef.current) return liveFacetsRef.current;
@@ -225,13 +232,17 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
   const handleExport = useCallback(
     async (sep: "," | "\t") => {
       if (!answer || !presented) return;
-      const body = answerToDelimited(answer, presented, t("copilot.export.header"), sep);
-      const ext = sep === "," ? "csv" : "tsv";
-      const { saveExportFile } = await import("@/utils/exportFile");
-      await saveExportFile(body, {
-        fileName: `${answer.recipeId}.${ext}`,
-        mimeType: sep === "," ? "text/csv" : "text/tab-separated-values",
-      });
+      try {
+        const body = answerToDelimited(answer, presented, t("copilot.export.header"), sep);
+        const ext = sep === "," ? "csv" : "tsv";
+        const { saveExportFile } = await import("@/utils/exportFile");
+        await saveExportFile(body, {
+          fileName: `${answer.recipeId}.${ext}`,
+          mimeType: sep === "," ? "text/csv" : "text/tab-separated-values",
+        });
+      } catch (err) {
+        console.warn("Copilot export failed", err);
+      }
     },
     [answer, presented, t],
   );
@@ -342,6 +353,10 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
         elapsedMs: Date.now() - t0,
       });
     } finally {
+      // Seal this flight so a newer scan / unmount abort does not clear a successor controller.
+      if (visionAbortRef.current === abort) {
+        visionAbortRef.current = null;
+      }
       setVisionBusy(false);
     }
   }, [attachedScan, onApplyHsms, t]);
@@ -535,6 +550,32 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                 <Text style={styles.headline}>{presented.headline}</Text>
                 {presented.serverNote ? <Text style={styles.serverNote}>{presented.serverNote}</Text> : null}
 
+                {answer.recipeId === "stats.term_frequency" && typeof answer.count === "number" ? (
+                  <View style={styles.statBlock}>
+                    <Text style={styles.statValue}>{fmt(answer.count)}</Text>
+                    {typeof answer.params?.word === "string" ? (
+                      <Text style={styles.statWord}>“{answer.params.word}”</Text>
+                    ) : null}
+                    {typeof answer.params?.word === "string" && answer.count > 0 ? (
+                      <Pressable
+                        onPress={() => {
+                          const next = runRecipeById("search.kwic", parsedManuscript, {
+                            ...askOptions,
+                            params: { word: String(answer.params!.word) },
+                          });
+                          if (next) setAnswer(next);
+                        }}
+                        style={styles.actionButton}
+                        accessibilityRole="button"
+                        accessibilityLabel={t("copilot.action.openKwic")}
+                      >
+                        <Search color="#f6d890" size={12} />
+                        <Text style={styles.actionText}>{t("copilot.action.openKwic")}</Text>
+                      </Pressable>
+                    ) : null}
+                  </View>
+                ) : null}
+
                 {answer.slotPrompt ? (
                   <View style={styles.slotPrompt}>
                     <Text style={styles.sectionLabel}>
@@ -582,12 +623,63 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                 ) : null}
 
                 {presented.breakdown.length > 0 ? (
-                  <View style={styles.breakdown}>
-                    {presented.breakdown.map((b, i) => (
-                      <View key={`${b.label}_${i}`} style={styles.breakdownRow}>
-                        <Text style={styles.breakdownLabel}>{b.label}</Text>
-                        <Text style={styles.breakdownValue}>{fmt(b.value)}</Text>
-                      </View>
+                  <View
+                    style={
+                      answer.recipeId === "stats.term_frequency" || answer.recipeId === "search.kwic"
+                        ? styles.folioChipRow
+                        : styles.breakdown
+                    }
+                  >
+                    {presented.breakdown.map((b, i) =>
+                      answer.recipeId === "stats.term_frequency" || answer.recipeId === "search.kwic" ? (
+                        <View key={`${b.label}_${i}`} style={styles.folioChip}>
+                          <Text style={styles.folioChipText}>
+                            {b.label}: {fmt(b.value)}
+                          </Text>
+                        </View>
+                      ) : (
+                        <View key={`${b.label}_${i}`} style={styles.breakdownRow}>
+                          <Text style={styles.breakdownLabel}>{b.label}</Text>
+                          <Text style={styles.breakdownValue}>{fmt(b.value)}</Text>
+                        </View>
+                      ),
+                    )}
+                  </View>
+                ) : null}
+
+                {answer.doActions && answer.doActions.length > 0 ? (
+                  <View style={styles.chipRow}>
+                    <Text style={styles.sectionLabel}>{t("copilot.nextActions")}</Text>
+                    {answer.doActions.map((action) => (
+                      <Pressable
+                        key={action}
+                        onPress={() => {
+                          if (action === "JUMP_FOLIO" && answer.rows[0]) {
+                            handleJumpToRow(answer.rows[0]);
+                            return;
+                          }
+                          if (action === "OPEN_KWIC" || action === "OPEN_CONCORDANCE") {
+                            handleRecipe("search.kwic");
+                            return;
+                          }
+                          if (action === "OPEN_VALIDATION" || action === "RUN_LINT") {
+                            handleRecipe("search.passages");
+                            return;
+                          }
+                          if (action === "OPEN_INGEST_PANEL") {
+                            handleRecipe("ingest.unreviewed");
+                            return;
+                          }
+                          if (action === "OPEN_LIBRARY") {
+                            handleRecipe("meta.witness");
+                          }
+                        }}
+                        style={styles.chip}
+                        accessibilityRole="button"
+                        accessibilityLabel={action}
+                      >
+                        <Text style={styles.chipLabel}>{action.replace(/_/g, " ")}</Text>
+                      </Pressable>
                     ))}
                   </View>
                 ) : null}
@@ -852,6 +944,19 @@ const styles = StyleSheet.create({
   breakdownRow: { flexDirection: "row", justifyContent: "space-between" },
   breakdownLabel: { color: "rgba(255,244,210,0.8)", fontSize: 12 },
   breakdownValue: { color: "#f6d890", fontSize: 12, fontWeight: "800", fontFamily: "monospace" },
+  statBlock: { alignItems: "center", gap: 6, paddingVertical: 8 },
+  statValue: { color: "#f6d890", fontSize: 42, fontWeight: "800", fontFamily: "monospace", lineHeight: 48 },
+  statWord: { color: "rgba(255,244,210,0.85)", fontSize: 14, fontStyle: "italic" },
+  folioChipRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 4 },
+  folioChip: {
+    backgroundColor: "rgba(155,34,23,0.28)",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.35)",
+  },
+  folioChipText: { color: "#f6d890", fontSize: 11, fontWeight: "700", fontFamily: "monospace" },
   hitCard: {
     backgroundColor: "rgba(255,253,244,0.05)",
     borderColor: "rgba(246,216,144,0.15)",

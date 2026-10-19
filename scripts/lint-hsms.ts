@@ -12,11 +12,11 @@ const DIM = "\x1b[2m";
 
 const SOURCE_EXT = /\.(txt|hsms)$/i;
 
-function printUsage(): void {
+function printUsage(exitCode = 1): void {
   console.log(`${BOLD}HSMS structural linter${RESET}`);
-  console.log(`Usage: npm run lint:hsms -- <file-or-dir> [--recursive]`);
+  console.log(`Usage: npm run lint:hsms -- <file-or-dir> [--recursive] [--json] [--verbose]`);
   console.log(`       npm run lint:project -- [dir]   (default: transcriptions, recursive)`);
-  process.exit(1);
+  process.exit(exitCode);
 }
 
 function collectFiles(targetPath: string, recursive: boolean): string[] {
@@ -50,8 +50,7 @@ function collectFiles(targetPath: string, recursive: boolean): string[] {
 function printReport(report: LintReport, baseName: string, verbose: boolean): boolean {
   if (report.issues.length === 0) {
     if (verbose) {
-      console.log(`\n${BOLD}${CYAN}${baseName}${RESET}`);
-      console.log(`${GREEN}✔ No structural or lexical issues.${RESET}`);
+      console.log(`${GREEN}✔ ${baseName}${RESET}`);
     }
     return true;
   }
@@ -85,16 +84,50 @@ function printReport(report: LintReport, baseName: string, verbose: boolean): bo
   return report.isValid;
 }
 
-function auditFile(filePath: string, verbose: boolean): boolean {
+function pad(s: string, n: number): string {
+  return s.length >= n ? s.slice(0, n) : s + " ".repeat(n - s.length);
+}
+
+function printTabularSummary(
+  rows: Array<{ file: string; errors: number; warnings: number; ok: boolean }>,
+): void {
+  console.log("\n" + `${BOLD}${CYAN}File summary${RESET}`);
+  console.log(`${DIM}${pad("FILE", 42)}  ${pad("ERR", 5)}  ${pad("WARN", 5)}  STATUS${RESET}`);
+  console.log("─".repeat(70));
+  for (const row of rows) {
+    const badge = row.ok ? `${GREEN}PASS${RESET}` : `${RED}FAIL${RESET}`;
+    const errColor = row.errors > 0 ? RED : DIM;
+    const warnColor = row.warnings > 0 ? YELLOW : DIM;
+    console.log(
+      `${pad(row.file, 42)}  ${errColor}${pad(String(row.errors), 5)}${RESET}  ${warnColor}${pad(String(row.warnings), 5)}${RESET}  ${badge}`,
+    );
+  }
+}
+
+function auditFile(
+  filePath: string,
+  options: { print: boolean; verbose: boolean },
+): { isValid: boolean; report: LintReport } {
   const content = fs.readFileSync(filePath, "utf8");
   const report = lintHsmsTranscription(content);
-  return printReport(report, path.basename(filePath), verbose);
+  const isValid = report.isValid;
+  if (options.print) {
+    printReport(report, path.basename(filePath), options.verbose);
+  }
+  return { isValid, report };
 }
 
 function main(): void {
   const args = process.argv.slice(2).filter((a) => a !== "--");
-  const recursive = args.includes("--recursive") || process.env.npm_lifecycle_event === "lint:project";
-  const positional = args.filter((a) => a !== "--recursive");
+  if (args.includes("--help") || args.includes("-h")) {
+    printUsage(0);
+    return;
+  }
+  const recursive =
+    args.includes("--recursive") || process.env.npm_lifecycle_event === "lint:project";
+  const isJson = args.includes("--json");
+  const verbose = args.includes("--verbose");
+  const positional = args.filter((a) => !a.startsWith("--"));
 
   const defaultDir = path.resolve(__dirname, "../../OSTA/transcriptions");
   const target =
@@ -106,6 +139,7 @@ function main(): void {
 
   if (!target) {
     printUsage();
+    return;
   }
 
   if (!fs.existsSync(target)) {
@@ -119,16 +153,54 @@ function main(): void {
     process.exit(1);
   }
 
-  if (files.length > 1) {
+  if (!isJson && files.length > 1) {
     console.log(`${BOLD}${CYAN}HSMS verification — ${files.length} file(s)${RESET}`);
   }
 
   let failed = 0;
+  const jsonResults: Record<string, LintReport> = {};
+  const summaryRows: Array<{ file: string; errors: number; warnings: number; ok: boolean }> = [];
+
   for (const file of files) {
-    if (!auditFile(file, files.length === 1)) failed++;
+    const printDetail = !isJson && (verbose || files.length === 1);
+    const { isValid, report } = auditFile(file, {
+      print: printDetail,
+      verbose: verbose || files.length === 1,
+    });
+    const base = path.basename(file);
+    jsonResults[base] = report;
+    summaryRows.push({
+      file: base,
+      errors: report.errorCount,
+      warnings: report.warningCount,
+      ok: isValid,
+    });
+    if (!isValid) {
+      failed++;
+      // Multi-file quiet mode: still expand failing documents.
+      if (!isJson && !printDetail) {
+        printReport(report, base, true);
+      }
+    }
+  }
+
+  if (isJson) {
+    console.log(
+      JSON.stringify(
+        {
+          files: files.length,
+          failed,
+          results: jsonResults,
+        },
+        null,
+        2,
+      ),
+    );
+    process.exit(failed === 0 ? 0 : 2);
   }
 
   if (files.length > 1) {
+    printTabularSummary(summaryRows);
     console.log("\n" + "═".repeat(70));
     if (failed === 0) {
       console.log(

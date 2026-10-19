@@ -4,6 +4,98 @@ A cross-platform app for previewing **Hispanic Seminary (HSMS)**–style diploma
 
 Built with [Expo](https://expo.dev/) and [React Native](https://reactnative.dev/).
 
+## Quick start (build & run)
+
+Anyone with Node.js can get a working web preview in a few minutes. Azure, OSTA, and Bun are optional.
+
+### Prerequisites
+
+| Tool | Required? | Notes |
+|------|-----------|--------|
+| **[Node.js](https://nodejs.org/) 20+** | Yes | Includes `npm` / `npx`. Check with `node -v` |
+| **Git** | Yes | Clone the repo |
+| **[Bun](https://bun.sh/)** | No | Faster installs; `npm install` works fine |
+| **Expo Go** (phone) | No | Only if you prefer a device over a browser |
+| **Azure OpenAI / Foundry** | No | Only for **Transcribe Scan (AI)** — see [Optional: Azure](#optional-azure-vision-transcription) |
+
+### 1. Clone and install
+
+```bash
+git clone <this-repo-url> transcription-conniption
+cd transcription-conniption
+
+# either:
+npm install
+# or:
+bun install
+```
+
+Generated catalogs and dictionary indexes that the app needs at runtime are already committed under `utils/generated/` and `public/dic/`. You do **not** need Azure, OSTA, or MUFI regeneration for a first run.
+
+### 2. Start the app
+
+**Easiest path — Expo Web (browser):**
+
+```bash
+npm run start:web
+# or: bun run start:web
+```
+
+When Metro prints a URL (typically `http://localhost:8081`), open it in Chrome/Edge/Firefox. Press `w` in the terminal if the browser does not open automatically.
+
+**Mobile / Expo Go:**
+
+```bash
+npm start
+# or: bun run start
+```
+
+Scan the QR code with [Expo Go](https://expo.dev/go) (same LAN), or press `i` / `a` for iOS / Android simulators. Use `npm run start:tunnel` if the device is on a different network.
+
+**Stuck cache?** Clear and restart:
+
+```bash
+npm run start:clear
+# or: npx expo start --clear --web
+```
+
+### 3. Smoke-check
+
+```bash
+npm test
+```
+
+Unit tests do **not** require OSTA or Azure. You should see Jest pass.
+
+### 4. Use the Studio
+
+1. Open the **Studio** tab (home).
+2. Tap **Upload & Convert** and pick any plain-text HSMS `.txt` (or a sample from Advanced editor → samples).
+3. Wait for the compilation overlay; scroll the parchment leaf.
+4. Toggle **Advanced editor** for source editing, validation, concordance, SVG facsimile, and export.
+
+Minimal HSMS snippet to try:
+
+```
+{RMK: Demo Author.}
+{RMK: Demo Title.}
+[fol. 1r]
+{CB1.
+1 {IN2.} Ao beginning of the leaf with an expansion s<cilicet>.}
+```
+
+### Troubleshooting first run
+
+| Symptom | Fix |
+|---------|-----|
+| `Cannot find module` / Metro resolve errors | Delete `node_modules`, reinstall (`npm install`), then `npm run start:clear` |
+| Blank web page / white screen | Hard-refresh the browser; ensure you opened the Metro web URL, not a stale tab |
+| Port already in use | Stop other Expo processes, or `npx expo start --web --port 8082` |
+| TypeScript / IDE red squiggles only | Runtime still works; run `npx tsc --noEmit` if you need a full check |
+| Vision / Transcribe Scan disabled | Expected without `.env` — configure Azure (below) or ignore |
+
+Continue for acknowledgments, features, optional corpus tooling, and full script reference.
+
 ## Acknowledgments
 
 This project implements markup conventions from the **[Hispanic Seminary of Medieval Studies (HSMS)](https://hispanicseminary.org/index.htm)**. The authoritative transcription rules are in the [HSMS *Manual of Manuscript Transcription* (English)](https://hispanicseminary.org/manual-en.htm).
@@ -21,8 +113,10 @@ A local copy of the manual also lives in [docs/HSMS-manual.md](docs/HSMS-manual.
 
 | Doc | Topic |
 |-----|--------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design, Copilot, Azure, reasoning graph |
+| [docs/REASONING-GRAPH.md](docs/REASONING-GRAPH.md) | Graph schema v1 + precompiled intent chains |
 | [docs/HSMS-LAYOUT.md](docs/HSMS-LAYOUT.md) | Columns, baselines, spatial AST, SVG grid |
-| [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) | Parchment aesthetics, ink semantics, ornate drop caps |
+| [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) | Parchment aesthetics, MUFI display tiers, ornate drop caps |
 | [docs/HSMS-EDITOR.md](docs/HSMS-EDITOR.md) | Editor, validation, batch, export |
 
 ### Pedro Nunes reference corpus (legacy HTML parity)
@@ -63,44 +157,31 @@ Toggle **Advanced editor** on the home screen to unlock:
 - **Spatial layout** — `utils/spatialAst.ts` lifts each folio into column blocks and physical lines for the SVG facsimile path; see [docs/HSMS-LAYOUT.md](docs/HSMS-LAYOUT.md)
 - **Legacy HTML parity** — inline `{INn.}` drop caps (one historiated grapheme per mnemonic; particle remainders stay in the body line, e.g. `{IN4.} AO` → cap **A**, text **O muyto…**), Portuguese `c'o~` compounds, balanced-brace figure lines (`utils/legacyDiacritics.ts`, `utils/dropInitial.ts`, `utils/braceBlocks.ts`); paleographic brackets (`[*]`, `[??]`, loose `??`, `[ ]`) via `utils/hsmsLexer.ts`; web SVG facsimile targets `PedroNunes-TRS` HTML float/justify behaviour
 - **Reference tab (Sources)** — HSMS / OSTA links, Georgetown funding credits, in-app OSTA citation & syntax cards ([docs/OSTA-guide.md](docs/OSTA-guide.md))
-- **Research Copilot** — local Tier‑A recipes (paleography, Voyant-style frequency / n-grams / vocab density) + MCP corpus sidecars
+- **Research Copilot** — local Tier‑A recipes (paleography, Voyant-style frequency / n-grams / vocab density), Tier‑1 **precompiled intent chains** from the reasoning graph, + MCP corpus sidecars
+- **Manuscript reasoning graph** — LOD-tiered scholarly graph (Claims, Evidence, FAQ, barriers, Pearlian interventions); schema `schemas/manuscript-reasoning-graph-v1.json` — see [docs/REASONING-GRAPH.md](docs/REASONING-GRAPH.md)
 - **Transcribe Scan (AI)** — optional Azure hybrid stack (`gpt-4o` vision + conditional / batched `gpt-5.4-mini` syntax repair); multi-page PDFs are sliced on the client (PDF.js), clean leaves stream immediately, flagged leaves share one Pass 2 call ([docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md))
 
 ## Requirements
 
-- [Bun](https://bun.sh/) (used for install and scripts)
-- Expo Go on a device, or iOS/Android simulator / web browser for development
-- Optional: Azure OpenAI / Foundry (`EXPO_PUBLIC_AZURE_OPENAI_*`, deployments, agent names) for vision transcription (see `.env.example`)
-
-## Getting started
-
-Install dependencies:
-
-```bash
-bun install
-```
-
-Start the dev server (mobile, with tunnel):
-
-```bash
-bun run start
-```
-
-Start for web:
-
-```bash
-bun run start:web
-```
-
-Scan the QR code with Expo Go, or press the platform key in the terminal to open a simulator.
+| Requirement | Details |
+|-------------|---------|
+| **Node.js 20+** | Required for Expo / Jest / `tsx` scripts (`node -v`) |
+| **npm** (or Bun) | `npm install` is enough; Bun is optional for faster installs |
+| **Browser or Expo Go** | Web via `npm run start:web`, or Expo Go / simulators via `npm start` |
+| **Azure** (optional) | Vision OCR only — copy `.env.example` → `.env` |
+| **OSTA clone** (optional) | Sibling `OSTA/transcriptions/` for corpus batch / `test:osta` |
 
 ### Optional: Azure vision transcription
 
 1. Confirm resource Responses deployment **`gpt-4o`** (Pass 1) and Foundry syntax agent **`hsms-agent-607kfp6kw1-gpt5-mini`** / model **`gpt-5.4-mini`** (Pass 2). Optionally paste [docs/prompt-hsms-transcriber.md](docs/prompt-hsms-transcriber.md) into the vision agent; keep **File search OFF**.
-2. Copy `.env.example` → `.env` and set `EXPO_PUBLIC_AZURE_OPENAI_ENDPOINT`, deployment names, agent names, and `EXPO_PUBLIC_AZURE_AGENT_API_KEY` (`TRANSPORT=hybrid` by default).
+2. Copy `.env.example` → `.env` and set at least:
+   - `EXPO_PUBLIC_AZURE_OPENAI_ENDPOINT`
+   - `EXPO_PUBLIC_AZURE_DEPLOYMENT_VISION` / `EXPO_PUBLIC_AZURE_DEPLOYMENT_SYNTAX`
+   - `EXPO_PUBLIC_AZURE_AGENT_API_KEY`
+   - `EXPO_PUBLIC_AZURE_TRANSPORT=hybrid` (default)
 3. Restart Expo with `--clear` (prefer **Expo Web** for multi-page PDFs), then use **Transcribe Scan (AI)** on the Studio hero bar.
 
-Full operator notes: [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md).
+Never commit `.env` (it is gitignored). Full operator notes: [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md).
 
 ## Project layout
 
@@ -143,7 +224,11 @@ Full operator notes: [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AG
 | `services/azureAgentOrchestrator.ts` | Hybrid chat (paleographer / linter session context) |
 | `services/azureOpenAI.ts` | Azure Responses client (timeouts + 429 retry) |
 | `utils/pdfPageExtractor.web.ts` | Client PDF.js slicer (Expo Web) |
-| `utils/copilot/` | Catalog, Tier A / Voyant executors, MCP sidecar runtime |
+| `utils/copilot/` | Catalog, Tier A / Voyant executors, precompiled chains, MCP sidecar runtime |
+| `utils/reasoningGraph/` | Scholarly reasoning graph builder (LOD, Claim/Evidence, causal, spatial) |
+| `schemas/manuscript-reasoning-graph-v1.json` | Reasoning-graph JSON Schema (v1.0 only) |
+| `assets/intent-taxonomy.json` | Copilot `domain:entity:action` intents + doActions |
+| `assets/precompiled-intent-chains.json` | Offline-flattened graph → intent recipes |
 | `utils/legacyDiacritics.ts` | Data-driven `@` notation and Portuguese compound resolution |
 | `utils/metadataText.ts` | Normalize `{RMK:}` title strings for display |
 | `utils/exportFormats.ts` | Extension → format mapping (txt, html, svg, png, jpeg) |
@@ -223,23 +308,44 @@ Supported inline tokens include `<expansion>`, `(^scribal deletion)`, `(editoria
 
 ## Scripts
 
+All commands work with `npm run …` or `bun run …`.
+
+### Everyday development
+
 | Command | Description |
 |---------|-------------|
-| `bun run start` | Dev server (Rork + tunnel) |
-| `bun run start:web` | Dev server for web |
-| `bun run lint` | Run ESLint |
-| `npm test` | Unit tests only — parser, spatial AST, concordance, Copilot/Proofer/Azure helpers, paleography, render leakage (never touches OSTA files) |
-| `npm run preflight` | Full asset/codegen preflight: HSMS indexes, i18n, Copilot catalog, agent memory, library sidecars (if `out/` exists), tier + size gates, lint, tests |
-| `npm run build:all` | `preflight` then Expo web export (`build:web`) |
+| `npm start` | Expo dev server (device / simulator QR) |
+| `npm run start:web` | Expo web (browser) |
+| `npm run start:tunnel` | Dev server with tunnel (off-LAN devices) |
+| `npm run start:clear` | Clear Metro cache and restart |
+| `npm run lint` | ESLint (Expo config) |
+| `npm test` | Unit tests — parser, spatial AST, concordance, Copilot, reasoning graph, paleography (never touches OSTA) |
+
+### Ship / regenerate assets
+
+| Command | Description |
+|---------|-------------|
+| `npm run preflight` | Full asset/codegen: HSMS indexes, i18n, Copilot catalog, agent memory, library (if `out/`), tier + size gates, lint, tests |
+| `npm run build:all` | `preflight` then Expo web export |
 | `npm run build:web` | Expo web export only (no asset regen) |
-| `npm run lint:hsms` | Paleographic lint of `.txt` / `.hsms` (folio leaks, Proofer incidents, env stack) |
-| `npm run lint:project` | Recursive OSTA-style batch lint (defaults to sibling `OSTA/transcriptions/` when present) |
-| `npm run test:osta` | OSTA integration suite under `__tests__/integration/osta/` (~650+ files; requires sibling `OSTA/transcriptions/`) |
-| `npm run batch:osta` | Batch-compile OSTA / Celestina roots → `out/` + library sidecars (HTML, facets, TF-IDF, graph; see [Batch issue logs](#batch-issue-logs)) |
-| `npm run build:library` / `sync:library` | Rebuild / sync catalog + corpus sidecars to `public/` |
-| `npm run compile:copilot` | Regenerate Copilot catalog + MCP tool declarations (`compile:graph-intents` alias) |
+| `npm run compile:copilot` | Regenerate `utils/generated/copilotCatalog.ts` + MCP tool declarations |
+| `npm run precompile:graph-intents` | Reasoning-graph subgraphs → `assets/precompiled-intent-chains.json` + taxonomy merge |
+| `npm run merge:intent-taxonomy` | Deep-merge EXTRA intents into `assets/intent-taxonomy.json` |
 | `npm run generate:dictionary` | Rebuild lemma + POS indexes from `assets/dic/hsms.src` |
-| `npm run report:osta` | Re-aggregate existing `out/*.issues.log` → `issues-summary.txt` and `issues.json` (lint, parse, and render counts) |
+| `npm run generate:hsms-assets` | Diacritics + dictionary + MUFI maps |
+
+### Corpus / OSTA (optional)
+
+| Command | Description |
+|---------|-------------|
+| `npm run lint:hsms` | Paleographic lint of `.txt` / `.hsms` |
+| `npm run lint:project` | Recursive batch lint (defaults to sibling `OSTA/transcriptions/`) |
+| `npm run test:osta` | OSTA integration suite (~650+ files; needs sibling OSTA) |
+| `npm run batch:osta` | Batch-compile → `out/` + library sidecars (see [Batch issue logs](#batch-issue-logs)) |
+| `npm run build:library` / `sync:library` | Rebuild / sync catalog + corpus sidecars to `public/` |
+| `npm run report:osta` | Re-aggregate `out/*.issues.log` → summary JSON/TXT |
+| `npm run offline:bundle` | Sample fixtures → merge → compile offline Copilot bundle |
+| `npm run eval:coverage` | Intent / doAction coverage report |
 
 Ship a web build with regenerated embeddings / catalogs:
 
@@ -252,6 +358,16 @@ npm run build:web
 ```
 
 `preflight` / `build:all` flags (pass after `--`): `--skip-tests`, `--skip-lint`, `--skip-library`.
+
+### Reasoning graph & Copilot intents
+
+```bash
+npm run merge:intent-taxonomy
+npm run precompile:graph-intents
+npx jest __tests__/reasoningGraph.test.ts __tests__/precompiledChains.test.ts
+```
+
+Details: [docs/REASONING-GRAPH.md](docs/REASONING-GRAPH.md).
 
 `jest.config.js` excludes `__tests__/integration/` so default `npm test` is safe without a local OSTA clone. `npm run test:osta` uses `jest.osta.config.js` and sets `OSTA_INTEGRATION=1`. Optional: `OSTA_WRITE_REPORTS=1` with `npm run test:osta` writes validation logs under `reports/`.
 
@@ -285,12 +401,14 @@ Pedro Nunes regression (sibling `PedroNunes-TRS/text-TRS.txt`):
 npx jest __tests__/pedroNunesTrsParity.test.ts
 ```
 
-## HSMS legacy assets (`assets/dic/`)
+## HSMS legacy assets (`assets/dic/`, `assets/mufi/`)
 
 | File | Role |
 |------|------|
 | `assets/dic/hsms.src` | HSMS **DB_MAP** lemmatization dictionary (~280k entries) — lemmas + EAGLES-style POS |
 | `utils/generated/hsmsDiacriticMap.ts` | Generated from `assets/legacy_hsms_settings.ini` `[RegexReplaces]` (vendored HSMSParser settings) |
+| `assets/mufi/` | [MUFI](https://mufi.info/q.php?p=mufi/chars) catalog + [Andron Scriptor](https://mufi.info/q.php?p=mufi/fonts/fonts/53) font registry + ornate SVG slots — see [assets/mufi/README.md](assets/mufi/README.md) |
+| `utils/generated/mufiCharMap.ts` / `ornateInitialInventory.ts` | HSMS→HTML→Unicode map + ornate-initial inventory |
 | `utils/generated/hsmsLemmaIndex.json` | Compact surface→lemma index built from `hsms.src` |
 | `utils/generated/hsmsPosIndex.json` | Surface→POS index (`lookupHsmsPos`) |
 | `public/dic/hsmsLemmaIndex.v2.tsv` / `hsmsPosIndex.json` | Lazy web dictionary assets |
@@ -298,10 +416,13 @@ npx jest __tests__/pedroNunesTrsParity.test.ts
 Regenerate after updating sources:
 
 ```bash
-npm run generate:hsms-assets
+npm run fetch:mufi          # refresh MUFI catalog from v4.0 chart PDF
+npm run generate:mufi       # emit mufiCharMap.ts + ornateInitialInventory.ts
+npm run generate:hsms-assets # diacritics + dictionary + MUFI (includes generate:mufi)
 ```
 
 - **Diacritics** (`@'`, `@~`, `c'`, etc.) mirror the C# parser’s `CharRegexReplacements` rules.
+- **MUFI** — catalog triples (`utils/mufiChars.ts`); Andron Scriptor (font 53) / Junicode stacks (`utils/mufiFonts.ts`); parchment toggles **MUFI graphemes** / **MUFI PUA font** map ASCII → display glyphs only (`utils/mufiCharacterMap.ts`). Details: [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) §7.
 - **Concordance** uses the lemma index when a surface form is listed in `hsms.src`; indexing is O(N) via sticky `RegExp.exec` on each folio’s `reconstructedFlow`.
 - **POS** tags are available via `lookupHsmsPos` after `ensureLemmaDictionary()` / `loadLemmaDictionarySync()`.
 
@@ -309,10 +430,12 @@ npm run generate:hsms-assets
 
 | Document | Description |
 |----------|-------------|
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | App structure, three-pass compiler + spatial layout, Copilot/Azure, OSTA testing |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | App structure, three-pass compiler + spatial layout, Copilot/Azure, reasoning graph, OSTA testing |
+| [docs/REASONING-GRAPH.md](docs/REASONING-GRAPH.md) | Reasoning-graph schema v1, LOD tiers, precompiled intent chains |
 | [docs/HSMS-EDITOR.md](docs/HSMS-EDITOR.md) | HSMS editor/builder — reader vs scriptorium workflows, workspace, validation, export |
 | [docs/HSMS-LAYOUT.md](docs/HSMS-LAYOUT.md) | Physical line model, fixed 800 px canvas, ForeignObject web path, legacy HTML parity checklist |
-| [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) | Ornate initials, ink palette, facsimile fidelity checklist |
+| [docs/HSMS-TYPOGRAPHY.md](docs/HSMS-TYPOGRAPHY.md) | Ornate initials, MUFI display tiers, ink palette, fidelity checklist |
+| [assets/mufi/README.md](assets/mufi/README.md) | MUFI catalog, overlays, fonts, regenerate scripts |
 | [docs/HSMS-manual.md](docs/HSMS-manual.md) | Local Markdown copy of the HSMS manual (5th ed., 1997) |
 | [docs/OSTA-guide.md](docs/OSTA-guide.md) | OSTA citation norms, wildcards, tag crosswalk |
 | [docs/AZURE_HSMS_AGENT_ORCHESTRATION.md](docs/AZURE_HSMS_AGENT_ORCHESTRATION.md) | Hybrid vision → lint → batched Pass 2 setup |

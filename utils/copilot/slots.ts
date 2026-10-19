@@ -8,14 +8,22 @@ import type { Recipe, RecipeParams, SlotSpec } from "./types";
 
 const QUOTED_RE = /["“”«»‘’']([^"“”«»‘’']{1,40})["“”«»‘’']/;
 
-/** Words that introduce the target word: "collocates of rey", "kwic de dios", "hitzaren …". */
-const WORD_INTRO = /\b(?:of|for|around|near|word|de|del|da|do|para|per|palabra|palavra|paraula|sobre)\s+([\p{L}][\p{L}'~ç]*)/gu;
+/** Words that introduce the target word: "collocates of rey", "kwic de dios", "how many times is muito". */
+const WORD_INTRO =
+  /\b(?:of|for|around|near|word|is|does|de|del|da|do|para|per|palabra|palavra|paraula|sobre|vezes?|veces?)\s+([\p{L}][\p{L}'~ç]*)/gu;
+/** "where X appears" / "dónde aparece X" / "show occurrences of X". */
+const WHERE_APPEARS_RE =
+  /\b(?:where|dónde|donde|onde)\s+([\p{L}][\p{L}'~ç]*)\s+(?:appears?|aparece[mn]?|ocorr)/iu;
+const APPEARS_BEFORE_RE =
+  /\b(?:aparece[mn]?|aparece|appear(?:s|ed)?)\s+(?:(?:a|la|el|o|the)\s+)?(?:palabra|palavra|paraula|word\s+)?([\p{L}][\p{L}'~ç]*)/iu;
 const NOT_A_TARGET = new Set([
   "the", "a", "la", "el", "los", "las", "o", "os", "as", "a", "les", "els", "un", "una", "words", "word",
   "palabras", "palavras", "paraules", "palabra", "palavra", "paraula", "context", "contexto", "context",
   "text", "texto", "manuscript", "manuscrito", "manuscrit", "witness", "testimonio", "testemunho",
   "occurrence", "occurrences", "aparicion", "apariciones", "ocorrencias", "every", "all", "todas", "todos",
   "window", "ventana", "janela", "finestra", "xanela", "spelling", "grafia", "lemma", "lema",
+  "this", "that", "here", "there", "esto", "esta", "aqui", "aquí", "isto", "esse", "esse", "este",
+  "in", "on", "at", "en", "em", "many", "times", "time", "how", "cuantas", "cuántas", "quantas",
 ]);
 
 const WINDOW_RE = /(?:±|\+\/-|window of|ventana de|janela de|finestra de|xanela de|within|en|em|dins)\s*(\d{1,2})\s*(?:words?|palabras?|palavras?|paraules?|hitz)?|(\d{1,2})\s*(?:-|\s)?(?:word|palabra|palavra|paraula|hitz)(?:s|es)?\s*(?:window|ventana|janela|finestra|xanela|leiho)/i;
@@ -58,6 +66,13 @@ export function extractWord(query: string): string | undefined {
   const quoted = query.match(QUOTED_RE);
   if (quoted) return quoted[1].trim();
   const q = normalizeQuery(query);
+
+  const where = q.match(WHERE_APPEARS_RE);
+  if (where?.[1] && !NOT_A_TARGET.has(where[1]) && where[1].length >= 2) return where[1];
+
+  const appears = q.match(APPEARS_BEFORE_RE);
+  if (appears?.[1] && !NOT_A_TARGET.has(appears[1]) && appears[1].length >= 2) return appears[1];
+
   let last: string | undefined;
   WORD_INTRO.lastIndex = 0;
   let m: RegExpExecArray | null;

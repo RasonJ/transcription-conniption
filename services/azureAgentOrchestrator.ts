@@ -27,6 +27,12 @@ import {
   type A2ATask,
 } from "@/services/azureA2A";
 import {
+  VISION_MAX_OUTPUT_TOKENS,
+  VISION_TIMEOUT_MS,
+  createOpenAIResponse,
+  buildVisionResponsesInput,
+} from "@/services/azureOpenAI";
+import {
   getAzureAgentApiKey,
   getAzureAgentEndpointForRole,
   getAzureDeploymentForRole,
@@ -44,10 +50,6 @@ import {
   instructionsForAzureRole,
   reanchorSystemPrompt,
 } from "@/services/hsmsOpenAIInstructions";
-import {
-  buildVisionResponsesInput,
-  createOpenAIResponse,
-} from "@/services/azureOpenAI";
 
 export { isAzureAgentConfigured } from "@/services/azureAgentConfig";
 export {
@@ -134,6 +136,8 @@ export interface AzureAgentChatParams {
   session_entities?: Record<string, string>;
   /** Extra A2A parts (e.g. binary metadata). */
   extraParts?: A2APart[];
+  /** Cancel in-flight A2A card/send/poll when the UI unmounts or the user aborts. */
+  signal?: AbortSignal;
 }
 
 function isVisionOcrIntent(params: AzureAgentChatParams): boolean {
@@ -271,8 +275,27 @@ export async function chatWithAzureAgent(params: AzureAgentChatParams): Promise<
   try {
     return await chatWithAzureA2A(params, role, fullQuery);
   } catch (err) {
-    // Hybrid / A2A path: if vision data-URI (or https image) fails on A2A,
-    // fall back to OpenAI Responses multimodal so multi-page queues recover.
+    // Hybrid / A2A path: on timeout, 429, or transport error, fall back to
+    // OpenAI Responses (multimodal when an image URI is present) so queues recover.
+    if (err instanceof Error && err.name === "AbortError") throw err;
+    const msg = err instanceof Error ? err.message : String(err);
+    const isTransient =
+      /\b429\b/.test(msg) || /timed?\s*out/i.test(msg) || /rate.?limit/i.test(msg);
+    const allowFailover =
+      getAzureTransport() === "hybrid" ||
+      role === "vision" ||
+      role === "syntax" ||
+      hasVisionUri ||
+      isTransient;
+    if (allowFailover && isTransient) {
+      console.warn(
+        hasVisionUri
+          ? "A2A vision turn failed; falling back to OpenAI Responses multimodal"
+          : "A2A turn failed; falling back to OpenAI Responses",
+        err,
+      );
+      return chatWithAzureOpenAI(params, role, fullQuery);
+    }
     if (hasVisionUri && (getAzureTransport() === "hybrid" || role === "vision")) {
       console.warn(
         "A2A vision turn failed; falling back to OpenAI Responses multimodal",
@@ -300,24 +323,35 @@ async function chatWithAzureOpenAI(
   const viaAgent = useFoundryAgentResponses(role);
   const agentResponsesUrl = viaAgent ? getAzureAgentResponsesUrlForRole(role) : undefined;
 
+  const isVisionTurn = hasImage || role === "vision";
   const { answer } = await createOpenAIResponse(
     {
       baseUrl: getAzureOpenAIEndpoint(),
       apiKey: getAzureAgentApiKey(),
       deployment,
-      timeoutMs:
-        hasImage || role === "vision" ? A2A_VISION_SEND_TIMEOUT_MS : undefined,
+      // Vision: fail fast on runaway loops (45s). Syntax repair keeps A2A-length budget.
+      timeoutMs: isVisionTurn ? VISION_TIMEOUT_MS : undefined,
       ...(agentResponsesUrl
         ? { responsesUrl: agentResponsesUrl, omitInstructions: true }
         : {}),
     },
     viaAgent
-      ? // Agent-bound Responses: only model + input (portal owns instructions/temp).
-        { input }
+      ? // Agent-bound Responses: portal owns base instructions; still force deterministic
+        // vision sampling + hard token cap to stop autoregressive repetition loops.
+        {
+          input,
+          ...(isVisionTurn
+            ? { temperature: 0, max_output_tokens: VISION_MAX_OUTPUT_TOKENS }
+            : role === "syntax"
+              ? { temperature: 0 }
+              : {}),
+        }
       : {
           input,
           instructions: instructionsForAzureRole(role),
-          temperature: role === "syntax" ? 0 : 0.2,
+          // Vision/syntax: greedy sampling; vision also hard-caps single-page output length.
+          temperature: isVisionTurn || role === "syntax" ? 0 : 0.2,
+          ...(isVisionTurn ? { max_output_tokens: VISION_MAX_OUTPUT_TOKENS } : {}),
         },
   );
 
@@ -339,6 +373,7 @@ async function chatWithAzureA2A(
   const cfg = a2aConfig({
     endpoint,
     ...(params.vision || role === "vision" ? { sendTimeoutMs: A2A_VISION_SEND_TIMEOUT_MS } : {}),
+    ...(params.signal ? { signal: params.signal } : {}),
   });
   const baseUrl = a2aBaseUrl(cfg.endpoint);
   const agentCard = await getA2AAgentCard(cfg, baseUrl);

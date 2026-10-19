@@ -238,7 +238,7 @@ function paintBlockRow(
     );
   }
 
-  const isRubric = block.type === "rubric";
+  const isRubric = block.type === "rubric" || block.type === "heading";
   const isGloss = block.type === "gloss";
   const skipJustify = isRubric || isGloss;
 

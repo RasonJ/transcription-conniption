@@ -1,0 +1,31 @@
+{
+  "version": "1.0.0-hsms",
+  "domain": "hsms_scriptorium",
+  "fixtures": {
+    "panel1_flagged_folios": {
+      "scene": "ingest_queue",
+      "mcp_tool": "get_today_queue",
+      "response_markdown": "Three of today's six assigned folio sides require immediate attention:\n\n• **1r** — Low recognition confidence (0.42)\n• **3v** — Empty column envelope `{CB2.}`\n• **5r** — Unreviewed machine transcription (14 lines)",
+      "response": { "filter": "action_required", "flagged_count": 3 },
+      "variants": ["flagged folios today", "folios needing attention"]
+    },
+    "panel2_preflight_breakdown": {
+      "scene": "validate",
+      "mcp_tool": "audit_hsms_syntax",
+      "response_markdown": "**Witness preflight**\n\n• Barriers blocking TEI: **EMPTY_COLUMN_ENVELOPE**\n• **Export TEI: blocked until repair**",
+      "response": {
+        "card_kind": "preflight",
+        "status": "blocked",
+        "barrier_ids": ["EMPTY_COLUMN_ENVELOPE"]
+      },
+      "variants": ["preflight this transcription", "why is export blocked"]
+    },
+    "panel2_term_frequency": {
+      "scene": "analyze",
+      "mcp_tool": "__local__",
+      "response_markdown": "**Term frequency — `muito`**\n\n• Occurrences: **47**",
+      "response": { "word": "muito", "count": 47, "amount_tokens": 47 },
+      "variants": ["how many times is muito", "cuántas veces aparece muito"]
+    }
+  }
+}

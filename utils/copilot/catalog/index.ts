@@ -17,10 +17,26 @@ import { ngrams, termFrequency, vocabDensity } from "../executors/voyant";
 import type { CopilotLocale, Recipe, RecipeResult } from "../types";
 import { EXTRA_RECIPES } from "./extra";
 import { LOCALE_TRIGGERS } from "../triggers";
+import { mergeI18nTriggerSeeds } from "../i18nTriggerSeeds";
 import TIER_B_PRECISION from "../tierBPrecision.json";
+import enCatalog from "../../../i18n/locales/en.json";
+import esCatalog from "../../../i18n/locales/es.json";
+import ptCatalog from "../../../i18n/locales/pt.json";
+import caCatalog from "../../../i18n/locales/ca.json";
+import glCatalog from "../../../i18n/locales/gl.json";
+import euCatalog from "../../../i18n/locales/eu.json";
 
 /** Bump when any recipe's triggers or output semantics change. */
-export const CATALOG_VERSION = 2;
+export const CATALOG_VERSION = 4;
+
+const I18N_CATALOGS = {
+  en: enCatalog as Record<string, string>,
+  es: esCatalog as Record<string, string>,
+  pt: ptCatalog as Record<string, string>,
+  ca: caCatalog as Record<string, string>,
+  gl: glCatalog as Record<string, string>,
+  eu: euCatalog as Record<string, string>,
+};
 
 type AnyRecipe = Recipe<Record<string, unknown>>;
 
@@ -95,6 +111,10 @@ const searchPassages: Recipe<{ query?: string; topK?: number }> = {
       "look up a phrase",
       "search the manuscript",
       "find passages containing",
+      "run structural lint on this witness",
+      "run structural lint",
+      "show validation errors",
+      "preflight this transcription",
     ],
     es: ["buscar pasajes sobre", "donde dice", "buscar en el manuscrito", "encontrar el texto que menciona"],
   },
@@ -398,15 +418,16 @@ const BASE_RECIPES: readonly AnyRecipe[] = [
   searchPassages as unknown as AnyRecipe,
 ];
 
-/** Merge per-locale trigger files (es, pt, ca, gl, eu…) into each recipe's triggers. */
+/** Merge per-locale trigger files + i18n chip/label seeds into each recipe's triggers. */
 function withLocaleTriggers(recipe: AnyRecipe): AnyRecipe {
-  const triggers = { ...recipe.triggers };
+  let triggers = { ...recipe.triggers };
   for (const [locale, table] of Object.entries(LOCALE_TRIGGERS) as Array<[CopilotLocale, Record<string, string[]>]>) {
     const extra = table[recipe.id];
     if (!extra?.length) continue;
     const merged = new Set([...(triggers[locale] ?? []), ...extra]);
     triggers[locale] = [...merged];
   }
+  triggers = mergeI18nTriggerSeeds(recipe.id, triggers, I18N_CATALOGS) as typeof triggers;
   return { ...recipe, triggers };
 }
 
