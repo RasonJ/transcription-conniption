@@ -272,6 +272,7 @@ export const CA: Record<string, string[]> = {
     "correspondències aljamiades",
   ],
   "syntax.punctuation": [
+    "com puntua les oracions el copista",
     "puntuació del copista dos punts vírgules punts",
     "puntuació i grups fònics",
     "puntuació i límits de clàusula",
@@ -361,6 +362,7 @@ export const CA: Record<string, string[]> = {
   ],
   "codex.catchword_hyphen_bias": [
     "hi ha més paraules partides al peu dels quaderns",
+    "es parteixen més paraules a l'última línia d'un quadern",
     "biaix lèxic segons la posició a la pàgina",
     "guionets al final de quadern enfront de línies interiors",
     "prova estadística de guionets al peu",
@@ -369,6 +371,7 @@ export const CA: Record<string, string[]> = {
   ],
   "marg.vocab_ratio": [
     "vocabulari exclusiu de les glosses enfront del cos",
+    "paraules que són a les glosses però no al text principal",
     "paraules que només surten a les glosses",
     "proporció del vocabulari de les glosses",
     "lèxic dels marges",
@@ -401,6 +404,7 @@ export const CA: Record<string, string[]> = {
   ],
   "ml.aljamiado_density": [
     "vocabulari romànic enfront de manlleus àrabs en textos transliterats",
+    "proporció d'arabismes als passatges transliterats",
     "densitat aljamiada",
     "proporció de manlleus en ladí",
     "manlleus hebreus en trams symb",
@@ -457,6 +461,7 @@ export const CA: Record<string, string[]> = {
   "corpus.ngrams": [
     "parelles de paraules freqüents",
     "combinacions de dues paraules",
+    "quins parells de paraules van junts més sovint",
     "extreu n-grames",
     "mostra bigrames",
     "parells de paraules seguides",

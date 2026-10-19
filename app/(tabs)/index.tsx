@@ -24,7 +24,6 @@ import {
 import { scriptoriumTheme as theme } from "@/constants/scriptoriumTheme";
 import { useBatchTranscription } from "@/hooks/useBatchTranscription";
 import { dropCapFontSize } from "@/utils/dropInitial";
-import { tokenizeString } from "@/utils/hsmsLexer";
 import type { FacsimilePlacement, FolioSide, ManuscriptBlock, Token, WordOccurrence } from "@/constants/manuscript";
 import { formatRunningHeaderText } from "@/utils/metadataText";
 import { reconstructManuscriptFlow } from "@/utils/manuscriptParser";
@@ -56,7 +55,6 @@ import {
   Download,
   FileCode2,
   FileText,
-  FolderUp,
   Image as ImageIcon,
   LayoutPanelLeft,
   ListOrdered,

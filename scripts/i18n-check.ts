@@ -22,7 +22,29 @@ const TIER1_RELEASE = ["es", "es-ES", "es-419", "es-MX", "es-AR", "pt", "pt-PT",
 /** Keys looked up dynamically (`validation.${code}`, `hsms.lang.${code}`, `copilot.recipe.…`). */
 const DYNAMIC_PREFIXES = ["common.", "validation.", "hsms.lang.", "hsms.term.", "copilot.recipe.", "copilot.tier.", "copilot.category.", "copilot.slot.", "copilot.label.", "copilot.msg."];
 /** Values legitimately identical to English. */
-const SAME_AS_EN_OK = /^(OK|TEI|HSMS|IIIF|CSV|DSL|L\{line\}|\[fol\. \{folio\}\]|.*\{term:\w+\}.*|Biblioteca|Normal|Total|Error|Demo.*|Simple|Global|Local|.*\.hsms|Exportar TEI)$/;
+const SAME_AS_EN_OK = /^(OK|TEI|HSMS|IIIF|CSV|DSL|L\{line\}|\[fol\. \{folio\}\]|fol\. \{folio\}|.*\{term:\w+\}.*|Biblioteca|Normal|Total|Error|Demo.*|Simple|Global|Local|.*\.hsms|Exportar TEI|Transcription Conniption|Georgetown University|Michael J\. Ferreira|Zipf|xp \/ ih|Provençal|Calderones|Enclisis|editorial \(\.\.\.\)|grave @`)$/;
+/**
+ * Keys whose English form is intentional across Tier 1 (product name, proper nouns,
+ * HSMS notation templates, or technical chips shared by Iberian scholarly usage).
+ */
+const SAME_AS_EN_KEYS = new Set([
+  "studio.title",
+  "sources.georgetownTitle",
+  "sources.ferreiraTitle",
+  "copilot.label.lang",
+  "copilot.label.accent_section",
+  "copilot.label.collocate",
+  "copilot.label.folioHit",
+  "copilot.label.greek_formula",
+  "copilot.label.editorial_deletion",
+  "copilot.label.grave",
+  "copilot.recipe.stats.zipf.chip",
+  "copilot.recipe.meta.witness.answer",
+  "copilot.recipe.discourse.calderones.chip",
+  "copilot.recipe.morph.enclisis.chip",
+  "copilot.recipe.abbr.nasal_tilde_vs_geminate.chip",
+  "hsms.lang.PRV",
+]);
 
 function load(name: string): Record<string, unknown> {
   const raw = readFileSync(join(localesDir, `${name}.json`), "utf8").replace(/^﻿/, "");
@@ -120,7 +142,11 @@ export function runI18nCheck(release: boolean): { failures: string[]; warnings: 
     if ((TIER1_BASES as readonly string[]).includes(locale)) {
       for (const key of enKeys) {
         if (typeof catalog[key] !== "string") failures.push(`[${locale}] missing key: ${key}`);
-        else if (catalog[key] === en[key] && !SAME_AS_EN_OK.test(String(en[key]))) {
+        else if (
+          catalog[key] === en[key] &&
+          !SAME_AS_EN_KEYS.has(key) &&
+          !SAME_AS_EN_OK.test(String(en[key]))
+        ) {
           (release ? failures : warnings).push(`[${locale}] identical to English: ${key}`);
         }
       }

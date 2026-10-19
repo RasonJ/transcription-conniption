@@ -290,7 +290,7 @@ export const EN: Record<string, string[]> = {
     "what is the shelfmark",
     "which library holds this manuscript",
     "what year was this printed",
-    "who wrote this witness",
+    "who is the dedicatee of this witness",
     "manuscript title and author",
     "imprint date and holding library",
     "dedicatee of this text",
@@ -311,5 +311,4 @@ export const EN: Record<string, string[]> = {
     "take me to folio",
     "jump to fol",
   ],
-  "search.passages": [
-    "giv
+};

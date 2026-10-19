@@ -113,10 +113,6 @@ function defaultCapState(): HtmlCapState {
   return { padLeft: 0, rowsLeft: 0 };
 }
 
-function stripMnemonics(raw: string): string {
-  return raw.replace(/\{[^}]+\}/g, " ").replace(/\s+/g, " ").trim();
-}
-
 function charSpanStyle(s: Seg, useMufiFont?: boolean): React.CSSProperties {
   return {
     color: s.fill,

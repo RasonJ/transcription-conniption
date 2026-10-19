@@ -13,6 +13,8 @@ export const ES: Record<string, string[]> = {
   "layout.wrapback": ["calderón dos y calderón tres", "texto devuelto al final de la columna", "reenvíos %2 %3"],
   "lex.code_switching": [
     "dónde cambia la lengua del texto",
+    "dónde pasa el texto al latín o al árabe",
+    "pasajes incrustados en lengua extranjera",
     "pasajes escritos en otra lengua","pasajes en otras lenguas {LAT.} {ARB.}", "dónde se alterna con el latín"],
   "ml.foreign_ratio": [
     "qué fracción de las palabras es extranjera",
@@ -102,6 +104,8 @@ export const ES: Record<string, string[]> = {
   ],
   "phon.palatal_nasal": [
     "cómo se escribe la nasal palatal",
+    "maneras en que el escriba escribe el sonido de la eñe",
+    "nasal palatal escrita con nn o con tilde",
     "palatalización n con tilde nn o n simple",
     "grafías de la ñ",
     "ortografía de la nasal palatal",
@@ -126,6 +130,7 @@ export const ES: Record<string, string[]> = {
   ],
   "morph.enclisis": [
     "pronombres enclíticos unidos al verbo",
+    "pronombres de objeto enclíticos en el texto",
     "dixol llamol saliol",
     "enclisis frente a proclisis",
     "pronombres átonos después del verbo",
@@ -134,6 +139,7 @@ export const ES: Record<string, string[]> = {
   ],
   "morph.clitic_elision": [
     "elisión de clíticos yl frente a y le",
+    "formas pronominales elididas ante verbo",
     "pronombres clíticos elididos",
     "formas quel nol sil",
     "elisión vocálica de los clíticos",
@@ -143,6 +149,7 @@ export const ES: Record<string, string[]> = {
   "morph.contractions": [
     "preposición y artículo fundidos en una palabra",
     "palabras como delos escritas juntas",
+    "con qué frecuencia se escribe delos junto",
     "contracciones enel delos sobrel",
     "contracciones preposicionales frente a formas separadas",
     "enel frente a en el",
@@ -152,6 +159,7 @@ export const ES: Record<string, string[]> = {
   ],
   "morph.prefix_separation": [
     "separación editorial de prefijos [+]",
+    "palabras con el más entre corchetes",
     "de[+]nostados a[+]caudillar",
     "compuestos con separador de prefijo",
     "prefijos escritos aparte de la raíz",
@@ -160,6 +168,7 @@ export const ES: Record<string, string[]> = {
   ],
   "morph.prefix_linebreak": [
     "prefijo separado de la raíz a final de línea",
+    "saltos de línea que separan un prefijo",
     "de[+]- al final de la línea",
     "salto de línea entre prefijo y raíz",
     "palabras con prefijo divididas",
@@ -177,6 +186,7 @@ export const ES: Record<string, string[]> = {
   "lex.greek_formulas": [
     "abreviaturas de cristo y jesús con letras griegas",
     "fórmulas con letras griegas xp ih",
+    "dónde aparece xpo",
     "nomina sacra",
     "xp por chr",
     "ih por jhes",
@@ -185,6 +195,7 @@ export const ES: Record<string, string[]> = {
   ],
   "dial.tagged_spans": [
     "pasajes marcados como aragoneses",
+    "material dialectal regional en el testimonio",
     "rasgos aragoneses o leoneses",
     "tramos dialectales etiquetados {ARG.}",
     "marcas dialectales en el texto castellano",
@@ -220,6 +231,7 @@ export const ES: Record<string, string[]> = {
   "stats.ttr_hapax": [
     "relación tipo token y hápax",
     "riqueza léxica de este manuscrito",
+    "palabras que aparecen una sola vez",
     "ttr por cuaderno",
     "cuántos hápax legómenos hay",
     "estadísticas del vocabulario",
@@ -236,6 +248,7 @@ export const ES: Record<string, string[]> = {
   "stats.variant_share": [
     "qué porcentaje aparece con cada grafía",
     "variantes ortográficas de un lema",
+    "variación gráfica de una sola palabra",
     "variantes gráficas de fazer",
     "porcentajes de fazer facer façer",
     "distribución de variantes de una palabra",
@@ -251,6 +264,7 @@ export const ES: Record<string, string[]> = {
   ],
   "colloc.window": [
     "información mutua o puntuación t en una ventana de 5 palabras",
+    "asociaciones más fuertes de dios en cinco palabras",
     "colocaciones de rey",
     "palabras que coaparecen con emperador",
     "análisis de colocaciones",
@@ -292,6 +306,7 @@ export const ES: Record<string, string[]> = {
   ],
   "codex.catchword_hyphen_bias": [
     "hay más palabras partidas al pie de los cuadernos",
+    "se parten más palabras en la última línea de un cuaderno",
     "sesgo léxico según la posición en la página",
     "guiones al final de cuaderno frente a líneas interiores",
     "prueba estadística de guiones al pie",
@@ -332,6 +347,7 @@ export const ES: Record<string, string[]> = {
   ],
   "ml.aljamiado_density": [
     "vocabulario romance frente a préstamos árabes en textos transliterados",
+    "proporción de arabismos en los pasajes transliterados",
     "densidad aljamiada",
     "proporción de préstamos en ladino",
     "préstamos hebreos en tramos symb",
@@ -348,6 +364,7 @@ export const ES: Record<string, string[]> = {
   ],
   "ingest.low_confidence": [
     "líneas con baja confianza",
+    "líneas en las que dudó el reconocimiento de escritura",
     "qué líneas reconoció peor",
     "transcripción automática dudosa",
     "líneas bajo el umbral de confianza",
@@ -388,6 +405,7 @@ export const ES: Record<string, string[]> = {
   "corpus.ngrams": [
     "parejas de palabras frecuentes",
     "combinaciones de dos palabras",
+    "qué parejas de palabras van juntas más a menudo",
     "extrae bigramas",
     "n-gramas de palabras",
     "pares de palabras seguidas",

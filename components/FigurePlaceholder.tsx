@@ -1,7 +1,7 @@
 import type { Token } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
 import { resolveStoredFileUri } from "@/utils/expoFileSystem";
-import { Image as ImageIcon, PlusCircle, Trash2 } from "lucide-react-native";
+import { PlusCircle, Trash2 } from "lucide-react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, Image, Pressable, StyleSheet, Text, View } from "react-native";
 
