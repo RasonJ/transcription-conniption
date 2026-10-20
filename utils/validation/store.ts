@@ -12,6 +12,7 @@ export interface ValidationState {
   diagnostics: ValidationError[];
   errorCount: number;
   warningCount: number;
+  infoCount: number;
 }
 
 type Listener = (state: ValidationState) => void;
@@ -43,6 +44,7 @@ class ValidationStoreManager {
     diagnostics: [],
     errorCount: 0,
     warningCount: 0,
+    infoCount: 0,
   };
   private listeners = new Set<Listener>();
   private lexicalTimer: ReturnType<typeof setTimeout> | null = null;
@@ -94,10 +96,12 @@ class ValidationStoreManager {
     const merged = mergeUnique([...this.lexicalIssues, ...this.structuralIssues]);
     const errorCount = merged.filter((i) => i.severity === "error").length;
     const warningCount = merged.filter((i) => i.severity === "warning").length;
+    const infoCount = merged.filter((i) => i.severity === "info").length;
     this.setState({
       diagnostics: merged,
       errorCount,
       warningCount,
+      infoCount,
       isParsing: !structuralDone,
     });
   }

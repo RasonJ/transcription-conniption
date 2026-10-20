@@ -98,6 +98,7 @@ export async function buildHsmsBundle(workspace: ScriptoriumWorkspace): Promise<
           Object.keys(folioBackgrounds).map((k) => [k, `folios/${k}`]),
         ),
         freePlacements: workspace.freePlacements,
+        facsSidecar: workspace.facsSidecar,
         createdAt: workspace.createdAt,
         lastModified: workspace.lastModified,
       },
@@ -144,6 +145,7 @@ export async function importHsmsBundleFromUri(uri: string): Promise<ScriptoriumW
       manuscriptTitle: v2.metadata.title,
       sourceFileName: v2.witness.sourceFileName,
     });
+    fromV2.facsSidecar = v2.sidecar;
     await persistWorkspace(fromV2);
     return fromV2;
   }
@@ -181,6 +183,7 @@ export async function importHsmsBundleFromUri(uri: string): Promise<ScriptoriumW
     assetMap,
     folioBackgrounds: Object.keys(folioBackgrounds).length > 0 ? folioBackgrounds : undefined,
     freePlacements: m.freePlacements,
+    facsSidecar: m.facsSidecar,
     lastModified: new Date().toISOString(),
   };
 

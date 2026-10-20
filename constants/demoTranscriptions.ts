@@ -16,7 +16,7 @@ export const DEFAULT_DEMO = `{RMK: Pedro Nunes.}
 10 ras s<cilicet> em a nona que he o primeyro mobile: em a sphera das estre-
 11 las fixas que se chama o firmame~to: & em sete spheras de sete prane-
 12 tas.
-13 {GLR. % Chame~sse fixas porque esta~o sempre em hu~a mesma distancia de nos q<ue> he o oytauo.}}
+13 {GL. [^% Chame~sse fixas porque esta~o sempre em hu~a mesma distancia de nos q<ue> he o oytauo.]}}
 {CW. a}`;
 
 export const SIMPLE_SAMPLE = `[fol. 1r]
@@ -27,7 +27,8 @@ export const SIMPLE_SAMPLE = `[fol. 1r]
 4 Quando el omne quisiere fablar con seso
 5 deve catar primero la razon e despues la palabra
 6 ca la palabra dicha non puede tornar atras
-{CW. e}}`;
+}
+{CW. e}`;
 
 export const LAT_SPAN_SAMPLE = `[fol. 1r]
 {CB1.

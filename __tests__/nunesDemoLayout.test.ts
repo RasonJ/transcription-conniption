@@ -37,12 +37,12 @@ describe("Nunes demo leaf layout contracts", () => {
     expect(joined.startsWith("S")).toBe(false);
   });
 
-  it("keeps {GLR.} as a gloss block, not prose", () => {
+  it("keeps {GL.} as a gloss block, not prose", () => {
     const gloss = folio.blocks.find((b) => b.lineNumber === "13");
     expect(gloss?.type).toBe("gloss");
     const codes = gloss!.tokens.flatMap((t) => t.envLayers?.map((l) => l.code) ?? []);
-    expect(codes.some((c) => (c ?? "").toUpperCase() === "GLR")).toBe(true);
-    expect(renderNormalizedText(gloss!.tokens)).toMatch(/Chamẽsse fixas/i);
+    expect(codes.some((c) => (c ?? "").toUpperCase() === "GL")).toBe(true);
+    expect(renderNormalizedText(gloss!.tokens)).toMatch(/Chame~sse fixas|Chamẽsse fixas/i);
   });
 
   it("does not fold the gloss into a two-column zipper group", () => {

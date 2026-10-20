@@ -8,6 +8,7 @@ import React, {
   type RefObject,
 } from "react";
 import { ScrollView, View, type LayoutChangeEvent } from "react-native";
+import { scaledAnchorOffset } from "@/utils/folioScale";
 import { anchorFromLineIndex } from "@/utils/scrollAnchor";
 
 export type ScrollHighlight = { folioId: string; lineNumber?: string } | null;
@@ -27,6 +28,7 @@ type ScrollAnchorContextValue = {
   navigateToAnchor: (target: ScrollAnchorTarget) => void;
   navigateToLineIndex: (lineIndex: number, transcriptionText: string) => void;
   remeasureFolio: (folioId: string, folioRef: RefObject<View | null>) => void;
+  setViewportScale: (scale: number) => void;
 };
 
 const ScrollAnchorContext = createContext<ScrollAnchorContextValue | null>(null);
@@ -36,7 +38,12 @@ export function ScrollAnchorProvider({ children }: { children: React.ReactNode }
   const parchmentContentRef = useRef<View>(null);
   const folioOffsets = useRef<Record<string, number>>({});
   const lineOffsets = useRef<Record<string, number>>({});
+  const scaleRef = useRef(1);
+  const highlightTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [scrollHighlight, setScrollHighlight] = useState<ScrollHighlight>(null);
+  const setViewportScale = useCallback((scale: number) => {
+    scaleRef.current = scale > 0 ? scale : 1;
+  }, []);
 
   const registerFolioOffset = useCallback((folioId: string, y: number) => {
     folioOffsets.current[folioId] = y;
@@ -48,13 +55,16 @@ export function ScrollAnchorProvider({ children }: { children: React.ReactNode }
 
   const navigateToAnchor = useCallback((target: ScrollAnchorTarget) => {
     setScrollHighlight({ folioId: target.folioId, lineNumber: target.lineNumber });
+    if (highlightTimer.current) clearTimeout(highlightTimer.current);
+    highlightTimer.current = setTimeout(() => setScrollHighlight(null), 2000);
     const lineKey = target.lineNumber ? `${target.folioId}:${target.lineNumber}` : null;
     const y =
       lineKey && lineOffsets.current[lineKey] !== undefined
         ? lineOffsets.current[lineKey]
         : folioOffsets.current[target.folioId];
     if (y !== undefined) {
-      parchmentRef.current?.scrollTo({ y: Math.max(0, y - 32), animated: true });
+      const scaled = scaledAnchorOffset(y, scaleRef.current);
+      parchmentRef.current?.scrollTo({ y: Math.max(0, scaled - 32), animated: true });
     }
   }, []);
 
@@ -94,6 +104,7 @@ export function ScrollAnchorProvider({ children }: { children: React.ReactNode }
       navigateToAnchor,
       navigateToLineIndex,
       remeasureFolio,
+      setViewportScale,
     }),
     [
       scrollHighlight,
@@ -102,6 +113,7 @@ export function ScrollAnchorProvider({ children }: { children: React.ReactNode }
       navigateToAnchor,
       navigateToLineIndex,
       remeasureFolio,
+      setViewportScale,
     ],
   );
 

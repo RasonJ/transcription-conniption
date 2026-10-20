@@ -14,9 +14,9 @@ import {
 import { loadPersistedOverview, persistOverview } from "@/utils/copilot/persistentOverview";
 import { precomputeEager, type OverviewEntry } from "@/utils/copilot/precompute";
 import { answerToDelimited, presentAnswer, presentChip } from "@/utils/copilot/present";
-import { routingLocales } from "@/utils/copilot/router";
+import { routingLocales, ROUTER_THRESHOLD } from "@/utils/copilot/router";
 import { overviewFromPrecompiled } from "@/utils/copilot/sidecarRecipes";
-import type { CopilotAnswer, EvidenceRow, EvidenceTier } from "@/utils/copilot/types";
+import type { CopilotAnswer, EvidenceRow } from "@/utils/copilot/types";
 import type { PrecompiledFacets } from "@/utils/corpusPrecompute";
 import { loadPrecompiledFacets } from "@/utils/librarySidecars";
 import { buildManuscriptVectorIndex } from "@/utils/manuscriptVectorIndex";
@@ -68,6 +68,7 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
   const { navigateToAnchor } = useScrollAnchor();
   const [query, setQuery] = useState("");
   const [answer, setAnswer] = useState<CopilotAnswer | null>(null);
+  const [showOtherReadings, setShowOtherReadings] = useState(false);
   const [attachedScan, setAttachedScan] = useState<AttachedScan | null>(null);
   const [visionBusy, setVisionBusy] = useState(false);
   const [precompiledFacets, setPrecompiledFacets] = useState<PrecompiledFacets | null>(null);
@@ -410,11 +411,6 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     [navigateToAnchor, onClose],
   );
 
-  const tierLabel = useCallback(
-    (tier: EvidenceTier) => t(`copilot.tier.${tier}` as "copilot.tier.A"),
-    [t],
-  );
-
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={[styles.backdrop, isWide && styles.backdropWide]}>
@@ -425,7 +421,7 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
               <Sparkles color="#f6d890" size={18} />
               <Text style={styles.title}>{t("copilot.title")}</Text>
             </View>
-            {answer && answer.elapsedMs > 0 ? (
+            {answer && typeof __DEV__ !== "undefined" && __DEV__ && answer.elapsedMs > 0 ? (
               <Text style={styles.speedBadge}>{answer.elapsedMs.toFixed(2)} ms</Text>
             ) : null}
             <Pressable
@@ -523,7 +519,6 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                       accessibilityLabel={`${chipLabelFor(entry.recipeId, entry.chipLabel)}: ${fmt(entry.count)}`}
                     >
                       <Text style={styles.chipLabel}>{chipLabelFor(entry.recipeId, entry.chipLabel)}</Text>
-                      <Text style={styles.chipCount}>{fmt(entry.count)}</Text>
                     </Pressable>
                   ))}
                 </View>
@@ -533,9 +528,13 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
             {answer && presented ? (
               <View style={styles.answerCard} accessible accessibilityLabel={presented.accessibilityLabel}>
                 <View style={styles.answerTop}>
-                  <View style={styles.tierBadge}>
+                  <View
+                    style={styles.tierBadge}
+                    accessibilityLabel={t(`copilot.tier.word.${answer.tier}` as "copilot.tier.A")}
+                    accessibilityHint={t(`copilot.tier.explain.${answer.tier}` as "copilot.tier.A")}
+                  >
                     <Text style={styles.tierBadgeText}>
-                      {answer.tier} · {tierLabel(answer.tier)}
+                      {t(`copilot.tier.word.${answer.tier}` as "copilot.tier.A")}
                     </Text>
                   </View>
                   {getRecipe(answer.recipeId)?.precision !== undefined ? (
@@ -545,11 +544,33 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
                       })}
                     </Text>
                   ) : null}
-                  {answer.confidence !== undefined && answer.confidence < 1 ? (
-                    <Text style={styles.confidence}>{(answer.confidence * 100).toFixed(0)}%</Text>
+                  {answer.confidence !== undefined &&
+                  answer.confidence < 1 &&
+                  answer.confidence < ROUTER_THRESHOLD + 0.1 ? (
+                    <Text style={styles.confidence}>
+                      {t("copilot.bestMatch", {
+                        pct: fmt(Math.round(answer.confidence * 100)),
+                      })}
+                    </Text>
                   ) : null}
                 </View>
                 <Text style={styles.headline}>{presented.headline}</Text>
+                {answer.alternatives && answer.alternatives.length > 0 ? (
+                  <Pressable
+                    onPress={() => setShowOtherReadings((open) => !open)}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("copilot.otherReadings")}
+                  >
+                    <Text style={styles.confidence}>{t("copilot.otherReadings")}</Text>
+                  </Pressable>
+                ) : null}
+                {showOtherReadings
+                  ? answer.alternatives?.map((alt) => (
+                      <Text key={alt.recipeId} style={styles.confidence}>
+                        {alt.chipLabel}
+                      </Text>
+                    ))
+                  : null}
                 {presented.serverNote ? <Text style={styles.serverNote}>{presented.serverNote}</Text> : null}
 
                 {answer.recipeId === "stats.term_frequency" && typeof answer.count === "number" ? (

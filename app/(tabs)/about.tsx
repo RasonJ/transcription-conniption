@@ -107,7 +107,6 @@ export default function AboutScreen() {
             <View
               style={[styles.summaryPanelCard, isDesktop && styles.desktopSplitPanel]}
             >
-              <LocalePicker />
               <View style={styles.brandBadgeRow}>
                 <View style={styles.monasteryIconBox}>
                   <ScrollText color="#ffd36e" size={26} />
@@ -116,7 +115,7 @@ export default function AboutScreen() {
               </View>
 
               <Text style={styles.mainTitleText}>{t("studio.title")}</Text>
-              <Text style={styles.narrativeParagraphText}>{t("sources.narrative1")}</Text>
+              <Text style={styles.narrativeParagraphText}>{t("sources.intro")}</Text>
               <Text style={styles.narrativeParagraphText}>{t("sources.narrative2")}</Text>
 
               <View style={styles.fundingBlock}>
@@ -273,6 +272,10 @@ export default function AboutScreen() {
               </View>
             </View>
           </View>
+          <View style={styles.languageSection}>
+            <Text style={styles.sectionTitleLabel}>{t("sources.languageSection")}</Text>
+            <LocalePicker />
+          </View>
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -285,6 +288,7 @@ const styles = StyleSheet.create({
   scrollContent: { padding: 16, alignItems: "center" },
   desktopScrollPadding: { paddingVertical: 40, paddingHorizontal: 30 },
   mainLayoutWrapper: { width: "100%", maxWidth: 1100, gap: 20 },
+  languageSection: { width: "100%", maxWidth: 1100, marginTop: 12 },
   desktopRowDirection: { flexDirection: "row", alignItems: "stretch" },
   desktopSplitPanel: { flex: 1 },
 

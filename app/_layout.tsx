@@ -2,6 +2,7 @@
 import { I18nProvider } from "@/i18n/runtime";
 import { ScrollAnchorProvider } from "@/context/ScrollAnchorContext";
 import { ScriptoriumProvider } from "@/context/ScriptoriumContext";
+import { RemoteConsentSheet } from "@/components/RemoteConsentSheet";
 import { registerServiceWorker } from "@/utils/registerServiceWorker";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
@@ -50,6 +51,7 @@ export default function RootLayout() {
           <ScrollAnchorProvider>
             <ScriptoriumProvider>
               <RootLayoutNav />
+              <RemoteConsentSheet backendEnabled={process.env.EXPO_PUBLIC_ANALYSIS_BACKEND === "1"} />
             </ScriptoriumProvider>
           </ScrollAnchorProvider>
         </GestureHandlerRootView>

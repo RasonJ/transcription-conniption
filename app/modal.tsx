@@ -1,7 +1,7 @@
 import { ValidationPanel } from "@/components/ValidationPanel";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
-import { useT } from "@/i18n/runtime";
+import { useValidationStore } from "@/hooks/useValidationStore";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { X } from "lucide-react-native";
@@ -9,9 +9,10 @@ import React, { useCallback } from "react";
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function ValidationModalScreen() {
-  const { parsedManuscript, debouncedText } = useScriptorium();
+  const { debouncedText } = useScriptorium();
   const { navigateToLineIndex } = useScrollAnchor();
   const t = useT();
+  const validation = useValidationStore(debouncedText);
 
   const handleJump = useCallback(
     (lineIndex: number) => {
@@ -21,7 +22,7 @@ export default function ValidationModalScreen() {
     [debouncedText, navigateToLineIndex],
   );
 
-  const errors = parsedManuscript.validationErrors ?? [];
+  const errors = validation.diagnostics;
 
   return (
     <SafeAreaView style={styles.container}>

@@ -8,9 +8,10 @@ import {
   getConcordanceBuildForManuscript,
   getConcordanceEntriesSorted,
 } from "@/utils/concordance";
+import { concordanceToCsv } from "@/utils/concordanceExport";
 import { Search, X } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
-import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Modal, Pressable, Share, StyleSheet, Text, TextInput, View } from "react-native";
 
 type ConcordanceEntry = { lemma: string; count: number; occurrences: WordOccurrence[] };
 
@@ -66,11 +67,11 @@ const ConcordanceEntryRow = React.memo(
                     ? t("concordance.occurrence.folioLine", { folio: occ.folioId, line: occ.lineNumber })
                     : t("concordance.occurrence.folio", { folio: occ.folioId })}
                 </Text>
-                <Text style={styles.kwicLine} numberOfLines={2}>
-                  <Text style={styles.kwicPre}>{occ.preContext} </Text>
+                <View style={styles.kwicColumns}>
+                  <Text style={styles.kwicPre} numberOfLines={2}>{occ.preContext}</Text>
                   <Text style={styles.kwicHit}>{occ.keyword}</Text>
-                  <Text style={styles.kwicPost}> {occ.postContext}</Text>
-                </Text>
+                  <Text style={styles.kwicPost} numberOfLines={2}>{occ.postContext}</Text>
+                </View>
               </Pressable>
             ))}
           </View>
@@ -157,6 +158,17 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
             <Text nativeID={TITLE_ID} style={styles.title} accessibilityRole="header">
               {t("concordance.title")}
             </Text>
+            <Pressable
+              onPress={() => {
+                const csv = concordanceToCsv(concordance, methodLine);
+                void Share.share({ message: csv });
+              }}
+              hitSlop={12}
+              accessibilityRole="button"
+              accessibilityLabel={t("concordance.exportCsv")}
+            >
+              <Text style={styles.count}>{t("concordance.exportCsv")}</Text>
+            </Pressable>
             <Pressable
               onPress={onClose}
               hitSlop={12}
@@ -262,8 +274,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   kwicMeta: { fontSize: 10, color: "#99836a", marginBottom: 4, fontWeight: "700", fontFamily: "monospace" },
-  kwicLine: { fontSize: 13, lineHeight: 20, color: "#dfcba5" },
-  kwicPre: { color: "rgba(223,203,165,0.7)" },
-  kwicHit: { color: "#f6d890", fontWeight: "800", backgroundColor: "rgba(155,34,23,0.35)" },
-  kwicPost: { color: "rgba(223,203,165,0.7)" },
+  kwicColumns: { flexDirection: "row", gap: 8, alignItems: "flex-start" },
+  kwicPre: { flex: 1, color: "rgba(223,203,165,0.7)", fontSize: 13, textAlign: "right" },
+  kwicHit: { color: "#f6d890", fontWeight: "800", fontSize: 13 },
+  kwicPost: { flex: 1, color: "rgba(223,203,165,0.7)", fontSize: 13 },
 });

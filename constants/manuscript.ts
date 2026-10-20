@@ -104,7 +104,7 @@ export type ConcordanceEntryData = {
 export type ConcordanceIndex = Record<string, ConcordanceEntryData>;
 
 export interface ValidationError {
-  severity: "error" | "warning";
+  severity: "error" | "warning" | "info";
   message: string;
   /** Stable issue code for UI localization (`validation.<code>`); `message` stays English for CLI. */
   code?: string;

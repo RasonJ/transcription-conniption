@@ -49,6 +49,7 @@
     "i18n:check": "npx tsx scripts/i18n-check.ts",
     "size:check": "npx tsx scripts/size-report.ts --check",
     "check:tiers": "npx tsx scripts/check-tiers.ts",
+    "check:mnemonics": "npx tsx scripts/check-mnemonics.ts",
     "tierb:precision": "npx tsx scripts/tierb-precision.ts"
   },
   "dependencies": {

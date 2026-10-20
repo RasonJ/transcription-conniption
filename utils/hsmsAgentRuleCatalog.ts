@@ -33,7 +33,10 @@ export type HsmsLinterIssueCode =
   | "UNCLOSED_DELETION"
   | "UNCLOSED_INSERTION"
   | "STRAY_CLOSING_BRACE"
-  | "IMPLICIT_CONTINUATION";
+  | "IMPLICIT_CONTINUATION"
+  | "HSMS-E-CW-PLACEMENT"
+  | "HSMS-E-SG-PLACEMENT"
+  | "HSMS-I-EXTENSION";
 
 /** Codes emitted by `scanProoferLineIncidents` / `scanProoferDocumentIncidents`. */
 export type HsmsProoferIssueCode =

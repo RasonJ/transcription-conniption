@@ -265,6 +265,44 @@ export function lintHsmsTranscription(
 
     runPaleographicContextChecks(line, i, linesSinceFolio, issues);
 
+    const trimmedLine = line.trim();
+    if (inColumnBlock && /^\{CW\./i.test(trimmedLine)) {
+      pushLintIssue(
+        issues,
+        "error",
+        "HSMS-E-CW-PLACEMENT",
+        "Catchword must stand on its own line after the last column closes.",
+        i,
+        trimmedLine,
+        { mnemonic: "CW", line: i + 1 },
+      );
+    }
+    if (inColumnBlock && /^\{SG\./i.test(trimmedLine)) {
+      pushLintIssue(
+        issues,
+        "error",
+        "HSMS-E-SG-PLACEMENT",
+        "Signature must stand on its own line after the last column closes.",
+        i,
+        trimmedLine,
+        { mnemonic: "SG", line: i + 1 },
+      );
+    }
+    const extension = line.match(/\{(GLR|GLL|GLB|GLT|ADR|ADL)\b/i);
+    if (extension) {
+      const mnemonic = extension[1].toUpperCase();
+      const standard = mnemonic.startsWith("GL") ? "GL" : "AD";
+      pushLintIssue(
+        issues,
+        "info",
+        "HSMS-I-EXTENSION",
+        `{${mnemonic}.} is a Transcription Conniption extension of {${standard}.}. Other HSMS tools may not read it.`,
+        i,
+        trimmedLine,
+        { mnemonic, standard, section: "3.239a" },
+      );
+    }
+
     const diacriticSample =
       line.length > LINT_REGEX_WINDOW ? line.slice(0, LINT_REGEX_WINDOW) : line;
     if (RE_MALFORMED_DIACRITIC.test(diacriticSample)) {

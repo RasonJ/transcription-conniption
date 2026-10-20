@@ -19,7 +19,7 @@ import { ResponsiveBatchShell } from "@/components/ResponsiveBatchShell";
 import { SvgFacsimilePage } from "@/components/SvgFacsimilePage";
 import { FolioViewport } from "@/components/svgFacsimile/FolioViewport";
 import { TranscriptionProgressBar } from "@/components/TranscriptionProgressBar";
-import { ValidationPanel } from "@/components/ValidationPanel";
+import { SourceEditor } from "@/components/SourceEditor";
 import { useValidationStore } from "@/hooks/useValidationStore";
 import {
   DEFAULT_DEMO,
@@ -1034,8 +1034,9 @@ export default function TranscriptionConniptionScreen() {
               </View>
             ) : null}
 
+            <View style={width >= 1024 && isEditorMode && !isPreview ? styles.sideBySide : undefined}>
             {isEditorMode && !isPreview ? (
-              <View style={styles.editorCard}>
+              <View style={[styles.editorCard, width >= 1024 ? styles.splitPane : null]}>
                 <EditorLinterBanner
                   transcriptionText={localEditorBuffer}
                   diagnostics={validationState.diagnostics}
@@ -1048,10 +1049,6 @@ export default function TranscriptionConniptionScreen() {
                     void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
                   }}
                 />
-                <ValidationPanel
-                  errors={validationState.diagnostics}
-                  onJumpToLine={handleValidationJump}
-                />
                 <Pressable
                   onPress={() => router.push("/modal")}
                   style={({ pressed }) => [styles.validationModalLink, pressed && styles.pressed]}
@@ -1063,21 +1060,18 @@ export default function TranscriptionConniptionScreen() {
                   <Text style={styles.parsePendingLabel}>{t("studio.editor.parsing")}</Text>
                 ) : null}
                 <Text style={styles.sectionLabel}>{t("editor.section.transcription")}</Text>
-                <TextInput
-                  multiline
+                <SourceEditor
                   value={localEditorBuffer}
                   onChangeText={setLocalEditorBuffer}
                   onBlur={commitEditorBuffer}
                   placeholder={t("studio.editor.placeholder")}
-                  placeholderTextColor="rgba(246,216,144,0.45)"
-                  style={styles.editor}
-                  textAlignVertical="top"
+                  diagnostics={validationState.diagnostics}
                 />
               </View>
             ) : null}
 
             {showParchment ? (
-              <View style={styles.previewShell}>
+              <View style={[styles.previewShell, width >= 1024 && isEditorMode && !isPreview ? styles.splitPane : null]}>
                 {showCompanionTools ? (
                 <View style={styles.scholarToolbar} testID="witness-toolbar">
                   <Pressable
@@ -1107,6 +1101,7 @@ export default function TranscriptionConniptionScreen() {
                     accessibilityLabel={t("studio.tool.issues", {
                       errors: validationState.errorCount,
                       warnings: validationState.warningCount,
+                      notes: validationState.infoCount,
                     })}
                     testID="toolbar-issues"
                   >
@@ -1115,6 +1110,7 @@ export default function TranscriptionConniptionScreen() {
                       {t("studio.tool.issues", {
                         errors: validationState.errorCount,
                         warnings: validationState.warningCount,
+                        notes: validationState.infoCount,
                       })}
                     </Text>
                   </Pressable>
@@ -1207,6 +1203,7 @@ export default function TranscriptionConniptionScreen() {
                             showLineNumbers={showLineNumbers}
                             onSwitchToReadingView={() => setShowReadingFlow(true)}
                             remeasureFolio={remeasureFolio}
+                            zoomResetKey={workspace?.id}
                           />
                         ))
                       )}
@@ -1243,6 +1240,7 @@ export default function TranscriptionConniptionScreen() {
                         onSetFolioBackground={handleSetFolioBackground}
                         onSwitchToReadingView={() => setShowReadingFlow(true)}
                         remeasureFolio={remeasureFolio}
+                        zoomResetKey={workspace?.id}
                       />
                     ))
                   )}
@@ -1273,6 +1271,7 @@ export default function TranscriptionConniptionScreen() {
                 ) : null}
               </View>
             ) : null}
+            </View>
 
             <ConcordanceDrawer
               visible={concordanceOpen}
@@ -1384,6 +1383,7 @@ function FolioPage({
   onSetFolioBackground,
   onSwitchToReadingView,
   remeasureFolio,
+  zoomResetKey,
 }: {
   folio: FolioSide;
   highlight: { folioId: string; lineNumber?: string } | null;
@@ -1403,6 +1403,7 @@ function FolioPage({
   onSetFolioBackground?: (folioId: string) => void;
   onSwitchToReadingView?: () => void;
   remeasureFolio: (folioId: string, folioRef: React.RefObject<View | null>) => void;
+  zoomResetKey?: string;
 }) {
   const t = useT();
   const folioRef = useRef<View>(null);
@@ -1473,7 +1474,11 @@ function FolioPage({
   );
 
   const content = svgMode ? (
-    <FolioViewport pageHeight={1100} onSwitchToReadingView={onSwitchToReadingView}>
+    <FolioViewport
+      pageHeight={1100}
+      resetKey={zoomResetKey}
+      onSwitchToReadingView={onSwitchToReadingView}
+    >
       <SvgFacsimilePage
         folio={folio}
         showExpanded={showExpanded}
@@ -1950,9 +1955,11 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
   },
+  sideBySide: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
+  splitPane: { flex: 1, minWidth: 0 },
   previewShell: {
     borderRadius: 24,
-    overflow: "hidden",
+    overflow: "visible",
     borderWidth: 1,
     borderColor: theme.goldBorderStrong,
     backgroundColor: theme.frostPanelDeep,

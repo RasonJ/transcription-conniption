@@ -1,8 +1,6 @@
 import type { ValidationError } from "../constants/manuscript";
 import { hasMessage, type MessageKey, type TFunction } from "../i18n/core";
 
-const CODE_PREFIX_RE = /^\[[A-Z_]+\]\s*/;
-
 /**
  * UI text for a validation issue (SPEC-I18N §4.3): `validation.<code>` in the active locale
  * when the code has a catalog entry, otherwise the English `message` without its `[CODE]`
@@ -15,5 +13,5 @@ export function localizeValidationMessage(t: TFunction, error: ValidationError):
       return t(key as MessageKey, error.params);
     }
   }
-  return error.message.replace(CODE_PREFIX_RE, "");
+  return error.message.replace(/^\[[A-Za-z0-9_-]+\]\s*/, "");
 }
