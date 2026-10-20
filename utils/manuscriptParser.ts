@@ -356,6 +356,24 @@ export function parseHsMsText(rawText: string): ParsedManuscript {
     pendingLineNumber = undefined;
   };
 
+  /** Outside {CB.}: running header strings. Inside {CB.}: structured heading blocks (centered render). */
+  const emitHeading = (folio: FolioSide, rawHead: string, lineNumber?: string): void => {
+    const headText = rawHead.replace(RE_HEADING_TRAILING_PLUS, "").trim();
+    if (!headText) {
+      pendingLineNumber = undefined;
+      return;
+    }
+    if (inColumnBlock) {
+      doFlush(folio);
+      const headingTokens = tokenizeString(headText);
+      flushBlock(folio, "heading", activeColumns, headingTokens, lineNumber);
+      pendingLineNumber = undefined;
+      return;
+    }
+    folio.headings.push(headText);
+    pendingLineNumber = undefined;
+  };
+
   const resetEnvironment = (): void => {
     envStack = [];
     validationEnvStack = [];
@@ -398,8 +416,7 @@ export function parseHsMsText(rawText: string): ParsedManuscript {
 
     if (line.startsWith("{HD")) {
       const headMatch = line.match(RE_HEADING_EXTRACT);
-      const headText = headMatch ? headMatch[1] : "";
-      folio.headings.push(headText.replace(RE_HEADING_TRAILING_PLUS, "").trim());
+      emitHeading(folio, headMatch ? headMatch[1] : "");
       continue;
     }
 
@@ -456,12 +473,10 @@ export function parseHsMsText(rawText: string): ParsedManuscript {
       result.stats.totalLines++;
     }
 
-    // Numbered running headers inside {CB.}: `1 {HD. …}` must not become body prose.
+    // Numbered running headers inside {CB.}: `1 {HD. …}` → heading blocks (not prose).
     if (line.startsWith("{HD")) {
       const headMatch = line.match(RE_HEADING_EXTRACT);
-      const headText = headMatch ? headMatch[1] : "";
-      folio.headings.push(headText.replace(RE_HEADING_TRAILING_PLUS, "").trim());
-      pendingLineNumber = undefined;
+      emitHeading(folio, headMatch ? headMatch[1] : "", pendingLineNumber);
       continue;
     }
 

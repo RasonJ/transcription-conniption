@@ -361,6 +361,10 @@ export const ES: Record<string, string[]> = {
     "palabra clave en contexto",
     "dónde aparece la palabra",
     "todas las apariciones de",
+    "primeras 5 palabras antes y después",
+    "palabras antes y después de",
+    "kwic moderno de",
+    "ventana de contexto alrededor de",
   ],
   "ingest.low_confidence": [
     "líneas con baja confianza",
@@ -464,5 +468,9 @@ export const ES: Record<string, string[]> = {
     "ver pasajes con la palabra",
     "instancias de la palabra",
     "buscar la palabra en este documento",
+    "primeras 5 palabras antes y después",
+    "palabras antes y después de",
+    "kwic moderno de",
+    "ventana de contexto alrededor de",
   ],
 };

@@ -3,6 +3,11 @@
  * (SPEC-COPILOT §9.1–9.3).
  */
 import type { Token } from "../../../constants/manuscript";
+import {
+  expandHistoricalVariants,
+  historicalVariantMatchKeys,
+  variantMatchKey,
+} from "../../modernizedText";
 import { chiSquare1PValue, logLikelihood2x2, minExpected2x2 } from "../corpusStats";
 import { getLineIndex, isBodyLine, type LineRecord } from "../lineIndex";
 import { inferQuires } from "../quires";
@@ -521,28 +526,55 @@ export function editorialOverrides(ctx: RecipeContext): RecipeResult {
   };
 }
 
-/** `search.kwic`: every occurrence of a word (accent-insensitive) with context. */
-export function kwicSearch(ctx: RecipeContext, word: string | undefined): RecipeResult {
+/** `search.kwic`: every occurrence of a word (modern→diplomatic variants) with ±window context. */
+export function kwicSearch(
+  ctx: RecipeContext,
+  word: string | undefined,
+  windowSize: number = 5,
+): RecipeResult {
   const needle = readingKey(word ?? "");
   if (!needle) {
     return { headline: "Which word? Put it in quotes, e.g. \"rey\".", params: {}, messageKey: "needWord", count: 0, rows: [] };
   }
+  const variants = expandHistoricalVariants(word ?? "");
+  const needles = historicalVariantMatchKeys(word ?? "");
+  const radius = Math.min(10, Math.max(1, Math.floor(windowSize) || 5));
   const lines = getLineIndex(ctx.parsed);
   const rows: EvidenceRow[] = [];
   const byFolio = new Map<string, number>();
+  const hitForms = new Set<string>();
   let total = 0;
   for (const line of lines) {
     const words = line.words.map((w) => w.reading);
     words.forEach((w, i) => {
-      if (readingKey(w) !== needle) return;
+      if (!needles.has(variantMatchKey(w))) return;
       total++;
+      hitForms.add(line.words[i].diplomatic || w);
       byFolio.set(line.folioId, (byFolio.get(line.folioId) ?? 0) + 1);
-      if (rows.length < ROW_LIMIT) rows.push(lineRow(line, line.words[i].diplomatic, kwic(words, i, 5)));
+      if (rows.length < ROW_LIMIT) {
+        const diplomatic = line.words[i].diplomatic || w;
+        rows.push(
+          lineRow(
+            line,
+            `[fol. ${line.folioId}] · line ${line.lineNumber ?? "?"} (${diplomatic})`,
+            kwic(words, i, radius),
+          ),
+        );
+      }
     });
   }
+  const variantNote =
+    variants.length > 1 ? ` (variants: ${variants.slice(0, 8).join(", ")})` : "";
+  const formsNote = hitForms.size ? `; attested: ${[...hitForms].slice(0, 6).join(", ")}` : "";
   return {
-    headline: `${plural(total, "occurrence")} of “${word}”.`,
-    params: { total, word: word ?? "", folios: byFolio.size },
+    headline: `${plural(total, "occurrence")} of “${word}”${variantNote}${formsNote}.`,
+    params: {
+      total,
+      word: word ?? "",
+      folios: byFolio.size,
+      window: radius,
+      variants: variants.join(","),
+    },
     count: total,
     breakdown: [...byFolio.entries()]
       .sort((a, b) => a[0].localeCompare(b[0]))

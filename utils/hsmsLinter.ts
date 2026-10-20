@@ -1,4 +1,5 @@
 import type { ValidationError } from "../constants/manuscript";
+import type { HsmsLinterIssueCode } from "./hsmsAgentRuleCatalog";
 import {
   implicitContinuationSlopKey,
   implicitContinuationSlopWarning,
@@ -8,10 +9,14 @@ import {
   type StructuralEnvFrame,
 } from "./parseValidation";
 import {
-  auditHsmsProoferIncidents,
   prooferIncidentsAsValidationErrors,
+  scanProoferDocumentIncidents,
+  scanProoferLineIncidents,
 } from "./prooferIncidents";
 import { tokenizeLineStructural } from "./structuralAssembly";
+
+/** Max chars evaluated by paleographic / diacritic regex windows (bounds backtracking cost). */
+const LINT_REGEX_WINDOW = 240;
 
 export interface LintReport {
   isValid: boolean;
@@ -38,17 +43,22 @@ const RE_HEADER_LEAK = /^\{HD[12]?\.\s*([^}]+)\}/i;
 /** Asterisk inside brackets but not in valid `[*text]` editorial reconstruction form. */
 const RE_MALFORMED_RECONSTRUCTION =
   /\[\s*[^*\]][^\]]*\*[^\]]*\]|\[\s+\*[^\]]*\]|\[\*\s*\]|\*[^\]]*\]/;
+/** Valid editorial reconstruction — exclude from MALFORMED_RECONSTRUCTION. */
+const RE_VALID_RECONSTRUCTION = /\[\s*\*[^\]]+\]/;
 /** Multiple spaces after `{INn.}` collapse micro-tracking beside the cap box. */
 const RE_INITIAL_MULTI_SPACE = /^\{IN\d+\.\}\s{2,}/;
 /** Mechanical lacuna must be `[ ]` (interior space), not bare `[]`. */
 const RE_BARE_EMPTY_BRACKETS = /\[\]/;
 /** Stacked @ / prime notation before the lexer can bind a single cluster. */
 const RE_MALFORMED_DIACRITIC = /@[@'~^]{2,}|[A-Za-z]{2,}@[A-Za-z]/;
+const RE_LETTER_OR_DIGIT = /[\p{L}\p{N}]/u;
+const RE_TRAILING_BRACE = /\}\s*$/;
+const RE_LAT_VERNACULAR_CLOSE = /\}\s+\S/;
 
 function pushLintIssue(
   issues: ValidationError[],
   severity: ValidationError["severity"],
-  code: string,
+  code: HsmsLinterIssueCode,
   message: string,
   lineIndex: number,
   snippet: string,
@@ -90,21 +100,24 @@ function runPaleographicContextChecks(
   linesSinceFolio: number,
   issues: ValidationError[],
 ): void {
+  // Bound regex windows to avoid catastrophic backtracking on un-truncated OCR lines.
+  const sample = line.length > LINT_REGEX_WINDOW ? line.slice(0, LINT_REGEX_WINDOW) : line;
+
   if (linesSinceFolio >= 0 && linesSinceFolio < 4) {
-    if (RE_STRAY_CATCHWORD.test(line) || RE_STRAY_SIGNATURE.test(line)) {
+    if (RE_STRAY_CATCHWORD.test(sample) || RE_STRAY_SIGNATURE.test(sample)) {
       pushLintIssue(
         issues,
         "warning",
         "STRAY_PAGE_METADATA",
         "Catchword or signature appears near the top of the folio — verify it belongs at the page foot.",
         lineIndex,
-        line,
+        sample,
       );
     }
   }
 
-  if (line.startsWith("{HD") && RE_HEADER_LEAK.test(line)) {
-    const payload = line.match(RE_HEADER_LEAK)?.[1] ?? "";
+  if (sample.startsWith("{HD") && RE_HEADER_LEAK.test(sample)) {
+    const payload = sample.match(RE_HEADER_LEAK)?.[1] ?? "";
     if (payload.includes("{") || payload.includes("}")) {
       pushLintIssue(
         issues,
@@ -112,41 +125,41 @@ function runPaleographicContextChecks(
         "MALFORMED_HEADER_BLOCK",
         "Running headers must contain flat text only, not nested structural braces.",
         lineIndex,
-        line,
+        sample,
       );
     }
   }
 
-  if (RE_INITIAL_MULTI_SPACE.test(line)) {
+  if (RE_INITIAL_MULTI_SPACE.test(sample)) {
     pushLintIssue(
       issues,
       "warning",
       "INITIAL_GUTTER_LEAK",
       "Multiple spaces after `{INn.}` can disturb drop-cap gutter alignment in facsimile layout.",
       lineIndex,
-      line,
+      sample,
     );
   }
 
-  if (RE_MALFORMED_RECONSTRUCTION.test(line) && !/\[\s*\*[^\]]+\]/.test(line)) {
+  if (RE_MALFORMED_RECONSTRUCTION.test(sample) && !RE_VALID_RECONSTRUCTION.test(sample)) {
     pushLintIssue(
       issues,
       "warning",
       "MALFORMED_RECONSTRUCTION",
       "Bracket/asterisk sequence does not match editorial reconstruction form `[*text]`.",
       lineIndex,
-      line,
+      sample,
     );
   }
 
-  if (RE_BARE_EMPTY_BRACKETS.test(line)) {
+  if (RE_BARE_EMPTY_BRACKETS.test(sample)) {
     pushLintIssue(
       issues,
       "warning",
       "EMPTY_BRACKET_TOKEN",
       "Empty brackets `[]` should be a mechanical lacuna `[ ]` (interior space) per HSMS convention.",
       lineIndex,
-      line,
+      sample,
     );
   }
 }
@@ -180,15 +193,19 @@ export function lintHsmsTranscription(
 
   const lines = rawText.split(/\r?\n/);
   const issues: ValidationError[] = [];
-  if (options?.includeProofer !== false) {
+  const includeProofer = options?.includeProofer !== false;
+
+  // Document-scoped proofer checks once; line checks run in the shared O(N) pass below.
+  if (includeProofer) {
     issues.push(
       ...prooferIncidentsAsValidationErrors(
-        auditHsmsProoferIncidents(rawText, {
+        scanProoferDocumentIncidents(rawText, {
           sourceFileName: options?.sourceFileName,
         }),
       ),
     );
   }
+
   let envStack: StructuralEnvFrame[] = [];
   let inColumnBlock = false;
   let columnLineIndex = -1;
@@ -200,8 +217,17 @@ export function lintHsmsTranscription(
   const slopWarned = new Set<string>();
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i].trim();
-    if (!line) continue;
+    // Preserve leading spaces for proofer EDGE_SPACE; strip trailing only.
+    const rawLine = lines[i].replace(/\s+$/, "");
+    if (!rawLine.trim()) continue;
+
+    if (includeProofer) {
+      issues.push(
+        ...prooferIncidentsAsValidationErrors(scanProoferLineIncidents(rawLine, i)),
+      );
+    }
+
+    let line = rawLine.trim();
 
     if (RE_FOLIO_MARKER.test(line)) {
       if (envStack.length > 0) {
@@ -216,12 +242,15 @@ export function lintHsmsTranscription(
           { mnemonic: `{${activeEnv.code}.}`, line: activeEnv.startLine + 1 },
         );
       }
+      // Reset folio-local tracking — prevents unbounded Set growth on multi-folio corpora.
       envStack = [];
       inColumnBlock = false;
       columnLineIndex = -1;
       columnHadEnvOpen = false;
       pendingVernacularClose = false;
+      sawEmptyColumnTag = false;
       linesSinceFolio = 0;
+      slopWarned.clear();
       continue;
     }
 
@@ -236,14 +265,16 @@ export function lintHsmsTranscription(
 
     runPaleographicContextChecks(line, i, linesSinceFolio, issues);
 
-    if (RE_MALFORMED_DIACRITIC.test(line)) {
+    const diacriticSample =
+      line.length > LINT_REGEX_WINDOW ? line.slice(0, LINT_REGEX_WINDOW) : line;
+    if (RE_MALFORMED_DIACRITIC.test(diacriticSample)) {
       pushLintIssue(
         issues,
         "warning",
         "MALFORMED_DIACRITIC",
         "Nested or stacked diacritic markers detected — verify @, ', and ~ notation.",
         i,
-        line,
+        diacriticSample,
       );
     }
 
@@ -290,7 +321,7 @@ export function lintHsmsTranscription(
       sawEmptyColumnTag &&
       !inColumnBlock &&
       !RE_OUTSIDE_COLUMN_OK.test(line) &&
-      /[\p{L}\p{N}]/u.test(line)
+      RE_LETTER_OR_DIGIT.test(line)
     ) {
       pushLintIssue(
         issues,
@@ -317,7 +348,7 @@ export function lintHsmsTranscription(
         columnContext: inColumnBlock
           ? { lineIndex: columnLineIndex, hadEnvOpen: columnHadEnvOpen }
           : undefined,
-        allowVernacularClose: pendingVernacularClose && /\}\s*$/.test(line),
+        allowVernacularClose: pendingVernacularClose && RE_TRAILING_BRACE.test(line),
       });
       issues.push(...scanned.errors);
       envStack = scanned.stackAfter;
@@ -355,13 +386,12 @@ export function lintHsmsTranscription(
     const latClosedWithVernacular =
       stackBeforeLine.some((f) => f.code === "LAT") &&
       envStack.length < stackBeforeLine.length &&
-      /\}\s+\S/.test(line);
+      RE_LAT_VERNACULAR_CLOSE.test(line);
     if (latClosedWithVernacular) {
       pendingVernacularClose = true;
-    } else if (pendingVernacularClose && /\}\s*$/.test(line)) {
+    } else if (pendingVernacularClose && RE_TRAILING_BRACE.test(line)) {
       pendingVernacularClose = false;
     }
-
   }
 
   issues.push(...unclosedEnvironmentErrors(envStack));

@@ -1090,7 +1090,7 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
   },
   {
     "name": "search_kwic",
-    "description": "Word in context. Every occurrence of the word (accents folded) with five words of context on each side. Triggers: concordance for a word; show every occurrence of; kwic for. (Precompiled local recipe, no network.)",
+    "description": "Word in context. Every occurrence of the word (modern→diplomatic variants; accents folded) with ±window tokens of context. Triggers: concordance for a word; show every occurrence of; kwic for. (Precompiled local recipe, no network.)",
     "inputSchema": {
       "type": "object",
       "properties": {
@@ -1101,6 +1101,13 @@ export const MCP_MANUSCRIPT_TOOLS: McpManuscriptTool[] = [
         "word": {
           "type": "string",
           "description": "Slot `word`"
+        },
+        "window": {
+          "type": "integer",
+          "description": "Slot `window`",
+          "default": 5,
+          "minimum": 1,
+          "maximum": 10
         }
       },
       "required": [

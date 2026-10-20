@@ -24,7 +24,7 @@ describe("HSMS Parser Engine Core Tests", () => {
     expect(prose?.tokens.some((t) => t.value.startsWith("Phera"))).toBe(true);
   });
 
-  it("extracts numbered {HD.} lines inside {CB.} into folio.headings (not body prose)", () => {
+  it("emits numbered {HD.} lines inside {CB.} as heading blocks (not prose or bare braces)", () => {
     const demo = `[fol. 1r]
 {CB1.
 1 {HD. AO SERENISSIMO E EXCELLENTISSIMO PRINCIPE}
@@ -34,20 +34,29 @@ describe("HSMS Parser Engine Core Tests", () => {
 }`;
     const ast = parseHsMsText(demo);
     const folio = ast.folios[0];
-    expect(folio?.headings).toEqual([
-      "AO SERENISSIMO E EXCELLENTISSIMO PRINCIPE",
-      "HO IFANTE DOM LVYS.:.",
-    ]);
+    // Inside the column envelope → structured heading blocks, not folio.headings.
+    expect(folio?.headings ?? []).toEqual([]);
+    const headings = (folio?.blocks ?? []).filter((b) => b.type === "heading");
+    expect(headings).toHaveLength(2);
+    expect(headings[0]?.lineNumber).toBe("1");
+    expect(headings[0]?.tokens.map((t) => t.value).join(" ")).toMatch(/SERENISSIMO/);
+    expect(headings[1]?.tokens.map((t) => t.value).join(" ")).toMatch(/IFANTE/);
     const bodyJoined = (folio?.blocks ?? [])
+      .filter((b) => b.type !== "heading")
       .flatMap((b) => b.tokens.map((t) => t.value))
       .join(" ");
     expect(bodyJoined).not.toMatch(/\{HD/);
-    expect(bodyJoined).not.toMatch(/SERENISSIMO/);
     const drop = folio?.blocks.find((b) => b.tokens.some((t) => t.type === "drop_initial"));
     expect(drop?.tokens[0]?.value).toBe("D");
     expect(drop?.tokens.some((t) => t.value.startsWith("zbo") || t.raw?.startsWith("zbo"))).toBe(
       true,
     );
+  });
+
+  it("keeps unnumbered {HD.} outside {CB.} on folio.headings", () => {
+    const ast = parseHsMsText("[fol. 1r]\n{HD. LIBRO DELA SPHERA}\n{CB1.\n1 texto\n}");
+    expect(ast.folios[0]?.headings).toEqual(["LIBRO DELA SPHERA"]);
+    expect(ast.folios[0]?.blocks.some((b) => b.type === "heading")).toBe(false);
   });
 
   it("strips and records complex alphanumeric line numbers", () => {

@@ -1,4 +1,5 @@
 import type { ParsedManuscript } from "../../constants/manuscript";
+import { historicalVariantMatchKeys, variantMatchKey } from "../modernizedText";
 import { getLineIndex } from "./lineIndex";
 
 const RE_EDGE_PUNCT = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
@@ -18,19 +19,19 @@ export interface WordOccurrenceResult {
   byFolio: Record<string, number>;
 }
 
-/** Exact token count for a surface form (accents folded). */
+/** Token count for a surface form, including modern→diplomatic historical variants. */
 export function countWordOccurrences(
   manuscript: ParsedManuscript,
   targetWord: string,
 ): WordOccurrenceResult {
-  const needle = normalizeWord(targetWord);
+  const needles = historicalVariantMatchKeys(targetWord);
   const byFolio: Record<string, number> = {};
   let totalCount = 0;
-  if (!needle) return { count: 0, folioCount: 0, byFolio };
+  if (!needles.size) return { count: 0, folioCount: 0, byFolio };
 
   for (const line of getLineIndex(manuscript)) {
     for (const w of line.words) {
-      if (normalizeWord(w.reading) !== needle) continue;
+      if (!needles.has(variantMatchKey(w.reading))) continue;
       totalCount++;
       byFolio[line.folioId] = (byFolio[line.folioId] ?? 0) + 1;
     }
@@ -51,22 +52,23 @@ export interface KwicMatch {
   suffix: string;
 }
 
-/** KWIC rows for a surface form (accents folded). */
+/** KWIC rows for a surface form (modern→diplomatic variants; accents/tildes folded). */
 export function buildKwicConcordance(
   manuscript: ParsedManuscript,
   targetWord: string,
   windowSize: number = 5,
 ): KwicMatch[] {
-  const needle = normalizeWord(targetWord);
+  const needles = historicalVariantMatchKeys(targetWord);
   const matches: KwicMatch[] = [];
-  if (!needle) return matches;
+  if (!needles.size) return matches;
+  const radius = Math.min(10, Math.max(1, Math.floor(windowSize) || 5));
 
   for (const line of getLineIndex(manuscript)) {
     const readings = line.words.map((w) => w.reading);
     readings.forEach((w, i) => {
-      if (normalizeWord(w) !== needle) return;
-      const lo = Math.max(0, i - windowSize);
-      const hi = Math.min(readings.length, i + 1 + windowSize);
+      if (!needles.has(variantMatchKey(w))) return;
+      const lo = Math.max(0, i - radius);
+      const hi = Math.min(readings.length, i + 1 + radius);
       matches.push({
         folioId: line.folioId,
         lineNumber: line.lineNumber,

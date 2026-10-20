@@ -32,14 +32,14 @@ function writeJson(filePath: string, data: unknown): void {
 
 function subsetPayload(
   base: AgentMemoryExportPayload,
-  rules: HsmsAgentRule[],
+  rules: readonly HsmsAgentRule[],
   description: string,
 ): AgentMemoryExportPayload {
   return {
     ...base,
     description,
     ruleCount: rules.length,
-    rules,
+    rules: [...rules],
   };
 }
 

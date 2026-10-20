@@ -108,6 +108,10 @@ export const EN: Record<string, string[]> = {
     "concordance lines for the word",
     "search for the word principe in this document",
     "instances of the word",
+    "show me the first 5 words before and after",
+    "words before and after",
+    "kwic for modern",
+    "context window around the word",
   ],
   "search.passages": [
     "run structural lint on this witness",

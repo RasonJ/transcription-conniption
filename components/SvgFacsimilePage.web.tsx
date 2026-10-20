@@ -222,7 +222,9 @@ function HtmlLineRow({
   let lineSegs = blockToSegs(block, settings);
 
   const isRubric = block.type === "rubric";
-  const isHeading = block.type === "heading";
+  const isHeading =
+    block.type === "heading" ||
+    block.tokens.some((t) => t.envLayers?.some((e) => e.code === "HD" || e.code === "HD1" || e.code === "HD2"));
   const isGloss = block.type === "gloss" || block.type === "addendum";
   const glossSide = glossMarginSide(block);
   const skipJustify = isRubric || isHeading || isGloss;

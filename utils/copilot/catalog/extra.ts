@@ -895,7 +895,7 @@ export const EXTRA_RECIPES: readonly R[] = [
     id: "search.kwic",
     category: "navigation",
     tier: "A",
-    slots: [WORD_SLOT],
+    slots: [WORD_SLOT, WINDOW_SLOT],
     triggers: {
       en: [
         "concordance for a word",
@@ -912,11 +912,16 @@ export const EXTRA_RECIPES: readonly R[] = [
         "keyword in context for",
         "instances of the word",
         "search for the word in this document",
+        "show me the first 5 words before and after",
+        "words before and after",
+        "kwic for modern",
+        "context window around the word",
       ],
     },
-    run: run((ctx, p) => kwicSearch(ctx, p.word ?? p.lemma)),
+    run: run((ctx, p) => kwicSearch(ctx, p.word ?? p.lemma, p.window ?? 5)),
     present: { view: "kwic", chipLabel: "Word in context" },
-    method: "Every occurrence of the word (accents folded) with five words of context on each side.",
+    method:
+      "Every occurrence of the word (modern→diplomatic variants; accents folded) with ±window tokens of context.",
   }),
   recipe({
     id: "ingest.low_confidence",

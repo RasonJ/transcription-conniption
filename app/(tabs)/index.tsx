@@ -11,6 +11,7 @@ import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
 import { ResponsiveBatchShell } from "@/components/ResponsiveBatchShell";
 import { SvgFacsimilePage } from "@/components/SvgFacsimilePage";
+import { ModernLineSynopticSplit } from "@/components/ModernLineSynopticSplit";
 import { SynopticFolioSplit } from "@/components/SynopticFolioSplit";
 import { EditorLinterBanner } from "@/components/EditorLinterBanner";
 import { TranscriptionProgressBar } from "@/components/TranscriptionProgressBar";
@@ -27,6 +28,7 @@ import { dropCapFontSize } from "@/utils/dropInitial";
 import type { FacsimilePlacement, FolioSide, ManuscriptBlock, Token, WordOccurrence } from "@/constants/manuscript";
 import { formatRunningHeaderText } from "@/utils/metadataText";
 import { reconstructManuscriptFlow } from "@/utils/manuscriptParser";
+import { detectWitnessLanguage } from "@/utils/witnessLanguage";
 import { buildManuscriptExportPayload } from "@/utils/manuscriptExport";
 import { saveExportFile } from "@/utils/exportFile";
 import type { ManuscriptExportFormat } from "@/utils/exportFormats";
@@ -199,6 +201,17 @@ export default function TranscriptionConniptionScreen() {
   const [showLineNumbers, setShowLineNumbers] = useState(true);
   const [suppressOtioseMarks, setSuppressOtioseMarks] = useState(false);
   const [showSynoptic, setShowSynoptic] = useState(false);
+  const [showModernSynoptic, setShowModernSynoptic] = useState(false);
+
+  const handleToggleSynoptic = useCallback((val: boolean) => {
+    setShowSynoptic(val);
+    if (val) setShowModernSynoptic(false);
+  }, []);
+
+  const handleToggleModernSynoptic = useCallback((val: boolean) => {
+    setShowModernSynoptic(val);
+    if (val) setShowSynoptic(false);
+  }, []);
   const [concordanceOpen, setConcordanceOpen] = useState(false);
   const [assistantOpen, setAssistantOpen] = useState(false);
   const [batchShellVisible, setBatchShellVisible] = useState(false);
@@ -210,6 +223,11 @@ export default function TranscriptionConniptionScreen() {
   const visionSourceNameRef = useRef("vision_transcription.txt");
 
   const synopticEnabled = showSynoptic && width >= 640;
+  const modernSynopticEnabled = showModernSynoptic && width >= 640;
+  const witnessLanguageHint = useMemo(
+    () => detectWitnessLanguage(parsedManuscript).language,
+    [parsedManuscript],
+  );
 
   const {
     isProcessing: visionBusy,
@@ -1117,7 +1135,16 @@ export default function TranscriptionConniptionScreen() {
                     <Text style={styles.toggleLabel}>{t("editor.toggle.synoptic")}</Text>
                     <Switch
                       value={showSynoptic}
-                      onValueChange={setShowSynoptic}
+                      onValueChange={handleToggleSynoptic}
+                      thumbColor="#9b2217"
+                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
+                    />
+                  </View>
+                  <View style={styles.toggleCell}>
+                    <Text style={styles.toggleLabel}>{t("editor.toggle.modernText")}</Text>
+                    <Switch
+                      value={showModernSynoptic}
+                      onValueChange={handleToggleModernSynoptic}
                       thumbColor="#9b2217"
                       trackColor={{ true: "#dfcba5", false: "#ccc" }}
                     />
@@ -1199,6 +1226,14 @@ export default function TranscriptionConniptionScreen() {
                   ) : showSynoptic ? (
                     <Text style={styles.toolHint}>{t("studio.tool.synopticHint")}</Text>
                   ) : null}
+                  {modernSynopticEnabled ? (
+                    <View style={styles.toolBadge}>
+                      <LayoutPanelLeft color="#446622" size={14} />
+                      <Text style={styles.toolBadgeText}>{t("studio.tool.modernSynopticActive")}</Text>
+                    </View>
+                  ) : showModernSynoptic ? (
+                    <Text style={styles.toolHint}>{t("studio.tool.modernSynopticHint")}</Text>
+                  ) : null}
                 </View>
                 ) : null}
 
@@ -1237,6 +1272,8 @@ export default function TranscriptionConniptionScreen() {
                             folio={folio}
                             highlight={scrollHighlight}
                             synoptic={synopticEnabled}
+                            modernSynoptic={modernSynopticEnabled}
+                            languageHint={witnessLanguageHint}
                             folioBackgroundUri={workspace?.folioBackgrounds?.[folio.id]}
                             freePlacements={workspace?.freePlacements ?? []}
                             facsimileCanvasEnabled={false}
@@ -1268,6 +1305,8 @@ export default function TranscriptionConniptionScreen() {
                         folio={folio}
                         highlight={scrollHighlight}
                         synoptic={synopticEnabled}
+                        modernSynoptic={modernSynopticEnabled}
+                        languageHint={witnessLanguageHint}
                         folioBackgroundUri={workspace?.folioBackgrounds?.[folio.id]}
                         freePlacements={workspace?.freePlacements ?? []}
                         facsimileCanvasEnabled={facsimileCanvasEnabled}
@@ -1370,6 +1409,8 @@ function FolioPage({
   folio,
   highlight,
   synoptic,
+  modernSynoptic,
+  languageHint = "PRT",
   folioBackgroundUri,
   freePlacements,
   facsimileCanvasEnabled,
@@ -1386,6 +1427,8 @@ function FolioPage({
   folio: FolioSide;
   highlight: { folioId: string; lineNumber?: string } | null;
   synoptic: boolean;
+  modernSynoptic?: boolean;
+  languageHint?: string;
   folioBackgroundUri?: string;
   freePlacements: FacsimilePlacement[];
   facsimileCanvasEnabled: boolean;
@@ -1499,12 +1542,26 @@ function FolioPage({
           onCanvasPress={onCanvasPress}
           onSetFolioBackground={onSetFolioBackground}
         >
-          {synoptic ? (
+          {modernSynoptic ? (
+            <ModernLineSynopticSplit
+              folio={folio}
+              highlight={highlight}
+              diplomaticContent={content}
+              languageHint={languageHint}
+            />
+          ) : synoptic ? (
             <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
           ) : (
             content
           )}
         </FolioFacsimileCanvas>
+      ) : modernSynoptic ? (
+        <ModernLineSynopticSplit
+          folio={folio}
+          highlight={highlight}
+          diplomaticContent={content}
+          languageHint={languageHint}
+        />
       ) : synoptic ? (
         <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
       ) : (

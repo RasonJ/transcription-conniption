@@ -1,8 +1,8 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-19T20:53:22.576Z",
+  "generatedAt": "2026-10-19T23:34:25.339Z",
   "description": "HSMS paleography + Proofer/linter rules for Azure Foundry agent memory. Deterministic enforcement remains on-device via lintHsmsTranscription.",
-  "ruleCount": 52,
+  "ruleCount": 59,
   "rules": [
     {
       "id": "FOLIATION_MARKER",
@@ -169,12 +169,70 @@
       "guidance": "Keep brace tags well-formed so the client structural tokenizer never fails."
     },
     {
-      "id": "UNCLOSED_ENVIRONMENT",
+      "id": "EMPTY_COLUMN_ENVELOPE",
+      "source": "linter",
+      "severity": "error",
+      "kind": "structural",
+      "title": "Empty column tag",
+      "guidance": "Never emit a same-line empty `{CBn.}` — open `{CBn.` on its own line, put text inside, close with `}`.",
+      "exampleBad": "{CB1.}",
+      "exampleGood": "{CB1.\ntext\n}"
+    },
+    {
+      "id": "TEXT_OUTSIDE_COLUMN",
+      "source": "linter",
+      "severity": "error",
+      "kind": "structural",
+      "title": "Body text outside column",
+      "guidance": "After an empty `{CBn.}` mistake, wrap following body text in a proper multiline column envelope."
+    },
+    {
+      "id": "UNCLOSED_ENV",
       "source": "linter",
       "severity": "error",
       "kind": "structural",
       "title": "Unclosed environments at EOF",
       "guidance": "Every open {TAG. must have a matching } before the end of the page / document."
+    },
+    {
+      "id": "UNCLOSED_EXPANSION",
+      "source": "linter",
+      "severity": "error",
+      "kind": "editorial",
+      "title": "Unclosed abbreviation expansion",
+      "guidance": "Close every <…> abbreviation expansion on the same physical line."
+    },
+    {
+      "id": "UNCLOSED_DELETION",
+      "source": "linter",
+      "severity": "error",
+      "kind": "editorial",
+      "title": "Unclosed deletion",
+      "guidance": "Close every (… deletion marker on the same physical line."
+    },
+    {
+      "id": "UNCLOSED_INSERTION",
+      "source": "linter",
+      "severity": "error",
+      "kind": "editorial",
+      "title": "Unclosed insertion",
+      "guidance": "Close every [^… insertion marker on the same physical line."
+    },
+    {
+      "id": "STRAY_CLOSING_BRACE",
+      "source": "linter",
+      "severity": "error",
+      "kind": "structural",
+      "title": "Stray closing brace",
+      "guidance": "Do not emit } without a matching open environment on the stack."
+    },
+    {
+      "id": "IMPLICIT_CONTINUATION",
+      "source": "linter",
+      "severity": "warning",
+      "kind": "structural",
+      "title": "Implicit continuation without +",
+      "guidance": "When an environment continues across lines, end the prior line with + (or close with })."
     },
     {
       "id": "COMBINING_DIACRITIC",

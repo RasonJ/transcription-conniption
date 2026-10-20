@@ -193,7 +193,27 @@
       "examples": [
         "show me where muito appears",
         "concordance for sancto",
-        "kwic for rey"
+        "kwic for rey",
+        "show me the first 5 words before and after não"
+      ]
+    },
+    "analyze:concordance:modern_kwic": {
+      "recipeId": "search.kwic",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_CONCORDANCE",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "word",
+        "window"
+      ],
+      "examples": [
+        "show me the first {window|5} words before and after {word|não}",
+        "kwic for modern {word|não} with {window|5} words context",
+        "5 words before and after {word|não}",
+        "muito com 5 palavras antes e depois",
+        "5 palabras antes y después de {word|dijo}"
       ]
     },
     "analyze:stats:ttr_hapax": {

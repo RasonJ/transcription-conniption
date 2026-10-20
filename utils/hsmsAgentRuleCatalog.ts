@@ -4,11 +4,92 @@
  *
  * These are guidance for the Azure Foundry agent (prompt / memory).
  * Deterministic enforcement stays on the client (`lintHsmsTranscription`).
+ *
+ * Issue-code unions below mirror `ValidationError["code"]` values emitted by the
+ * client linter / proofer so catalog drift fails at compile time.
  */
+
+import type { ValidationError } from "@/constants/manuscript";
 
 export type AgentRuleSeverity = "error" | "warning" | "info";
 export type AgentRuleSource = "linter" | "proofer" | "paleography";
 export type AgentRuleKind = "technical" | "editorial" | "structural" | "paleographic";
+
+/** Codes emitted by `lintHsmsTranscription` + `parseValidation` (stable ValidationError.code). */
+export type HsmsLinterIssueCode =
+  | "EMPTY_FILE"
+  | "STRAY_PAGE_METADATA"
+  | "MALFORMED_HEADER_BLOCK"
+  | "INITIAL_GUTTER_LEAK"
+  | "MALFORMED_RECONSTRUCTION"
+  | "EMPTY_BRACKET_TOKEN"
+  | "FOLIO_LEAK"
+  | "MALFORMED_DIACRITIC"
+  | "EMPTY_COLUMN_ENVELOPE"
+  | "TEXT_OUTSIDE_COLUMN"
+  | "COMPILER_CRASH"
+  | "UNCLOSED_ENV"
+  | "UNCLOSED_EXPANSION"
+  | "UNCLOSED_DELETION"
+  | "UNCLOSED_INSERTION"
+  | "STRAY_CLOSING_BRACE"
+  | "IMPLICIT_CONTINUATION";
+
+/** Codes emitted by `scanProoferLineIncidents` / `scanProoferDocumentIncidents`. */
+export type HsmsProoferIssueCode =
+  | "COMBINING_DIACRITIC"
+  | "UNCONVERTED_HTR_MARKER"
+  | "INVALID_AD_GL_FORMAT"
+  | "INVISIBLE_CHAR"
+  | "EDGE_SPACE"
+  | "CONSECUTIVE_SPACES"
+  | "LINE_TOO_LONG"
+  | "ELLIPSIS_OUTSIDE_BRACKETS"
+  | "BRACE_ADJACENT"
+  | "HYPHEN_BEFORE_BRACE"
+  | "TAG_LOWERCASE"
+  | "ILLEGIBLE_RUN"
+  | "CALDERON_SPACING"
+  | "CALDERON_DOUBLE"
+  | "ANGLE_DELIMITER"
+  | "ANGLE_UNCLOSED"
+  | "INSERT_DEL_SPACE"
+  | "HAND_MARKER_SPACE"
+  | "SUBSTITUTION_GAP"
+  | "EMPTY_DELETION"
+  | "UNBALANCED_BRACKET"
+  | "UNBALANCED_PAREN"
+  | "CW_SG_LINE"
+  | "RMK_UNCLOSED"
+  | "RMK_PERIOD"
+  | "RMK_DELIMITER"
+  | "AD_GL_HAND"
+  | "EQUALS_VECTOR"
+  | "UNKNOWN_TAG"
+  | "BLANK_LINE_RUN"
+  | "CONTINUATION_UNRESOLVED"
+  | "FILENAME_SIGLA";
+
+/** Paleographic memory ids (not always emitted as ValidationError.code). */
+export type HsmsPaleographicRuleId =
+  | "FOLIATION_MARKER"
+  | "COLUMN_ENVELOPE"
+  | "DROP_CAP_SINGLE_SPACE"
+  | "ABBREV_VS_SUPERSCRIPT"
+  | "I_VS_J"
+  | "U_VS_V"
+  | "TILDE_NASAL"
+  | "WRAP_BACK_PERCENT2"
+  | "GLOSS_BRACKETS"
+  | "LACUNA_FORMS";
+
+/** Union of every ValidationError.code the client may emit from linter + proofer. */
+export type HsmsValidationIssueCode = HsmsLinterIssueCode | HsmsProoferIssueCode;
+
+/** Narrow ValidationError.code to known HSMS issue ids when present. */
+export type HsmsValidationError = ValidationError & {
+  code?: HsmsValidationIssueCode | string;
+};
 
 export type HsmsAgentRule = {
   id: string;
@@ -23,8 +104,23 @@ export type HsmsAgentRule = {
   exampleGood?: string;
 };
 
+type LinterAgentRule = HsmsAgentRule & { id: HsmsLinterIssueCode; source: "linter" };
+type ProoferAgentRule = HsmsAgentRule & { id: HsmsProoferIssueCode; source: "proofer" };
+type PaleographicAgentRule = HsmsAgentRule & {
+  id: HsmsPaleographicRuleId;
+  source: "paleography";
+};
+
+/** Compile-time exhaustiveness: every linter/proofer code must appear in the catalog. */
+type AssertCovered<Code extends string, Rules extends readonly { id: string }[]> = Exclude<
+  Code,
+  Rules[number]["id"]
+> extends never
+  ? true
+  : Exclude<Code, Rules[number]["id"]>;
+
 /** Structural / paleographic invariants for agent memory (not a runtime check id). */
-export const PALEOGRAPHIC_AGENT_RULES: HsmsAgentRule[] = [
+export const PALEOGRAPHIC_AGENT_RULES = [
   {
     id: "FOLIATION_MARKER",
     source: "paleography",
@@ -116,10 +212,10 @@ export const PALEOGRAPHIC_AGENT_RULES: HsmsAgentRule[] = [
     guidance:
       "Use [*text], [^text], (^text), mechanical [ ], and [??]/[???] — never bare [] or four+ question marks.",
   },
-];
+] as const satisfies readonly PaleographicAgentRule[];
 
 /** Codes emitted by `runPaleographicContextChecks` / `lintHsmsTranscription` core. */
-export const LINTER_AGENT_RULES: HsmsAgentRule[] = [
+export const LINTER_AGENT_RULES = [
   {
     id: "EMPTY_FILE",
     source: "linter",
@@ -200,17 +296,75 @@ export const LINTER_AGENT_RULES: HsmsAgentRule[] = [
     guidance: "Keep brace tags well-formed so the client structural tokenizer never fails.",
   },
   {
-    id: "UNCLOSED_ENVIRONMENT",
+    id: "EMPTY_COLUMN_ENVELOPE",
+    source: "linter",
+    severity: "error",
+    kind: "structural",
+    title: "Empty column tag",
+    guidance: "Never emit a same-line empty `{CBn.}` — open `{CBn.` on its own line, put text inside, close with `}`.",
+    exampleBad: "{CB1.}",
+    exampleGood: "{CB1.\ntext\n}",
+  },
+  {
+    id: "TEXT_OUTSIDE_COLUMN",
+    source: "linter",
+    severity: "error",
+    kind: "structural",
+    title: "Body text outside column",
+    guidance: "After an empty `{CBn.}` mistake, wrap following body text in a proper multiline column envelope.",
+  },
+  {
+    id: "UNCLOSED_ENV",
     source: "linter",
     severity: "error",
     kind: "structural",
     title: "Unclosed environments at EOF",
     guidance: "Every open {TAG. must have a matching } before the end of the page / document.",
   },
-];
+  {
+    id: "UNCLOSED_EXPANSION",
+    source: "linter",
+    severity: "error",
+    kind: "editorial",
+    title: "Unclosed abbreviation expansion",
+    guidance: "Close every <…> abbreviation expansion on the same physical line.",
+  },
+  {
+    id: "UNCLOSED_DELETION",
+    source: "linter",
+    severity: "error",
+    kind: "editorial",
+    title: "Unclosed deletion",
+    guidance: "Close every (… deletion marker on the same physical line.",
+  },
+  {
+    id: "UNCLOSED_INSERTION",
+    source: "linter",
+    severity: "error",
+    kind: "editorial",
+    title: "Unclosed insertion",
+    guidance: "Close every [^… insertion marker on the same physical line.",
+  },
+  {
+    id: "STRAY_CLOSING_BRACE",
+    source: "linter",
+    severity: "error",
+    kind: "structural",
+    title: "Stray closing brace",
+    guidance: "Do not emit } without a matching open environment on the stack.",
+  },
+  {
+    id: "IMPLICIT_CONTINUATION",
+    source: "linter",
+    severity: "warning",
+    kind: "structural",
+    title: "Implicit continuation without +",
+    guidance: "When an environment continues across lines, end the prior line with + (or close with }).",
+  },
+] as const satisfies readonly LinterAgentRule[];
 
 /** Codes from `scanProoferLineIncidents` / `scanProoferDocumentIncidents`. */
-export const PROOFER_AGENT_RULES: HsmsAgentRule[] = [
+export const PROOFER_AGENT_RULES = [
   {
     id: "COMBINING_DIACRITIC",
     source: "proofer",
@@ -472,10 +626,19 @@ export const PROOFER_AGENT_RULES: HsmsAgentRule[] = [
     title: "Witness filename sigla",
     guidance: "Witness filenames should be TEXT.SIGLA.txt (client-side naming; agent usually ignores).",
   },
-];
+] as const satisfies readonly ProoferAgentRule[];
+
+const _linterCoverage: AssertCovered<HsmsLinterIssueCode, typeof LINTER_AGENT_RULES> = true;
+const _prooferCoverage: AssertCovered<HsmsProoferIssueCode, typeof PROOFER_AGENT_RULES> = true;
+void _linterCoverage;
+void _prooferCoverage;
 
 export function getAllHsmsAgentRules(): HsmsAgentRule[] {
-  return [...PALEOGRAPHIC_AGENT_RULES, ...LINTER_AGENT_RULES, ...PROOFER_AGENT_RULES];
+  return [
+    ...PALEOGRAPHIC_AGENT_RULES,
+    ...LINTER_AGENT_RULES,
+    ...PROOFER_AGENT_RULES,
+  ] as HsmsAgentRule[];
 }
 
 export type AgentMemoryExportPayload = {

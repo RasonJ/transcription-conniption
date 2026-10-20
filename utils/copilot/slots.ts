@@ -24,9 +24,16 @@ const NOT_A_TARGET = new Set([
   "window", "ventana", "janela", "finestra", "xanela", "spelling", "grafia", "lemma", "lema",
   "this", "that", "here", "there", "esto", "esta", "aqui", "aquí", "isto", "esse", "esse", "este",
   "in", "on", "at", "en", "em", "many", "times", "time", "how", "cuantas", "cuántas", "quantas",
+  "before", "after", "antes", "depois", "despues", "después", "despres", "després", "and", "y", "e", "i",
+  "first", "primeros", "primeiros", "primers", "modern", "moderno", "moderna",
 ]);
 
 const WINDOW_RE = /(?:±|\+\/-|window of|ventana de|janela de|finestra de|xanela de|within|en|em|dins)\s*(\d{1,2})\s*(?:words?|palabras?|palavras?|paraules?|hitz)?|(\d{1,2})\s*(?:-|\s)?(?:word|palabra|palavra|paraula|hitz)(?:s|es)?\s*(?:window|ventana|janela|finestra|xanela|leiho)/i;
+/** "first 5 words before and after não" / "5 palavras antes e depois de nam". */
+const BEFORE_AFTER_WINDOW_RE =
+  /(?:first|primer[oa]s?|primeir[oa]s?|primers?|lehen)?\s*(\d{1,2})\s*(?:words?|palabras?|palavras?|paraules?|hitz)\s*(?:before\s+and\s+after|antes\s+(?:y|e)\s+despu[eé]s(?:\s+de)?|antes\s+e\s+depois(?:\s+de)?|abans\s+i\s+despr[eé]s(?:\s+de)?)/i;
+const BEFORE_AFTER_WORD_RE =
+  /(?:before\s+and\s+after|antes\s+(?:y|e)\s+despu[eé]s(?:\s+de)?|antes\s+e\s+depois(?:\s+de)?|abans\s+i\s+despr[eé]s(?:\s+de)?)\s+([\p{L}][\p{L}'~çãõáéíóúàèìòùü]*)/iu;
 
 const NGRAM_WORDS: Record<string, number> = {
   bigram: 2, bigrams: 2, bigrama: 2, bigramas: 2, bigrames: 2,
@@ -67,6 +74,11 @@ export function extractWord(query: string): string | undefined {
   if (quoted) return quoted[1].trim();
   const q = normalizeQuery(query);
 
+  const beforeAfter = q.match(BEFORE_AFTER_WORD_RE);
+  if (beforeAfter?.[1] && !NOT_A_TARGET.has(beforeAfter[1]) && beforeAfter[1].length >= 2) {
+    return beforeAfter[1];
+  }
+
   const where = q.match(WHERE_APPEARS_RE);
   if (where?.[1] && !NOT_A_TARGET.has(where[1]) && where[1].length >= 2) return where[1];
 
@@ -96,7 +108,8 @@ export function extractSlots(query: string, recipe: Pick<Recipe, "slots">): Reci
         break;
       }
       case "window": {
-        const m = q.match(WINDOW_RE);
+        const ba = q.match(BEFORE_AFTER_WINDOW_RE);
+        const m = ba ?? q.match(WINDOW_RE);
         const n = m ? Number(m[1] ?? m[2]) : NaN;
         if (Number.isFinite(n) && slot.type === "int") params.window = clampInt(n, slot);
         break;

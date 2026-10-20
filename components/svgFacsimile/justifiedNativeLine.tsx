@@ -37,6 +37,8 @@ export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): Reac
   if (visible.length === 0) return null;
 
   const gapExtra = wordGapExtra(visible, trackWidth, isLastLine, skipJustify);
+  // Skip dx allocations for sub-pixel micro-jitter (long folios / low-end devices).
+  const applyJustify = gapExtra > 0.05;
 
   const tspans: React.ReactNode[] = [];
   let baselineShift = 0;
@@ -45,7 +47,7 @@ export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): Reac
     const s = visible[segIdx];
     // SVG `dx` adds to natural advance — only space glyphs get justification extras.
     let dxValues: number[] | undefined;
-    if (gapExtra > 0) {
+    if (applyJustify) {
       const values: number[] = [];
       let anyExtra = false;
       for (let i = 0; i < s.text.length; i++) {

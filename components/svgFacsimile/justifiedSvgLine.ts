@@ -33,6 +33,8 @@ export function renderJustifiedSvgLine(
   if (visible.length === 0) return "";
 
   const gapExtra = wordGapExtra(visible, targetWidth, isLastLine, skipJustify);
+  // Skip dx allocations for sub-pixel micro-jitter (long folios / export SVG).
+  const applyJustify = gapExtra > 0.05;
   const parts: string[] = [];
   let baselineShift = 0;
 
@@ -41,7 +43,7 @@ export function renderJustifiedSvgLine(
     // Only inject extras on word spaces — never push full glyph widths (that
     // double-advances and creates letter rivers).
     let dxAttr = "";
-    if (gapExtra > 0) {
+    if (applyJustify) {
       const dxList: string[] = [];
       let anyExtra = false;
       for (let i = 0; i < s.text.length; i++) {

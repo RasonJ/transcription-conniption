@@ -1,6 +1,6 @@
 # HSMS Agent Memory Rules
-# Generated: 2026-10-19T20:53:22.576Z
-# Rules: 52
+# Generated: 2026-10-19T23:34:25.339Z
+# Rules: 59
 # Source: utils/hsmsAgentRuleCatalog.ts — regenerate with npm run export:agent-memory
 
 HSMS paleography + Proofer/linter rules for Azure Foundry agent memory. Deterministic enforcement remains on-device via lintHsmsTranscription.
@@ -49,7 +49,7 @@ Right/left glosses use {GLR. […]} / {GLL. […]} with gloss text in brackets w
 ### [LACUNA_FORMS] (info · editorial) — Lacunae and illegibility
 Use [*text], [^text], (^text), mechanical [ ], and [??]/[???] — never bare [] or four+ question marks.
 
-## LINTER (10)
+## LINTER (17)
 
 ### [EMPTY_FILE] (error · structural) — Empty transcription
 Never return an empty string; always emit at least a folio marker and column block when a page is visible.
@@ -86,8 +86,33 @@ Avoid nested/stacked @/'/~ diacritic clusters; prefer clear HSMS ASCII notation.
 ### [COMPILER_CRASH] (error · structural) — Unparseable structural line
 Keep brace tags well-formed so the client structural tokenizer never fails.
 
-### [UNCLOSED_ENVIRONMENT] (error · structural) — Unclosed environments at EOF
+### [EMPTY_COLUMN_ENVELOPE] (error · structural) — Empty column tag
+Never emit a same-line empty `{CBn.}` — open `{CBn.` on its own line, put text inside, close with `}`.
+Avoid: `{CB1.}`
+Prefer: `{CB1.
+text
+}`
+
+### [TEXT_OUTSIDE_COLUMN] (error · structural) — Body text outside column
+After an empty `{CBn.}` mistake, wrap following body text in a proper multiline column envelope.
+
+### [UNCLOSED_ENV] (error · structural) — Unclosed environments at EOF
 Every open {TAG. must have a matching } before the end of the page / document.
+
+### [UNCLOSED_EXPANSION] (error · editorial) — Unclosed abbreviation expansion
+Close every <…> abbreviation expansion on the same physical line.
+
+### [UNCLOSED_DELETION] (error · editorial) — Unclosed deletion
+Close every (… deletion marker on the same physical line.
+
+### [UNCLOSED_INSERTION] (error · editorial) — Unclosed insertion
+Close every [^… insertion marker on the same physical line.
+
+### [STRAY_CLOSING_BRACE] (error · structural) — Stray closing brace
+Do not emit } without a matching open environment on the stack.
+
+### [IMPLICIT_CONTINUATION] (warning · structural) — Implicit continuation without +
+When an environment continues across lines, end the prior line with + (or close with }).
 
 ## PROOFER (32)
 

@@ -77,6 +77,7 @@
   "editor.toggle.diacritics": "Unicode diacritics",
   "editor.toggle.readingFlow": "Reading flow",
   "editor.toggle.synoptic": "Synoptic pane",
+  "editor.toggle.modernText": "Modern text (line-by-line)",
   "editor.toggle.facsimile": "Facsimile canvas",
   "editor.toggle.svg": "SVG canvas",
   "editor.validation.openSheet": "Open full validation sheet",
@@ -217,6 +218,8 @@
   "synoptic.diplomaticView": "Diplomatic View",
   "synoptic.enableOne": "Enable at least one synoptic panel.",
   "synoptic.normalizedReading": "Normalized reading",
+  "studio.synoptic.diplomaticTitle": "Diplomatic (HSMS)",
+  "studio.synoptic.modernTitle": "Modern text (line by line)",
   "concordance.lemmatizing": "Loading the lemma dictionary… showing surface forms until it is ready.",
   "validation.sheetTitle": "Structural validation",
   "validation.ok": "Transcription structure looks consistent.",
@@ -575,5 +578,7 @@
   "copilot.label.review_needs_attention": "needs attention",
   "editor.toggle.mufiGraphemes": "MUFI graphemes",
   "editor.toggle.mufiPua": "MUFI PUA font",
-  "editor.toggle.lineNumbers": "Line numbers"
+  "editor.toggle.lineNumbers": "Line numbers",
+  "studio.tool.modernSynopticActive": "Modern synoptic active",
+  "studio.tool.modernSynopticHint": "Widen window for modern line-by-line split"
 }

@@ -132,9 +132,11 @@ function assignCb2Tracks(blocks: ManuscriptBlock[], startBi: number): SpatialLin
   return lines;
 }
 
-function applyWrapBackLines(lines: SpatialLine[]): void {
-  for (let li = 1; li < lines.length; li++) {
-    const tokens = lines[li].block.tokens;
+/** Pure non-mutating wrap-back suffix transformation — never mutates input line tokens. */
+function applyWrapBackLines(lines: SpatialLine[]): SpatialLine[] {
+  const result = lines.slice();
+  for (let li = 1; li < result.length; li++) {
+    const tokens = result[li].block.tokens;
     const wrapIdx = tokens.findIndex((t) => t.type === "calderon_two");
     if (wrapIdx < 0) continue;
 
@@ -148,24 +150,31 @@ function applyWrapBackLines(lines: SpatialLine[]): void {
     const suffixTokens = tokens.slice(wrapIdx + 1);
     if (suffixTokens.length === 0) continue;
 
-    const prev = lines[li - 1];
-    if (prev.track === lines[li].track || lines[li].track === "full") {
-      prev.wrapBackSuffix = suffixTokens.map((t) => t.normalized ?? t.value).join("");
+    const prev = result[li - 1];
+    if (prev.track === result[li].track || result[li].track === "full") {
+      result[li - 1] = {
+        ...prev,
+        wrapBackSuffix: suffixTokens.map((t) => t.normalized ?? t.value).join(""),
+      };
       // Carrier row keeps only tokens through %2 — suffix renders on the previous line.
-      lines[li] = {
-        ...lines[li],
+      result[li] = {
+        ...result[li],
         block: {
-          ...lines[li].block,
+          ...result[li].block,
           tokens: tokens.slice(0, wrapIdx + 1),
         },
       };
     }
   }
+  return result;
 }
 
-/** Attach %2 wrap-back suffixes to preceding lines (mutates `lines` in place). */
+/** Attach %2 wrap-back suffixes; mutates the array slots for callers that own the buffer. */
 export function applyWrapBackLinesInPlace(lines: SpatialLine[]): void {
-  applyWrapBackLines(lines);
+  const next = applyWrapBackLines(lines);
+  for (let i = 0; i < next.length; i++) {
+    lines[i] = next[i];
+  }
 }
 
 function segmentColumnBlocks(printableBlocks: ManuscriptBlock[]): SpatialColumnBlock[] {
@@ -182,7 +191,7 @@ function segmentColumnBlocks(printableBlocks: ManuscriptBlock[]): SpatialColumnB
       i++;
     }
 
-    const lines =
+    const rawLines =
       layout === 1
         ? segment.map((block, j) => ({
             block,
@@ -192,8 +201,7 @@ function segmentColumnBlocks(printableBlocks: ManuscriptBlock[]): SpatialColumnB
           }))
         : assignCb2Tracks(segment, startBi);
 
-    applyWrapBackLines(lines);
-    out.push({ layout, lines });
+    out.push({ layout, lines: applyWrapBackLines(rawLines) });
   }
 
   return out;
