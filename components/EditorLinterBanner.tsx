@@ -3,7 +3,7 @@ import type { ValidationError } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
 import { localizeValidationMessage } from "@/utils/validationMessage";
-import { lintHsmsTranscription } from "@/utils/hsmsLinter";
+import { lintHsmsTranscription, validationIssuesToLintReport } from "@/utils/hsmsLinter";
 import { AlertTriangle, CheckCircle2, Sparkles, XCircle } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
 import {
@@ -18,6 +18,8 @@ import {
 
 type Props = {
   transcriptionText: string;
+  /** When provided, prefer the unified ValidationStore diagnostics (VAL-1). */
+  diagnostics?: ValidationError[];
   onJumpToLine?: (lineIndex: number) => void;
   /** Apply Pass 2 repaired HSMS into the editor / workspace. */
   onRepaired?: (repairedText: string) => void;
@@ -25,9 +27,17 @@ type Props = {
 
 const MAX_VISIBLE = 12;
 
-export function EditorLinterBanner({ transcriptionText, onJumpToLine, onRepaired }: Props) {
+export function EditorLinterBanner({
+  transcriptionText,
+  diagnostics,
+  onJumpToLine,
+  onRepaired,
+}: Props) {
   const tr = useT();
-  const report = useMemo(() => lintHsmsTranscription(transcriptionText), [transcriptionText]);
+  const report = useMemo(() => {
+    if (diagnostics) return validationIssuesToLintReport(diagnostics);
+    return lintHsmsTranscription(transcriptionText);
+  }, [diagnostics, transcriptionText]);
   const ordered = [...report.criticalErrors, ...report.structuralWarnings];
   const [repairing, setRepairing] = useState(false);
   const azureReady = isAzureAgentConfigured();

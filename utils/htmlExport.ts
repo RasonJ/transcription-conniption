@@ -1,4 +1,6 @@
 import type { ParsedManuscript, Token } from "../constants/manuscript";
+import { buildInitialScene, serializeInitialScene } from "./initials/scene";
+import { resolveInitialSpec } from "./initials/spec";
 import { convertHsmsToMufiGlyphs } from "./mufiCharacterMap";
 import { formatRunningHeaderText } from "./metadataText";
 import { buildSpatialFolio, zipColumnBlockRows, type SpatialLine } from "./spatialAst";
@@ -176,16 +178,25 @@ function renderDropInitial(
   options: Required<LegacyHtmlExportOptions>,
 ): string {
   const depth = token.initialDepth ?? 3;
-  const fontSize = Math.max(depth * 15, 32);
   let letter = token.value ?? "";
   if (options.useMufiGlyphs) {
     letter = convertHsmsToMufiGlyphs(letter, options.usePuaFont);
   }
+  const scene = buildInitialScene(
+    resolveInitialSpec({
+      letter: letter || "?",
+      depth,
+      tradition: "print.woodcut",
+      sequence: 0,
+      seed: letter,
+    }),
+    18,
+  );
+  const svg = serializeInitialScene(scene);
   return (
-    `<span class="drop-initial-cap" style="font-size: ${fontSize}px; font-weight: bold; ` +
-    `font-family: ${MUFI_HTML_SERIF_STACK}; text-transform: capitalize; color: #9b2217; float: left; ` +
-    `margin-right: 6px; margin-top: 2px; line-height: 0.85em; border: 1px solid #d4af37; padding: 2px 4px; background: #fffdf5; border-radius: 4px;">` +
-    `${escapeHtml(letter)}</span>`
+    `<span class="drop-initial-cap" style="float:left;margin-right:6px;line-height:0;">` +
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${scene.boxWidth}" height="${scene.boxHeight}" viewBox="0 0 ${scene.boxWidth} ${scene.boxHeight}">${svg}</svg>` +
+    `</span>`
   );
 }
 

@@ -89,13 +89,19 @@ export interface WordOccurrence {
   keyword: string;
 }
 
-export type ConcordanceIndex = Record<
-  string,
-  {
-    count: number;
-    occurrences: WordOccurrence[];
-  }
->;
+/** One concordance grouping key (lemma or folded word form). */
+export type ConcordanceEntryData = {
+  count: number;
+  occurrences: WordOccurrence[];
+  /** How this key was formed (SPEC-CONCORDANCE-LANGUAGE). */
+  mode?: "lemma" | "word_form";
+  /** Surface-form → count under this key. */
+  variants?: Record<string, number>;
+  sourceId?: string;
+  language?: string;
+};
+
+export type ConcordanceIndex = Record<string, ConcordanceEntryData>;
 
 export interface ValidationError {
   severity: "error" | "warning";

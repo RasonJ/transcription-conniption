@@ -1,9 +1,5 @@
-import {
-  buildDropCapSeed,
-  buildOrnateInitialGeometry,
-  GOLD_DARK,
-  type OrnamentPath,
-} from "@/components/svgFacsimile/dropInitialLetterform";
+import { buildInitialScene, serializeInitialScene } from "@/utils/initials/scene";
+import { resolveInitialSpec } from "@/utils/initials/spec";
 import { renderJustifiedSvgLine } from "@/components/svgFacsimile/justifiedSvgLine";
 import { segsLineWidth } from "@/components/svgFacsimile/glyphMetrics";
 import {
@@ -72,49 +68,29 @@ function displaySettings(opts: ResolvedOpts): DisplaySettings {
   };
 }
 
-function ornamentPathToSvg(p: OrnamentPath): string {
-  const stroke = p.stroke ? ` stroke="${p.stroke}"` : "";
-  const fill = p.fill ? ` fill="${p.fill}"` : ' fill="none"';
-  const sw = p.strokeWidth != null ? ` stroke-width="${p.strokeWidth}"` : "";
-  const op = p.opacity != null ? ` opacity="${p.opacity}"` : "";
-  return `<path d="${p.d}"${stroke}${fill}${sw}${op}/>`;
-}
-
 function serializeOrnateInitial(
   letter: string,
   cx: number,
   cy: number,
-  capW: number,
+  _capW: number,
   capH: number,
-  capFS: number,
+  _capFS: number,
   folioId: string,
   blockIndex: number,
-  bkey: string,
+  _bkey: string,
 ): string[] {
-  const seed = buildDropCapSeed(folioId, letter, blockIndex);
-  const geo = buildOrnateInitialGeometry(letter, cx, cy, capW, capH, capFS, seed, bkey);
-  const parts: string[] = [];
-
-  parts.push(
-    `<rect x="${geo.shadow.x}" y="${geo.shadow.y}" width="${geo.shadow.w}" height="${geo.shadow.h}" rx="${geo.shadow.rx}" fill="rgba(26,10,5,0.18)"/>`,
-    `<rect x="${geo.field.x}" y="${geo.field.y}" width="${geo.field.w}" height="${geo.field.h}" rx="${geo.field.rx}" fill="${geo.field.fill}"/>`,
-    `<rect x="${geo.inner.x}" y="${geo.inner.y}" width="${geo.inner.w}" height="${geo.inner.h}" rx="${geo.inner.rx}" fill="${geo.inner.fill}"/>`,
-    `<rect x="${geo.outerStroke.x}" y="${geo.outerStroke.y}" width="${geo.outerStroke.w}" height="${geo.outerStroke.h}" rx="${geo.outerStroke.rx}" fill="none" stroke="${geo.outerStroke.stroke}" stroke-width="${geo.outerStroke.strokeWidth}"/>`,
-    `<rect x="${geo.innerStroke.x}" y="${geo.innerStroke.y}" width="${geo.innerStroke.w}" height="${geo.innerStroke.h}" rx="${geo.innerStroke.rx}" fill="none" stroke="${GOLD_DARK}" stroke-width="${geo.innerStroke.strokeWidth}" opacity="${geo.innerStroke.opacity}"/>`,
+  const depth = Math.max(1, Math.round(capH / LH));
+  const scene = buildInitialScene(
+    resolveInitialSpec({
+      letter,
+      depth,
+      tradition: "print.woodcut",
+      sequence: blockIndex,
+      seed: `${folioId}|${letter}|${blockIndex}`,
+    }),
+    capH / depth,
   );
-
-  for (let i = 0; i < geo.paths.length; i++) {
-    parts.push(ornamentPathToSvg(geo.paths[i]));
-  }
-
-  parts.push(
-    `<text x="${geo.letter.x.toFixed(2)}" y="${geo.letter.y.toFixed(2)}" text-anchor="middle" ` +
-      `font-family="${escapeXml(geo.letter.fontFamily)}" font-size="${geo.letter.fontSize.toFixed(1)}" ` +
-      `font-weight="${geo.letter.fontWeight}" fill="${geo.letter.fill}" stroke="${geo.letter.stroke}" stroke-width="${geo.letter.strokeWidth}">` +
-      `${escapeXml(geo.letter.text)}</text>`,
-  );
-
-  return parts;
+  return [serializeInitialScene(scene, cx, cy)];
 }
 
 /** Word-gap justified line — compact `<tspan>` groups (matches SvgFacsimilePage). */

@@ -1,8 +1,13 @@
 import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
+import { useDialogFocusTrap } from "@/hooks/useDialogFocusTrap";
 import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
 import { foldForSearch } from "@/utils/witnessLanguage";
 import { formatNumber, useLocale, useT } from "@/i18n/runtime";
-import { getConcordanceEntriesSorted, getConcordanceForManuscript } from "@/utils/concordance";
+import {
+  formatConcordanceMethodLine,
+  getConcordanceBuildForManuscript,
+  getConcordanceEntriesSorted,
+} from "@/utils/concordance";
 import { Search, X } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
 import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
@@ -49,6 +54,12 @@ const ConcordanceEntryRow = React.memo(
                   onClose();
                 }}
                 style={styles.kwicRow}
+                accessibilityRole="button"
+                accessibilityLabel={
+                  occ.lineNumber
+                    ? t("concordance.occurrence.folioLine", { folio: occ.folioId, line: occ.lineNumber })
+                    : t("concordance.occurrence.folio", { folio: occ.folioId })
+                }
               >
                 <Text style={styles.kwicMeta}>
                   {occ.lineNumber
@@ -80,19 +91,33 @@ ConcordanceEntryRow.displayName = "ConcordanceEntryRow";
 
 const EMPTY_CONCORDANCE: ConcordanceIndex = {};
 
+const TITLE_ID = "concordance-drawer-title";
+
 export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSelectOccurrence }: Props) {
   const t = useT();
   const { locale } = useLocale();
   const [query, setQuery] = useState("");
   const [expandedLemma, setExpandedLemma] = useState<string | null>(null);
 
+  useDialogFocusTrap({
+    active: visible,
+    onClose,
+    titleId: TITLE_ID,
+    dialogId: "concordance-dialog",
+  });
+
   const lemmas = useLemmaDictionary(visible);
-  const concordance = useMemo(
-    () => (visible ? getConcordanceForManuscript(parsed, sourceText) : EMPTY_CONCORDANCE),
+  const build = useMemo(
+    () =>
+      visible
+        ? getConcordanceBuildForManuscript(parsed, sourceText)
+        : { index: EMPTY_CONCORDANCE, meta: null },
     // lemmas.generation: rebuild once the lazy dictionary arrives (surface forms until then).
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [visible, parsed, sourceText, lemmas.generation],
   );
+  const concordance = build.index;
+  const methodLine = build.meta ? formatConcordanceMethodLine(build.meta) : "";
   const entries = useMemo(() => getConcordanceEntriesSorted(concordance), [concordance]);
   const filtered = useMemo(() => {
     // Accent-insensitive: "rubricas" matches "rúbricas" (SPEC-I18N §8).
@@ -127,9 +152,11 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.backdrop}>
-        <View style={styles.panel}>
+        <View style={styles.panel} accessibilityViewIsModal nativeID="concordance-dialog">
           <View style={styles.header}>
-            <Text style={styles.title}>{t("concordance.title")}</Text>
+            <Text nativeID={TITLE_ID} style={styles.title} accessibilityRole="header">
+              {t("concordance.title")}
+            </Text>
             <Pressable
               onPress={onClose}
               hitSlop={12}
@@ -157,6 +184,8 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
           {lemmas.loading ? (
             <Text style={styles.hint}>{t("concordance.lemmatizing")}</Text>
           ) : null}
+
+          {methodLine ? <Text style={styles.method}>{methodLine}</Text> : null}
 
           <Text style={styles.hint}>
             {t(query.trim() ? "concordance.summaryFiltered" : "concordance.summary", {
@@ -210,6 +239,12 @@ const styles = StyleSheet.create({
   },
   searchInput: { flex: 1, color: "#fff4d2", fontSize: 15, paddingVertical: 10 },
   hint: { color: "rgba(246,216,144,0.65)", fontSize: 12, marginBottom: 10 },
+  method: {
+    color: "#f6d890",
+    fontSize: 12,
+    fontWeight: "700",
+    marginBottom: 6,
+  },
   list: { flex: 1 },
   emptyList: { color: "#99836a", textAlign: "center", paddingVertical: 24, fontStyle: "italic" },
   entry: { borderBottomWidth: 1, borderBottomColor: "rgba(246,216,144,0.12)", paddingVertical: 6 },

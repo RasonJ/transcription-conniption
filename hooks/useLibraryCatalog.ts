@@ -7,12 +7,18 @@ import type {
   LibraryCatalogEntry,
   LibraryEntryPayload,
   LibrarySearchFilters,
+  WorkGroup,
 } from "@/utils/libraryCatalog";
 import {
   LIBRARY_CATALOG_FORMAT,
+  LIBRARY_CATALOG_FORMAT_V1,
   LIBRARY_ENTRY_FORMAT,
+  LIBRARY_ENTRY_FORMAT_V1,
   filterLibraryEntries,
+  normalizeLibraryCatalog,
+  upgradeCatalogEntryToV2,
 } from "@/utils/libraryCatalog";
+import { groupCatalogEntriesIntoWorks } from "@/utils/workGrouping";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 type LoadState = "idle" | "loading" | "ready" | "error";
@@ -33,24 +39,27 @@ async function fetchJson<T>(url: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-function isLibraryCatalog(value: unknown): value is LibraryCatalog {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-  const catalog = value as LibraryCatalog;
+function isLibraryCatalogBlob(value: unknown): value is {
+  format: string;
+  entries: unknown[];
+  generatedAt?: string;
+  outputDir?: string;
+  entryCount?: number;
+} {
+  if (!value || typeof value !== "object") return false;
+  const catalog = value as { format?: string; entries?: unknown };
   return (
-    catalog.format === LIBRARY_CATALOG_FORMAT &&
+    (catalog.format === LIBRARY_CATALOG_FORMAT ||
+      catalog.format === LIBRARY_CATALOG_FORMAT_V1) &&
     Array.isArray(catalog.entries)
   );
 }
 
 function isLibraryEntryPayload(value: unknown): value is LibraryEntryPayload {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
+  if (!value || typeof value !== "object") return false;
   const entry = value as LibraryEntryPayload;
   return (
-    entry.format === LIBRARY_ENTRY_FORMAT &&
+    (entry.format === LIBRARY_ENTRY_FORMAT || entry.format === LIBRARY_ENTRY_FORMAT_V1) &&
     typeof entry.transcriptionText === "string"
   );
 }
@@ -73,8 +82,8 @@ export function useLibraryCatalog() {
     const remoteUrl = getLibraryCatalogUrl();
     try {
       const remote = await fetchJson<unknown>(remoteUrl);
-      if (isLibraryCatalog(remote)) {
-        setCatalog(remote);
+      if (isLibraryCatalogBlob(remote)) {
+        setCatalog(normalizeLibraryCatalog(remote));
         setLoadState("ready");
         return;
       }
@@ -82,8 +91,8 @@ export function useLibraryCatalog() {
       console.warn("Library catalog fetch failed", remoteUrl, remoteErr);
     }
 
-    if (bundledCatalog && isLibraryCatalog(bundledCatalog)) {
-      setCatalog(bundledCatalog);
+    if (bundledCatalog && isLibraryCatalogBlob(bundledCatalog)) {
+      setCatalog(normalizeLibraryCatalog(bundledCatalog));
       setLoadState("ready");
       return;
     }
@@ -100,11 +109,14 @@ export function useLibraryCatalog() {
   }, [reload]);
 
   const filteredEntries = useMemo(() => {
-    if (!catalog) {
-      return [] as LibraryCatalogEntry[];
-    }
+    if (!catalog) return [] as LibraryCatalogEntry[];
     return filterLibraryEntries(catalog.entries, filters);
   }, [catalog, filters]);
+
+  const workGroups: WorkGroup[] = useMemo(
+    () => groupCatalogEntriesIntoWorks(filteredEntries),
+    [filteredEntries],
+  );
 
   const loadEntryPayload = useCallback(async (entry: LibraryCatalogEntry) => {
     if (entry.status !== "ok") {
@@ -116,7 +128,12 @@ export function useLibraryCatalog() {
       const url = getLibraryEntryUrl(entry.baseName);
       const remote = await fetchJson<unknown>(url);
       if (isLibraryEntryPayload(remote)) {
-        return remote;
+        const upgraded = upgradeCatalogEntryToV2(remote as unknown as Record<string, unknown>);
+        return {
+          ...upgraded,
+          format: LIBRARY_ENTRY_FORMAT,
+          transcriptionText: remote.transcriptionText,
+        } satisfies LibraryEntryPayload;
       }
       throw new Error("Invalid library entry payload");
     } finally {
@@ -131,6 +148,7 @@ export function useLibraryCatalog() {
     filters,
     setFilters,
     filteredEntries,
+    workGroups,
     reload,
     loadEntryPayload,
     loadingEntryId,

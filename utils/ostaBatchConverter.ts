@@ -413,8 +413,12 @@ function enrichCatalogEntryFromPath(
         ? "osta"
         : rootLabel.replace(/[^\w.\-]+/g, " ");
 
-  if (yearHint && !entry.year) {
-    entry.year = yearHint;
+  if (yearHint && entry.year == null) {
+    const parsedYear = parseInt(yearHint, 10);
+    if (Number.isFinite(parsedYear)) {
+      entry.year = parsedYear;
+      if (!entry.date) entry.date = yearHint;
+    }
   }
   if (!entry.author && corpusHint.includes("celestina")) {
     entry.author = "Fernando de Rojas";

@@ -1,6 +1,7 @@
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { t as tNow, useT } from "@/i18n/runtime";
 import { useRegisterLineAnchor, useScrollAnchor } from "@/context/ScrollAnchorContext";
+import { DisplaySettingsPopover } from "@/components/DisplaySettingsPopover";
 import { ExportManuscriptSheet } from "@/components/ExportManuscriptSheet";
 import { BlockFigureLayout } from "@/components/BlockFigureLayout";
 import { CompilationOverlay } from "@/components/CompilationOverlay";
@@ -16,8 +17,10 @@ import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
 import { ResponsiveBatchShell } from "@/components/ResponsiveBatchShell";
 import { SvgFacsimilePage } from "@/components/SvgFacsimilePage";
+import { FolioViewport } from "@/components/svgFacsimile/FolioViewport";
 import { TranscriptionProgressBar } from "@/components/TranscriptionProgressBar";
 import { ValidationPanel } from "@/components/ValidationPanel";
+import { useValidationStore } from "@/hooks/useValidationStore";
 import {
   DEFAULT_DEMO,
   INLINE_IMAGE_DEMO,
@@ -32,6 +35,9 @@ import { formatRunningHeaderText } from "@/utils/metadataText";
 import { reconstructManuscriptFlow } from "@/utils/manuscriptParser";
 import { detectWitnessLanguage } from "@/utils/witnessLanguage";
 import type { ManuscriptExportFormat } from "@/utils/exportFormats";
+import { deriveTraditionFromRmk } from "@/utils/initials/tradition";
+import { InitialTraditionContext } from "@/utils/initials/TraditionContext";
+import type { InitialTradition } from "@/utils/initials/scene";
 import { copyFigureIntoWorkspace } from "@/utils/figureAssetStorage";
 import { platformShadow } from "@/utils/platformShadow";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
@@ -54,16 +60,15 @@ import {
   BookOpen,
   ClipboardList,
   Download,
-  FileCode2,
   FileText,
   Image as ImageIcon,
   LayoutPanelLeft,
   ListOrdered,
   MessageCircle,
-  Package,
   Layers,
   PlusCircle,
   Settings2,
+  SlidersHorizontal,
   Sparkles,
   Upload,
   Wand2,
@@ -86,7 +91,6 @@ import {
   ScrollView,
   Share,
   StyleSheet,
-  Switch,
   Text,
   TextInput,
   useWindowDimensions,
@@ -110,6 +114,7 @@ const ReaderStateContext = createContext<{
   useMufiGraphemes: boolean;
   usePuaFont: boolean;
   showLineNumbers: boolean;
+  initialTradition: InitialTradition;
 }>({
   showExpanded: true,
   showDeletions: true,
@@ -118,6 +123,7 @@ const ReaderStateContext = createContext<{
   useMufiGraphemes: false,
   usePuaFont: true,
   showLineNumbers: true,
+  initialTradition: "ms.penwork",
 });
 
 type BlockGroup =
@@ -199,7 +205,6 @@ export default function TranscriptionConniptionScreen() {
     loadBatch,
     createNewWorkspace,
     importHsmsBundle,
-    exportHsmsBundle,
     loadSample,
     applyTranscription,
     addFreePlacement,
@@ -237,7 +242,9 @@ export default function TranscriptionConniptionScreen() {
   const [svgModeEnabled, setSvgModeEnabled] = useState(true);
   const [isDragOver, setIsDragOver] = useState(false);
   const [exportSheetVisible, setExportSheetVisible] = useState(false);
+  const [displaySheetVisible, setDisplaySheetVisible] = useState(false);
   const visionSourceNameRef = useRef("vision_transcription.txt");
+  const validationState = useValidationStore(localEditorBuffer);
 
   const synopticEnabled = showSynoptic && width >= 640;
   const modernSynopticEnabled = showModernSynoptic && width >= 640;
@@ -245,6 +252,7 @@ export default function TranscriptionConniptionScreen() {
     () => detectWitnessLanguage(parsedManuscript).language,
     [parsedManuscript],
   );
+  const initialTradition = useMemo(() => deriveTraditionFromRmk(debouncedText), [debouncedText]);
 
   const {
     isProcessing: visionBusy,
@@ -653,22 +661,14 @@ export default function TranscriptionConniptionScreen() {
     [loadBatch],
   );
 
-  const exportTei = useCallback(async () => {
-    const { exportToTEIXML } = await import("@/utils/teiExport");
-    const xml = exportToTEIXML(parsedManuscript);
-    try {
-      await Share.share({
-        message: xml.length > 8000 ? `${xml.slice(0, 8000)}\n… [truncated for share sheet]` : xml,
-        title: "TEI-XML export",
-      });
-    } catch {
-      Alert.alert(tNow("common.export"), tNow("alert.teiShareFailed"));
-    }
-  }, [parsedManuscript]);
-
   const buildExportContents = useCallback(
     async (format: ManuscriptExportFormat) => {
       const { buildManuscriptExportPayload } = await import("@/utils/manuscriptExport");
+      let hsmsBundleJson: string | undefined;
+      if (format === "hsms_bundle" && workspace) {
+        const { buildHsmsBundle } = await import("@/utils/hsmsBundle");
+        hsmsBundleJson = await buildHsmsBundle(workspace);
+      }
       return buildManuscriptExportPayload(format, {
         parsed: parsedManuscript,
         sourceText: debouncedText,
@@ -678,6 +678,7 @@ export default function TranscriptionConniptionScreen() {
           useNormalizedDiacritics: showNormalizedDiacritics,
           suppressOtioseMarks,
         },
+        hsmsBundleJson,
       }).contents;
     },
     [
@@ -687,6 +688,7 @@ export default function TranscriptionConniptionScreen() {
       showDeletions,
       showNormalizedDiacritics,
       suppressOtioseMarks,
+      workspace,
     ],
   );
 
@@ -698,13 +700,25 @@ export default function TranscriptionConniptionScreen() {
       }
 
       try {
-        const { saveExportFile } = await import("@/utils/exportFile");
-        const contents = await buildExportContents(format);
-        await saveExportFile(contents, {
-          fileName,
-          format,
-          dialogTitle: `Export ${fileName}`,
-        });
+        if (format === "hsms_bundle" && workspace) {
+          const { exportHsmsBundleToFile } = await import("@/utils/hsmsBundle");
+          const { resolveStoredFileUri } = await import("@/utils/expoFileSystem");
+          const path = await exportHsmsBundleToFile(workspace);
+          const shareUri = resolveStoredFileUri(path);
+          if (Platform.OS === "web") {
+            await Share.share({ url: shareUri, title: fileName });
+          } else {
+            await Share.share({ url: path, title: fileName });
+          }
+        } else {
+          const { saveExportFile } = await import("@/utils/exportFile");
+          const contents = await buildExportContents(format);
+          await saveExportFile(contents, {
+            fileName,
+            format,
+            dialogTitle: `Export ${fileName}`,
+          });
+        }
         await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       } catch (error) {
         if (error instanceof Error && error.name === "AbortError") {
@@ -714,7 +728,7 @@ export default function TranscriptionConniptionScreen() {
         Alert.alert(tNow("alert.exportFailed"), tNow("alert.exportFailedBody"));
       }
     },
-    [parsedManuscript.folios.length, debouncedText, buildExportContents],
+    [parsedManuscript.folios.length, debouncedText, buildExportContents, workspace],
   );
 
   const handleSetFolioBackground = useCallback(
@@ -756,7 +770,7 @@ export default function TranscriptionConniptionScreen() {
     [placementMode, addFreePlacement],
   );
 
-  const validationCount = parsedManuscript.validationErrors?.length ?? 0;
+  const criticalExportErrors = validationState.errorCount;
   const hasPublicationMeta = Boolean(
     parsedManuscript.metadata.title ||
       parsedManuscript.metadata.author ||
@@ -766,7 +780,6 @@ export default function TranscriptionConniptionScreen() {
   const showReaderTools = isEditorMode;
   const showCompanionTools = parsedManuscript.folios.length > 0 || isEditorMode;
   const showParchment = isPreview || !isEditorMode;
-  const canExportHtml = parsedManuscript.folios.length > 0 || debouncedText.trim().length > 0;
 
   return (
     <LinearGradient colors={[...theme.gradient]} style={styles.root}>
@@ -780,8 +793,10 @@ export default function TranscriptionConniptionScreen() {
             useMufiGraphemes,
             usePuaFont,
             showLineNumbers,
+            initialTradition,
           }}
         >
+        <InitialTraditionContext.Provider value={initialTradition}>
           <FigureImageContext.Provider
             value={{
               uploadedImages,
@@ -839,21 +854,16 @@ export default function TranscriptionConniptionScreen() {
                   </Text>
                 </Pressable>
                 <Pressable
-                  onPress={() => setAssistantOpen(true)}
-                  style={({ pressed }) => [styles.htmlExportButton, pressed && styles.pressed]}
-                  accessibilityRole="button"
-                  accessibilityLabel={t("studio.tool.ask")}
-                >
-                  <MessageCircle color={theme.gold} size={16} />
-                  <Text style={styles.htmlExportButtonText}>{t("studio.tool.ask")}</Text>
-                </Pressable>
-                <Pressable
                   onPress={() => setIsEditorMode((prev) => !prev)}
                   style={({ pressed }) => [
                     styles.editorModeToggle,
                     isEditorMode && styles.editorModeToggleActive,
                     pressed && styles.pressed,
                   ]}
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    isEditorMode ? t("studio.action.editorHide") : t("studio.action.editorShow")
+                  }
                 >
                   <Settings2 color={isEditorMode ? theme.inkDark : theme.gold} size={16} />
                   <Text
@@ -862,15 +872,6 @@ export default function TranscriptionConniptionScreen() {
                     {isEditorMode ? t("studio.action.editorHide") : t("studio.action.editorShow")}
                   </Text>
                 </Pressable>
-                {canExportHtml ? (
-                  <Pressable
-                    onPress={() => setExportSheetVisible(true)}
-                    style={({ pressed }) => [styles.htmlExportButton, pressed && styles.pressed]}
-                  >
-                    <Download color={theme.gold} size={16} />
-                    <Text style={styles.htmlExportButtonText}>{t("studio.tool.export")}</Text>
-                  </Pressable>
-                ) : null}
               </View>
 
               {isEditorMode ? (
@@ -918,17 +919,12 @@ export default function TranscriptionConniptionScreen() {
 
                   <View style={styles.actionRow}>
                     <Pressable
-                      onPress={() => void exportHsmsBundle()}
-                      style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
-                    >
-                      <Package color="#f6d890" size={18} />
-                      <Text style={styles.secondaryButtonText}>{t("studio.action.exportHsms")}</Text>
-                    </Pressable>
-                    <Pressable
                       onPress={() => {
                         void importHsmsBundle().then(() => setIsPreview(true));
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.action.importHsms")}
                     >
                       <Upload color="#f6d890" size={18} />
                       <Text style={styles.secondaryButtonText}>{t("studio.action.importHsms")}</Text>
@@ -938,6 +934,8 @@ export default function TranscriptionConniptionScreen() {
                         void loadSample(DEFAULT_DEMO, "Nunes_Demo").then(() => setIsPreview(true));
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.demo.nunes")}
                     >
                       <Sparkles color="#f6d890" size={18} />
                       <Text style={styles.secondaryButtonText}>{t("studio.demo.nunes")}</Text>
@@ -1040,6 +1038,7 @@ export default function TranscriptionConniptionScreen() {
               <View style={styles.editorCard}>
                 <EditorLinterBanner
                   transcriptionText={localEditorBuffer}
+                  diagnostics={validationState.diagnostics}
                   onJumpToLine={handleValidationJump}
                   onRepaired={(repaired) => {
                     setLocalEditorBuffer(repaired);
@@ -1050,7 +1049,7 @@ export default function TranscriptionConniptionScreen() {
                   }}
                 />
                 <ValidationPanel
-                  errors={parsedManuscript.validationErrors ?? []}
+                  errors={validationState.diagnostics}
                   onJumpToLine={handleValidationJump}
                 />
                 <Pressable
@@ -1079,135 +1078,14 @@ export default function TranscriptionConniptionScreen() {
 
             {showParchment ? (
               <View style={styles.previewShell}>
-                {showReaderTools ? (
-                <View style={styles.configStrip}>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("studio.toggle.expansions")}</Text>
-                    <Switch
-                      value={showExpanded}
-                      onValueChange={setShowExpanded}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("studio.toggle.deletions")}</Text>
-                    <Switch
-                      value={showDeletions}
-                      onValueChange={setShowDeletions}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.diacritics")}</Text>
-                    <Switch
-                      value={showNormalizedDiacritics}
-                      onValueChange={setShowNormalizedDiacritics}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.mufiGraphemes")}</Text>
-                    <Switch
-                      value={useMufiGraphemes}
-                      onValueChange={setUseMufiGraphemes}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.mufiPua")}</Text>
-                    <Switch
-                      value={usePuaFont}
-                      onValueChange={setUsePuaFont}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.lineNumbers")}</Text>
-                    <Switch
-                      value={showLineNumbers}
-                      onValueChange={setShowLineNumbers}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("studio.toggle.otiose")}</Text>
-                    <Switch
-                      value={suppressOtioseMarks}
-                      onValueChange={setSuppressOtioseMarks}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.readingFlow")}</Text>
-                    <Switch
-                      value={showReadingFlow}
-                      onValueChange={setShowReadingFlow}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.synoptic")}</Text>
-                    <Switch
-                      value={showSynoptic}
-                      onValueChange={handleToggleSynoptic}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.modernText")}</Text>
-                    <Switch
-                      value={showModernSynoptic}
-                      onValueChange={handleToggleModernSynoptic}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.facsimile")}</Text>
-                    <Switch
-                      value={facsimileCanvasEnabled}
-                      onValueChange={setFacsimileCanvasEnabled}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("studio.toggle.placeFigure")}</Text>
-                    <Switch
-                      value={placementMode}
-                      onValueChange={setPlacementMode}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                  <View style={styles.toggleCell}>
-                    <Text style={styles.toggleLabel}>{t("editor.toggle.svg")}</Text>
-                    <Switch
-                      value={svgModeEnabled}
-                      onValueChange={setSvgModeEnabled}
-                      thumbColor="#9b2217"
-                      trackColor={{ true: "#dfcba5", false: "#ccc" }}
-                    />
-                  </View>
-                </View>
-                ) : null}
-
-                {showReaderTools ? <IngestPanel /> : null}
-
                 {showCompanionTools ? (
-                <View style={styles.scholarToolbar}>
+                <View style={styles.scholarToolbar} testID="witness-toolbar">
                   <Pressable
                     onPress={() => setConcordanceOpen(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("studio.tool.concordance")}
+                    testID="toolbar-concordance"
                   >
                     <ListOrdered color="#f6d890" size={16} />
                     <Text style={styles.toolButtonText}>{t("studio.tool.concordance")}</Text>
@@ -1215,30 +1093,50 @@ export default function TranscriptionConniptionScreen() {
                   <Pressable
                     onPress={() => setAssistantOpen(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("studio.tool.ask")}
+                    testID="toolbar-ask"
                   >
                     <MessageCircle color="#f6d890" size={16} />
                     <Text style={styles.toolButtonText}>{t("studio.tool.ask")}</Text>
                   </Pressable>
                   <Pressable
-                    onPress={exportTei}
+                    onPress={() => router.push("/modal")}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("studio.tool.issues", {
+                      errors: validationState.errorCount,
+                      warnings: validationState.warningCount,
+                    })}
+                    testID="toolbar-issues"
                   >
-                    <FileCode2 color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>{t("studio.tool.tei")}</Text>
+                    <AlertCircle color="#f6d890" size={16} />
+                    <Text style={styles.toolButtonText}>
+                      {t("studio.tool.issues", {
+                        errors: validationState.errorCount,
+                        warnings: validationState.warningCount,
+                      })}
+                    </Text>
                   </Pressable>
                   <Pressable
                     onPress={() => setExportSheetVisible(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("studio.tool.export")}
+                    testID="toolbar-export"
                   >
                     <Download color="#f6d890" size={16} />
                     <Text style={styles.toolButtonText}>{t("studio.tool.export")}</Text>
                   </Pressable>
                   <Pressable
-                    onPress={() => router.push("/modal")}
+                    onPress={() => setDisplaySheetVisible(true)}
                     style={({ pressed }) => [styles.toolButton, pressed && styles.pressed]}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("display.sheet.title")}
+                    testID="toolbar-display"
                   >
-                    <AlertCircle color="#f6d890" size={16} />
-                    <Text style={styles.toolButtonText}>{t("studio.tool.errors", { count: validationCount })}</Text>
+                    <SlidersHorizontal color="#f6d890" size={16} />
+                    <Text style={styles.toolButtonText}>{t("display.sheet.short")}</Text>
                   </Pressable>
                   {synopticEnabled ? (
                     <View style={styles.toolBadge}>
@@ -1258,6 +1156,8 @@ export default function TranscriptionConniptionScreen() {
                   ) : null}
                 </View>
                 ) : null}
+
+                {showReaderTools ? <IngestPanel /> : null}
 
                 {scrollHighlight ? (
                   <Pressable
@@ -1305,6 +1205,7 @@ export default function TranscriptionConniptionScreen() {
                             useMufiGraphemes={useMufiGraphemes}
                             usePuaFont={usePuaFont}
                             showLineNumbers={showLineNumbers}
+                            onSwitchToReadingView={() => setShowReadingFlow(true)}
                             remeasureFolio={remeasureFolio}
                           />
                         ))
@@ -1340,6 +1241,7 @@ export default function TranscriptionConniptionScreen() {
                         showLineNumbers={showLineNumbers}
                         onCanvasPress={handleCanvasPress}
                         onSetFolioBackground={handleSetFolioBackground}
+                        onSwitchToReadingView={() => setShowReadingFlow(true)}
                         remeasureFolio={remeasureFolio}
                       />
                     ))
@@ -1398,10 +1300,46 @@ export default function TranscriptionConniptionScreen() {
             visible={exportSheetVisible}
             onClose={() => setExportSheetVisible(false)}
             sourceFileName={activeFileName ?? workspace?.sourceFileName}
+            criticalErrorCount={criticalExportErrors}
             onExport={handleExportManuscript}
+          />
+          <DisplaySettingsPopover
+            visible={displaySheetVisible}
+            onClose={() => setDisplaySheetVisible(false)}
+            values={{
+              showExpanded,
+              showDeletions,
+              showNormalizedDiacritics,
+              useMufiGraphemes,
+              usePuaFont,
+              suppressOtioseMarks,
+              showLineNumbers,
+              showReadingFlow,
+              facsimileCanvasEnabled,
+              placementMode,
+              svgModeEnabled,
+              showSynoptic,
+              showModernSynoptic,
+            }}
+            handlers={{
+              setShowExpanded,
+              setShowDeletions,
+              setShowNormalizedDiacritics,
+              setUseMufiGraphemes,
+              setUsePuaFont,
+              setSuppressOtioseMarks,
+              setShowLineNumbers,
+              setShowReadingFlow,
+              setFacsimileCanvasEnabled,
+              setPlacementMode,
+              setSvgModeEnabled,
+              onToggleSynoptic: handleToggleSynoptic,
+              onToggleModernSynoptic: handleToggleModernSynoptic,
+            }}
           />
           </View>
           </FigureImageContext.Provider>
+        </InitialTraditionContext.Provider>
         </ReaderStateContext.Provider>
       </SafeAreaView>
     </LinearGradient>
@@ -1444,6 +1382,7 @@ function FolioPage({
   showLineNumbers,
   onCanvasPress,
   onSetFolioBackground,
+  onSwitchToReadingView,
   remeasureFolio,
 }: {
   folio: FolioSide;
@@ -1462,11 +1401,12 @@ function FolioPage({
   showLineNumbers?: boolean;
   onCanvasPress?: (folioId: string, relX: number, relY: number) => void;
   onSetFolioBackground?: (folioId: string) => void;
+  onSwitchToReadingView?: () => void;
   remeasureFolio: (folioId: string, folioRef: React.RefObject<View | null>) => void;
 }) {
   const t = useT();
   const folioRef = useRef<View>(null);
-  const { showExpanded, showDeletions, suppressOtioseMarks } = useContext(ReaderStateContext);
+  const { showExpanded, showDeletions, suppressOtioseMarks, initialTradition } = useContext(ReaderStateContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1533,16 +1473,19 @@ function FolioPage({
   );
 
   const content = svgMode ? (
-    <SvgFacsimilePage
-      folio={folio}
-      showExpanded={showExpanded}
-      showDeletions={showDeletions}
-      suppressOtioseMarks={suppressOtioseMarks}
-      useNormalizedDiacritics={useNormalizedDiacritics}
-      useMufiGraphemes={useMufiGraphemes}
-      usePuaFont={usePuaFont}
-      showLineNumbers={showLineNumbers !== false}
-    />
+    <FolioViewport pageHeight={1100} onSwitchToReadingView={onSwitchToReadingView}>
+      <SvgFacsimilePage
+        folio={folio}
+        showExpanded={showExpanded}
+        showDeletions={showDeletions}
+        suppressOtioseMarks={suppressOtioseMarks}
+        useNormalizedDiacritics={useNormalizedDiacritics}
+        useMufiGraphemes={useMufiGraphemes}
+        usePuaFont={usePuaFont}
+        showLineNumbers={showLineNumbers !== false}
+        initialTradition={initialTradition}
+      />
+    </FolioViewport>
   ) : diplomaticBody;
 
   return (

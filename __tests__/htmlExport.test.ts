@@ -14,14 +14,14 @@ describe("htmlExport", () => {
     expect(html).not.toContain("{RMK:");
   });
 
-  it("renders float:left drop initials with depth-based font size", () => {
+  it("renders drop initials from the shared initial scene", () => {
     const ast = compileManuscriptTree(DEFAULT_DEMO);
     const html = exportToLegacyHTML(ast);
 
-    expect(html).toContain("float: left");
+    expect(html).toContain("float:left");
     expect(html).toContain("drop-initial-cap");
-    expect(html).toMatch(/font-size: 60px/);
-    expect(html).toContain(">S</span>");
+    expect(html).toContain("<svg");
+    expect(html).toContain(">S</text>");
   });
 
   it("wraps expansions in italic tags", () => {

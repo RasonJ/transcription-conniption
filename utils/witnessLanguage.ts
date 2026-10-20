@@ -13,8 +13,10 @@ export type WitnessLanguage = "SPN" | "PRT" | "GAL" | "CAT" | "LAT";
 export const WITNESS_LANGUAGES: readonly WitnessLanguage[] = ["SPN", "PRT", "GAL", "CAT", "LAT"];
 
 const GALICIAN_PORTUGUESE = new Set([
+  // Keep *he* / *ha* indexable: without a PRT lemma source they must group as word forms
+  // (SPEC-CONCORDANCE-LANGUAGE LEX-3 — never collapse into Spanish *haber*).
   "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do", "dos", "e", "ela", "elas",
-  "ele", "eles", "em", "en", "entre", "era", "foi", "foy", "he", "hu", "hua", "hũa", "huum",
+  "ele", "eles", "em", "en", "entre", "era", "foi", "foy", "hu", "hua", "hũa", "huum",
   "ja", "lhe", "lhi", "lo", "los", "mais", "mas", "me", "mha", "mui", "muito", "muyto", "na",
   "nas", "nem", "no", "nom", "non", "nos", "nõ", "o", "os", "ou", "para", "pera", "per", "pois",
   "por", "porem", "que", "quando", "se", "seu", "seus", "sem", "ser", "sobre", "sua", "suas",

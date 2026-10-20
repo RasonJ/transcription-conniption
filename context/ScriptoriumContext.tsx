@@ -27,6 +27,7 @@ import {
   removeFigureFromWorkspace,
   touchWorkspace,
 } from "@/utils/scriptoriumWorkspace";
+import { openAsNewWorkspace } from "@/utils/workspaceTransactions";
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
 import React, {
@@ -357,10 +358,18 @@ export function ScriptoriumProvider({
     void initializeWorkspace();
   }, [defaultText, hydrateFromWorkspace]);
 
+  // Structural compile follows the live editor buffer (VAL-3) — not gated on blur.
   useEffect(() => {
-    const handle = setTimeout(() => setDebouncedText(editorBuffer), PARSE_DEBOUNCE_MS);
+    const handle = setTimeout(() => setDebouncedText(localEditorBuffer), PARSE_DEBOUNCE_MS);
     return () => clearTimeout(handle);
-  }, [editorBuffer]);
+  }, [localEditorBuffer]);
+
+  // Keep persisted editorBuffer in sync without requiring blur (IA / VAL-3).
+  useEffect(() => {
+    if (localEditorBuffer === editorBuffer) return;
+    const handle = setTimeout(() => setEditorBuffer(localEditorBuffer), 150);
+    return () => clearTimeout(handle);
+  }, [localEditorBuffer, editorBuffer]);
 
   useEffect(() => {
     if (!workspaceReady || !workspace) {
@@ -412,7 +421,12 @@ export function ScriptoriumProvider({
       setCompilationStatus("Compiling manuscript layout…");
       await yieldToUi();
 
-      applyTranscription(fileText, { sourceFileName: fileName });
+      const ws = await openAsNewWorkspace({
+        transcriptionText: fileText,
+        sourceFileName: fileName,
+        manuscriptTitle: inferManuscriptTitle(fileText, fileName),
+      });
+      hydrateFromWorkspace(ws);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("Document import failed", error);
@@ -421,14 +435,19 @@ export function ScriptoriumProvider({
       setIsCompiling(false);
       setCompilationStatus("");
     }
-  }, [applyTranscription, yieldToUi]);
+  }, [hydrateFromWorkspace, yieldToUi]);
 
   const loadSample = useCallback(
     async (sample: string, sampleName: string) => {
-      applyTranscription(sample, { sourceFileName: `${sampleName}.txt` });
+      const ws = await openAsNewWorkspace({
+        transcriptionText: sample,
+        sourceFileName: `${sampleName}.txt`,
+        manuscriptTitle: inferManuscriptTitle(sample, `${sampleName}.txt`),
+      });
+      hydrateFromWorkspace(ws);
       await Haptics.selectionAsync();
     },
-    [applyTranscription],
+    [hydrateFromWorkspace],
   );
 
   const exportHsmsBundle = useCallback(async () => {

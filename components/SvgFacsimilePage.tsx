@@ -1,6 +1,8 @@
 import { useT } from "@/i18n/runtime";
 import { FigureImageContext } from "@/components/FigurePlaceholder";
 import { renderOrnateInitialSvg } from "@/components/svgFacsimile/renderOrnateInitial";
+import { buildInitialScene, type InitialTradition } from "@/utils/initials/scene";
+import { resolveInitialSpec } from "@/utils/initials/spec";
 import { getPrintableBlocks, flattenFolioLayoutGroups, groupFolioLayout } from "@/components/svgFacsimile/folioGroups";
 import { renderJustifiedNativeLine } from "@/components/svgFacsimile/justifiedNativeLine";
 import { segsLineWidth } from "@/components/svgFacsimile/glyphMetrics";
@@ -22,7 +24,6 @@ import {
   BLOCK_GAP_AFTER_INITIAL,
   CANVAS_W,
   CAP_GUTTER,
-  dropCapBoxWidth,
   columnWidth,
   GUTTER_WIDTH,
   HEADING_GAP,
@@ -34,7 +35,6 @@ import {
   RULE_STROKE,
 } from "@/components/svgFacsimile/pageLayout";
 import type { FolioSide, ManuscriptBlock } from "@/constants/manuscript";
-import { dropCapFontSize } from "@/utils/dropInitial";
 import { resolveStoredFileUri } from "@/utils/expoFileSystem";
 import { blockIsMetadataLeak } from "@/utils/metadataBlocks";
 import { formatRunningHeaderText } from "@/utils/metadataText";
@@ -166,6 +166,7 @@ function layoutBlock(
   triggerPick?: (id: string) => void,
   wrapBackSuffix?: string,
   isLastLine = false,
+  initialTradition: InitialTradition = "ms.penwork",
 ): LayoutResult {
   const elems: React.ReactNode[] = [];
   let nextCapState = capState;
@@ -238,12 +239,18 @@ function layoutBlock(
       const inlineFS = Math.round(FS * 1.4);
       lineSegs.unshift(seg({ text: initialLetter, fill: RUBRIC_FILL, bold: true, fs: inlineFS }));
     } else {
-      const capH = initialDepth * LH;
-      const letterCount = Math.max(1, initialLetter.length);
-      const capW = dropCapBoxWidth(capH, letterCount);
-      const capFS =
-        Math.min(dropCapFontSize(initialDepth), capH * 0.78) /
-        (letterCount > 1 ? 1 + 0.22 * (letterCount - 1) : 1);
+      const scene = buildInitialScene(
+        resolveInitialSpec({
+          letter: initialLetter,
+          depth: initialDepth,
+          tradition: initialTradition,
+          sequence: blockIndex,
+          seed: `${folioId}|${initialLetter}|${blockIndex}`,
+        }),
+        LH,
+      );
+      const capH = scene.boxHeight;
+      const capW = scene.boxWidth;
       const dropcapId = `dc_${bkey}`;
       const storedUri = uploadedImages[dropcapId];
       const displayUri = storedUri ? resolveStoredFileUri(storedUri) : undefined;
@@ -255,12 +262,13 @@ function layoutBlock(
           startY,
           capW,
           capH,
-          capFS,
+          capH * 0.72,
           folioId,
           blockIndex,
           bkey,
           displayUri,
           triggerPick ? () => triggerPick(dropcapId) : undefined,
+          { tradition: initialTradition, depth: initialDepth },
         ),
       );
 
@@ -402,6 +410,8 @@ export interface SvgFacsimilePageProps {
   usePuaFont?: boolean;
   /** Left-gutter scholarly line numbers (default true). */
   showLineNumbers?: boolean;
+  /** Witness-level decorated-initial tradition (from {RMK:}). */
+  initialTradition?: InitialTradition;
 }
 
 export function SvgFacsimilePage({
@@ -413,6 +423,7 @@ export function SvgFacsimilePage({
   useMufiGraphemes = false,
   usePuaFont = true,
   showLineNumbers = true,
+  initialTradition = "ms.penwork",
 }: SvgFacsimilePageProps) {
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const t = useT();
@@ -527,6 +538,7 @@ export function SvgFacsimilePage({
         triggerImagePick,
         group.wrapBackSuffix,
         group.isLastLine ?? false,
+        initialTradition,
       );
       svgElems.push(...elements);
       curY += heightUsed + gapAfter(group.block);
@@ -563,6 +575,7 @@ export function SvgFacsimilePage({
             triggerImagePick,
             wrapBackSuffix,
             isLastLine,
+            initialTradition,
           );
           svgElems.push(...result.elements);
           leftCap = result.capState;
@@ -586,6 +599,7 @@ export function SvgFacsimilePage({
             triggerImagePick,
             wrapBackSuffix,
             isLastLine,
+            initialTradition,
           );
           svgElems.push(...result.elements);
           rightCap = result.capState;

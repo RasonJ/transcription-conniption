@@ -1,0 +1,237 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Transcription Conniption Walkthrough</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Source+Sans+3:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: single reading column; each finding = text beside its annotated screen, stacking on phones */
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1c2230; --muted:#5b6475; --rule:#dde1e8;
+  --rubric:#a8261c; --code-bg:#eef1f5;
+  --broken:#a8261c; --broken-bg:#fbe9e7; --confusing:#8a5a00; --confusing-bg:#fdf1d8; --polish:#2f5b8a; --polish-bg:#e5eef8; --good:#2c6e49; --good-bg:#e3f2e8;
+  --f-display:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-body:"Source Sans 3",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12151b; --surface:#1a1e26; --ink:#e6e9ef; --muted:#9aa3b2; --rule:#2c323d; --rubric:#ff7a6b; --code-bg:#232833;
+  --broken:#ff8a7a; --broken-bg:#3a1d1a; --confusing:#f0c060; --confusing-bg:#33290f; --polish:#8ab8ec; --polish-bg:#18283a; --good:#7fd1a0; --good-bg:#15301f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12151b; --surface:#1a1e26; --ink:#e6e9ef; --muted:#9aa3b2; --rule:#2c323d; --rubric:#ff7a6b; --code-bg:#232833;
+  --broken:#ff8a7a; --broken-bg:#3a1d1a; --confusing:#f0c060; --confusing-bg:#33290f; --polish:#8ab8ec; --polish-bg:#18283a; --good:#7fd1a0; --good-bg:#15301f; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body)}
+.wrap{max-width:1040px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:48px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:2.4rem}
+h2{font-size:1.6rem;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+h3{font-size:1.25rem}
+p{margin:0}
+.eyebrow{font:600 .78rem/1 var(--f-body);letter-spacing:.09em;text-transform:uppercase;color:var(--rubric)}
+.lede{color:var(--muted);max-width:65ch}
+header{display:grid;gap:14px}
+.meta{font-size:.9rem;color:var(--muted)}
+code,.mono{font-family:var(--f-mono);font-size:.86em;background:var(--code-bg);padding:1px 5px;border-radius:4px}
+section{display:grid;gap:22px}
+.top{display:grid;gap:10px;padding:0;margin:0;list-style:none;counter-reset:t}
+.top li{display:grid;grid-template-columns:2rem 1fr;gap:8px;align-items:baseline}
+.top li::before{counter-increment:t;content:counter(t);font:600 1.1rem var(--f-display);color:var(--rubric)}
+.good{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.good div{background:var(--good-bg);border-radius:8px;padding:12px 14px;font-size:.95rem;min-width:0}
+.good b{display:block;color:var(--good)}
+.finding{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:28px;align-items:start;padding-block:22px;border-top:1px solid var(--rule)}
+.finding:first-of-type{border-top:0}
+.finding .text{display:grid;gap:12px;min-width:0}
+.finding figure{margin:0;display:grid;gap:12px}
+.finding img{width:100%;border:1px solid var(--rule);border-radius:6px;display:block}
+.finding figcaption{font-size:.82rem;color:var(--muted)}
+.tagrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sev{font:700 .72rem/1 var(--f-body);letter-spacing:.07em;text-transform:uppercase;padding:5px 8px;border-radius:999px}
+.sev.broken{color:var(--broken);background:var(--broken-bg)}
+.sev.confusing{color:var(--confusing);background:var(--confusing-bg)}
+.sev.polish{color:var(--polish);background:var(--polish-bg)}
+.where{font-size:.85rem;color:var(--muted)}
+.finding ul{margin:0;padding-left:1.2rem;display:grid;gap:6px}
+.fix{border-left:3px solid var(--rubric);padding:4px 0 4px 12px}
+.fix b{color:var(--rubric)}
+.note{font-size:.92rem;color:var(--muted);max-width:70ch}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.9rem;color:var(--muted)}
+.legend span{display:flex;gap:8px;align-items:center}
+@media (max-width:760px){.finding{grid-template-columns:1fr}h1{font-size:1.9rem}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Usability walkthrough · 20 October 2026</div>
+  <h1>Transcription Conniption walkthrough</h1>
+  <p class="lede">I used the running web build at <span class="mono">localhost:8081</span> the way a researcher would. I read the Pedro Nunes sample, edited its HSMS source, ran the concordance and the assistant, exported, and opened a Celestina witness from the Library. Below are the 11 problems I found, ranked by how much they get in the way of research. Each one is marked on the screen where it happens.</p>
+  <p class="meta">Tested in the desktop app's browser pane at 705 px wide (roughly a tablet or a half-width laptop window), plus a 375 px phone viewport. I removed my test edits from the sample afterward.</p>
+  <div class="legend">
+    <span><i class="sev broken">Broken</i> gives wrong results or blocks the task</span>
+    <span><i class="sev confusing">Confusing</i> works, but misleads or slows people down</span>
+    <span><i class="sev polish">Polish</i> cleanup, accessibility, wording</span>
+  </div>
+</header>
+
+<section>
+  <h2>Fix these first</h2>
+  <ol class="top">
+    <li><span><b>Make the parchment fit the screen.</b> Below about 740 px the right edge is cut off, which hides glosses, catchwords and the leaf label. On a phone the text is clipped on both sides.</span></li>
+    <li><span><b>Keep one validation result.</b> While you type, the two validation panels show different results, and the structural check only runs once the editor loses focus.</span></li>
+    <li><span><b>Make the validator, the renderer and the samples follow the same rules.</b> A catchword left open inside a column passed without comment. Meanwhile the sample's own gloss uses <code>{GLR.}</code>, which isn't in the HSMS manual (the manual uses <code>{GL. [^text]}</code>, §3.239a): the page view draws it as a gloss while the linter flags it.</span></li>
+    <li><span><b>Stop using Spanish lemmas for Portuguese.</b> The concordance files 5 of the 6 copular <i>he</i> in Nunes under <i>haber</i>.</span></li>
+    <li><span><b>Make buttons and switches real controls.</b> Most of them can't be reached with a keyboard or screen reader.</span></li>
+  </ol>
+</section>
+
+<section>
+  <h2>What already works</h2>
+  <div class="good">
+    <div><b>Assistant answers you can cite</b>Suggested-question chips, a method line with the recipe expression, and CSV/TSV export. That covers most of what I suggested earlier.</div>
+    <div><b>Error → canvas jump</b>"Jump to line on canvas" goes to the right folio and line, and the focus bar follows the editor cursor.</div>
+    <div><b>The rendering itself</b>The drop initial, rubric, superscript expansions and gloss placement read as a faithful page.</div>
+    <div><b>Library search</b>739 witnesses, filterable by author, year and keyword, each opening straight into the Studio.</div>
+    <div><b>Interface languages</b>Iberian and Latin American languages, with community translations marked as such.</div>
+  </div>
+</section>
+
+<section>
+  <h2>Findings</h2>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev broken">Broken</i><span class="where">Studio · Parchment, reader and editor modes</span></div>
+      <h3>1. The parchment is cut off below about 740 px</h3>
+      <p>The folio has a fixed width inside a container with <code>overflow-x: hidden</code> (734 px of content in a 667 px box). Anything past the right edge can't be reached: the leaf label (1), the marginal gloss (2) and the catchword (3). On a 375 px phone the main text is also clipped on the left, and the page shows only about ten lines before blank space.</p>
+      <p class="fix"><b>Fix:</b> scale the folio to the container width (SVG <code>viewBox</code> or a CSS transform), so every element stays proportionate. Add pinch and zoom controls for close reading. If the page has to stay at native size, use horizontal scrolling with a visible edge shadow instead of hiding the overflow.</p>
+    </div>
+    <figure><img src="img/clipped.jpg" alt="Parchment view with the leaf label, marginal gloss and catchword cut off at the right edge"><img src="img/mobile.jpg" alt="Phone-width view with text clipped on both sides"><figcaption>Top: 705 px. Bottom: 375 px phone, Celestina auto 02.</figcaption></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev broken">Broken</i><span class="where">Studio · Advanced editor → Transcription Code</span></div>
+      <h3>2. The two validation panels disagree while you type</h3>
+      <p>I added a test line <code>{ZZZ. test}</code> at the top. The line-level banner (1) updated at once: 2 warnings, at L1 and L20. The structural panel just below it (2) kept showing the old result: 1 warning at L19. "Parsing manuscript structure…" (3) stayed on screen for more than 14 seconds and only cleared once I clicked outside the editor.</p>
+      <p>So the same warning appears in three places (banner, panel, full sheet) with different counts and different line numbers. That's the moment researchers stop trusting the checker.</p>
+      <p class="fix"><b>Fix:</b> show a single validation list. Run the structural pass on the same debounce as the line checks, not on blur. If it must lag, gray out the stale entries and show a spinner that actually finishes.</p>
+    </div>
+    <figure><img src="img/stale.jpg" alt="Editor with two validation panels showing different warning counts"><figcaption>(4) is the catchword I left open, which neither panel reported. (5) shows the browser spellcheck underlining Old Portuguese.</figcaption></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev broken">Broken</i><span class="where">Linter / structural validation</span></div>
+      <h3>3. Real errors pass, and the parts of the app follow different rules</h3>
+      <ul>
+        <li><b>Missed:</b> I typed <code>{CW. a</code> right after <code>{CB1.</code>, which puts a catchword inside the column with no closing brace. Manual §4.2 says the catchword goes on its own line after the column's closing brace. Neither panel reported it, and the unbalanced brace went unflagged too.</li>
+        <li><b>Inconsistent:</b> the bundled sample marks its gloss with <code>{GLR.}</code>. That isn't in the manual's mnemonic list; §3.239a uses <code>{GL. [^text]}</code>. The page view still draws it as a margin gloss, while the linter calls it an "unrecognized HSMS tag" (1). So the parser and the linter use different tag catalogs, and the first thing a new user sees is a warning on your own demo.</li>
+        <li><b>Message:</b> (2) tells the user to "verify against the mnemonic catalog" but doesn't link to it, cite a manual section, or offer a fix.</li>
+      </ul>
+      <p class="fix"><b>Fix:</b> build the linter's and the parser's tag lists from one registry taken from the manual's mnemonic index, and mark any app-only tags as extensions. Rewrite the sample's gloss as <code>{GL. [^…]}</code>. Add brace-balance and placement rules (§3.239a(e) close inside the column, §4.2 catchword and signature, §3.12 column end, §5.1 remark periods), and give every message a manual section and a one-tap fix where one exists.</p>
+    </div>
+    <figure><img src="img/validation.jpg" alt="Structural validation sheet with one warning about {GLR."></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev broken">Broken</i><span class="where">Studio · Concordance</span></div>
+      <h3>4. Portuguese text gets Spanish lemmas</h3>
+      <p>Nunes's <i>Tratado da sphera</i> is Portuguese, but the concordance lemmatizes it with the Old Spanish dictionary. In five of the six hits under <b>haber</b>, <i>he</i> is the Portuguese copula "é" (<i>"a primeira he sustancial"</i>). The list also shows <b>atar</b> (from <i>ate</i>, "até"), <b>acid</b> (a truncated <i>acidẽtal</i>) and <b>tu</b>. A researcher who exports these counts gets wrong numbers without any warning.</p>
+      <p>Smaller issues: the keyword isn't centered in a fixed column (as is standard for KWIC), hits show the folio but not the line, the scrollbar covers the counts, and there is no export from this drawer.</p>
+      <p class="fix"><b>Fix:</b> lemmatize only when the witness language matches the dictionary. Otherwise group by surface form and say why ("Lemmas available for Old Spanish only"). Show the surface form next to each lemma, so wrong mappings are easy to spot.</p>
+    </div>
+    <figure><img src="img/concordance.jpg" alt="Concordance listing 'haber' with hits that are Portuguese 'he' meaning 'is'"></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev confusing">Confusing</i><span class="where">Studio · toolbar and validation</span></div>
+      <h3>5. Error counts and line numbers don't match</h3>
+      <ul>
+        <li>The button reads <b>Errors (1)</b> (B), but the sheet it opens says "0 errors · 1 warning". Call it "Issues", or show both counts.</li>
+        <li>The same item is called "L19" (line in the source file) and "13" (manuscript line) on the same row, with no label for either.</li>
+        <li>"Jump to line on canvas" sets the focus bar but doesn't highlight or scroll to the target line. There's no jump to the source line, which is where the fix happens.</li>
+      </ul>
+      <p class="fix"><b>Fix:</b> label the two numbers ("source line 19 · ms. line 13"), highlight the target line, and add "Edit this line", which opens the code view with the cursor on that line.</p>
+    </div>
+    <figure><img src="img/reader.jpg" alt="Reader view with duplicated Ask and Export buttons and an Errors (1) button"><figcaption>(A) Ask and Export each appear twice on this screen. (B) "Errors (1)" opens a sheet that reports 0 errors.</figcaption></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev confusing">Confusing</i><span class="where">Studio · Transcription Code</span></div>
+      <h3>6. The source editor is a plain text box</h3>
+      <ul>
+        <li>There are no source line numbers, so "L19" can't be found except by counting.</li>
+        <li>The browser spellcheck is on (<code>spellcheck=true</code>), so nearly every Old Portuguese word gets a red squiggle. That looks like an error and competes with the real ones.</li>
+        <li>Code and parchment are alternate tabs, so you can't see a change and its result together. At this width that's reasonable, but on a desktop window they should sit side by side.</li>
+        <li>The editor sits below the toolbar, the editor tools and the validation panels, so it's the fourth thing on the screen in a mode built for editing.</li>
+      </ul>
+      <p class="fix"><b>Fix:</b> turn spellcheck off, add a line-number gutter, show code and parchment side by side above about 1000 px, and move validation into a collapsible strip under the editor.</p>
+    </div>
+    <figure><img src="img/editortools.jpg" alt="Advanced editor tools: New blank scriptorium, Batch folder, Export .hsms, Import .hsms, Nunes demo, Simple, LAT span, Graphics"></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev confusing">Confusing</i><span class="where">Studio · editor tools, display toggles, exports</span></div>
+      <h3>7. Too many controls, too much jargon</h3>
+      <ul>
+        <li>Sample loaders (<i>Nunes demo, Simple, LAT span, Graphics</i>) sit in the same row as file actions (<i>New blank scriptorium, Batch folder, Import/Export .hsms</i>). A researcher can't tell which ones replace their work.</li>
+        <li>Thirteen display toggles sit in one flat grid. Off is red and on is teal, so the off state looks like an error, and color is the only cue. Group them by purpose: <i>Text</i> (expansions, deletions, diacritics, MUFI), <i>Layout</i> (line numbers, reading flow, facsimile, figures), <i>Compare</i> (synoptic, modern text).</li>
+        <li>Exporting has three separate entry points: the Export sheet (txt/html/svg/png/jpg), a separate TEI export button, and Export .hsms in the editor tools. TEI, the format scholars most need, isn't in the Export sheet. One choice there is described as "Legacy table layout for browsers", which makes it sound like the wrong one to pick.</li>
+        <li>"Scriptorium", "PUA", "otiose", "SVG canvas" and "Place figure" are developer terms. Each label should say what the user will see change.</li>
+      </ul>
+      <p class="fix"><b>Fix:</b> make one Export sheet with every format (TEI and .hsms included), a "Samples" menu separate from file actions, and grouped toggles with plain labels and an on/off cue that doesn't rely on color.</p>
+    </div>
+    <figure><img src="img/toggles.jpg" alt="Grid of 13 display toggles with red and teal states"><img src="img/export.jpg" alt="Export sheet with five formats and no TEI option"></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev polish">Polish</i><span class="where">Studio · Assistant</span></div>
+      <h3>8. Unexplained badges on assistant answers</h3>
+      <p>The answer is good and can be reproduced. Around it, though, sit unexplained badges: "A · Exact" (1), a bare "64%" (2), and a developer timer, "4.90 ms" (3). The chip counts (e.g. "Zipf 62") don't say what they count.</p>
+      <p>It also says <i>sphera</i> occurs 4 times, while the concordance shows <i>esfera</i> 6, because the assistant counts exact word forms and the concordance groups by lemma. Neither one explains the difference.</p>
+      <p class="fix"><b>Fix:</b> hide the timer outside dev builds. Turn the tier and the percentage into plain words with a tooltip ("Exact count · matched 64% of the question"). Add one line: "Exact form only. Including <i>spheras</i>: 6."</p>
+    </div>
+    <figure><img src="img/copilot.jpg" alt="Assistant answer card with A · Exact badge, 64% and 4.90 ms"></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev polish">Polish</i><span class="where">Library</span></div>
+      <h3>9. Library entries are named after their files</h3>
+      <p>Entries show the file path instead of a title: "1500/auto 02 (Celestina)". The first entry is ". desconocido" (1). <i>Celestina</i> takes up about 40 separate rows (2), one per act file, which buries everything after it. Opening a witness shows its file name, not its title and author.</p>
+      <p class="fix"><b>Fix:</b> show the title, author, date and shelfmark from the catalog, group parts of the same work under one entry, and sort by author or date with a choice of order.</p>
+    </div>
+    <figure><img src="img/library.jpg" alt="Library list showing file-path titles and a '. desconocido' entry"></figure>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev polish">Polish</i><span class="where">Whole app · accessibility</span></div>
+      <h3>10. Most controls aren't real buttons</h3>
+      <p>In the accessibility tree, Advanced editor, Export, Concordance, TEI export, Errors, every editor tool and every "Open in Studio" link show up as plain <code>generic</code> elements, not buttons. All 13 display switches are announced only as "on", with no name. The bottom tabs have no names either. Keyboard and screen-reader users can't operate most of the Studio.</p>
+      <p class="fix"><b>Fix:</b> give every Pressable <code>accessibilityRole="button"</code> and a label, label each Switch, and name the tab-bar items. Then check it with a keyboard-only pass.</p>
+    </div>
+  </article>
+
+  <article class="finding">
+    <div class="text">
+      <div class="tagrow"><i class="sev polish">Polish</i><span class="where">Sources tab</span></div>
+      <h3>11. Developer text on the Sources page</h3>
+      <ul>
+        <li>The language list includes the pseudo-locale <span class="mono">[Ëñglîsh ~~~]</span>. Hide it outside dev builds.</li>
+        <li>The description reads as a spec: "real-time vector rendering engine… precise coordinate vector metrics". It also mentions "MCP: audit_hsms_syntax" and the repo path "docs/OSTA-guide.md", neither of which means anything to a researcher.</li>
+        <li>The language picker opens the Sources page, but most people will look for it next to the language chip in the Studio header.</li>
+      </ul>
+      <p class="fix"><b>Fix:</b> rewrite the intro in two sentences a paleographer would write. Link the OSTA guide as a page, not a file path.</p>
+    </div>
+  </article>
+</section>
+
+<p class="note">I didn't test PDF or image ingest (it needs the backend), batch folders, or a facsimile with a real image attached, so a pass with the backend on would round this out. Earlier I suggested suggested-question chips, a method line and result export for the assistant; those are already built.</p>
+</div>
+
+</body></html>

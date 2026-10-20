@@ -2,11 +2,12 @@ import { scriptoriumTheme } from "@/constants/scriptoriumTheme";
 import { useScriptorium } from "@/context/ScriptoriumContext";
 import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
 import { useT } from "@/i18n/runtime";
-import type { LibraryCatalogEntry } from "@/utils/libraryCatalog";
+import type { LibraryCatalogEntry, WorkGroup } from "@/utils/libraryCatalog";
 import { countLibraryByStatus } from "@/utils/libraryCatalog";
+import { createWorkspaceFromLibraryEntry } from "@/utils/workspaceIngest";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { BookMarked, RefreshCw, Search } from "lucide-react-native";
+import { BookMarked, ChevronDown, ChevronRight, RefreshCw, Search } from "lucide-react-native";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   ActivityIndicator,
@@ -21,7 +22,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-function LibraryRow({
+function LibraryPartRow({
   entry,
   onOpen,
   opening,
@@ -32,43 +33,118 @@ function LibraryRow({
 }) {
   const t = useT();
   const disabled = entry.status !== "ok" || opening;
-
   return (
     <Pressable
       onPress={() => onOpen(entry)}
       disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={t("library.open")}
       style={({ pressed }) => [
-        styles.rowCard,
+        styles.partRow,
         pressed && !disabled && styles.rowPressed,
         disabled && styles.rowDisabled,
       ]}
     >
-      <View style={styles.rowHeader}>
-        <Text style={styles.rowTitle} numberOfLines={2}>
-          {entry.title || entry.baseName}
-        </Text>
-        {entry.status === "failed" ? (
-          <View style={styles.badgeFailed}>
-            <Text style={styles.badgeFailedText}>{t("library.failed")}</Text>
-          </View>
-        ) : null}
-      </View>
-      <Text style={styles.rowMeta}>
-        {entry.author ? `${entry.author}` : t("library.unknownAuthor")}
-        {entry.year ? ` · ${entry.year}` : ""}
+      <Text style={styles.partTitle} numberOfLines={1}>
+        {entry.partLabel || entry.title}
       </Text>
-      {(entry.city || entry.printer) && (
-        <Text style={styles.rowSubMeta} numberOfLines={1}>
-          {[entry.city, entry.printer].filter(Boolean).join(" · ")}
-        </Text>
-      )}
-      <Text style={styles.rowFile}>{entry.sourceFileName}</Text>
-      {entry.status === "ok" && (
-        <Text style={styles.rowAction}>
-          {opening ? t("library.opening") : t("library.open")}
-        </Text>
-      )}
+      <Text style={styles.rowAction}>
+        {opening ? t("library.opening") : t("library.open")}
+      </Text>
     </Pressable>
+  );
+}
+
+function WorkGroupCard({
+  group,
+  expanded,
+  onToggle,
+  onOpen,
+  loadingEntryId,
+}: {
+  group: WorkGroup;
+  expanded: boolean;
+  onToggle: () => void;
+  onOpen: (entry: LibraryCatalogEntry) => void;
+  loadingEntryId: string | null;
+}) {
+  const t = useT();
+  const multi = group.parts.length > 1;
+  const primary = group.primaryEntry;
+
+  return (
+    <View style={styles.rowCard}>
+      <Pressable
+        onPress={multi ? onToggle : () => onOpen(primary)}
+        accessibilityRole="button"
+        accessibilityState={multi ? { expanded } : undefined}
+        accessibilityLabel={group.title}
+        style={({ pressed }) => [pressed && styles.rowPressed]}
+      >
+        <View style={styles.rowHeader}>
+          <Text style={styles.rowTitle} numberOfLines={2}>
+            {group.title}
+          </Text>
+          {multi ? (
+            <View style={styles.partsBadge}>
+              {expanded ? (
+                <ChevronDown color={scriptoriumTheme.goldMuted} size={16} />
+              ) : (
+                <ChevronRight color={scriptoriumTheme.goldMuted} size={16} />
+              )}
+              <Text style={styles.partsBadgeText}>
+                {group.parts.length} parts
+              </Text>
+            </View>
+          ) : primary.status === "failed" ? (
+            <View style={styles.badgeFailed}>
+              <Text style={styles.badgeFailedText}>{t("library.failed")}</Text>
+            </View>
+          ) : null}
+        </View>
+        <Text style={styles.rowMeta}>
+          {group.authorUnknown || !group.author
+            ? t("library.unknownAuthor")
+            : group.author}
+          {group.yearRange ? ` · ${group.yearRange}` : ""}
+        </Text>
+        {(primary.city || primary.repository || primary.printer) && (
+          <Text style={styles.rowSubMeta} numberOfLines={1}>
+            {[primary.city, primary.repository || primary.printer]
+              .filter(Boolean)
+              .join(" · ")}
+          </Text>
+        )}
+        {primary.hsmsId ? (
+          <Text style={styles.rowHsms}>{primary.hsmsId}</Text>
+        ) : null}
+      </Pressable>
+
+      {!multi && primary.status === "ok" ? (
+        <Pressable
+          onPress={() => onOpen(primary)}
+          accessibilityRole="button"
+          accessibilityLabel={t("library.open")}
+          disabled={loadingEntryId === primary.id}
+          style={styles.openBtn}
+        >
+          <Text style={styles.rowAction}>
+            {loadingEntryId === primary.id ? t("library.opening") : t("library.open")}
+          </Text>
+        </Pressable>
+      ) : null}
+
+      {multi && expanded
+        ? group.parts.map((part) => (
+            <LibraryPartRow
+              key={part.id}
+              entry={part}
+              onOpen={onOpen}
+              opening={loadingEntryId === part.id}
+            />
+          ))
+        : null}
+    </View>
   );
 }
 
@@ -76,7 +152,7 @@ export default function LibraryScreen() {
   const t = useT();
   const { width } = useWindowDimensions();
   const isWide = width >= 840;
-  const { applyTranscription } = useScriptorium();
+  const { hydrateFromWorkspace } = useScriptorium();
   const {
     loadState,
     catalog,
@@ -84,11 +160,13 @@ export default function LibraryScreen() {
     filters,
     setFilters,
     filteredEntries,
+    workGroups,
     reload,
     loadEntryPayload,
     loadingEntryId,
   } = useLibraryCatalog();
   const [openError, setOpenError] = useState<string | null>(null);
+  const [expandedWorks, setExpandedWorks] = useState<Record<string, boolean>>({});
 
   const statusCounts = useMemo(
     () => (catalog ? countLibraryByStatus(catalog.entries) : { ok: 0, failed: 0 }),
@@ -100,10 +178,8 @@ export default function LibraryScreen() {
       setOpenError(null);
       try {
         const payload = await loadEntryPayload(entry);
-        applyTranscription(payload.transcriptionText, {
-          sourceFileName: payload.sourceFileName,
-          manuscriptTitle: payload.title,
-        });
+        const ws = await createWorkspaceFromLibraryEntry(entry, payload.transcriptionText);
+        hydrateFromWorkspace(ws);
         router.navigate("/(tabs)/");
       } catch (err) {
         const message =
@@ -112,7 +188,7 @@ export default function LibraryScreen() {
         Alert.alert(t("library.alertTitle"), message);
       }
     },
-    [applyTranscription, loadEntryPayload, t],
+    [hydrateFromWorkspace, loadEntryPayload, t],
   );
 
   return (
@@ -134,6 +210,8 @@ export default function LibraryScreen() {
             </View>
             <Pressable
               onPress={() => void reload()}
+              accessibilityRole="button"
+              accessibilityLabel={t("library.refresh")}
               style={({ pressed }) => [styles.refreshBtn, pressed && styles.refreshPressed]}
             >
               <RefreshCw color={scriptoriumTheme.goldMuted} size={18} />
@@ -203,10 +281,7 @@ export default function LibraryScreen() {
           {loadState === "ready" && catalog && (
             <>
               <Text style={styles.resultsLine}>
-                {t("library.results", {
-                  shown: filteredEntries.length,
-                  total: catalog.entryCount,
-                })}
+                {filteredEntries.length} witnesses in {workGroups.length} works
                 {statusCounts.failed > 0
                   ? t("library.resultsFailed", {
                       ok: statusCounts.ok,
@@ -215,15 +290,22 @@ export default function LibraryScreen() {
                   : ""}
               </Text>
               {openError ? <Text style={styles.openError}>{openError}</Text> : null}
-              {filteredEntries.length === 0 ? (
+              {workGroups.length === 0 ? (
                 <Text style={styles.empty}>{t("library.empty")}</Text>
               ) : (
-                filteredEntries.map((entry) => (
-                  <LibraryRow
-                    key={entry.id}
-                    entry={entry}
+                workGroups.map((group) => (
+                  <WorkGroupCard
+                    key={group.workId}
+                    group={group}
+                    expanded={Boolean(expandedWorks[group.workId])}
+                    onToggle={() =>
+                      setExpandedWorks((prev) => ({
+                        ...prev,
+                        [group.workId]: !prev[group.workId],
+                      }))
+                    }
                     onOpen={handleOpen}
-                    opening={loadingEntryId === entry.id}
+                    loadingEntryId={loadingEntryId}
                   />
                 ))
               )}
@@ -297,14 +379,14 @@ const styles = StyleSheet.create({
   searchPanel: {
     backgroundColor: "rgba(255,253,244,0.04)",
     borderRadius: 16,
-    borderWidth: 1,
-    borderColor: "rgba(246,216,144,0.18)",
     padding: 14,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.12)",
     gap: 10,
   },
   searchPanelWide: { padding: 18 },
   searchLabelRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  searchLabel: { color: scriptoriumTheme.goldMuted, fontWeight: "800", fontSize: 12 },
+  searchLabel: { color: scriptoriumTheme.goldMuted, fontWeight: "700", fontSize: 13 },
   searchGrid: { gap: 10 },
   searchGridWide: { flexDirection: "row", flexWrap: "wrap" },
   fieldWrap: { gap: 4, flexGrow: 1, minWidth: 140 },
@@ -314,54 +396,70 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.25)",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "rgba(246,216,144,0.2)",
+    borderColor: "rgba(246,216,144,0.15)",
+    color: "#fff4d2",
     paddingHorizontal: 12,
     paddingVertical: 10,
-    color: "#fff4d2",
     fontSize: 14,
   },
-  statusBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    padding: 16,
-  },
-  statusText: { color: "rgba(255,244,210,0.7)", fontSize: 14 },
+  statusBox: { alignItems: "center", gap: 10, paddingVertical: 24 },
+  statusText: { color: "rgba(255,244,210,0.7)" },
   errorBox: {
-    backgroundColor: "rgba(155,34,23,0.2)",
-    borderRadius: 14,
+    backgroundColor: "rgba(155,34,23,0.25)",
+    borderRadius: 12,
     padding: 14,
     gap: 6,
-    borderWidth: 1,
-    borderColor: "rgba(155,34,23,0.4)",
   },
-  errorTitle: { color: "#f6d890", fontWeight: "800", fontSize: 15 },
+  errorTitle: { color: "#ef9a9a", fontWeight: "800" },
   errorBody: { color: "#fff4d2", fontSize: 13 },
-  errorHint: { color: "rgba(255,244,210,0.55)", fontSize: 12, lineHeight: 17 },
-  resultsLine: { color: "rgba(246,216,144,0.7)", fontSize: 13, fontWeight: "600" },
-  openError: { color: "#e88", fontSize: 13 },
-  empty: { color: "rgba(255,244,210,0.55)", fontStyle: "italic", marginTop: 8 },
+  errorHint: { color: "rgba(255,244,210,0.55)", fontSize: 12 },
+  resultsLine: { color: "rgba(246,216,144,0.7)", fontSize: 12, fontWeight: "600" },
+  openError: { color: "#ef9a9a", fontSize: 12 },
+  empty: { color: "#99836a", textAlign: "center", paddingVertical: 24, fontStyle: "italic" },
   rowCard: {
     backgroundColor: "rgba(255,253,244,0.05)",
     borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "rgba(246,216,144,0.18)",
     padding: 14,
-    gap: 4,
+    borderWidth: 1,
+    borderColor: "rgba(246,216,144,0.12)",
+    gap: 6,
   },
-  rowPressed: { backgroundColor: "rgba(246,216,144,0.12)" },
-  rowDisabled: { opacity: 0.55 },
-  rowHeader: { flexDirection: "row", justifyContent: "space-between", gap: 8 },
-  rowTitle: { color: "#fff4d2", fontSize: 15, fontWeight: "800", flex: 1 },
+  rowPressed: { opacity: 0.85 },
+  rowDisabled: { opacity: 0.45 },
+  rowHeader: { flexDirection: "row", justifyContent: "space-between", gap: 8, alignItems: "flex-start" },
+  rowTitle: { color: "#fff4d2", fontSize: 16, fontWeight: "800", flex: 1 },
+  rowMeta: { color: "rgba(255,244,210,0.75)", fontSize: 13 },
+  rowSubMeta: { color: "rgba(255,244,210,0.5)", fontSize: 12 },
+  rowHsms: { color: "rgba(246,216,144,0.55)", fontSize: 11, fontFamily: "monospace" },
+  rowAction: { color: scriptoriumTheme.gold, fontWeight: "800", fontSize: 13, marginTop: 4 },
+  openBtn: { alignSelf: "flex-start", minHeight: 44, justifyContent: "center" },
   badgeFailed: {
-    backgroundColor: "rgba(155,34,23,0.35)",
-    borderRadius: 6,
-    paddingHorizontal: 6,
+    backgroundColor: "rgba(155,34,23,0.45)",
+    borderRadius: 999,
+    paddingHorizontal: 8,
     paddingVertical: 2,
   },
-  badgeFailedText: { color: "#f6a890", fontSize: 10, fontWeight: "800" },
-  rowMeta: { color: scriptoriumTheme.goldMuted, fontSize: 12 },
-  rowSubMeta: { color: "rgba(255,244,210,0.45)", fontSize: 11 },
-  rowFile: { color: "rgba(255,244,210,0.35)", fontSize: 11, fontFamily: "monospace" },
-  rowAction: { color: scriptoriumTheme.gold, fontSize: 12, fontWeight: "800", marginTop: 4 },
+  badgeFailedText: { color: "#ef9a9a", fontSize: 10, fontWeight: "800" },
+  partsBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    backgroundColor: "rgba(246,216,144,0.1)",
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  partsBadgeText: { color: scriptoriumTheme.goldMuted, fontSize: 11, fontWeight: "700" },
+  partRow: {
+    marginTop: 6,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    backgroundColor: "rgba(0,0,0,0.2)",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    minHeight: 44,
+  },
+  partTitle: { color: "#dfcba5", fontSize: 13, flex: 1, marginRight: 8 },
 });
