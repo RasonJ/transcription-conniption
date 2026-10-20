@@ -1,12 +1,21 @@
-// template
-const tintColorLight = "#2f95dc";
+import { scriptoriumTheme } from "./scriptoriumTheme";
 
-export default {
+/** App tint colors. The sienna/gold palette in `scriptoriumTheme` is the source of truth. */
+const colors = {
   light: {
-    text: "#000",
-    background: "#fff",
-    tint: tintColorLight,
-    tabIconDefault: "#ccc",
-    tabIconSelected: tintColorLight,
+    text: scriptoriumTheme.inkDark,
+    background: scriptoriumTheme.parchment,
+    tint: scriptoriumTheme.gold,
+    tabIconDefault: "rgba(255, 244, 210, 0.55)",
+    tabIconSelected: scriptoriumTheme.gold,
   },
-};
+  dark: {
+    text: scriptoriumTheme.textCream,
+    background: scriptoriumTheme.inkDark,
+    tint: scriptoriumTheme.gold,
+    tabIconDefault: "rgba(255, 244, 210, 0.55)",
+    tabIconSelected: scriptoriumTheme.gold,
+  },
+} as const;
+
+export default colors;

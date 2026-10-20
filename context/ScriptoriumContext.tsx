@@ -27,6 +27,7 @@ import {
   removeFigureFromWorkspace,
   touchWorkspace,
 } from "@/utils/scriptoriumWorkspace";
+import { validationStore } from "@/utils/validation/store";
 import { openAsNewWorkspace } from "@/utils/workspaceTransactions";
 import * as DocumentPicker from "expo-document-picker";
 import * as Haptics from "expo-haptics";
@@ -358,10 +359,14 @@ export function ScriptoriumProvider({
     void initializeWorkspace();
   }, [defaultText, hydrateFromWorkspace]);
 
-  // Structural compile follows the live editor buffer (VAL-3) — not gated on blur.
+  // Lexical validation at 150 ms; structural compile at 400 ms. Neither waits for blur.
   useEffect(() => {
-    const handle = setTimeout(() => setDebouncedText(localEditorBuffer), PARSE_DEBOUNCE_MS);
-    return () => clearTimeout(handle);
+    const lexical = setTimeout(() => validationStore.updateText(localEditorBuffer), 150);
+    const structural = setTimeout(() => setDebouncedText(localEditorBuffer), PARSE_DEBOUNCE_MS);
+    return () => {
+      clearTimeout(lexical);
+      clearTimeout(structural);
+    };
   }, [localEditorBuffer]);
 
   // Keep persisted editorBuffer in sync without requiring blur (IA / VAL-3).

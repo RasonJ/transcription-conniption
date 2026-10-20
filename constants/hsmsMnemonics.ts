@@ -4,16 +4,16 @@
  */
 
 export interface MnemonicSpec {
-  code: string;
-  delimiter: "." | ":";
-  numbered?: "required" | "optional";
-  kind: "structure" | "insertion" | "figure" | "language" | "remark" | "heading" | "decoration";
-  placement?: "inside-cb" | "after-last-cb" | "after-folio-line" | "any";
-  manualSection?: string;
-  standard: boolean;
+  readonly code: string;
+  readonly delimiter: "." | ":";
+  readonly numbered?: "required" | "optional";
+  readonly kind: "structure" | "insertion" | "figure" | "language" | "remark" | "heading" | "decoration";
+  readonly placement?: "inside-cb" | "after-last-cb" | "after-folio-line" | "any";
+  readonly manualSection?: string;
+  readonly standard: boolean;
   /** Standard mnemonic this extension stands in for. */
-  extends?: string;
-  name: string;
+  readonly extends?: string;
+  readonly name: string;
 }
 
 const STRUCTURE: MnemonicSpec[] = [

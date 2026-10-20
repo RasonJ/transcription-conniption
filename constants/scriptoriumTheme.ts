@@ -21,3 +21,5 @@ export const scriptoriumTheme = {
   annotationBar: "rgba(123, 164, 204, 0.35)",
   shadow: "#000",
 } as const;
+
+export type ScriptoriumTheme = typeof scriptoriumTheme;

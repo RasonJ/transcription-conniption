@@ -84,3 +84,42 @@ export const STOPWORDS = new Set([
   "mas",
   "más",
 ]);
+
+/** Witness-language codes. Kept here so this module does not import the detector. */
+export type StopwordLanguage = "SPN" | "PRT" | "GAL" | "CAT" | "LAT";
+
+const PORTUGUESE_STOPWORDS = new Set([
+  "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do", "dos", "e", "ela", "elas",
+  "ele", "eles", "em", "en", "entre", "era", "foi", "foy", "hu", "hua", "hũa", "huum",
+  "ja", "lhe", "lhi", "lo", "los", "mais", "mas", "me", "mha", "mui", "muito", "muyto", "na",
+  "nas", "nem", "no", "nom", "non", "nos", "nõ", "o", "os", "ou", "para", "pera", "per", "pois",
+  "por", "porem", "que", "quando", "se", "seu", "seus", "sem", "ser", "sobre", "sua", "suas",
+  "seer", "te", "todo", "todos", "toda", "todas", "um", "uma", "vos", "y", "ya",
+]);
+
+const CATALAN_STOPWORDS = new Set([
+  "a", "ab", "al", "als", "axi", "aci", "aquell", "aquella", "aquells", "aquest", "aquesta",
+  "car", "com", "con", "de", "del", "dels", "e", "el", "els", "en", "entre", "era", "es", "esser",
+  "fo", "ha", "han", "hi", "i", "jo", "la", "les", "li", "lo", "los", "lur", "lurs", "mas", "me",
+  "molt", "na", "ne", "no", "nos", "o", "per", "perque", "que", "qui", "se", "sens", "si",
+  "sobre", "son", "sos", "sa", "ses", "tot", "tots", "tota", "totes", "un", "una", "vos", "ço",
+]);
+
+const LATIN_STOPWORDS = new Set([
+  "a", "ab", "ac", "ad", "atque", "aut", "autem", "cum", "de", "dum", "e", "eius", "eo", "est",
+  "et", "ex", "hoc", "iam", "id", "in", "inter", "ita", "nam", "ne", "nec", "non", "per", "post",
+  "pro", "quae", "quam", "qui", "quia", "quibus", "quid", "quo", "quod", "se", "sed", "si", "sic",
+  "sicut", "sine", "sub", "sunt", "super", "tamen", "tunc", "ut", "vel", "enim", "ergo", "erat",
+]);
+
+export const STOPWORD_SETS: Record<StopwordLanguage, ReadonlySet<string>> = {
+  SPN: STOPWORDS,
+  PRT: PORTUGUESE_STOPWORDS,
+  GAL: PORTUGUESE_STOPWORDS,
+  CAT: CATALAN_STOPWORDS,
+  LAT: LATIN_STOPWORDS,
+};
+
+export function getStopwordsForLanguage(language: StopwordLanguage = "SPN"): ReadonlySet<string> {
+  return STOPWORD_SETS[language] ?? STOPWORDS;
+}

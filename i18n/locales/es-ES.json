@@ -1,5 +1,5 @@
 {
-  "copilot.placeholder": "Pregunta o busca (p. ej., \"ir a fol. 2r\", \"tachaduras del copista\")…",
-  "concordance.summary": "{total} términos indexados · mostrando {shown}. Pulsa una aparición para ir al folio.",
-  "concordance.summaryFiltered": "{total} términos indexados · mostrando {shown} coincidencias. Pulsa una aparición para ir al folio."
+  "studio.action.upload": "Cargar",
+  "studio.action.uploadHint": "Elija una transcripción (.txt, .hsms, Word .docx), o una imagen / PDF para IA. También puede arrastrar o pegar.",
+  "copilot.placeholder": "Pregunte o busque (p. ej., \"ir a fol. 2r\", \"tachaduras del copista\")…"
 }

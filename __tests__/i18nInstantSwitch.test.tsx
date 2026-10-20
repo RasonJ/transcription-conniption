@@ -39,6 +39,8 @@ describe("instant locale switch (SPEC-I18N I18N-1)", () => {
       act(() => switchTo(locale));
       expect(text()).toBe(label);
     }
-    renderer.unmount();
+    act(() => {
+      renderer.unmount();
+    });
   });
 });

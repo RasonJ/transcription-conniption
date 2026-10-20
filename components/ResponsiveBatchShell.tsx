@@ -32,7 +32,13 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
   if (isDesktop) {
     return (
       <View style={[styles.sidebarContainer, isCollapsed && styles.sidebarCollapsed]}>
-        <Pressable onPress={() => setIsCollapsed(!isCollapsed)} style={styles.collapseHandle}>
+        <Pressable
+          onPress={() => setIsCollapsed(!isCollapsed)}
+          style={styles.collapseHandle}
+          accessibilityRole="button"
+          accessibilityState={{ expanded: !isCollapsed }}
+          accessibilityLabel={t("batch.compilerTitle")}
+        >
           {isCollapsed ? (
             <ChevronLeft color="#f6d890" size={16} />
           ) : (
@@ -43,7 +49,12 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
           <View style={styles.innerPanel}>
             <View style={styles.panelHeader}>
               <Text style={styles.panelTitle}>{t("batch.compilerTitle")}</Text>
-              <Pressable onPress={onClose} style={styles.closeButton}>
+              <Pressable
+                onPress={onClose}
+                style={styles.closeButton}
+                accessibilityRole="button"
+                accessibilityLabel={t("common.close")}
+              >
                 <X color="#f6d890" size={18} />
               </Pressable>
             </View>
@@ -62,7 +73,12 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
             <FolderUp color="#f6d890" size={20} />
             <Text style={styles.mobileTitle}>{t("batch.processingTitle")}</Text>
           </View>
-          <Pressable onPress={onClose} style={styles.mobileCloseButton}>
+          <Pressable
+            onPress={onClose}
+            style={styles.mobileCloseButton}
+            accessibilityRole="button"
+            accessibilityLabel={t("common.close")}
+          >
             <X color="#2b110c" size={20} />
           </Pressable>
         </View>

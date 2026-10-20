@@ -91,6 +91,9 @@ export function FolioFacsimileCanvas({
 
       <Pressable
         onPress={handlePress}
+        accessible={placementMode}
+        accessibilityRole={placementMode ? "button" : "none"}
+        accessibilityLabel={placementMode ? t("facsimile.tapToPlace") : undefined}
         style={[styles.contentLayer, placementMode && styles.contentLayerPlacementMode]}
       >
         {children}
@@ -117,6 +120,7 @@ export function FolioFacsimileCanvas({
       {onSetFolioBackground ? (
         <Pressable
           onPress={() => onSetFolioBackground(folio.id)}
+          accessibilityRole="button"
           style={({ pressed }) => [styles.folioBgButton, pressed && styles.pressed]}
         >
           <Text style={styles.folioBgButtonText}>

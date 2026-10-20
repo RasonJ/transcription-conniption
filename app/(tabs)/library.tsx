@@ -281,7 +281,10 @@ export default function LibraryScreen() {
           {loadState === "ready" && catalog && (
             <>
               <Text style={styles.resultsLine}>
-                {filteredEntries.length} witnesses in {workGroups.length} works
+                {t("library.results", {
+                  shown: filteredEntries.length,
+                  works: workGroups.length,
+                })}
                 {statusCounts.failed > 0
                   ? t("library.resultsFailed", {
                       ok: statusCounts.ok,

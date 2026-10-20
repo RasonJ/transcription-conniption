@@ -5,46 +5,12 @@
  */
 import type { ParsedManuscript } from "../constants/manuscript";
 import { LANGUAGE_TAG_BCP47 } from "../constants/languageTags";
-import { STOPWORDS as CASTILIAN_STOPWORDS } from "../constants/stopwords";
+import { getStopwordsForLanguage } from "../constants/stopwords";
 
 /** HSMS code for the witness's base language. `SPN` covers Old Castilian. */
 export type WitnessLanguage = "SPN" | "PRT" | "GAL" | "CAT" | "LAT";
 
 export const WITNESS_LANGUAGES: readonly WitnessLanguage[] = ["SPN", "PRT", "GAL", "CAT", "LAT"];
-
-const GALICIAN_PORTUGUESE = new Set([
-  // Keep *he* / *ha* indexable: without a PRT lemma source they must group as word forms
-  // (SPEC-CONCORDANCE-LANGUAGE LEX-3 — never collapse into Spanish *haber*).
-  "a", "ao", "aos", "as", "com", "como", "da", "das", "de", "do", "dos", "e", "ela", "elas",
-  "ele", "eles", "em", "en", "entre", "era", "foi", "foy", "hu", "hua", "hũa", "huum",
-  "ja", "lhe", "lhi", "lo", "los", "mais", "mas", "me", "mha", "mui", "muito", "muyto", "na",
-  "nas", "nem", "no", "nom", "non", "nos", "nõ", "o", "os", "ou", "para", "pera", "per", "pois",
-  "por", "porem", "que", "quando", "se", "seu", "seus", "sem", "ser", "sobre", "sua", "suas",
-  "seer", "te", "todo", "todos", "toda", "todas", "um", "uma", "vos", "y", "ya",
-]);
-
-const CATALAN = new Set([
-  "a", "ab", "al", "als", "axi", "aci", "aquell", "aquella", "aquells", "aquest", "aquesta",
-  "car", "com", "con", "de", "del", "dels", "e", "el", "els", "en", "entre", "era", "es", "esser",
-  "fo", "ha", "han", "hi", "i", "jo", "la", "les", "li", "lo", "los", "lur", "lurs", "mas", "me",
-  "molt", "na", "ne", "no", "nos", "o", "per", "perque", "que", "qui", "se", "sens", "si",
-  "sobre", "son", "sos", "sa", "ses", "tot", "tots", "tota", "totes", "un", "una", "vos", "ço",
-]);
-
-const LATIN = new Set([
-  "a", "ab", "ac", "ad", "atque", "aut", "autem", "cum", "de", "dum", "e", "eius", "eo", "est",
-  "et", "ex", "hoc", "iam", "id", "in", "inter", "ita", "nam", "ne", "nec", "non", "per", "post",
-  "pro", "quae", "quam", "qui", "quia", "quibus", "quid", "quo", "quod", "se", "sed", "si", "sic",
-  "sicut", "sine", "sub", "sunt", "super", "tamen", "tunc", "ut", "vel", "enim", "ergo", "erat",
-]);
-
-const STOPWORD_SETS: Record<WitnessLanguage, ReadonlySet<string>> = {
-  SPN: CASTILIAN_STOPWORDS,
-  PRT: GALICIAN_PORTUGUESE,
-  GAL: GALICIAN_PORTUGUESE,
-  CAT: CATALAN,
-  LAT: LATIN,
-};
 
 /** Distinctive high-frequency forms used only for detection (shared forms like "de" excluded). */
 const DETECTION_MARKERS: Record<Exclude<WitnessLanguage, "GAL">, ReadonlySet<string>> = {
@@ -62,7 +28,7 @@ export function foldForSearch(value: string): string {
 }
 
 export function stopwordsFor(language: WitnessLanguage = "SPN"): ReadonlySet<string> {
-  return STOPWORD_SETS[language] ?? CASTILIAN_STOPWORDS;
+  return getStopwordsForLanguage(language);
 }
 
 export function isWitnessLanguage(value: unknown): value is WitnessLanguage {

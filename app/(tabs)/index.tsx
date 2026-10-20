@@ -904,6 +904,8 @@ export default function TranscriptionConniptionScreen() {
                         });
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.workflow.new")}
                     >
                       <PlusCircle color={theme.gold} size={16} />
                       <Text style={styles.secondaryButtonText}>{t("studio.workflow.new")}</Text>
@@ -911,6 +913,8 @@ export default function TranscriptionConniptionScreen() {
                     <Pressable
                       onPress={() => setBatchShellVisible(true)}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.workflow.batch")}
                     >
                       <Layers color={theme.gold} size={16} />
                       <Text style={styles.secondaryButtonText}>{t("studio.workflow.batch")}</Text>
@@ -945,6 +949,8 @@ export default function TranscriptionConniptionScreen() {
                         void loadSample(SIMPLE_SAMPLE, "Simple_Witness").then(() => setIsPreview(true));
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.demo.simple")}
                     >
                       <FileText color="#f6d890" size={18} />
                       <Text style={styles.secondaryButtonText}>{t("studio.demo.simple")}</Text>
@@ -954,6 +960,8 @@ export default function TranscriptionConniptionScreen() {
                         void loadSample(LAT_SPAN_SAMPLE, "LAT_Span").then(() => setIsPreview(true));
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.demo.latSpan")}
                     >
                       <FileText color="#f6d890" size={18} />
                       <Text style={styles.secondaryButtonText}>{t("studio.demo.latSpan")}</Text>
@@ -963,6 +971,8 @@ export default function TranscriptionConniptionScreen() {
                         void loadSample(INLINE_IMAGE_DEMO, "Graphics_Demo").then(() => setIsPreview(true));
                       }}
                       style={({ pressed }) => [styles.secondaryButton, pressed && styles.pressed]}
+                      accessibilityRole="button"
+                      accessibilityLabel={t("studio.demo.graphics")}
                     >
                       <ImageIcon color="#f6d890" size={18} />
                       <Text style={styles.secondaryButtonText}>{t("studio.demo.graphics")}</Text>
@@ -977,6 +987,9 @@ export default function TranscriptionConniptionScreen() {
               <Pressable
                 onPress={() => setIsPreview(false)}
                 style={[styles.switchOption, !isPreview && styles.switchOptionActive]}
+                accessibilityRole="button"
+                accessibilityState={{ selected: !isPreview }}
+                accessibilityLabel={t("studio.view.code")}
               >
                 <FileText color={!isPreview ? theme.inkDark : theme.gold} size={16} />
                 <Text style={[styles.switchText, !isPreview && styles.switchTextActive]}>{t("studio.view.code")}</Text>
@@ -987,6 +1000,9 @@ export default function TranscriptionConniptionScreen() {
                   setIsPreview(true);
                 }}
                 style={[styles.switchOption, isPreview && styles.switchOptionActive]}
+                accessibilityRole="button"
+                accessibilityState={{ selected: isPreview }}
+                accessibilityLabel={t("studio.view.sheet")}
               >
                 <Wand2 color={isPreview ? theme.inkDark : theme.gold} size={16} />
                 <Text style={[styles.switchText, isPreview && styles.switchTextActive]}>{t("studio.view.sheet")}</Text>
@@ -1052,6 +1068,8 @@ export default function TranscriptionConniptionScreen() {
                 <Pressable
                   onPress={() => router.push("/modal")}
                   style={({ pressed }) => [styles.validationModalLink, pressed && styles.pressed]}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("editor.validation.openSheet")}
                 >
                   <ClipboardList color="#7ba4cc" size={16} />
                   <Text style={styles.validationModalLinkText}>{t("editor.validation.openSheet")}</Text>
@@ -1159,6 +1177,13 @@ export default function TranscriptionConniptionScreen() {
                   <Pressable
                     onPress={() => setScrollHighlight(null)}
                     style={styles.anchorBanner}
+                    accessibilityRole="button"
+                    accessibilityLabel={t("studio.focus.clear", {
+                      folio: scrollHighlight.folioId,
+                      line: scrollHighlight.lineNumber
+                        ? t("studio.focus.line", { line: scrollHighlight.lineNumber })
+                        : "",
+                    })}
                   >
                     <Text style={styles.anchorBannerText}>
                       {t("studio.focus.clear", {

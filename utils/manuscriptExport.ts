@@ -27,7 +27,7 @@ export function buildManuscriptExportPayload(
     case "html":
       return { kind: "text", contents: exportToLegacyHTML(ctx.parsed, ctx.display) };
     case "svg":
-      return { kind: "text", contents: exportToSvgDocument(ctx.parsed, ctx.display) };
+      return { kind: "text", contents: exportToSvgDocument(ctx.parsed, { ...ctx.display, sourceText: ctx.sourceText }) };
     case "tei_xml":
       return { kind: "text", contents: exportToTEIXML(ctx.parsed) };
     case "tei_normalized_xml":
@@ -39,7 +39,7 @@ export function buildManuscriptExportPayload(
     case "webp":
       return {
         kind: "text",
-        contents: exportToSvgDocument(ctx.parsed, ctx.display),
+        contents: exportToSvgDocument(ctx.parsed, { ...ctx.display, sourceText: ctx.sourceText }),
       };
     default:
       return { kind: "text", contents: ctx.sourceText };

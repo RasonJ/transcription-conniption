@@ -245,6 +245,8 @@ export default function AboutScreen() {
                     <Pressable
                       key={`ref-${idx}`}
                       onPress={() => handleOpenLink(item.url)}
+                      accessibilityRole="link"
+                      accessibilityLabel={item.title}
                       style={({ pressed }) => [
                         styles.referenceCardItem,
                         pressed && styles.cardItemPressed,

@@ -10,8 +10,10 @@ import {
   completionToken,
   getMnemonicCompletions,
 } from "@/utils/mnemonicCompletions";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import {
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
   Platform,
   Pressable,
   ScrollView,
@@ -47,6 +49,7 @@ export function SourceEditor({
 }: Props) {
   const t = useT();
   const { height } = useWindowDimensions();
+  const gutterScrollRef = useRef<ScrollView>(null);
   const [cursor, setCursor] = useState(selection?.start ?? value.length);
   const minHeight = Math.max(360, Math.round(height * 0.6));
 
@@ -64,6 +67,10 @@ export function SourceEditor({
   const prefix = completionToken(value, cursor);
   const lineBefore = value.slice(0, cursor);
   const completions = prefix === null ? [] : getMnemonicCompletions(prefix, lineBefore);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    gutterScrollRef.current?.scrollTo({ y: event.nativeEvent.contentOffset.y, animated: false });
+  };
 
   const handleChange = (next: string) => {
     const paired = pairBraces(value, next);
@@ -89,7 +96,12 @@ export function SourceEditor({
   return (
     <View style={styles.wrap}>
       <View style={[styles.row, { minHeight }]}>
-        <ScrollView style={styles.gutter} contentContainerStyle={styles.gutterContent} scrollEnabled={false}>
+        <ScrollView
+          ref={gutterScrollRef}
+          style={styles.gutter}
+          contentContainerStyle={styles.gutterContent}
+          scrollEnabled={false}
+        >
           {lines.map((_, index) => {
             const severity = byLine.get(index);
             const mark = severity === "error" ? "✕" : severity === "warning" ? "⚠" : severity === "info" ? "ℹ" : "";
@@ -116,6 +128,8 @@ export function SourceEditor({
           textAlignVertical="top"
           autoCorrect={false}
           autoCapitalize="none"
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
           selection={selection}
           onSelectionChange={(event) => {
             const next = event.nativeEvent.selection;

@@ -56,3 +56,38 @@ export const INLINE_IMAGE_DEMO = `[fol. 3r]
 7 chamase Eyxo da sphera. Os dous po~tos que sa~ cabos do eixo sa~
 8 polos do mu~do.
 9 {ILL. Representação do astrolábio plano medieval de Nunes.}}`;
+
+export interface DemoSampleSpec {
+  readonly id: string;
+  readonly title: string;
+  readonly sourceFileName: string;
+  readonly text: string;
+}
+
+/** Named samples the Open menu can list without parsing the strings twice. */
+export const DEMO_SAMPLES: readonly DemoSampleSpec[] = [
+  {
+    id: "nunes_sphera",
+    title: "Tratado da sphera",
+    sourceFileName: "Nunes_Demo.txt",
+    text: DEFAULT_DEMO,
+  },
+  {
+    id: "simple_witness",
+    title: "Libro de antiguos saberes",
+    sourceFileName: "Simple_Witness.txt",
+    text: SIMPLE_SAMPLE,
+  },
+  {
+    id: "lat_span",
+    title: "Latin passage",
+    sourceFileName: "Latin_Span.txt",
+    text: LAT_SPAN_SAMPLE,
+  },
+  {
+    id: "figures",
+    title: "Figures and diagrams",
+    sourceFileName: "Figures_Demo.txt",
+    text: INLINE_IMAGE_DEMO,
+  },
+];

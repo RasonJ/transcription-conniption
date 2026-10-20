@@ -99,6 +99,8 @@ export function BatchProcessingPanel({ onBatchComplete }: Props) {
       <Pressable
         onPress={() => void handleDirectorySelection()}
         disabled={isProcessing}
+        accessibilityRole="button"
+        accessibilityLabel={t("batch.uploadTitle")}
         style={({ pressed }) => [
           styles.uploadZone,
           isProcessing && styles.disabledZone,

@@ -107,16 +107,8 @@ export type StructuralScanResult = {
   columnBlockClosed: boolean;
 };
 
-export type ColumnScanContext = {
-  /** Zero-based index of this line within the current `{CBn.` block. */
-  lineIndex: number;
-  /** True once any structural env opens inside the current column block. */
-  hadEnvOpen: boolean;
-};
-
 export type StructuralScanOptions = {
   inColumnBlock?: boolean;
-  columnContext?: ColumnScanContext;
   /** When true, suppress empty-stack `}` extra-close (vernacular tail after `{LAT. …} text}`). */
   allowVernacularClose?: boolean;
 };
@@ -132,7 +124,6 @@ export function scanStructuralTokenIssues(
   const opts: StructuralScanOptions =
     typeof options === "boolean" ? { inColumnBlock: options } : options;
   const inColumnBlock = opts.inColumnBlock ?? false;
-  const columnContext = opts.columnContext;
   const allowVernacularClose = opts.allowVernacularClose ?? false;
 
   const errors: ValidationError[] = [];
@@ -156,13 +147,6 @@ export function scanStructuralTokenIssues(
     return false;
   };
 
-  const canCloseColumnWrapper = (): boolean => {
-    if (!columnContext) {
-      return true;
-    }
-    return columnContext.hadEnvOpen || columnContext.lineIndex > 0;
-  };
-
   for (let i = 0; i < structuralTokens.length; i++) {
     const token = structuralTokens[i];
     if (token.type === "env_open") {
@@ -179,7 +163,7 @@ export function scanStructuralTokenIssues(
     } else if (token.type === "env_close") {
       if (envStack.length > 0) {
         envStack.pop();
-      } else if (inColumnBlock && !hasSubstantialTokensAfter(i) && canCloseColumnWrapper()) {
+      } else if (inColumnBlock && !hasSubstantialTokensAfter(i)) {
         if (!columnBlockClosed) {
           columnBlockClosed = true;
         }

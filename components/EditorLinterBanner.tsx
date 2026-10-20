@@ -153,6 +153,7 @@ function IssueRow({
     <Pressable
       onPress={() => onJumpToLine?.(issue.lineIndex)}
       disabled={!onJumpToLine}
+      accessibilityRole="button"
       style={({ pressed }) => [styles.issueRow, pressed && onJumpToLine && styles.issueRowPressed]}
     >
       <Text style={[styles.lineMeta, isError ? styles.errMeta : styles.warnMeta]}>

@@ -121,6 +121,13 @@ export type CorpusPrecomputeArtifacts = {
   corpusPostings: CorpusTermPostings;
 };
 
+/** Catalog fields are strings in v1 JSON and numbers (`year`) or null in v2. */
+function catalogLabel(value: unknown): string {
+  if (typeof value === "number" && Number.isFinite(value)) return String(value);
+  if (typeof value !== "string") return "";
+  return value.trim();
+}
+
 function slugEntity(kind: string, label: string): string {
   const slug = label
     .normalize("NFD")
@@ -381,24 +388,28 @@ export function buildLibraryGraph(
     const msId = `MS.${entry.baseName}`;
     addNode({ id: msId, type: "manuscript", label: entry.title || entry.baseName });
 
-    if (entry.author.trim()) {
-      const id = slugEntity("AUTHOR", entry.author);
-      addNode({ id, type: "author", label: entry.author.trim() });
+    const author = catalogLabel(entry.author);
+    if (author) {
+      const id = slugEntity("AUTHOR", author);
+      addNode({ id, type: "author", label: author });
       edges.push({ source: msId, target: id, rel: "AUTHORED_BY" });
     }
-    if (entry.printer.trim()) {
-      const id = slugEntity("PRINTER", entry.printer);
-      addNode({ id, type: "printer", label: entry.printer.trim() });
+    const printer = catalogLabel(entry.printer);
+    if (printer) {
+      const id = slugEntity("PRINTER", printer);
+      addNode({ id, type: "printer", label: printer });
       edges.push({ source: msId, target: id, rel: "PRINTED_BY" });
     }
-    if (entry.city.trim()) {
-      const id = slugEntity("CITY", entry.city);
-      addNode({ id, type: "city", label: entry.city.trim() });
+    const city = catalogLabel(entry.city);
+    if (city) {
+      const id = slugEntity("CITY", city);
+      addNode({ id, type: "city", label: city });
       edges.push({ source: msId, target: id, rel: "PUBLISHED_IN" });
     }
-    if (entry.year.trim()) {
-      const id = slugEntity("YEAR", entry.year);
-      addNode({ id, type: "year", label: entry.year.trim() });
+    const year = catalogLabel(entry.year);
+    if (year) {
+      const id = slugEntity("YEAR", year);
+      addNode({ id, type: "year", label: year });
       edges.push({ source: msId, target: id, rel: "DATED" });
     }
 

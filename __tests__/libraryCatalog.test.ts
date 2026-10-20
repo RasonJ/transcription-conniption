@@ -25,7 +25,7 @@ describe("libraryCatalog", () => {
 
     expect(entry.author).toMatch(/Christine/i);
     expect(entry.title).toMatch(/espelho de Cristina/i);
-    expect(entry.year).toBe("1518");
+    expect(entry.year).toBe(1518);
     expect(entry.city).toMatch(/Lisboa/i);
     expect(entry.keywords).toContain("1518");
     expect(entry.keywords).toContain("cw_test");
@@ -71,7 +71,7 @@ describe("libraryCatalog", () => {
     const blob = buildLibraryKeywords({
       author: "Christine",
       title: "Mirror",
-      year: "1518",
+      date: "1518",
       city: "Lisboa",
       printer: "Campos",
       baseName: "cw_test",

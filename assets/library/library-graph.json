@@ -1,14 +1,9 @@
 {
   "format": "hsms-library-graph/1",
-  "generatedAt": "2026-10-20T15:06:57.897Z",
-  "nodeCount": 7649,
-  "edgeCount": 22685,
+  "generatedAt": "2026-10-20T19:11:15.385Z",
+  "nodeCount": 7584,
+  "edgeCount": 22549,
   "nodes": [
-    {
-      "id": "AUTHOR.fernando_de_rojas",
-      "type": "author",
-      "label": "Fernando de Rojas"
-    },
     {
       "id": "AUTHOR.hsms_0001",
       "type": "author",
@@ -3015,6 +3010,11 @@
       "label": "Pero Núñez de Avendaño"
     },
     {
+      "id": "CITY.ag7_el_septimo_libro_del_rey_amadis_de_gaula",
+      "type": "city",
+      "label": "[AG7] El séptimo libro del rey Amadís de Gaula"
+    },
+    {
       "id": "CITY.alba_de_tormes",
       "type": "city",
       "label": "Alba de Tormes"
@@ -3022,17 +3022,12 @@
     {
       "id": "CITY.alcala_de_henares",
       "type": "city",
-      "label": "Alcalá de Henares"
+      "label": "Alcalá de Henares [?]"
     },
     {
       "id": "CITY.amberes",
       "type": "city",
       "label": "Amberes"
-    },
-    {
-      "id": "CITY.ann_arbor",
-      "type": "city",
-      "label": "Ann Arbor"
     },
     {
       "id": "CITY.aviles",
@@ -3050,19 +3045,9 @@
       "label": "Béjar"
     },
     {
-      "id": "CITY.boston",
-      "type": "city",
-      "label": "Boston"
-    },
-    {
       "id": "CITY.burgos",
       "type": "city",
       "label": "Burgos"
-    },
-    {
-      "id": "CITY.cambridge_uk",
-      "type": "city",
-      "label": "Cambridge UK"
     },
     {
       "id": "CITY.ciudad_de_mexico",
@@ -3078,11 +3063,6 @@
       "id": "CITY.coria",
       "type": "city",
       "label": "Coria"
-    },
-    {
-      "id": "CITY.dallas",
-      "type": "city",
-      "label": "Dallas"
     },
     {
       "id": "CITY.dresden",
@@ -3103,6 +3083,21 @@
       "id": "CITY.granada",
       "type": "city",
       "label": "Granada"
+    },
+    {
+      "id": "CITY.guadalajara",
+      "type": "city",
+      "label": "Guadalajara"
+    },
+    {
+      "id": "CITY.guadalajara_mexico",
+      "type": "city",
+      "label": "Guadalajara, México"
+    },
+    {
+      "id": "CITY.hijar",
+      "type": "city",
+      "label": "Híjar [?]"
     },
     {
       "id": "CITY.huete",
@@ -3130,6 +3125,11 @@
       "label": "Lisboa"
     },
     {
+      "id": "CITY.logrono",
+      "type": "city",
+      "label": "Logroño"
+    },
+    {
       "id": "CITY.londres",
       "type": "city",
       "label": "Londres"
@@ -3148,11 +3148,6 @@
       "id": "CITY.mallorca",
       "type": "city",
       "label": "Mallorca"
-    },
-    {
-      "id": "CITY.manchester",
-      "type": "city",
-      "label": "Manchester"
     },
     {
       "id": "CITY.manila",
@@ -3190,11 +3185,6 @@
       "label": "New Haven"
     },
     {
-      "id": "CITY.new_york",
-      "type": "city",
-      "label": "New York"
-    },
-    {
       "id": "CITY.nueva_york",
       "type": "city",
       "label": "Nueva York"
@@ -3203,11 +3193,6 @@
       "id": "CITY.oviedo",
       "type": "city",
       "label": "Oviedo"
-    },
-    {
-      "id": "CITY.oxford",
-      "type": "city",
-      "label": "Oxford"
     },
     {
       "id": "CITY.palma_de_mallorca",
@@ -3230,11 +3215,6 @@
       "label": "Philadelphia"
     },
     {
-      "id": "CITY.providence",
-      "type": "city",
-      "label": "Providence"
-    },
-    {
       "id": "CITY.roma",
       "type": "city",
       "label": "Roma"
@@ -3255,9 +3235,9 @@
       "label": "Salamanca"
     },
     {
-      "id": "CITY.salamanca_biblioteca_general_historica_de_la_universidad_de_sala",
+      "id": "CITY.san_gabriel_nuevo_mexico_ciudad_de_mexico",
       "type": "city",
-      "label": "Salamanca: Biblioteca General Histórica de la Universidad de Salamanca"
+      "label": "San Gabriel, Nuevo México; Ciudad de México"
     },
     {
       "id": "CITY.san_lorenzo_de_el_escorial",
@@ -3270,14 +3250,14 @@
       "label": "San Lorenzo de El Escorial: Real Biblioteca del Monasterio de San Lorenzo de El Escorial"
     },
     {
-      "id": "CITY.san_marino",
-      "type": "city",
-      "label": "San Marino"
-    },
-    {
       "id": "CITY.santander",
       "type": "city",
       "label": "Santander"
+    },
+    {
+      "id": "CITY.santiago_de_compostena",
+      "type": "city",
+      "label": "Santiago de Compostena"
     },
     {
       "id": "CITY.segovia",
@@ -3298,11 +3278,6 @@
       "id": "CITY.stockholm",
       "type": "city",
       "label": "Stockholm"
-    },
-    {
-      "id": "CITY.stuttgart",
-      "type": "city",
-      "label": "Stuttgart"
     },
     {
       "id": "CITY.tenochtitlan",
@@ -3330,14 +3305,14 @@
       "label": "Valladolid"
     },
     {
+      "id": "CITY.vgp_epitoma_rei_militaris",
+      "type": "city",
+      "label": "[VGP] Epitoma rei militaris"
+    },
+    {
       "id": "CITY.viena",
       "type": "city",
       "label": "Viena"
-    },
-    {
-      "id": "CITY.washington",
-      "type": "city",
-      "label": "Washington"
     },
     {
       "id": "CITY.zamora",
@@ -3352,347 +3327,347 @@
     {
       "id": "MS.1500__acr_sticos_2",
       "type": "manuscript",
-      "label": "1500/acrósticos 2 (Celestina)"
+      "label": "1500/acrósticos 2"
     },
     {
       "id": "MS.1500__argumentogeneral_3",
       "type": "manuscript",
-      "label": "1500/argumentogeneral 3 (Celestina)"
+      "label": "1500/argumentogeneral 3"
     },
     {
       "id": "MS.1500__argumentosactos_4",
       "type": "manuscript",
-      "label": "1500/argumentosactos 4 (Celestina)"
+      "label": "1500/argumentosactos 4"
     },
     {
       "id": "MS.1500__auto_02",
       "type": "manuscript",
-      "label": "1500/auto 02 (Celestina)"
+      "label": "1500/auto 02"
     },
     {
       "id": "MS.1500__auto_03",
       "type": "manuscript",
-      "label": "1500/auto 03 (Celestina)"
+      "label": "1500/auto 03"
     },
     {
       "id": "MS.1500__auto_04",
       "type": "manuscript",
-      "label": "1500/auto 04 (Celestina)"
+      "label": "1500/auto 04"
     },
     {
       "id": "MS.1500__auto_04a",
       "type": "manuscript",
-      "label": "1500/auto 04a (Celestina)"
+      "label": "1500/auto 04a"
     },
     {
       "id": "MS.1500__auto_04b",
       "type": "manuscript",
-      "label": "1500/auto 04b (Celestina)"
+      "label": "1500/auto 04b"
     },
     {
       "id": "MS.1500__auto_05",
       "type": "manuscript",
-      "label": "1500/auto 05 (Celestina)"
+      "label": "1500/auto 05"
     },
     {
       "id": "MS.1500__auto_06",
       "type": "manuscript",
-      "label": "1500/auto 06 (Celestina)"
+      "label": "1500/auto 06"
     },
     {
       "id": "MS.1500__auto_06a",
       "type": "manuscript",
-      "label": "1500/auto 06a (Celestina)"
+      "label": "1500/auto 06a"
     },
     {
       "id": "MS.1500__auto_06b",
       "type": "manuscript",
-      "label": "1500/auto 06b (Celestina)"
+      "label": "1500/auto 06b"
     },
     {
       "id": "MS.1500__auto_07",
       "type": "manuscript",
-      "label": "1500/auto 07 (Celestina)"
+      "label": "1500/auto 07"
     },
     {
       "id": "MS.1500__auto_07a",
       "type": "manuscript",
-      "label": "1500/auto 07a (Celestina)"
+      "label": "1500/auto 07a"
     },
     {
       "id": "MS.1500__auto_07b",
       "type": "manuscript",
-      "label": "1500/auto 07b (Celestina)"
+      "label": "1500/auto 07b"
     },
     {
       "id": "MS.1500__auto_08",
       "type": "manuscript",
-      "label": "1500/auto 08 (Celestina)"
+      "label": "1500/auto 08"
     },
     {
       "id": "MS.1500__auto_09",
       "type": "manuscript",
-      "label": "1500/auto 09 (Celestina)"
+      "label": "1500/auto 09"
     },
     {
       "id": "MS.1500__auto_09a",
       "type": "manuscript",
-      "label": "1500/auto 09a (Celestina)"
+      "label": "1500/auto 09a"
     },
     {
       "id": "MS.1500__auto_09b",
       "type": "manuscript",
-      "label": "1500/auto 09b (Celestina)"
+      "label": "1500/auto 09b"
     },
     {
       "id": "MS.1500__auto_10",
       "type": "manuscript",
-      "label": "1500/auto 10 (Celestina)"
+      "label": "1500/auto 10"
     },
     {
       "id": "MS.1500__auto_11",
       "type": "manuscript",
-      "label": "1500/auto 11 (Celestina)"
+      "label": "1500/auto 11"
     },
     {
       "id": "MS.1500__auto_12",
       "type": "manuscript",
-      "label": "1500/auto 12 (Celestina)"
+      "label": "1500/auto 12"
     },
     {
       "id": "MS.1500__auto_12a",
       "type": "manuscript",
-      "label": "1500/auto 12a (Celestina)"
+      "label": "1500/auto 12a"
     },
     {
       "id": "MS.1500__auto_12b",
       "type": "manuscript",
-      "label": "1500/auto 12b (Celestina)"
+      "label": "1500/auto 12b"
     },
     {
       "id": "MS.1500__auto_13",
       "type": "manuscript",
-      "label": "1500/auto 13 (Celestina)"
+      "label": "1500/auto 13"
     },
     {
       "id": "MS.1500__auto_14",
       "type": "manuscript",
-      "label": "1500/auto 14 (Celestina)"
+      "label": "1500/auto 14"
     },
     {
       "id": "MS.1500__auto_15",
       "type": "manuscript",
-      "label": "1500/auto 15 (Celestina)"
+      "label": "1500/auto 15"
     },
     {
       "id": "MS.1500__auto_16",
       "type": "manuscript",
-      "label": "1500/auto 16 (Celestina)"
+      "label": "1500/auto 16"
     },
     {
       "id": "MS.1500__auto1_01",
       "type": "manuscript",
-      "label": "1500/auto1 01 (Celestina)"
+      "label": "1500/auto1 01"
     },
     {
       "id": "MS.1500__auto1_01-a",
       "type": "manuscript",
-      "label": "1500/auto1 01-a (Celestina)"
+      "label": "1500/auto1 01-a"
     },
     {
       "id": "MS.1500__auto1_01-b",
       "type": "manuscript",
-      "label": "1500/auto1 01-b (Celestina)"
+      "label": "1500/auto1 01-b"
     },
     {
       "id": "MS.1500__auto1_01a",
       "type": "manuscript",
-      "label": "1500/auto1 01a (Celestina)"
+      "label": "1500/auto1 01a"
     },
     {
       "id": "MS.1500__auto1_01b",
       "type": "manuscript",
-      "label": "1500/auto1 01b (Celestina)"
+      "label": "1500/auto1 01b"
     },
     {
       "id": "MS.1500__auto1_01c",
       "type": "manuscript",
-      "label": "1500/auto1 01c (Celestina)"
+      "label": "1500/auto1 01c"
     },
     {
       "id": "MS.1500__auto1_01d",
       "type": "manuscript",
-      "label": "1500/auto1 01d (Celestina)"
+      "label": "1500/auto1 01d"
     },
     {
       "id": "MS.1500__cartaasuamigo_1",
       "type": "manuscript",
-      "label": "1500/cartaasuamigo 1 (Celestina)"
+      "label": "1500/cartaasuamigo 1"
     },
     {
       "id": "MS.1500__octavasProaza_5",
       "type": "manuscript",
-      "label": "1500/octavasProaza 5 (Celestina)"
+      "label": "1500/octavasProaza 5"
     },
     {
       "id": "MS.1514__acr_sticos_02",
       "type": "manuscript",
-      "label": "1514/acrósticos 02 (Celestina)"
+      "label": "1514/acrósticos 02"
     },
     {
       "id": "MS.1514__argumentogeneral_04",
       "type": "manuscript",
-      "label": "1514/argumentogeneral 04 (Celestina)"
+      "label": "1514/argumentogeneral 04"
     },
     {
       "id": "MS.1514__argumentosactos_05",
       "type": "manuscript",
-      "label": "1514/argumentosactos 05 (Celestina)"
+      "label": "1514/argumentosactos 05"
     },
     {
       "id": "MS.1514__auto_02",
       "type": "manuscript",
-      "label": "1514/auto 02 (Celestina)"
+      "label": "1514/auto 02"
     },
     {
       "id": "MS.1514__auto_03",
       "type": "manuscript",
-      "label": "1514/auto 03 (Celestina)"
+      "label": "1514/auto 03"
     },
     {
       "id": "MS.1514__auto_04",
       "type": "manuscript",
-      "label": "1514/auto 04 (Celestina)"
+      "label": "1514/auto 04"
     },
     {
       "id": "MS.1514__auto_05",
       "type": "manuscript",
-      "label": "1514/auto 05 (Celestina)"
+      "label": "1514/auto 05"
     },
     {
       "id": "MS.1514__auto_06",
       "type": "manuscript",
-      "label": "1514/auto 06 (Celestina)"
+      "label": "1514/auto 06"
     },
     {
       "id": "MS.1514__auto_07",
       "type": "manuscript",
-      "label": "1514/auto 07 (Celestina)"
+      "label": "1514/auto 07"
     },
     {
       "id": "MS.1514__auto_08",
       "type": "manuscript",
-      "label": "1514/auto 08 (Celestina)"
+      "label": "1514/auto 08"
     },
     {
       "id": "MS.1514__auto_09",
       "type": "manuscript",
-      "label": "1514/auto 09 (Celestina)"
+      "label": "1514/auto 09"
     },
     {
       "id": "MS.1514__auto_10",
       "type": "manuscript",
-      "label": "1514/auto 10 (Celestina)"
+      "label": "1514/auto 10"
     },
     {
       "id": "MS.1514__auto_11",
       "type": "manuscript",
-      "label": "1514/auto 11 (Celestina)"
+      "label": "1514/auto 11"
     },
     {
       "id": "MS.1514__auto_12",
       "type": "manuscript",
-      "label": "1514/auto 12 (Celestina)"
+      "label": "1514/auto 12"
     },
     {
       "id": "MS.1514__auto_13",
       "type": "manuscript",
-      "label": "1514/auto 13 (Celestina)"
+      "label": "1514/auto 13"
     },
     {
       "id": "MS.1514__auto_14",
       "type": "manuscript",
-      "label": "1514/auto 14 (Celestina)"
+      "label": "1514/auto 14"
     },
     {
       "id": "MS.1514__auto_20",
       "type": "manuscript",
-      "label": "1514/auto 20 (Celestina)"
+      "label": "1514/auto 20"
     },
     {
       "id": "MS.1514__auto_21",
       "type": "manuscript",
-      "label": "1514/auto 21 (Celestina)"
+      "label": "1514/auto 21"
     },
     {
       "id": "MS.1514__auto1_01",
       "type": "manuscript",
-      "label": "1514/auto1 01 (Celestina)"
+      "label": "1514/auto1 01"
     },
     {
       "id": "MS.1514__auto1_01-a",
       "type": "manuscript",
-      "label": "1514/auto1 01-a (Celestina)"
+      "label": "1514/auto1 01-a"
     },
     {
       "id": "MS.1514__auto1_01-b",
       "type": "manuscript",
-      "label": "1514/auto1 01-b (Celestina)"
+      "label": "1514/auto1 01-b"
     },
     {
       "id": "MS.1514__cartaasuamigo_01",
       "type": "manuscript",
-      "label": "1514/cartaasuamigo 01 (Celestina)"
+      "label": "1514/cartaasuamigo 01"
     },
     {
       "id": "MS.1514__octavasautor_06",
       "type": "manuscript",
-      "label": "1514/octavasautor 06 (Celestina)"
+      "label": "1514/octavasautor 06"
     },
     {
       "id": "MS.1514__octavasProaza_07",
       "type": "manuscript",
-      "label": "1514/octavasProaza 07 (Celestina)"
+      "label": "1514/octavasProaza 07"
     },
     {
       "id": "MS.1514__pr_logo_03",
       "type": "manuscript",
-      "label": "1514/prólogo 03 (Celestina)"
+      "label": "1514/prólogo 03"
     },
     {
       "id": "MS.1514__TC_auto15",
       "type": "manuscript",
-      "label": "1514/TC auto15 (Celestina)"
+      "label": "1514/TC auto15"
     },
     {
       "id": "MS.1514__TC_auto15-19",
       "type": "manuscript",
-      "label": "1514/TC auto15-19 (Celestina)"
+      "label": "1514/TC auto15-19"
     },
     {
       "id": "MS.1514__TC_auto16",
       "type": "manuscript",
-      "label": "1514/TC auto16 (Celestina)"
+      "label": "1514/TC auto16"
     },
     {
       "id": "MS.1514__TC_auto17",
       "type": "manuscript",
-      "label": "1514/TC auto17 (Celestina)"
+      "label": "1514/TC auto17"
     },
     {
       "id": "MS.1514__TC_auto18",
       "type": "manuscript",
-      "label": "1514/TC auto18 (Celestina)"
+      "label": "1514/TC auto18"
     },
     {
       "id": "MS.1514__TC_auto19",
       "type": "manuscript",
-      "label": "1514/TC auto19 (Celestina)"
+      "label": "1514/TC auto19"
     },
     {
       "id": "MS.1514__Traso",
       "type": "manuscript",
-      "label": "1514/Traso (Celestina)"
+      "label": "1514/Traso"
     },
     {
       "id": "MS.TEXT.2CR",
@@ -7045,14 +7020,39 @@
       "label": "Ibrahim ibn Yahya al-Zarqali"
     },
     {
+      "id": "PRINTER.1544",
+      "type": "printer",
+      "label": "1544"
+    },
+    {
+      "id": "PRINTER.1600_1602",
+      "type": "printer",
+      "label": "1600-1602"
+    },
+    {
+      "id": "PRINTER.1602",
+      "type": "printer",
+      "label": "1602"
+    },
+    {
       "id": "PRINTER.agustin_de_paz_juan_picardo",
       "type": "printer",
       "label": "Agustín de Paz, Juan Picardo"
     },
     {
+      "id": "PRINTER.alfonso_de_orta",
+      "type": "printer",
+      "label": "Alfonso de Orta [?]"
+    },
+    {
       "id": "PRINTER.alfonso_de_porras_y_lorenzo_de_liomdedei",
       "type": "printer",
       "label": "Alfonso de Porras y Lorenzo de Liomdedei"
+    },
+    {
+      "id": "PRINTER.alfonso_fernandez_de_cordoba",
+      "type": "printer",
+      "label": "Alfonso Fernández de Córdoba"
     },
     {
       "id": "PRINTER.alonso_de_coca",
@@ -7063,6 +7063,11 @@
       "id": "PRINTER.alonso_de_melgar",
       "type": "printer",
       "label": "Alonso de Melgar"
+    },
+    {
+      "id": "PRINTER.alonso_de_porras",
+      "type": "printer",
+      "label": "Alonso de Porras"
     },
     {
       "id": "PRINTER.alonso_del_puerto",
@@ -7085,6 +7090,11 @@
       "label": "Alvaro de Castro"
     },
     {
+      "id": "PRINTER.andrea_de_portonariis",
+      "type": "printer",
+      "label": "Andrea de Portonariis"
+    },
+    {
       "id": "PRINTER.andres_de_burgos",
       "type": "printer",
       "label": "Andrés de Burgos"
@@ -7093,6 +7103,11 @@
       "id": "PRINTER.antonia_ramirez",
       "type": "printer",
       "label": "Antonia Ramírez"
+    },
+    {
+      "id": "PRINTER.antonio_de_centenera",
+      "type": "printer",
+      "label": "Antonio de Centenera"
     },
     {
       "id": "PRINTER.antonio_de_salamanca",
@@ -7115,19 +7130,9 @@
       "label": "Archivo General de Indias"
     },
     {
-      "id": "PRINTER.archivo_general_de_las_indias",
-      "type": "printer",
-      "label": "Archivo General de las Indias"
-    },
-    {
       "id": "PRINTER.archivo_general_de_navarra",
       "type": "printer",
       "label": "Archivo General de Navarra"
-    },
-    {
-      "id": "PRINTER.archivo_historico_de_protocolos",
-      "type": "printer",
-      "label": "Archivo Histórico de Protocolos"
     },
     {
       "id": "PRINTER.archivo_historico_municipal",
@@ -7175,11 +7180,6 @@
       "label": "Beinecke Library"
     },
     {
-      "id": "PRINTER.bg_37753",
-      "type": "printer",
-      "label": "BG/37753"
-    },
-    {
       "id": "PRINTER.biblioteca_apostolica_vaticana",
       "type": "printer",
       "label": "Biblioteca Apostólica Vaticana"
@@ -7210,19 +7210,9 @@
       "label": "Biblioteca de Menéndez Pelayo"
     },
     {
-      "id": "PRINTER.biblioteca_del_marques_de_morbecq",
-      "type": "printer",
-      "label": "Biblioteca del Marqués de Mórbecq"
-    },
-    {
       "id": "PRINTER.biblioteca_francisco_de_zabalburu_y_basabe",
       "type": "printer",
       "label": "Biblioteca Francisco de Zabálburu y Basabe"
-    },
-    {
-      "id": "PRINTER.biblioteca_general_historica",
-      "type": "printer",
-      "label": "Biblioteca General Histórica"
     },
     {
       "id": "PRINTER.biblioteca_general_historica_de_la_universidad_de_salamanca",
@@ -7280,11 +7270,6 @@
       "label": "Bibliothèque de l’Arsenal"
     },
     {
-      "id": "PRINTER.bibliotheque_national_de_france",
-      "type": "printer",
-      "label": "Bibliothèque National de France"
-    },
-    {
       "id": "PRINTER.bibliotheque_nationale_de_france",
       "type": "printer",
       "label": "Bibliothèque Nationale de France"
@@ -7293,21 +7278,6 @@
       "id": "PRINTER.bibliotheque_patrimoniale_villon",
       "type": "printer",
       "label": "Bibliothèque patrimoniale Villon"
-    },
-    {
-      "id": "PRINTER.bodleian",
-      "type": "printer",
-      "label": "Bodleian"
-    },
-    {
-      "id": "PRINTER.boston_public_library",
-      "type": "printer",
-      "label": "Boston Public Library"
-    },
-    {
-      "id": "PRINTER.british_library",
-      "type": "printer",
-      "label": "British Library"
     },
     {
       "id": "PRINTER.caja_duero_de_ahorros",
@@ -7320,9 +7290,9 @@
       "label": "Carles Amorós"
     },
     {
-      "id": "PRINTER.columbia_university",
+      "id": "PRINTER.christofol_kofmann",
       "type": "printer",
-      "label": "Columbia University"
+      "label": "Christofol Kofmann"
     },
     {
       "id": "PRINTER.cordoba",
@@ -7342,7 +7312,7 @@
     {
       "id": "PRINTER.cuatro_companeros_alemanes",
       "type": "printer",
-      "label": "Cuatro Compañeros alemanes"
+      "label": "Cuatro Compañeros Alemanes"
     },
     {
       "id": "PRINTER.diego_de_gumiel",
@@ -7380,9 +7350,24 @@
       "label": "Felipe de Junta"
     },
     {
+      "id": "PRINTER.felipe_de_junta_y_juan_bautista_varesio",
+      "type": "printer",
+      "label": "Felipe de Junta y Juan Bautista Varesio"
+    },
+    {
       "id": "PRINTER.fernando_de_aguilar",
       "type": "printer",
       "label": "Fernando de Aguilar"
+    },
+    {
+      "id": "PRINTER.fernando_de_santa_catalina",
+      "type": "printer",
+      "label": "Fernando de Santa Catalina"
+    },
+    {
+      "id": "PRINTER.fernando_de_santa_catalina_diego_ferrer",
+      "type": "printer",
+      "label": "Fernando de Santa Catalina, Diego Ferrer"
     },
     {
       "id": "PRINTER.fernando_diaz",
@@ -7428,6 +7413,11 @@
       "id": "PRINTER.fundacion_lazaro_galdiano",
       "type": "printer",
       "label": "Fundación Lázaro Galdiano"
+    },
+    {
+      "id": "PRINTER.gabriel_luis_arino_y_lope_de_la_roca",
+      "type": "printer",
+      "label": "Gabriel Luis Ariño y Lope de la Roca"
     },
     {
       "id": "PRINTER.gaspar_de_avila",
@@ -7505,6 +7495,11 @@
       "label": "Jacobo y Juan Cromberger"
     },
     {
+      "id": "PRINTER.jacome_cromberger",
+      "type": "printer",
+      "label": "Jácome Cromberger [?]"
+    },
+    {
       "id": "PRINTER.joan_de_mey",
       "type": "printer",
       "label": "Joan de Mey"
@@ -7522,12 +7517,12 @@
     {
       "id": "PRINTER.johann_paris_y_etienne_clebat",
       "type": "printer",
-      "label": "Johann París y Etienne Clebat"
+      "label": "Johann Paris y Etienne Clebat"
     },
     {
-      "id": "PRINTER.john_carter_brown_library",
+      "id": "PRINTER.jorge_cocci",
       "type": "printer",
-      "label": "John Carter Brown Library"
+      "label": "Jorge Cocci"
     },
     {
       "id": "PRINTER.jorge_coci",
@@ -7535,9 +7530,24 @@
       "label": "Jorge Coci"
     },
     {
+      "id": "PRINTER.jorge_coci_leonardo_hutz_lope_appentegger",
+      "type": "printer",
+      "label": "Jorge Coci, Leonardo Hutz, Lope Appentegger"
+    },
+    {
+      "id": "PRINTER.jorge_costilla",
+      "type": "printer",
+      "label": "Jorge Costilla"
+    },
+    {
       "id": "PRINTER.juan_cromberger",
       "type": "printer",
       "label": "Juan Cromberger"
+    },
+    {
+      "id": "PRINTER.juan_de_ayala",
+      "type": "printer",
+      "label": "Juan de Ayala [?]"
     },
     {
       "id": "PRINTER.juan_de_brocar",
@@ -7552,7 +7562,7 @@
     {
       "id": "PRINTER.juan_de_junta",
       "type": "printer",
-      "label": "Juan de Junta ?"
+      "label": "Juan de Junta"
     },
     {
       "id": "PRINTER.juan_de_leon",
@@ -7563,6 +7573,11 @@
       "id": "PRINTER.juan_de_porras",
       "type": "printer",
       "label": "Juan de Porras"
+    },
+    {
+      "id": "PRINTER.juan_de_porras_para_fernando_de_jaen",
+      "type": "printer",
+      "label": "Juan de Porras para Fernando de Jaen"
     },
     {
       "id": "PRINTER.juan_de_porras_para_pedro_de_pascua",
@@ -7610,6 +7625,11 @@
       "label": "Juan Párix y Etienne Clebat"
     },
     {
+      "id": "PRINTER.juan_pegnitzer_y_magno_herbst",
+      "type": "printer",
+      "label": "Juan Pegnitzer [?] y Magno Herbst [?]"
+    },
+    {
       "id": "PRINTER.juan_perez_de_valdivielso",
       "type": "printer",
       "label": "Juan Pérez de Valdivielso"
@@ -7645,9 +7665,19 @@
       "label": "Kungliga Biblioteket"
     },
     {
-      "id": "PRINTER.library_of_congress",
+      "id": "PRINTER.la_coronica_de_los_famosos_caballeros_lisuarte_de_grecia_y_perio",
       "type": "printer",
-      "label": "Library of Congress"
+      "label": "La corónica de los famosos caballeros Lisuarte de Grecia y Perión de Gaula"
+    },
+    {
+      "id": "PRINTER.leonardo_hutz_y_lope_sanz",
+      "type": "printer",
+      "label": "Leonardo Hutz y Lope Sanz"
+    },
+    {
+      "id": "PRINTER.libro_de_vegecio_de_la_caballeria_y_del_arte_de_las_batallas",
+      "type": "printer",
+      "label": "Libro de Vegecio de la caballeria y del arte de las batallas"
     },
     {
       "id": "PRINTER.lope_de_la_roca",
@@ -7673,6 +7703,11 @@
       "id": "PRINTER.lucas_martin_de_hermosilla",
       "type": "printer",
       "label": "Lucas Martín de Hermosilla"
+    },
+    {
+      "id": "PRINTER.luis_de_paz",
+      "type": "printer",
+      "label": "Luis de Paz."
     },
     {
       "id": "PRINTER.luis_sanchez",
@@ -7707,7 +7742,7 @@
     {
       "id": "PRINTER.mateo_de_flandes",
       "type": "printer",
-      "label": "Mateo de Flandes ?"
+      "label": "Mateo de Flandes [?]"
     },
     {
       "id": "PRINTER.mateo_y_francisco_del_canto",
@@ -7730,19 +7765,24 @@
       "label": "Miguel de Eguía"
     },
     {
+      "id": "PRINTER.miguel_martinez",
+      "type": "printer",
+      "label": "Miguel Martínez"
+    },
+    {
+      "id": "PRINTER.nicolas_spindeler",
+      "type": "printer",
+      "label": "Nicolas Spindeler [?]"
+    },
+    {
       "id": "PRINTER.nicolas_tierry",
       "type": "printer",
-      "label": "Nicolas Tierry"
+      "label": "Nicolás Tierry"
     },
     {
       "id": "PRINTER.osterreichische_nationalbibliotek",
       "type": "printer",
       "label": "Österreichische Nationalbibliotek"
-    },
-    {
-      "id": "PRINTER.osterreichische_nationalbibliothek",
-      "type": "printer",
-      "label": "Österreichische Nationalbibliothek"
     },
     {
       "id": "PRINTER.pablo_hurus",
@@ -7760,6 +7800,11 @@
       "label": "Pedro Brun"
     },
     {
+      "id": "PRINTER.pedro_brun_y_juan_gentil",
+      "type": "printer",
+      "label": "Pedro Brun y Juan Gentil"
+    },
+    {
       "id": "PRINTER.pedro_compadre_y_blas_guidon",
       "type": "printer",
       "label": "Pedro Compadre y Blas Guidón"
@@ -7767,12 +7812,22 @@
     {
       "id": "PRINTER.pedro_de_castro",
       "type": "printer",
-      "label": "Pedro de Castro ?"
+      "label": "Pedro de Castro [?]"
+    },
+    {
+      "id": "PRINTER.pedro_de_santillana",
+      "type": "printer",
+      "label": "Pedro de Santillana"
     },
     {
       "id": "PRINTER.pedro_escuder",
       "type": "printer",
       "label": "Pedro Escuder"
+    },
+    {
+      "id": "PRINTER.pedro_giraldi_y_miguel_de_planes",
+      "type": "printer",
+      "label": "Pedro Giraldi y Miguel de Planes"
     },
     {
       "id": "PRINTER.pedro_hagenbach",
@@ -7793,6 +7848,16 @@
       "id": "PRINTER.pedro_posa",
       "type": "printer",
       "label": "Pedro Posa"
+    },
+    {
+      "id": "PRINTER.pedro_tovans",
+      "type": "printer",
+      "label": "Pedro Tovans"
+    },
+    {
+      "id": "PRINTER.philippe_pigouchet",
+      "type": "printer",
+      "label": "Philippe Pigouchet"
     },
     {
       "id": "PRINTER.pierre_hardouin",
@@ -7890,11 +7955,6 @@
       "label": "Sebastián Trujillo"
     },
     {
-      "id": "PRINTER.southern_methodist_university_bridwell_library",
-      "type": "printer",
-      "label": "Southern Methodist University. Bridwell Library"
-    },
-    {
       "id": "PRINTER.sucesor_a_hagenbach",
       "type": "printer",
       "label": "Sucesor a Hagenbach"
@@ -7905,29 +7965,14 @@
       "label": "The British Library"
     },
     {
-      "id": "PRINTER.the_huntington_library",
+      "id": "PRINTER.thielman_kerver",
       "type": "printer",
-      "label": "The Huntington Library"
+      "label": "Thielman Kerver"
     },
     {
       "id": "PRINTER.tres_companeros_alemanes",
       "type": "printer",
       "label": "Tres Compañeros alemanes"
-    },
-    {
-      "id": "PRINTER.universidade_de_lisboa",
-      "type": "printer",
-      "label": "Universidade de Lisboa"
-    },
-    {
-      "id": "PRINTER.university_library",
-      "type": "printer",
-      "label": "University Library"
-    },
-    {
-      "id": "PRINTER.university_of_manchester_john_rylands_university_library",
-      "type": "printer",
-      "label": "University of Manchester John Rylands University Library"
     },
     {
       "id": "PRINTER.university_of_minnesota",
@@ -7943,16 +7988,6 @@
       "id": "PRINTER.valentin_fernandez",
       "type": "printer",
       "label": "Valentín Fernández"
-    },
-    {
-      "id": "PRINTER.william_l_clements_library_university_of_michigan",
-      "type": "printer",
-      "label": "William L. Clements Library, University of Michigan"
-    },
-    {
-      "id": "PRINTER.wurttembergische_landesbibliothek",
-      "type": "printer",
-      "label": "Württembergische Landesbibliothek"
     },
     {
       "id": "TERM.2_como",
@@ -36650,11 +36685,6 @@
       "label": "1023"
     },
     {
-      "id": "YEAR.1025",
-      "type": "year",
-      "label": "1025"
-    },
-    {
       "id": "YEAR.1028",
       "type": "year",
       "label": "1028"
@@ -36690,11 +36720,6 @@
       "label": "1111"
     },
     {
-      "id": "YEAR.112",
-      "type": "year",
-      "label": "112"
-    },
-    {
       "id": "YEAR.1130",
       "type": "year",
       "label": "1130"
@@ -36703,11 +36728,6 @@
       "id": "YEAR.1154",
       "type": "year",
       "label": "1154"
-    },
-    {
-      "id": "YEAR.1168",
-      "type": "year",
-      "label": "1168"
     },
     {
       "id": "YEAR.1182",
@@ -36725,34 +36745,9 @@
       "label": "1196"
     },
     {
-      "id": "YEAR.1220",
-      "type": "year",
-      "label": "1220"
-    },
-    {
-      "id": "YEAR.1227",
-      "type": "year",
-      "label": "1227"
-    },
-    {
-      "id": "YEAR.1243",
-      "type": "year",
-      "label": "1243"
-    },
-    {
-      "id": "YEAR.1265",
-      "type": "year",
-      "label": "1265"
-    },
-    {
       "id": "YEAR.1272",
       "type": "year",
       "label": "1272"
-    },
-    {
-      "id": "YEAR.1278",
-      "type": "year",
-      "label": "1278"
     },
     {
       "id": "YEAR.1279",
@@ -36760,39 +36755,14 @@
       "label": "1279"
     },
     {
-      "id": "YEAR.1280",
-      "type": "year",
-      "label": "1280"
-    },
-    {
       "id": "YEAR.1283",
       "type": "year",
       "label": "1283"
     },
     {
-      "id": "YEAR.1313",
-      "type": "year",
-      "label": "1313"
-    },
-    {
-      "id": "YEAR.1314",
-      "type": "year",
-      "label": "1314"
-    },
-    {
-      "id": "YEAR.1322",
-      "type": "year",
-      "label": "1322"
-    },
-    {
       "id": "YEAR.1341",
       "type": "year",
       "label": "1341"
-    },
-    {
-      "id": "YEAR.1350",
-      "type": "year",
-      "label": "1350"
     },
     {
       "id": "YEAR.1356",
@@ -36803,21 +36773,6 @@
       "id": "YEAR.139",
       "type": "year",
       "label": "139"
-    },
-    {
-      "id": "YEAR.1424",
-      "type": "year",
-      "label": "1424"
-    },
-    {
-      "id": "YEAR.1427",
-      "type": "year",
-      "label": "1427"
-    },
-    {
-      "id": "YEAR.143",
-      "type": "year",
-      "label": "143"
     },
     {
       "id": "YEAR.1472",
@@ -36840,6 +36795,11 @@
       "label": "1482"
     },
     {
+      "id": "YEAR.1483",
+      "type": "year",
+      "label": "1483"
+    },
+    {
       "id": "YEAR.1484",
       "type": "year",
       "label": "1484"
@@ -36848,6 +36808,11 @@
       "id": "YEAR.1485",
       "type": "year",
       "label": "1485"
+    },
+    {
+      "id": "YEAR.1486",
+      "type": "year",
+      "label": "1486"
     },
     {
       "id": "YEAR.1487",
@@ -36935,6 +36900,11 @@
       "label": "1503"
     },
     {
+      "id": "YEAR.1504",
+      "type": "year",
+      "label": "1504"
+    },
+    {
       "id": "YEAR.1505",
       "type": "year",
       "label": "1505"
@@ -36953,11 +36923,6 @@
       "id": "YEAR.1508",
       "type": "year",
       "label": "1508"
-    },
-    {
-      "id": "YEAR.151",
-      "type": "year",
-      "label": "151"
     },
     {
       "id": "YEAR.1510",
@@ -37060,11 +37025,6 @@
       "label": "1529"
     },
     {
-      "id": "YEAR.153",
-      "type": "year",
-      "label": "153"
-    },
-    {
       "id": "YEAR.1530",
       "type": "year",
       "label": "1530"
@@ -37088,6 +37048,11 @@
       "id": "YEAR.1535",
       "type": "year",
       "label": "1535"
+    },
+    {
+      "id": "YEAR.1537",
+      "type": "year",
+      "label": "1537"
     },
     {
       "id": "YEAR.1538",
@@ -37178,6 +37143,11 @@
       "id": "YEAR.1556",
       "type": "year",
       "label": "1556"
+    },
+    {
+      "id": "YEAR.1557",
+      "type": "year",
+      "label": "1557"
     },
     {
       "id": "YEAR.1558",
@@ -37300,6 +37270,16 @@
       "label": "1594"
     },
     {
+      "id": "YEAR.1596",
+      "type": "year",
+      "label": "1596"
+    },
+    {
+      "id": "YEAR.1597",
+      "type": "year",
+      "label": "1597"
+    },
+    {
       "id": "YEAR.1598",
       "type": "year",
       "label": "1598"
@@ -37365,11 +37345,6 @@
       "label": "1700"
     },
     {
-      "id": "YEAR.1721",
-      "type": "year",
-      "label": "1721"
-    },
-    {
       "id": "YEAR.1725",
       "type": "year",
       "label": "1725"
@@ -37388,11 +37363,6 @@
       "id": "YEAR.1750",
       "type": "year",
       "label": "1750"
-    },
-    {
-      "id": "YEAR.1756",
-      "type": "year",
-      "label": "1756"
     },
     {
       "id": "YEAR.1761",
@@ -37428,11 +37398,6 @@
       "id": "YEAR.1781",
       "type": "year",
       "label": "1781"
-    },
-    {
-      "id": "YEAR.1801",
-      "type": "year",
-      "label": "1801"
     },
     {
       "id": "YEAR.1805",
@@ -37475,29 +37440,14 @@
       "label": "1890"
     },
     {
-      "id": "YEAR.1910",
-      "type": "year",
-      "label": "1910"
-    },
-    {
       "id": "YEAR.1947",
       "type": "year",
       "label": "1947"
     },
     {
-      "id": "YEAR.1956",
-      "type": "year",
-      "label": "1956"
-    },
-    {
       "id": "YEAR.1958",
       "type": "year",
       "label": "1958"
-    },
-    {
-      "id": "YEAR.196",
-      "type": "year",
-      "label": "196"
     },
     {
       "id": "YEAR.1962",
@@ -37508,21 +37458,6 @@
       "id": "YEAR.1963",
       "type": "year",
       "label": "1963"
-    },
-    {
-      "id": "YEAR.197",
-      "type": "year",
-      "label": "197"
-    },
-    {
-      "id": "YEAR.198",
-      "type": "year",
-      "label": "198"
-    },
-    {
-      "id": "YEAR.1989",
-      "type": "year",
-      "label": "1989"
     },
     {
       "id": "YEAR.1997",
@@ -37543,11 +37478,6 @@
       "id": "YEAR.2086",
       "type": "year",
       "label": "2086"
-    },
-    {
-      "id": "YEAR.2092",
-      "type": "year",
-      "label": "2092"
     },
     {
       "id": "YEAR.214",
@@ -37585,16 +37515,6 @@
       "label": "2178"
     },
     {
-      "id": "YEAR.218",
-      "type": "year",
-      "label": "218"
-    },
-    {
-      "id": "YEAR.2182",
-      "type": "year",
-      "label": "2182"
-    },
-    {
       "id": "YEAR.2201",
       "type": "year",
       "label": "2201"
@@ -37608,11 +37528,6 @@
       "id": "YEAR.2211",
       "type": "year",
       "label": "2211"
-    },
-    {
-      "id": "YEAR.2258",
-      "type": "year",
-      "label": "2258"
     },
     {
       "id": "YEAR.226",
@@ -37630,16 +37545,6 @@
       "label": "227"
     },
     {
-      "id": "YEAR.2271",
-      "type": "year",
-      "label": "2271"
-    },
-    {
-      "id": "YEAR.2272",
-      "type": "year",
-      "label": "2272"
-    },
-    {
       "id": "YEAR.230",
       "type": "year",
       "label": "230"
@@ -37655,44 +37560,9 @@
       "label": "233"
     },
     {
-      "id": "YEAR.2340",
-      "type": "year",
-      "label": "2340"
-    },
-    {
-      "id": "YEAR.2342",
-      "type": "year",
-      "label": "2342"
-    },
-    {
-      "id": "YEAR.240",
-      "type": "year",
-      "label": "240"
-    },
-    {
-      "id": "YEAR.243",
-      "type": "year",
-      "label": "243"
-    },
-    {
-      "id": "YEAR.2441",
-      "type": "year",
-      "label": "2441"
-    },
-    {
-      "id": "YEAR.2442",
-      "type": "year",
-      "label": "2442"
-    },
-    {
       "id": "YEAR.245",
       "type": "year",
       "label": "245"
-    },
-    {
-      "id": "YEAR.2470",
-      "type": "year",
-      "label": "2470"
     },
     {
       "id": "YEAR.248",
@@ -37700,19 +37570,9 @@
       "label": "248"
     },
     {
-      "id": "YEAR.2493",
-      "type": "year",
-      "label": "2493"
-    },
-    {
       "id": "YEAR.252",
       "type": "year",
       "label": "252"
-    },
-    {
-      "id": "YEAR.2559",
-      "type": "year",
-      "label": "2559"
     },
     {
       "id": "YEAR.2570",
@@ -37730,19 +37590,9 @@
       "label": "2652"
     },
     {
-      "id": "YEAR.2657",
-      "type": "year",
-      "label": "2657"
-    },
-    {
       "id": "YEAR.2663",
       "type": "year",
       "label": "2663"
-    },
-    {
-      "id": "YEAR.2674",
-      "type": "year",
-      "label": "2674"
     },
     {
       "id": "YEAR.270",
@@ -37775,11 +37625,6 @@
       "label": "2857"
     },
     {
-      "id": "YEAR.2892",
-      "type": "year",
-      "label": "2892"
-    },
-    {
       "id": "YEAR.293",
       "type": "year",
       "label": "293"
@@ -37805,44 +37650,14 @@
       "label": "3088"
     },
     {
-      "id": "YEAR.3104",
-      "type": "year",
-      "label": "3104"
-    },
-    {
-      "id": "YEAR.3109",
-      "type": "year",
-      "label": "3109"
-    },
-    {
       "id": "YEAR.313",
       "type": "year",
       "label": "313"
     },
     {
-      "id": "YEAR.3136",
-      "type": "year",
-      "label": "3136"
-    },
-    {
-      "id": "YEAR.3178",
-      "type": "year",
-      "label": "3178"
-    },
-    {
-      "id": "YEAR.3188",
-      "type": "year",
-      "label": "3188"
-    },
-    {
       "id": "YEAR.3191",
       "type": "year",
       "label": "3191"
-    },
-    {
-      "id": "YEAR.3257",
-      "type": "year",
-      "label": "3257"
     },
     {
       "id": "YEAR.3338",
@@ -37865,11 +37680,6 @@
       "label": "339"
     },
     {
-      "id": "YEAR.3418",
-      "type": "year",
-      "label": "3418"
-    },
-    {
       "id": "YEAR.345",
       "type": "year",
       "label": "345"
@@ -37880,34 +37690,9 @@
       "label": "3576"
     },
     {
-      "id": "YEAR.3642",
-      "type": "year",
-      "label": "3642"
-    },
-    {
       "id": "YEAR.3648",
       "type": "year",
       "label": "3648"
-    },
-    {
-      "id": "YEAR.3965",
-      "type": "year",
-      "label": "3965"
-    },
-    {
-      "id": "YEAR.399",
-      "type": "year",
-      "label": "399"
-    },
-    {
-      "id": "YEAR.4004",
-      "type": "year",
-      "label": "4004"
-    },
-    {
-      "id": "YEAR.403",
-      "type": "year",
-      "label": "403"
     },
     {
       "id": "YEAR.4052",
@@ -37918,11 +37703,6 @@
       "id": "YEAR.4055",
       "type": "year",
       "label": "4055"
-    },
-    {
-      "id": "YEAR.4112",
-      "type": "year",
-      "label": "4112"
     },
     {
       "id": "YEAR.4236",
@@ -37950,44 +37730,14 @@
       "label": "439"
     },
     {
-      "id": "YEAR.4459",
-      "type": "year",
-      "label": "4459"
-    },
-    {
       "id": "YEAR.458",
       "type": "year",
       "label": "458"
     },
     {
-      "id": "YEAR.4870",
-      "type": "year",
-      "label": "4870"
-    },
-    {
-      "id": "YEAR.4888",
-      "type": "year",
-      "label": "4888"
-    },
-    {
-      "id": "YEAR.495",
-      "type": "year",
-      "label": "495"
-    },
-    {
       "id": "YEAR.510",
       "type": "year",
       "label": "510"
-    },
-    {
-      "id": "YEAR.5182",
-      "type": "year",
-      "label": "5182"
-    },
-    {
-      "id": "YEAR.5212",
-      "type": "year",
-      "label": "5212"
     },
     {
       "id": "YEAR.539",
@@ -38005,16 +37755,6 @@
       "label": "5620"
     },
     {
-      "id": "YEAR.568",
-      "type": "year",
-      "label": "568"
-    },
-    {
-      "id": "YEAR.5754",
-      "type": "year",
-      "label": "5754"
-    },
-    {
       "id": "YEAR.5764",
       "type": "year",
       "label": "5764"
@@ -38030,11 +37770,6 @@
       "label": "5795"
     },
     {
-      "id": "YEAR.5843",
-      "type": "year",
-      "label": "5843"
-    },
-    {
       "id": "YEAR.6376",
       "type": "year",
       "label": "6376"
@@ -38045,19 +37780,9 @@
       "label": "6401"
     },
     {
-      "id": "YEAR.6426",
-      "type": "year",
-      "label": "6426"
-    },
-    {
       "id": "YEAR.6428",
       "type": "year",
       "label": "6428"
-    },
-    {
-      "id": "YEAR.6490",
-      "type": "year",
-      "label": "6490"
     },
     {
       "id": "YEAR.6559",
@@ -38065,19 +37790,9 @@
       "label": "6559"
     },
     {
-      "id": "YEAR.657",
-      "type": "year",
-      "label": "657"
-    },
-    {
       "id": "YEAR.6603",
       "type": "year",
       "label": "6603"
-    },
-    {
-      "id": "YEAR.6721",
-      "type": "year",
-      "label": "6721"
     },
     {
       "id": "YEAR.684",
@@ -38088,11 +37803,6 @@
       "id": "YEAR.691",
       "type": "year",
       "label": "691"
-    },
-    {
-      "id": "YEAR.6918",
-      "type": "year",
-      "label": "6918"
     },
     {
       "id": "YEAR.6958",
@@ -38160,29 +37870,9 @@
       "label": "8324"
     },
     {
-      "id": "YEAR.8501",
-      "type": "year",
-      "label": "8501"
-    },
-    {
-      "id": "YEAR.8507",
-      "type": "year",
-      "label": "8507"
-    },
-    {
-      "id": "YEAR.865",
-      "type": "year",
-      "label": "865"
-    },
-    {
       "id": "YEAR.9055",
       "type": "year",
       "label": "9055"
-    },
-    {
-      "id": "YEAR.9095",
-      "type": "year",
-      "label": "9095"
     },
     {
       "id": "YEAR.9199",
@@ -38223,21 +37913,6 @@
       "id": "YEAR.940",
       "type": "year",
       "label": "940"
-    },
-    {
-      "id": "YEAR.9430",
-      "type": "year",
-      "label": "9430"
-    },
-    {
-      "id": "YEAR.9432",
-      "type": "year",
-      "label": "9432"
-    },
-    {
-      "id": "YEAR.9443",
-      "type": "year",
-      "label": "9443"
     },
     {
       "id": "YEAR.946",
@@ -38504,16 +38179,6 @@
       "target": "TERM.ssienpre",
       "rel": "CONTAINS_TERM",
       "weight": 13.9782
-    },
-    {
-      "source": "MS.1500__acr_sticos_2",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__acr_sticos_2",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__acr_sticos_2",
@@ -39069,16 +38734,6 @@
     },
     {
       "source": "MS.1500__argumentogeneral_3",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__argumentogeneral_3",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__argumentogeneral_3",
       "target": "TERM.aduersa",
       "rel": "CONTAINS_TERM",
       "weight": 4.6594
@@ -39256,16 +38911,6 @@
       "target": "TERM.vencidos",
       "rel": "CONTAINS_TERM",
       "weight": 4.5259
-    },
-    {
-      "source": "MS.1500__argumentosactos_4",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__argumentosactos_4",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__argumentosactos_4",
@@ -39683,16 +39328,6 @@
     },
     {
       "source": "MS.1500__auto_02",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_02",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_02",
       "target": "TERM.soledad",
       "rel": "CONTAINS_TERM",
       "weight": 13.5776
@@ -40089,16 +39724,6 @@
     },
     {
       "source": "MS.1500__auto_03",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_03",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_03",
       "target": "TERM.hilado",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -40357,16 +39982,6 @@
     },
     {
       "source": "MS.1500__auto_04",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_04",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_04",
       "target": "TERM.falto",
       "rel": "CONTAINS_TERM",
       "weight": 24.0677
@@ -40442,16 +40057,6 @@
       "target": "TERM.sospecha",
       "rel": "CONTAINS_TERM",
       "weight": 14.4406
-    },
-    {
-      "source": "MS.1500__auto_04a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_04a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_04a",
@@ -40593,16 +40198,6 @@
     },
     {
       "source": "MS.1500__auto_04b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_04b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_04b",
       "target": "TERM.desculpa",
       "rel": "CONTAINS_TERM",
       "weight": 19.2542
@@ -40738,16 +40333,6 @@
       "target": "TERM.agradar",
       "rel": "CONTAINS_TERM",
       "weight": 5.219
-    },
-    {
-      "source": "MS.1500__auto_05",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_05",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_05",
@@ -41123,16 +40708,6 @@
     },
     {
       "source": "MS.1500__auto_06",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_06",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_06",
       "target": "TERM.saya",
       "rel": "CONTAINS_TERM",
       "weight": 24.9793
@@ -41268,16 +40843,6 @@
       "target": "TERM.discreta",
       "rel": "CONTAINS_TERM",
       "weight": 9.9917
-    },
-    {
-      "source": "MS.1500__auto_06a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_06a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_06a",
@@ -41500,16 +41065,6 @@
       "target": "TERM.aplazible",
       "rel": "CONTAINS_TERM",
       "weight": 5.219
-    },
-    {
-      "source": "MS.1500__auto_06b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_06b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_06b",
@@ -41759,16 +41314,6 @@
     },
     {
       "source": "MS.1500__auto_07",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_07",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_07",
       "target": "TERM.elisa",
       "rel": "CONTAINS_TERM",
       "weight": 33.0401
@@ -41856,16 +41401,6 @@
       "target": "TERM.acuerdas",
       "rel": "CONTAINS_TERM",
       "weight": 9.3188
-    },
-    {
-      "source": "MS.1500__auto_07a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_07a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_07a",
@@ -41986,16 +41521,6 @@
       "target": "TERM.agenas",
       "rel": "CONTAINS_TERM",
       "weight": 4.8135
-    },
-    {
-      "source": "MS.1500__auto_07b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_07b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_07b",
@@ -42188,16 +41713,6 @@
       "target": "TERM.agradar",
       "rel": "CONTAINS_TERM",
       "weight": 5.219
-    },
-    {
-      "source": "MS.1500__auto_08",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_08",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_08",
@@ -42423,16 +41938,6 @@
     },
     {
       "source": "MS.1500__auto_09",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_09",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_09",
       "target": "TERM.mocas",
       "rel": "CONTAINS_TERM",
       "weight": 19.9834
@@ -42544,16 +42049,6 @@
       "target": "TERM.estotro",
       "rel": "CONTAINS_TERM",
       "weight": 11.0134
-    },
-    {
-      "source": "MS.1500__auto_09a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_09a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_09a",
@@ -42761,16 +42256,6 @@
     },
     {
       "source": "MS.1500__auto_09b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_09b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_09b",
       "target": "TERM.esperan",
       "rel": "CONTAINS_TERM",
       "weight": 14.9876
@@ -42945,16 +42430,6 @@
     },
     {
       "source": "MS.1500__auto_10",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_10",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_10",
       "target": "TERM.descobrir",
       "rel": "CONTAINS_TERM",
       "weight": 26.095
@@ -43108,16 +42583,6 @@
       "target": "TERM.silencio",
       "rel": "CONTAINS_TERM",
       "weight": 10.438
-    },
-    {
-      "source": "MS.1500__auto_11",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_11",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_11",
@@ -43427,16 +42892,6 @@
     },
     {
       "source": "MS.1500__auto_12",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_12",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_12",
       "target": "TERM.puertas",
       "rel": "CONTAINS_TERM",
       "weight": 35.2646
@@ -43524,16 +42979,6 @@
       "target": "TERM.onze",
       "rel": "CONTAINS_TERM",
       "weight": 13.2242
-    },
-    {
-      "source": "MS.1500__auto_12a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_12a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_12a",
@@ -43711,16 +43156,6 @@
     },
     {
       "source": "MS.1500__auto_12b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_12b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_12b",
       "target": "TERM.almorzar",
       "rel": "CONTAINS_TERM",
       "weight": 15.657
@@ -43838,16 +43273,6 @@
       "target": "TERM.ygual",
       "rel": "CONTAINS_TERM",
       "weight": 9.0517
-    },
-    {
-      "source": "MS.1500__auto_13",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_13",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_13",
@@ -44241,16 +43666,6 @@
     },
     {
       "source": "MS.1500__auto_14",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_14",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto_14",
       "target": "TERM.escala",
       "rel": "CONTAINS_TERM",
       "weight": 19.2542
@@ -44560,16 +43975,6 @@
       "target": "TERM.escuro",
       "rel": "CONTAINS_TERM",
       "weight": 5.219
-    },
-    {
-      "source": "MS.1500__auto_15",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_15",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_15",
@@ -44912,16 +44317,6 @@
       "target": "TERM.consiente",
       "rel": "CONTAINS_TERM",
       "weight": 4.9959
-    },
-    {
-      "source": "MS.1500__auto_16",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto_16",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto_16",
@@ -45279,16 +44674,6 @@
     },
     {
       "source": "MS.1500__auto1_01",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto1_01",
       "target": "TERM.interesse",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -45310,16 +44695,6 @@
       "target": "TERM.passan",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
-    },
-    {
-      "source": "MS.1500__auto1_01-a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01-a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto1_01-a",
@@ -45455,16 +44830,6 @@
     },
     {
       "source": "MS.1500__auto1_01-b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01-b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto1_01-b",
       "target": "TERM.interesse",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -45546,16 +44911,6 @@
       "target": "TERM.consuela",
       "rel": "CONTAINS_TERM",
       "weight": 9.3188
-    },
-    {
-      "source": "MS.1500__auto1_01a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01a",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__auto1_01a",
@@ -45781,16 +45136,6 @@
     },
     {
       "source": "MS.1500__auto1_01b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01b",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto1_01b",
       "target": "TERM.crito",
       "rel": "CONTAINS_TERM",
       "weight": 14.4406
@@ -45977,16 +45322,6 @@
     },
     {
       "source": "MS.1500__auto1_01c",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01c",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto1_01c",
       "target": "TERM.remediar",
       "rel": "CONTAINS_TERM",
       "weight": 13.2242
@@ -46167,16 +45502,6 @@
     },
     {
       "source": "MS.1500__auto1_01d",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__auto1_01d",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__auto1_01d",
       "target": "TERM.interesse",
       "rel": "CONTAINS_TERM",
       "weight": 13.9782
@@ -46300,16 +45625,6 @@
       "target": "TERM.aspereza",
       "rel": "CONTAINS_TERM",
       "weight": 5.5067
-    },
-    {
-      "source": "MS.1500__cartaasuamigo_1",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__cartaasuamigo_1",
-      "target": "YEAR.1500",
-      "rel": "DATED"
     },
     {
       "source": "MS.1500__cartaasuamigo_1",
@@ -46877,16 +46192,6 @@
     },
     {
       "source": "MS.1500__octavasProaza_5",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1500__octavasProaza_5",
-      "target": "YEAR.1500",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1500__octavasProaza_5",
       "target": "TERM.leyendo",
       "rel": "CONTAINS_TERM",
       "weight": 22.0267
@@ -47310,16 +46615,6 @@
       "target": "TERM.troyanos",
       "rel": "CONTAINS_TERM",
       "weight": 4.5259
-    },
-    {
-      "source": "MS.1514__acr_sticos_02",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__acr_sticos_02",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__acr_sticos_02",
@@ -47929,16 +47224,6 @@
     },
     {
       "source": "MS.1514__argumentogeneral_04",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__argumentogeneral_04",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__argumentogeneral_04",
       "target": "TERM.aduersa",
       "rel": "CONTAINS_TERM",
       "weight": 4.6594
@@ -48122,16 +47407,6 @@
       "target": "TERM.vencidos",
       "rel": "CONTAINS_TERM",
       "weight": 4.5259
-    },
-    {
-      "source": "MS.1514__argumentosactos_05",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__argumentosactos_05",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__argumentosactos_05",
@@ -48498,16 +47773,6 @@
       "target": "TERM.esperando",
       "rel": "CONTAINS_TERM",
       "weight": 5.5067
-    },
-    {
-      "source": "MS.1514__auto_02",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_02",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_02",
@@ -48889,16 +48154,6 @@
     },
     {
       "source": "MS.1514__auto_03",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_03",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_03",
       "target": "TERM.hilado",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -49121,16 +48376,6 @@
     },
     {
       "source": "MS.1514__auto_04",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_04",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_04",
       "target": "TERM.falto",
       "rel": "CONTAINS_TERM",
       "weight": 24.0677
@@ -49206,16 +48451,6 @@
       "target": "TERM.necessidades",
       "rel": "CONTAINS_TERM",
       "weight": 14.9876
-    },
-    {
-      "source": "MS.1514__auto_05",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_05",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_05",
@@ -49597,16 +48832,6 @@
     },
     {
       "source": "MS.1514__auto_06",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_06",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_06",
       "target": "TERM.saya",
       "rel": "CONTAINS_TERM",
       "weight": 24.9793
@@ -49745,16 +48970,6 @@
     },
     {
       "source": "MS.1514__auto_07",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_07",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_07",
       "target": "TERM.conocida",
       "rel": "CONTAINS_TERM",
       "weight": 20.876
@@ -49836,16 +49051,6 @@
       "target": "TERM.acompane",
       "rel": "CONTAINS_TERM",
       "weight": 10.438
-    },
-    {
-      "source": "MS.1514__auto_08",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_08",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_08",
@@ -50083,16 +49288,6 @@
     },
     {
       "source": "MS.1514__auto_09",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_09",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_09",
       "target": "TERM.mocas",
       "rel": "CONTAINS_TERM",
       "weight": 19.9834
@@ -50186,16 +49381,6 @@
       "target": "TERM.entrauan",
       "rel": "CONTAINS_TERM",
       "weight": 10.438
-    },
-    {
-      "source": "MS.1514__auto_10",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_10",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_10",
@@ -50352,16 +49537,6 @@
       "target": "TERM.publicar",
       "rel": "CONTAINS_TERM",
       "weight": 10.438
-    },
-    {
-      "source": "MS.1514__auto_11",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_11",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_11",
@@ -50659,16 +49834,6 @@
     },
     {
       "source": "MS.1514__auto_12",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_12",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_12",
       "target": "TERM.puertas",
       "rel": "CONTAINS_TERM",
       "weight": 35.2646
@@ -50744,16 +49909,6 @@
       "target": "TERM.onze",
       "rel": "CONTAINS_TERM",
       "weight": 13.2242
-    },
-    {
-      "source": "MS.1514__auto_13",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_13",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_13",
@@ -51123,16 +50278,6 @@
     },
     {
       "source": "MS.1514__auto_14",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_14",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_14",
       "target": "TERM.escala",
       "rel": "CONTAINS_TERM",
       "weight": 19.2542
@@ -51469,16 +50614,6 @@
     },
     {
       "source": "MS.1514__auto_20",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_20",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto_20",
       "target": "TERM.cortaron",
       "rel": "CONTAINS_TERM",
       "weight": 24.9793
@@ -51800,16 +50935,6 @@
       "target": "TERM.breuemente",
       "rel": "CONTAINS_TERM",
       "weight": 4.9959
-    },
-    {
-      "source": "MS.1514__auto_21",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto_21",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto_21",
@@ -52167,16 +51292,6 @@
     },
     {
       "source": "MS.1514__auto1_01",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto1_01",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto1_01",
       "target": "TERM.interesse",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -52204,16 +51319,6 @@
       "target": "TERM.pienses",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
-    },
-    {
-      "source": "MS.1514__auto1_01-a",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto1_01-a",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__auto1_01-a",
@@ -52367,16 +51472,6 @@
     },
     {
       "source": "MS.1514__auto1_01-b",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__auto1_01-b",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__auto1_01-b",
       "target": "TERM.interesse",
       "rel": "CONTAINS_TERM",
       "weight": 18.6376
@@ -52464,16 +51559,6 @@
       "target": "TERM.crianca",
       "rel": "CONTAINS_TERM",
       "weight": 9.6271
-    },
-    {
-      "source": "MS.1514__cartaasuamigo_01",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__cartaasuamigo_01",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__cartaasuamigo_01",
@@ -53047,16 +52132,6 @@
     },
     {
       "source": "MS.1514__octavasautor_06",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__octavasautor_06",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__octavasautor_06",
       "target": "TERM.limpio",
       "rel": "CONTAINS_TERM",
       "weight": 9.3188
@@ -53192,16 +52267,6 @@
       "target": "TERM.vil",
       "rel": "CONTAINS_TERM",
       "weight": 4.5259
-    },
-    {
-      "source": "MS.1514__octavasProaza_07",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__octavasProaza_07",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__octavasProaza_07",
@@ -53679,16 +52744,6 @@
     },
     {
       "source": "MS.1514__pr_logo_03",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__pr_logo_03",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__pr_logo_03",
       "target": "TERM.contienda",
       "rel": "CONTAINS_TERM",
       "weight": 24.0677
@@ -53983,16 +53038,6 @@
     },
     {
       "source": "MS.1514__TC_auto15",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto15",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__TC_auto15",
       "target": "TERM.sentimiento",
       "rel": "CONTAINS_TERM",
       "weight": 13.2242
@@ -54227,16 +53272,6 @@
     },
     {
       "source": "MS.1514__TC_auto15-19",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto15-19",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__TC_auto15-19",
       "target": "TERM.suaue",
       "rel": "CONTAINS_TERM",
       "weight": 34.971
@@ -54282,16 +53317,6 @@
       "target": "TERM.priessa",
       "rel": "CONTAINS_TERM",
       "weight": 23.2969
-    },
-    {
-      "source": "MS.1514__TC_auto16",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto16",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__TC_auto16",
@@ -54577,16 +53602,6 @@
     },
     {
       "source": "MS.1514__TC_auto17",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto17",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__TC_auto17",
       "target": "TERM.visitacion",
       "rel": "CONTAINS_TERM",
       "weight": 15.657
@@ -54821,16 +53836,6 @@
     },
     {
       "source": "MS.1514__TC_auto18",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto18",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__TC_auto18",
       "target": "TERM.palos",
       "rel": "CONTAINS_TERM",
       "weight": 16.5201
@@ -55023,16 +54028,6 @@
     },
     {
       "source": "MS.1514__TC_auto19",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__TC_auto19",
-      "target": "YEAR.1514",
-      "rel": "DATED"
-    },
-    {
-      "source": "MS.1514__TC_auto19",
       "target": "TERM.ygual",
       "rel": "CONTAINS_TERM",
       "weight": 27.1551
@@ -55162,16 +54157,6 @@
       "target": "TERM.manifiesta",
       "rel": "CONTAINS_TERM",
       "weight": 9.9917
-    },
-    {
-      "source": "MS.1514__Traso",
-      "target": "AUTHOR.fernando_de_rojas",
-      "rel": "AUTHORED_BY"
-    },
-    {
-      "source": "MS.1514__Traso",
-      "target": "YEAR.1514",
-      "rel": "DATED"
     },
     {
       "source": "MS.1514__Traso",
@@ -57605,17 +56590,17 @@
     },
     {
       "source": "MS.TEXT.VID",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.VID",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.VID",
-      "target": "YEAR.2442",
+      "target": "YEAR.1486",
       "rel": "DATED"
     },
     {
@@ -57691,17 +56676,17 @@
     },
     {
       "source": "MS.TEXT.BLP",
-      "target": "PRINTER.real_biblioteca",
+      "target": "PRINTER.cuatro_companeros_alemanes",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BLP",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.BLP",
-      "target": "YEAR.1721",
+      "target": "YEAR.1490",
       "rel": "DATED"
     },
     {
@@ -63191,17 +62176,17 @@
     },
     {
       "source": "MS.TEXT.LOP1",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP1",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP1",
-      "target": "YEAR.196",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -63331,17 +62316,17 @@
     },
     {
       "source": "MS.TEXT.LOP2",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP2",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP2",
-      "target": "YEAR.196",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -63423,17 +62408,17 @@
     },
     {
       "source": "MS.TEXT.LOP3",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP3",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP3",
-      "target": "YEAR.197",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -63515,17 +62500,17 @@
     },
     {
       "source": "MS.TEXT.LOP4",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP4",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP4",
-      "target": "YEAR.197",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -63703,17 +62688,17 @@
     },
     {
       "source": "MS.TEXT.LOP5",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP5",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP5",
-      "target": "YEAR.198",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -63873,17 +62858,17 @@
     },
     {
       "source": "MS.TEXT.LOP6",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP6",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP6",
-      "target": "YEAR.198",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -64019,17 +63004,17 @@
     },
     {
       "source": "MS.TEXT.LOP7",
-      "target": "PRINTER.universidade_de_lisboa",
+      "target": "PRINTER.andrea_de_portonariis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LOP7",
-      "target": "CITY.lisboa",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LOP7",
-      "target": "YEAR.198",
+      "target": "YEAR.1555",
       "rel": "DATED"
     },
     {
@@ -67578,12 +66563,12 @@
     },
     {
       "source": "MS.TEXT.SPO",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.meinardo_ungut_y_estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.SPO",
-      "target": "CITY.nueva_york",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -69059,17 +68044,17 @@
     },
     {
       "source": "MS.TEXT.GA1",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.GA1",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.GA1",
-      "target": "YEAR.9432",
+      "target": "YEAR.1539",
       "rel": "DATED"
     },
     {
@@ -69343,17 +68328,17 @@
     },
     {
       "source": "MS.TEXT.GA2",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.GA2",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.GA2",
-      "target": "YEAR.9443",
+      "target": "YEAR.1539",
       "rel": "DATED"
     },
     {
@@ -69573,17 +68558,17 @@
     },
     {
       "source": "MS.TEXT.ORA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.gabriel_luis_arino_y_lope_de_la_roca",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ORA",
-      "target": "CITY.madrid",
+      "target": "CITY.murcia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.ORA",
-      "target": "YEAR.2493",
+      "target": "YEAR.1487",
       "rel": "DATED"
     },
     {
@@ -69713,17 +68698,17 @@
     },
     {
       "source": "MS.TEXT.C87",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.C87",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.C87",
-      "target": "YEAR.1910",
+      "target": "YEAR.1487",
       "rel": "DATED"
     },
     {
@@ -70275,12 +69260,12 @@
     },
     {
       "source": "MS.TEXT.BFC",
-      "target": "PRINTER.biblioteca_de_catalunya",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BFC",
-      "target": "CITY.barcelona",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -71453,17 +70438,17 @@
     },
     {
       "source": "MS.TEXT.CHP",
-      "target": "PRINTER.bibliotheque_national_de_france",
+      "target": "PRINTER.jacobo_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CHP",
-      "target": "CITY.paris",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CHP",
-      "target": "YEAR.112",
+      "target": "YEAR.1511",
       "rel": "DATED"
     },
     {
@@ -71713,17 +70698,17 @@
     },
     {
       "source": "MS.TEXT.CMH",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_junta",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CMH",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CMH",
-      "target": "YEAR.3642",
+      "target": "YEAR.1531",
       "rel": "DATED"
     },
     {
@@ -72495,17 +71480,17 @@
     },
     {
       "source": "MS.TEXT.REP",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.REP",
-      "target": "CITY.madrid",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.REP",
-      "target": "YEAR.2470",
+      "target": "YEAR.1495",
       "rel": "DATED"
     },
     {
@@ -72961,17 +71946,17 @@
     },
     {
       "source": "MS.TEXT.FRO",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.FRO",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.FRO",
-      "target": "YEAR.4004",
+      "target": "YEAR.1505",
       "rel": "DATED"
     },
     {
@@ -73463,12 +72448,12 @@
     },
     {
       "source": "MS.TEXT.DDH",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.arnaldo_guillen_de_brocar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.DDH",
-      "target": "CITY.nueva_york",
+      "target": "CITY.alcala_de_henares",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -74869,17 +73854,17 @@
     },
     {
       "source": "MS.TEXT.ILC",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.antonio_de_centenera",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ILC",
-      "target": "CITY.madrid",
+      "target": "CITY.zamora",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.ILC",
-      "target": "YEAR.1168",
+      "target": "YEAR.1492",
       "rel": "DATED"
     },
     {
@@ -76501,17 +75486,17 @@
     },
     {
       "source": "MS.TEXT.CMI",
-      "target": "PRINTER.biblioteca_historica_de_santa_cruz",
+      "target": "PRINTER.sebastian_trujillo",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CMI",
-      "target": "CITY.valladolid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CMI",
-      "target": "YEAR.106",
+      "target": "YEAR.1552",
       "rel": "DATED"
     },
     {
@@ -77716,17 +76701,17 @@
     },
     {
       "source": "MS.TEXT.VTS",
-      "target": "PRINTER.wurttembergische_landesbibliothek",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.VTS",
-      "target": "CITY.stuttgart",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.VTS",
-      "target": "YEAR.3965",
+      "target": "YEAR.1498",
       "rel": "DATED"
     },
     {
@@ -78992,17 +77977,17 @@
     },
     {
       "source": "MS.TEXT.P57",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.salcedo",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.P57",
-      "target": "CITY.madrid",
+      "target": "CITY.alcala_de_henares",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.P57",
-      "target": "YEAR.1543",
+      "target": "YEAR.1557",
       "rel": "DATED"
     },
     {
@@ -79168,17 +78153,17 @@
     },
     {
       "source": "MS.TEXT.PG22",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.arnaldo_guillen_de_brocar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PG22",
-      "target": "CITY.madrid",
+      "target": "CITY.alcala_de_henares",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PG22",
-      "target": "YEAR.1265",
+      "target": "YEAR.1522",
       "rel": "DATED"
     },
     {
@@ -79458,17 +78443,17 @@
     },
     {
       "source": "MS.TEXT.PP39",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PP39",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PP39",
-      "target": "YEAR.3178",
+      "target": "YEAR.1539",
       "rel": "DATED"
     },
     {
@@ -80032,17 +79017,17 @@
     },
     {
       "source": "MS.TEXT.CJP",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_villaquiran",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CJP",
-      "target": "CITY.madrid",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CJP",
-      "target": "YEAR.3418",
+      "target": "YEAR.1520",
       "rel": "DATED"
     },
     {
@@ -82397,17 +81382,17 @@
     },
     {
       "source": "MS.TEXT.ADJ",
-      "target": "PRINTER.biblioteca_de_catalunya",
+      "target": "PRINTER.pedro_hagenbach",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ADJ",
-      "target": "CITY.barcelona",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.ADJ",
-      "target": "YEAR.5754",
+      "target": "YEAR.1500",
       "rel": "DATED"
     },
     {
@@ -82919,12 +81904,12 @@
     },
     {
       "source": "MS.TEXT.AM1",
-      "target": "PRINTER.real_biblioteca_del_monasterio_de_san_lorenzo_de_el_escorial",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AM1",
-      "target": "CITY.san_lorenzo_de_el_escorial",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -83101,12 +82086,12 @@
     },
     {
       "source": "MS.TEXT.AM3",
-      "target": "PRINTER.bodleian",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AM3",
-      "target": "CITY.oxford",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -83400,17 +82385,17 @@
     },
     {
       "source": "MS.TEXT.ARA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pedro_de_santillana",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ARA",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.ARA",
-      "target": "YEAR.3136",
+      "target": "YEAR.1596",
       "rel": "DATED"
     },
     {
@@ -84145,17 +83130,17 @@
     },
     {
       "source": "MS.TEXT.BC1",
-      "target": "PRINTER.the_huntington_library",
+      "target": "PRINTER.leonardo_hutz_y_lope_sanz",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BC1",
-      "target": "CITY.san_marino",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.BC1",
-      "target": "YEAR.9095",
+      "target": "YEAR.1497",
       "rel": "DATED"
     },
     {
@@ -84998,17 +83983,17 @@
     },
     {
       "source": "MS.TEXT.CAT",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CAT",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CAT",
-      "target": "YEAR.1278",
+      "target": "YEAR.1498",
       "rel": "DATED"
     },
     {
@@ -85605,17 +84590,17 @@
     },
     {
       "source": "MS.TEXT.CCN",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jacobo_y_juan_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CCN",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CCN",
-      "target": "YEAR.2657",
+      "target": "YEAR.1525",
       "rel": "DATED"
     },
     {
@@ -85703,12 +84688,12 @@
     },
     {
       "source": "MS.TEXT.CCW",
-      "target": "PRINTER.osterreichische_nationalbibliothek",
+      "target": "PRINTER.tres_companeros_alemanes",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CCW",
-      "target": "CITY.viena",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -86900,17 +85885,17 @@
     },
     {
       "source": "MS.TEXT.CPA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CPA",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CPA",
-      "target": "YEAR.9430",
+      "target": "YEAR.1539",
       "rel": "DATED"
     },
     {
@@ -87946,17 +86931,17 @@
     },
     {
       "source": "MS.TEXT.CSH",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.alfonso_fernandez_de_cordoba",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CSH",
-      "target": "CITY.madrid",
+      "target": "CITY.hijar",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CSH",
-      "target": "YEAR.2674",
+      "target": "YEAR.1488",
       "rel": "DATED"
     },
     {
@@ -100933,17 +99918,17 @@
     },
     {
       "source": "MS.TEXT.MP68",
-      "target": "PRINTER.john_carter_brown_library",
+      "target": "PRINTER.miguel_martinez",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.MP68",
-      "target": "CITY.providence",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.MP68",
-      "target": "YEAR.568",
+      "target": "YEAR.1567",
       "rel": "DATED"
     },
     {
@@ -102634,17 +101619,17 @@
     },
     {
       "source": "MS.TEXT.OP02",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.thielman_kerver",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OP02",
-      "target": "CITY.madrid",
+      "target": "CITY.paris",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OP02",
-      "target": "YEAR.3104",
+      "target": "YEAR.1502",
       "rel": "DATED"
     },
     {
@@ -102804,7 +101789,7 @@
     },
     {
       "source": "MS.TEXT.OP99",
-      "target": "PRINTER.bibliotheque_nationale_de_france",
+      "target": "PRINTER.philippe_pigouchet",
       "rel": "PRINTED_BY"
     },
     {
@@ -102814,7 +101799,7 @@
     },
     {
       "source": "MS.TEXT.OP99",
-      "target": "YEAR.1501",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -105188,17 +104173,17 @@
     },
     {
       "source": "MS.TEXT.RFG",
-      "target": "PRINTER.library_of_congress",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RFG",
-      "target": "CITY.washington",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RFG",
-      "target": "YEAR.6490",
+      "target": "YEAR.1490",
       "rel": "DATED"
     },
     {
@@ -107001,17 +105986,17 @@
     },
     {
       "source": "MS.TEXT.TAL",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jacome_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TAL",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TAL",
-      "target": "YEAR.1756",
+      "target": "YEAR.1545",
       "rel": "DATED"
     },
     {
@@ -110484,17 +109469,17 @@
     },
     {
       "source": "MS.TEXT.EXR",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pedro_giraldi_y_miguel_de_planes",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.EXR",
-      "target": "CITY.madrid",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.EXR",
-      "target": "YEAR.495",
+      "target": "YEAR.1492",
       "rel": "DATED"
     },
     {
@@ -110680,17 +109665,17 @@
     },
     {
       "source": "MS.TEXT.PJN",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jorge_costilla",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PJN",
-      "target": "CITY.madrid",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PJN",
-      "target": "YEAR.2340",
+      "target": "YEAR.1519",
       "rel": "DATED"
     },
     {
@@ -111106,13 +110091,18 @@
     },
     {
       "source": "MS.TEXT.RD1",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.nicolas_spindeler",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RD1",
-      "target": "CITY.nueva_york",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
+    },
+    {
+      "source": "MS.TEXT.RD1",
+      "target": "YEAR.1500",
+      "rel": "DATED"
     },
     {
       "source": "MS.TEXT.RD1",
@@ -111223,13 +110213,18 @@
     },
     {
       "source": "MS.TEXT.RD2",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.alfonso_de_orta",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RD2",
-      "target": "CITY.nueva_york",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
+    },
+    {
+      "source": "MS.TEXT.RD2",
+      "target": "YEAR.1510",
+      "rel": "DATED"
     },
     {
       "source": "MS.TEXT.RD2",
@@ -111644,12 +110639,12 @@
     },
     {
       "source": "MS.TEXT.TJU",
-      "target": "PRINTER.bg_37753",
+      "target": "PRINTER.nicolas_tierry",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TJU",
-      "target": "CITY.salamanca_biblioteca_general_historica_de_la_universidad_de_sala",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -111796,17 +110791,17 @@
     },
     {
       "source": "MS.TEXT.TCU",
-      "target": "PRINTER.columbia_university",
+      "target": "PRINTER.alonso_de_melgar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TCU",
-      "target": "CITY.new_york",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TCU",
-      "target": "YEAR.657",
+      "target": "YEAR.1522",
       "rel": "DATED"
     },
     {
@@ -112149,17 +111144,17 @@
     },
     {
       "source": "MS.TEXT.IRG",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jorge_cocci",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.IRG",
-      "target": "CITY.madrid",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.IRG",
-      "target": "YEAR.1350",
+      "target": "YEAR.1537",
       "rel": "DATED"
     },
     {
@@ -112301,12 +111296,12 @@
     },
     {
       "source": "MS.TEXT.CBC",
-      "target": "PRINTER.real_academia_de_la_historia",
+      "target": "PRINTER.lope_de_la_roca",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CBC",
-      "target": "CITY.madrid",
+      "target": "CITY.murcia",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -112539,17 +111534,17 @@
     },
     {
       "source": "MS.TEXT.AYL",
-      "target": "PRINTER.real_academia_de_la_historia",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AYL",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.AYL",
-      "target": "YEAR.153",
+      "target": "YEAR.1491",
       "rel": "DATED"
     },
     {
@@ -112837,17 +111832,17 @@
     },
     {
       "source": "MS.TEXT.GLX",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.GLX",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.GLX",
-      "target": "YEAR.2165",
+      "target": "YEAR.1498",
       "rel": "DATED"
     },
     {
@@ -113951,17 +112946,17 @@
     },
     {
       "source": "MS.TEXT.THC",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.antonio_de_centenera",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.THC",
-      "target": "CITY.madrid",
+      "target": "CITY.zamora",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.THC",
-      "target": "YEAR.2441",
+      "target": "YEAR.1483",
       "rel": "DATED"
     },
     {
@@ -114079,17 +113074,17 @@
     },
     {
       "source": "MS.TEXT.Y88",
-      "target": "PRINTER.university_of_manchester_john_rylands_university_library",
+      "target": "PRINTER.johann_paris_y_etienne_clebat",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.Y88",
-      "target": "CITY.manchester",
+      "target": "CITY.toulouse",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.Y88",
-      "target": "YEAR.1956",
+      "target": "YEAR.1488",
       "rel": "DATED"
     },
     {
@@ -114595,17 +113590,17 @@
     },
     {
       "source": "MS.TEXT.SJ90",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.SJ90",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.SJ90",
-      "target": "YEAR.1989",
+      "target": "YEAR.1490",
       "rel": "DATED"
     },
     {
@@ -115455,17 +114450,17 @@
     },
     {
       "source": "MS.TEXT.CAC",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.juan_varela_de_salamanca",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CAC",
-      "target": "CITY.nueva_york",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CAC",
-      "target": "YEAR.3418",
+      "target": "YEAR.1520",
       "rel": "DATED"
     },
     {
@@ -115583,12 +114578,12 @@
     },
     {
       "source": "MS.TEXT.AG7",
-      "target": "PRINTER.jacobo_y_juan_cromberger",
+      "target": "PRINTER.la_coronica_de_los_famosos_caballeros_lisuarte_de_grecia_y_perio",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AG7",
-      "target": "CITY.sevilla",
+      "target": "CITY.ag7_el_septimo_libro_del_rey_amadis_de_gaula",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -116578,17 +115573,17 @@
     },
     {
       "source": "MS.TEXT.PPP",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.francisco_fernandez_de_cordoba",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PPP",
-      "target": "CITY.madrid",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PPP",
-      "target": "YEAR.1543",
+      "target": "YEAR.1558",
       "rel": "DATED"
     },
     {
@@ -117662,17 +116657,17 @@
     },
     {
       "source": "MS.TEXT.RPS",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jacobo_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RPS",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RPS",
-      "target": "YEAR.2182",
+      "target": "YEAR.1516",
       "rel": "DATED"
     },
     {
@@ -118640,17 +117635,17 @@
     },
     {
       "source": "MS.TEXT.C05",
-      "target": "PRINTER.william_l_clements_library_university_of_michigan",
+      "target": "PRINTER.jacobo_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.C05",
-      "target": "CITY.ann_arbor",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.C05",
-      "target": "YEAR.6426",
+      "target": "YEAR.1513",
       "rel": "DATED"
     },
     {
@@ -118660,17 +117655,17 @@
     },
     {
       "source": "MS.TEXT.C06",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jacobo_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.C06",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.C06",
-      "target": "YEAR.2657",
+      "target": "YEAR.1518",
       "rel": "DATED"
     },
     {
@@ -118766,17 +117761,17 @@
     },
     {
       "source": "MS.TEXT.C11",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_joffre",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.C11",
-      "target": "CITY.madrid",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.C11",
-      "target": "YEAR.4870",
+      "target": "YEAR.1514",
       "rel": "DATED"
     },
     {
@@ -118946,17 +117941,17 @@
     },
     {
       "source": "MS.TEXT.C20",
-      "target": "PRINTER.the_british_library",
+      "target": "PRINTER.pedro_tovans",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.C20",
-      "target": "CITY.londres",
+      "target": "CITY.medina_del_campo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.C20",
-      "target": "YEAR.243",
+      "target": "YEAR.1530",
       "rel": "DATED"
     },
     {
@@ -120261,12 +119256,12 @@
     },
     {
       "source": "MS.TEXT.YEN",
-      "target": "PRINTER.osterreichische_nationalbibliothek",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YEN",
-      "target": "CITY.viena",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -120491,17 +119486,17 @@
     },
     {
       "source": "MS.TEXT.YFC",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YFC",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.YFC",
-      "target": "YEAR.1220",
+      "target": "YEAR.1526",
       "rel": "DATED"
     },
     {
@@ -120637,12 +119632,12 @@
     },
     {
       "source": "MS.TEXT.YFN",
-      "target": "PRINTER.archivo_historico_de_protocolos",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YFN",
-      "target": "CITY.zaragoza",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -120813,12 +119808,12 @@
     },
     {
       "source": "MS.TEXT.YFT",
-      "target": "PRINTER.real_biblioteca_del_monasterio_de_san_lorenzo_de_el_escorial",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YFT",
-      "target": "CITY.san_lorenzo_de_el_escorial",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -121257,12 +120252,12 @@
     },
     {
       "source": "MS.TEXT.YTL",
-      "target": "PRINTER.biblioteca_del_marques_de_morbecq",
+      "target": "PRINTER.alonso_de_melgar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YTL",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -121385,17 +120380,17 @@
     },
     {
       "source": "MS.TEXT.NOB",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.pedro_brun_y_juan_gentil",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.NOB",
-      "target": "CITY.nueva_york",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.NOB",
-      "target": "YEAR.156",
+      "target": "YEAR.1492",
       "rel": "DATED"
     },
     {
@@ -121483,17 +120478,17 @@
     },
     {
       "source": "MS.TEXT.BPS",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_porras_para_fernando_de_jaen",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BPS",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.BPS",
-      "target": "YEAR.1801",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -121761,17 +120756,17 @@
     },
     {
       "source": "MS.TEXT.CGC",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_pegnitzer_y_magno_herbst",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CGC",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CGC",
-      "target": "YEAR.1427",
+      "target": "YEAR.1500",
       "rel": "DATED"
     },
     {
@@ -121967,12 +120962,12 @@
     },
     {
       "source": "MS.TEXT.LNH",
-      "target": "PRINTER.biblioteca_de_catalunya",
+      "target": "PRINTER.jacobo_cromberger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LNH",
-      "target": "CITY.barcelona",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -122155,17 +121150,17 @@
     },
     {
       "source": "MS.TEXT.OBS",
-      "target": "PRINTER.real_biblioteca",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OBS",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OBS",
-      "target": "YEAR.2272",
+      "target": "YEAR.1494",
       "rel": "DATED"
     },
     {
@@ -122415,17 +121410,17 @@
     },
     {
       "source": "MS.TEXT.OES",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.meinardo_ungut_y_estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OES",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OES",
-      "target": "YEAR.1243",
+      "target": "YEAR.1492",
       "rel": "DATED"
     },
     {
@@ -122561,17 +121556,17 @@
     },
     {
       "source": "MS.TEXT.OMU",
-      "target": "PRINTER.real_biblioteca",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OMU",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OMU",
-      "target": "YEAR.2271",
+      "target": "YEAR.1494",
       "rel": "DATED"
     },
     {
@@ -122815,17 +121810,17 @@
     },
     {
       "source": "MS.TEXT.OPA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OPA",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OPA",
-      "target": "YEAR.2559",
+      "target": "YEAR.1500",
       "rel": "DATED"
     },
     {
@@ -122943,17 +121938,17 @@
     },
     {
       "source": "MS.TEXT.OSE",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.meinardo_ungut_y_estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OSE",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OSE",
-      "target": "YEAR.1243",
+      "target": "YEAR.1492",
       "rel": "DATED"
     },
     {
@@ -123095,12 +122090,12 @@
     },
     {
       "source": "MS.TEXT.VGP",
-      "target": "PRINTER.bibliotheque_nationale_de_france",
+      "target": "PRINTER.libro_de_vegecio_de_la_caballeria_y_del_arte_de_las_batallas",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.VGP",
-      "target": "CITY.paris",
+      "target": "CITY.vgp_epitoma_rei_militaris",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -123767,12 +122762,12 @@
     },
     {
       "source": "MS.TEXT.PLT",
-      "target": "PRINTER.the_british_library",
+      "target": "PRINTER.nicolas_tierry",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PLT",
-      "target": "CITY.londres",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -124109,17 +123104,17 @@
     },
     {
       "source": "MS.TEXT.PM1",
-      "target": "PRINTER.the_british_library",
+      "target": "PRINTER.fernando_de_santa_catalina",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PM1",
-      "target": "CITY.londres",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PM1",
-      "target": "YEAR.1025",
+      "target": "YEAR.1547",
       "rel": "DATED"
     },
     {
@@ -124207,17 +123202,17 @@
     },
     {
       "source": "MS.TEXT.CUP",
-      "target": "PRINTER.biblioteca_general_historica_de_la_universidad_de_salamanca",
+      "target": "PRINTER.luis_de_paz",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CUP",
-      "target": "CITY.salamanca",
+      "target": "CITY.santiago_de_compostena",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CUP",
-      "target": "YEAR.8501",
+      "target": "YEAR.1562",
       "rel": "DATED"
     },
     {
@@ -124365,17 +123360,17 @@
     },
     {
       "source": "MS.TEXT.RCP",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.felipe_de_junta_y_juan_bautista_varesio",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RCP",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RCP",
-      "target": "YEAR.4459",
+      "target": "YEAR.1597",
       "rel": "DATED"
     },
     {
@@ -125502,17 +124497,17 @@
     },
     {
       "source": "MS.TEXT.PRM",
-      "target": "PRINTER.university_library",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PRM",
-      "target": "CITY.cambridge_uk",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PRM",
-      "target": "YEAR.151",
+      "target": "YEAR.1512",
       "rel": "DATED"
     },
     {
@@ -125582,12 +124577,12 @@
     },
     {
       "source": "MS.TEXT.AVC",
-      "target": "PRINTER.archivo_general_de_indias",
+      "target": "PRINTER.1544",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AVC",
-      "target": "CITY.sevilla",
+      "target": "CITY.guadalajara_mexico",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -126058,12 +125053,12 @@
     },
     {
       "source": "MS.TEXT.RVC",
-      "target": "PRINTER.archivo_general_de_las_indias",
+      "target": "PRINTER.1544",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RVC",
-      "target": "CITY.sevilla",
+      "target": "CITY.guadalajara",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -127517,17 +126512,17 @@
     },
     {
       "source": "MS.TEXT.CVA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CVA",
-      "target": "CITY.madrid",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CVA",
-      "target": "YEAR.2258",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -127898,17 +126893,17 @@
     },
     {
       "source": "MS.TEXT.FIA",
-      "target": "PRINTER.the_huntington_library",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.FIA",
-      "target": "CITY.san_marino",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.FIA",
-      "target": "YEAR.8507",
+      "target": "YEAR.1497",
       "rel": "DATED"
     },
     {
@@ -128088,17 +127083,17 @@
     },
     {
       "source": "MS.TEXT.EPM",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.diego_de_gumiel",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.EPM",
-      "target": "CITY.madrid",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.EPM",
-      "target": "YEAR.5212",
+      "target": "YEAR.1510",
       "rel": "DATED"
     },
     {
@@ -133067,17 +132062,17 @@
     },
     {
       "source": "MS.TEXT.YP2",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_ayala",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YP2",
-      "target": "CITY.madrid",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.YP2",
-      "target": "YEAR.3188",
+      "target": "YEAR.1542",
       "rel": "DATED"
     },
     {
@@ -133273,17 +132268,17 @@
     },
     {
       "source": "MS.TEXT.YP3A",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pedro_de_castro",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YP3A",
-      "target": "CITY.madrid",
+      "target": "CITY.medina_del_campo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.YP3A",
-      "target": "YEAR.3109",
+      "target": "YEAR.1543",
       "rel": "DATED"
     },
     {
@@ -133527,12 +132522,12 @@
     },
     {
       "source": "MS.TEXT.YP3B",
-      "target": "PRINTER.british_library",
+      "target": "PRINTER.pedro_de_castro",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YP3B",
-      "target": "CITY.londres",
+      "target": "CITY.medina_del_campo",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -134319,17 +133314,17 @@
     },
     {
       "source": "MS.TEXT.BDE",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BDE",
-      "target": "CITY.madrid",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.BDE",
-      "target": "YEAR.6559",
+      "target": "YEAR.1540",
       "rel": "DATED"
     },
     {
@@ -134615,17 +133610,17 @@
     },
     {
       "source": "MS.TEXT.CDR",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CDR",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CDR",
-      "target": "YEAR.4112",
+      "target": "YEAR.1505",
       "rel": "DATED"
     },
     {
@@ -135052,17 +134047,17 @@
     },
     {
       "source": "MS.TEXT.CDA",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.christofol_kofmann",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CDA",
-      "target": "CITY.madrid",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CDA",
-      "target": "YEAR.2092",
+      "target": "YEAR.1511",
       "rel": "DATED"
     },
     {
@@ -136137,17 +135132,17 @@
     },
     {
       "source": "MS.TEXT.CDM",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.tres_companeros_alemanes",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CDM",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CDM",
-      "target": "YEAR.5182",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -136307,12 +135302,12 @@
     },
     {
       "source": "MS.TEXT.BCF",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.BCF",
-      "target": "CITY.nueva_york",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -138465,17 +137460,17 @@
     },
     {
       "source": "MS.TEXT.LMM",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LMM",
-      "target": "CITY.madrid",
+      "target": "CITY.valencia",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LMM",
-      "target": "YEAR.1314",
+      "target": "YEAR.1524",
       "rel": "DATED"
     },
     {
@@ -138812,17 +137807,17 @@
     },
     {
       "source": "MS.TEXT.PEP",
-      "target": "PRINTER.boston_public_library",
+      "target": "PRINTER.fadrique_de_basilea",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PEP",
-      "target": "CITY.boston",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PEP",
-      "target": "YEAR.403",
+      "target": "YEAR.1493",
       "rel": "DATED"
     },
     {
@@ -140306,17 +139301,17 @@
     },
     {
       "source": "MS.TEXT.GMI",
-      "target": "PRINTER.biblioteca_nacional_de_portugal",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.GMI",
-      "target": "CITY.lisboa",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.GMI",
-      "target": "YEAR.218",
+      "target": "YEAR.1554",
       "rel": "DATED"
     },
     {
@@ -140772,17 +139767,17 @@
     },
     {
       "source": "MS.TEXT.CMP",
-      "target": "PRINTER.biblioteca_nacional_de_portugal",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CMP",
-      "target": "CITY.lisboa",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CMP",
-      "target": "YEAR.218",
+      "target": "YEAR.1501",
       "rel": "DATED"
     },
     {
@@ -141068,17 +140063,17 @@
     },
     {
       "source": "MS.TEXT.DFI",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_junta",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.DFI",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.DFI",
-      "target": "YEAR.1280",
+      "target": "YEAR.1528",
       "rel": "DATED"
     },
     {
@@ -142793,17 +141788,17 @@
     },
     {
       "source": "MS.TEXT.VIB",
-      "target": "PRINTER.public_library",
+      "target": "PRINTER.antonio_de_centenera",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.VIB",
-      "target": "CITY.boston",
+      "target": "CITY.zamora",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.VIB",
-      "target": "YEAR.160",
+      "target": "YEAR.1487",
       "rel": "DATED"
     },
     {
@@ -142977,12 +141972,12 @@
     },
     {
       "source": "MS.TEXT.SIH",
-      "target": "PRINTER.biblioteca_de_catalunya",
+      "target": "PRINTER.arnaldo_guillen_de_brocar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.SIH",
-      "target": "CITY.barcelona",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -143555,12 +142550,12 @@
     },
     {
       "source": "MS.TEXT.ENC",
-      "target": "PRINTER.real_academia_espanola",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ENC",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -143617,12 +142612,12 @@
     },
     {
       "source": "MS.TEXT.ETP",
-      "target": "PRINTER.bibliotheque_national_de_france",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ETP",
-      "target": "CITY.paris",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -143805,17 +142800,17 @@
     },
     {
       "source": "MS.TEXT.YND",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.alonso_de_melgar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.YND",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.YND",
-      "target": "YEAR.4888",
+      "target": "YEAR.1520",
       "rel": "DATED"
     },
     {
@@ -147959,17 +146954,17 @@
     },
     {
       "source": "MS.TEXT.TGF",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.estanislao_polono",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TGF",
-      "target": "CITY.madrid",
+      "target": "CITY.alcala_de_henares",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TGF",
-      "target": "YEAR.5843",
+      "target": "YEAR.1504",
       "rel": "DATED"
     },
     {
@@ -148069,17 +147064,17 @@
     },
     {
       "source": "MS.TEXT.RTG",
-      "target": "PRINTER.boston_public_library",
+      "target": "PRINTER.s_n",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RTG",
-      "target": "CITY.boston",
+      "target": "CITY.s_l",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RTG",
-      "target": "YEAR.240",
+      "target": "YEAR.1541",
       "rel": "DATED"
     },
     {
@@ -150085,17 +149080,17 @@
     },
     {
       "source": "MS.TEXT.OOI",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.alonso_de_melgar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.OOI",
-      "target": "CITY.nueva_york",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.OOI",
-      "target": "YEAR.143",
+      "target": "YEAR.1520",
       "rel": "DATED"
     },
     {
@@ -151797,17 +150792,17 @@
     },
     {
       "source": "MS.TEXT.TPR",
-      "target": "PRINTER.biblioteca_general_historica",
+      "target": "PRINTER.juan_de_ayala",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TPR",
-      "target": "CITY.salamanca",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TPR",
-      "target": "YEAR.1517",
+      "target": "YEAR.1543",
       "rel": "DATED"
     },
     {
@@ -152387,17 +151382,17 @@
     },
     {
       "source": "MS.TEXT.PM2",
-      "target": "PRINTER.the_british_library",
+      "target": "PRINTER.fernando_de_santa_catalina_diego_ferrer",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PM2",
-      "target": "CITY.londres",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.PM2",
-      "target": "YEAR.1025",
+      "target": "YEAR.1548",
       "rel": "DATED"
     },
     {
@@ -153468,17 +152463,17 @@
     },
     {
       "source": "MS.TEXT.ACM",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.jorge_coci_leonardo_hutz_lope_appentegger",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ACM",
-      "target": "CITY.madrid",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.ACM",
-      "target": "YEAR.2342",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -153614,17 +152609,17 @@
     },
     {
       "source": "MS.TEXT.LMP",
-      "target": "PRINTER.biblioteca_general_historica_de_la_universidad_de_salamanca",
+      "target": "PRINTER.juan_varela_de_salamanca",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.LMP",
-      "target": "CITY.salamanca",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.LMP",
-      "target": "YEAR.3257",
+      "target": "YEAR.1518",
       "rel": "DATED"
     },
     {
@@ -154666,12 +153661,12 @@
     },
     {
       "source": "MS.TEXT.ND00",
-      "target": "PRINTER.hispanic_society_of_america",
+      "target": "PRINTER.juan_de_burgos",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ND00",
-      "target": "CITY.nueva_york",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -156990,12 +155985,12 @@
     },
     {
       "source": "MS.TEXT.SVZ",
-      "target": "PRINTER.archivo_general_de_las_indias",
+      "target": "PRINTER.1602",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.SVZ",
-      "target": "CITY.sevilla",
+      "target": "CITY.ciudad_de_mexico",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -158602,17 +157597,17 @@
     },
     {
       "source": "MS.TEXT.CVD",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.alonso_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CVD",
-      "target": "CITY.madrid",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CVD",
-      "target": "YEAR.1272",
+      "target": "YEAR.1488",
       "rel": "DATED"
     },
     {
@@ -158790,17 +157785,17 @@
     },
     {
       "source": "MS.TEXT.SDS",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.dominico_de_robertis",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.SDS",
-      "target": "CITY.madrid",
+      "target": "CITY.sevilla",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.SDS",
-      "target": "YEAR.865",
+      "target": "YEAR.1549",
       "rel": "DATED"
     },
     {
@@ -158852,17 +157847,17 @@
     },
     {
       "source": "MS.TEXT.CMU",
-      "target": "PRINTER.biblioteca_nacional_de_portugal",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CMU",
-      "target": "CITY.lisboa",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CMU",
-      "target": "YEAR.1322",
+      "target": "YEAR.1488",
       "rel": "DATED"
     },
     {
@@ -159425,17 +158420,17 @@
     },
     {
       "source": "MS.TEXT.VC99",
-      "target": "PRINTER.southern_methodist_university_bridwell_library",
+      "target": "PRINTER.juan_de_porras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.VC99",
-      "target": "CITY.dallas",
+      "target": "CITY.salamanca",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.VC99",
-      "target": "YEAR.6721",
+      "target": "YEAR.1499",
       "rel": "DATED"
     },
     {
@@ -159925,17 +158920,17 @@
     },
     {
       "source": "MS.TEXT.TP24",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.alonso_de_melgar",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TP24",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TP24",
-      "target": "YEAR.1313",
+      "target": "YEAR.1524",
       "rel": "DATED"
     },
     {
@@ -160293,17 +159288,17 @@
     },
     {
       "source": "MS.TEXT.TP52",
-      "target": "PRINTER.biblioteca_nacional_de_portugal",
+      "target": "PRINTER.francisco_fernandez_de_cordoba",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.TP52",
-      "target": "CITY.lisboa",
+      "target": "CITY.valladolid",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.TP52",
-      "target": "YEAR.399",
+      "target": "YEAR.1552",
       "rel": "DATED"
     },
     {
@@ -162363,17 +161358,17 @@
     },
     {
       "source": "MS.TEXT.CRL",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.CRL",
-      "target": "CITY.madrid",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.CRL",
-      "target": "YEAR.2892",
+      "target": "YEAR.1488",
       "rel": "DATED"
     },
     {
@@ -162615,17 +161610,17 @@
     },
     {
       "source": "MS.TEXT.RN25",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.ramon_de_petras",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RN25",
-      "target": "CITY.madrid",
+      "target": "CITY.toledo",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RN25",
-      "target": "YEAR.6918",
+      "target": "YEAR.1525",
       "rel": "DATED"
     },
     {
@@ -163067,17 +162062,17 @@
     },
     {
       "source": "MS.TEXT.RN29",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.miguel_de_eguia",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.RN29",
-      "target": "CITY.madrid",
+      "target": "CITY.logrono",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.RN29",
-      "target": "YEAR.1227",
+      "target": "YEAR.1529",
       "rel": "DATED"
     },
     {
@@ -164423,12 +163418,12 @@
     },
     {
       "source": "MS.TEXT.ERI",
-      "target": "PRINTER.real_biblioteca_del_monasterio_de_san_lorenzo_de_el_escorial",
+      "target": "PRINTER.pablo_hurus",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.ERI",
-      "target": "CITY.san_lorenzo_de_el_escorial",
+      "target": "CITY.zaragoza",
       "rel": "PUBLISHED_IN"
     },
     {
@@ -169921,17 +168916,17 @@
     },
     {
       "source": "MS.TEXT.AUG",
-      "target": "PRINTER.biblioteca_nacional_de_espana",
+      "target": "PRINTER.juan_de_burgos",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.AUG",
-      "target": "CITY.madrid",
+      "target": "CITY.burgos",
       "rel": "PUBLISHED_IN"
     },
     {
       "source": "MS.TEXT.AUG",
-      "target": "YEAR.1424",
+      "target": "YEAR.1493",
       "rel": "DATED"
     },
     {
@@ -170937,12 +169932,12 @@
     },
     {
       "source": "MS.TEXT.PMZ",
-      "target": "PRINTER.archivo_general_de_las_indias",
+      "target": "PRINTER.1600_1602",
       "rel": "PRINTED_BY"
     },
     {
       "source": "MS.TEXT.PMZ",
-      "target": "CITY.sevilla",
+      "target": "CITY.san_gabriel_nuevo_mexico_ciudad_de_mexico",
       "rel": "PUBLISHED_IN"
     },
     {

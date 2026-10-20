@@ -16,10 +16,11 @@ describe("svgDocumentExport", () => {
 
   it("uses spatial column layout and ornate drop-cap rects", () => {
     const parsed = compileManuscriptTree(DEFAULT_DEMO);
-    const svg = exportToSvgDocument(parsed);
+    const svg = exportToSvgDocument(parsed, { sourceText: DEFAULT_DEMO });
 
     expect(svg).toContain("folio ");
-    expect(svg).toMatch(/<rect[^>]+rx="/);
+    // Nunes imprint (Lisboa | Galharde | 1537) is a woodcut plate, not a rounded page frame.
+    expect(svg).toMatch(/<rect[^>]+fill="#1c1916"/);
   });
 
   it("renders expansions as superscript-sized glyphs when expanded", () => {

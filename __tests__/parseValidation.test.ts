@@ -89,7 +89,6 @@ describe("parseValidation structural env stack", () => {
     expect(tokens.filter((t) => t.type === "env_close")).toHaveLength(1);
     const scan = scanStructuralTokenIssues(tokens, "{Glosa.}", 0, [], {
       inColumnBlock: true,
-      columnContext: { lineIndex: 5, hadEnvOpen: true },
     });
     expect(scan.columnBlockClosed).toBe(false);
   });

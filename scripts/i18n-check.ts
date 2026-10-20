@@ -20,7 +20,7 @@ const localesDir = join(root, "i18n", "locales");
 const TIER1_BASES = ["es", "pt", "ca", "gl", "eu"] as const;
 const TIER1_RELEASE = ["es", "es-ES", "es-419", "es-MX", "es-AR", "pt", "pt-PT", "pt-BR", "ca", "ca-ES-valencia", "gl", "eu"];
 /** Keys looked up dynamically (`validation.${code}`, `hsms.lang.${code}`, `copilot.recipe.…`). */
-const DYNAMIC_PREFIXES = ["common.", "validation.", "hsms.lang.", "hsms.term.", "copilot.recipe.", "copilot.tier.", "copilot.category.", "copilot.slot.", "copilot.label.", "copilot.msg."];
+const DYNAMIC_PREFIXES = ["common.", "validation.", "hsms.lang.", "hsms.term.", "copilot.recipe.", "copilot.tier.", "copilot.category.", "copilot.slot.", "copilot.label.", "copilot.msg.", "export.category."];
 /** Values legitimately identical to English. */
 const SAME_AS_EN_OK = /^(OK|TEI|HSMS|IIIF|CSV|DSL|L\{line\}|\[fol\. \{folio\}\]|fol\. \{folio\}|.*\{term:\w+\}.*|Biblioteca|Normal|Total|Error|Demo.*|Simple|Global|Local|.*\.hsms|Exportar TEI|Transcription Conniption|Georgetown University|Michael J\. Ferreira|Zipf|xp \/ ih|Provençal|Calderones|Enclisis|editorial \(\.\.\.\)|grave @`)$/;
 /**

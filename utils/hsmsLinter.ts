@@ -208,8 +208,6 @@ export function lintHsmsTranscription(
 
   let envStack: StructuralEnvFrame[] = [];
   let inColumnBlock = false;
-  let columnLineIndex = -1;
-  let columnHadEnvOpen = false;
   let pendingVernacularClose = false;
   let linesSinceFolio = -1;
   /** Vision models often emit `{CB1.}` then loose text; flag that pairing only. */
@@ -246,8 +244,6 @@ export function lintHsmsTranscription(
       // Keep `sawEmptyColumnTag`: vision often emits `{CB1.}` then `[fol. …]` then loose body text.
       envStack = [];
       inColumnBlock = false;
-      columnLineIndex = -1;
-      columnHadEnvOpen = false;
       pendingVernacularClose = false;
       linesSinceFolio = 0;
       slopWarned.clear();
@@ -327,8 +323,6 @@ export function lintHsmsTranscription(
       );
       sawEmptyColumnTag = true;
       inColumnBlock = false;
-      columnLineIndex = -1;
-      columnHadEnvOpen = false;
       pendingVernacularClose = false;
       continue;
     }
@@ -336,8 +330,6 @@ export function lintHsmsTranscription(
     if (RE_COLUMN_OPEN.test(line)) {
       inColumnBlock = true;
       sawEmptyColumnTag = false;
-      columnLineIndex = -1;
-      columnHadEnvOpen = false;
       pendingVernacularClose = false;
       line = line.replace(RE_COLUMN_STRIP, "").trim();
       if (!line) continue;
@@ -371,29 +363,19 @@ export function lintHsmsTranscription(
       );
     }
 
-    if (inColumnBlock) columnLineIndex++;
-
     issues.push(...scanLineLexicalIssues(line, i, true));
 
     const stackBeforeLine = envStack;
     try {
       const structuralTokens = tokenizeLineStructural(line);
-      if (inColumnBlock && structuralTokens.some((t) => t.type === "env_open")) {
-        columnHadEnvOpen = true;
-      }
       const scanned = scanStructuralTokenIssues(structuralTokens, line, i, envStack, {
         inColumnBlock,
-        columnContext: inColumnBlock
-          ? { lineIndex: columnLineIndex, hadEnvOpen: columnHadEnvOpen }
-          : undefined,
         allowVernacularClose: pendingVernacularClose && RE_TRAILING_BRACE.test(line),
       });
       issues.push(...scanned.errors);
       envStack = scanned.stackAfter;
       if (scanned.columnBlockClosed) {
         inColumnBlock = false;
-        columnLineIndex = -1;
-        columnHadEnvOpen = false;
       }
 
       if (

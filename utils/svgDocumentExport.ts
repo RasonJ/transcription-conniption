@@ -1,3 +1,5 @@
+import type { InitialTradition } from "@/utils/initials/scene";
+import { deriveTraditionFromRmk } from "@/utils/initials/tradition";
 import { buildInitialScene, serializeInitialScene } from "@/utils/initials/scene";
 import { resolveInitialSpec } from "@/utils/initials/spec";
 import { renderJustifiedSvgLine } from "@/components/svgFacsimile/justifiedSvgLine";
@@ -38,9 +40,11 @@ export type SvgExportOptions = {
   useNormalizedDiacritics?: boolean;
   suppressOtioseMarks?: boolean;
   canvasWidth?: number;
+  /** Raw HSMS, used to pick the drop-initial tradition from {RMK:} imprint. */
+  sourceText?: string;
 };
 
-type ResolvedOpts = Required<Omit<SvgExportOptions, "canvasWidth">> & { canvasWidth: number };
+type ResolvedOpts = Required<Omit<SvgExportOptions, "canvasWidth" | "sourceText">> & { canvasWidth: number };
 
 const DEFAULT_OPTS: ResolvedOpts = {
   showExpanded: true,
@@ -78,13 +82,14 @@ function serializeOrnateInitial(
   folioId: string,
   blockIndex: number,
   _bkey: string,
+  tradition: InitialTradition,
 ): string[] {
   const depth = Math.max(1, Math.round(capH / LH));
   const scene = buildInitialScene(
     resolveInitialSpec({
       letter,
       depth,
-      tradition: "print.woodcut",
+      tradition,
       sequence: blockIndex,
       seed: `${folioId}|${letter}|${blockIndex}`,
     }),
@@ -149,6 +154,7 @@ function paintBlockRow(
   capState: ColumnCapState,
   isLastLine: boolean,
   bkey: string,
+  tradition: InitialTradition,
   wrapBackSuffix?: string,
 ): { elements: string[]; nextCap: ColumnCapState } {
   const elements: string[] = [];
@@ -196,6 +202,7 @@ function paintBlockRow(
           folioId,
           blockIndex,
           bkey,
+          tradition,
         ),
       );
       textX = startX + capW + CAP_GUTTER;
@@ -245,6 +252,7 @@ function paintBlockRow(
 export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExportOptions = {}): string {
   const opts: ResolvedOpts = { ...DEFAULT_OPTS, ...options };
   const settings = displaySettings(opts);
+  const tradition = options.sourceText ? deriveTraditionFromRmk(options.sourceText) : "print.woodcut";
   const innerW = innerCanvasWidth();
   const colW = columnWidth();
   const leftColX = MARGIN;
@@ -315,6 +323,7 @@ export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExport
               capState,
               isLastLine,
               `f${fi}-b${row.left.bi}`,
+              tradition,
               row.left.wrapBackSuffix,
             );
             parts.push(...res.elements);
@@ -334,6 +343,7 @@ export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExport
               leftCap,
               isLastLine,
               `f${fi}-bl${row.left.bi}`,
+              tradition,
               row.left.wrapBackSuffix,
             );
             parts.push(...res.elements);
@@ -352,6 +362,7 @@ export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExport
               rightCap,
               isLastLine,
               `f${fi}-br${row.right.bi}`,
+              tradition,
               row.right.wrapBackSuffix,
             );
             parts.push(...res.elements);
