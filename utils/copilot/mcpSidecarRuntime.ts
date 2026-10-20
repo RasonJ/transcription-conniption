@@ -12,7 +12,6 @@ import {
   loadPrecompiledFacets,
 } from "@/utils/librarySidecars";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
-import { runHybridTranscriptionPipeline } from "@/services/batchTranscriptionService";
 import { convertHtrToHsms } from "@/utils/htrConverter";
 import {
   auditHsmsProoferIncidents,
@@ -219,6 +218,9 @@ export async function executeMcpSidecarTool(
       if (!imageUri) {
         return { ok: false, tool: name, elapsedMs: now() - t0, error: "image_uri required" };
       }
+      const { runHybridTranscriptionPipeline } = await import(
+        "@/services/batchTranscriptionService"
+      );
       const vision = await runHybridTranscriptionPipeline({
         uri: imageUri,
         name: args.sourceFileName ? String(args.sourceFileName) : undefined,

@@ -4,7 +4,6 @@ import { useLibraryCatalog } from "@/hooks/useLibraryCatalog";
 import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
 import { formatNumber, hasMessage, useLocale, useT } from "@/i18n/runtime";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
-import { runHybridTranscriptionPipeline } from "@/services/batchTranscriptionService";
 import { askCopilot, runRecipeById } from "@/utils/copilot/ask";
 import { getRecipe } from "@/utils/copilot/catalog";
 import { buildFacetIndex, type FacetIndex } from "@/utils/copilot/facetIndex";
@@ -302,6 +301,9 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     visionAbortRef.current = abort;
     const t0 = Date.now();
     try {
+      const { runHybridTranscriptionPipeline } = await import(
+        "@/services/batchTranscriptionService"
+      );
       const vision = await runHybridTranscriptionPipeline({
         uri: attachedScan.uri,
         name: attachedScan.name,

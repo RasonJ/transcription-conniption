@@ -51,51 +51,21 @@ import {
 } from "@/services/passTwoRepairService";
 import { extractHsmsAsciiPayload } from "@/utils/hsmsAsciiPayload";
 import { ingestAgentTranscription } from "@/utils/ingestAgentTranscription";
+import type {
+  BatchProgress,
+  BatchTranscriptionInput,
+  BatchTranscriptionResult as BatchTranscriptionResultBase,
+  TranscribedFolio,
+} from "@/services/batchTranscriptionTypes";
 
-export interface BatchProgress {
-  phase: "slicing" | "transcribing" | "repairing" | "merging";
-  currentPage: number;
-  totalPages: number;
-  currentFolio: string;
-  message?: string;
-}
+export type {
+  BatchProgress,
+  BatchTranscriptionInput,
+  TranscribedFolio,
+} from "@/services/batchTranscriptionTypes";
 
-export interface TranscribedFolio {
-  folioId: string;
-  pageNumber: number;
-  hsmsAscii: string;
-  errorCount: number;
-  warningCount: number;
-}
-
-export interface BatchTranscriptionResult extends VisionTranscriptionResult {
-  pageCount: number;
-  pages: Array<{ folioId: string; pageNumber: number; errorCount: number; warningCount: number }>;
-  /** Number of pages that went through the consolidated Pass 2 repair. */
-  repairedPageCount?: number;
-}
-
-export type BatchTranscriptionInput = {
-  /** Local file URI from DocumentPicker / cache. */
-  uri: string;
-  name?: string;
-  mimeType?: string;
-  /** Browser File when available (web drag-drop). */
-  file?: File;
-  languageHint?: string;
-  locale?: string;
-  maxPages?: number;
-  dpiScale?: number;
-  imageMime?: ConvertPdfOptions["imageMime"];
-  onProgress?: (progress: BatchProgress) => void;
-  /**
-   * Fired after each folio is transcribed + linted, with the cumulative HSMS so far.
-   * Awaited so React can paint parchment before the next Azure call.
-   */
-  onFolioComplete?: (folio: TranscribedFolio, cumulativeHsms: string) => void | Promise<void>;
-  /** Optional abort signal to stop between pages. */
-  signal?: AbortSignal;
-};
+export type BatchTranscriptionResult = BatchTranscriptionResultBase &
+  Pick<VisionTranscriptionResult, "hsmsAscii" | "isValid" | "errorCount" | "warningCount">;
 
 /** Join per-page HSMS payloads; ensure blank-line separation between leaves. */
 export function mergeHsmsPages(pages: string[]): string {

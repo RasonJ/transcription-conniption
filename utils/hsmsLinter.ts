@@ -243,12 +243,12 @@ export function lintHsmsTranscription(
         );
       }
       // Reset folio-local tracking — prevents unbounded Set growth on multi-folio corpora.
+      // Keep `sawEmptyColumnTag`: vision often emits `{CB1.}` then `[fol. …]` then loose body text.
       envStack = [];
       inColumnBlock = false;
       columnLineIndex = -1;
       columnHadEnvOpen = false;
       pendingVernacularClose = false;
-      sawEmptyColumnTag = false;
       linesSinceFolio = 0;
       slopWarned.clear();
       continue;

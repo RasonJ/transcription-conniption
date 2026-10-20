@@ -20,6 +20,9 @@ type ChatbotDrawerProps = ComponentProps<
 type IngestPanelProps = ComponentProps<
   Awaited<ReturnType<typeof loadIngestPanel>>["IngestPanel"]
 >;
+type EditorLinterBannerProps = ComponentProps<
+  typeof import("@/components/EditorLinterBanner").EditorLinterBanner
+>;
 
 const ConcordanceDrawerLazy = lazy(() =>
   loadConcordanceDrawer().then((m) => ({ default: m.ConcordanceDrawer })),
@@ -28,6 +31,9 @@ const ManuscriptChatbotDrawerLazy = lazy(() =>
   loadManuscriptChatbotDrawer().then((m) => ({ default: m.ManuscriptChatbotDrawer })),
 );
 const IngestPanelLazy = lazy(() => loadIngestPanel().then((m) => ({ default: m.IngestPanel })));
+const EditorLinterBannerLazy = lazy(() =>
+  import("@/components/EditorLinterBanner").then((m) => ({ default: m.EditorLinterBanner })),
+);
 
 /** Mounts the drawer only once it has been opened, then keeps it mounted for its close animation. */
 function useOpenedOnce(visible: boolean): boolean {
@@ -62,6 +68,15 @@ export function IngestPanel(props: IngestPanelProps) {
   return (
     <Suspense fallback={null}>
       <IngestPanelLazy {...props} />
+    </Suspense>
+  );
+}
+
+/** Live HSMS linter banner — deferred so Pass 2 / Azure stay out of the eager entry graph. */
+export function EditorLinterBanner(props: EditorLinterBannerProps) {
+  return (
+    <Suspense fallback={null}>
+      <EditorLinterBannerLazy {...props} />
     </Suspense>
   );
 }

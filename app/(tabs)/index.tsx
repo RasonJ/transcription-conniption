@@ -4,16 +4,18 @@ import { useRegisterLineAnchor, useScrollAnchor } from "@/context/ScrollAnchorCo
 import { ExportManuscriptSheet } from "@/components/ExportManuscriptSheet";
 import { BlockFigureLayout } from "@/components/BlockFigureLayout";
 import { CompilationOverlay } from "@/components/CompilationOverlay";
-import { ConcordanceDrawer, IngestPanel, ManuscriptChatbotDrawer } from "@/components/lazy/ScholarPanels";
+import {
+  ConcordanceDrawer,
+  EditorLinterBanner,
+  IngestPanel,
+  ManuscriptChatbotDrawer,
+} from "@/components/lazy/ScholarPanels";
 import { LocalePickerCompact } from "@/components/LocalePicker";
 import { FigureImageContext, FigurePlaceholder } from "@/components/FigurePlaceholder";
 import { FolioFacsimileCanvas } from "@/components/FolioFacsimileCanvas";
 import { ManuscriptSelector } from "@/components/ManuscriptSelector";
 import { ResponsiveBatchShell } from "@/components/ResponsiveBatchShell";
 import { SvgFacsimilePage } from "@/components/SvgFacsimilePage";
-import { ModernLineSynopticSplit } from "@/components/ModernLineSynopticSplit";
-import { SynopticFolioSplit } from "@/components/SynopticFolioSplit";
-import { EditorLinterBanner } from "@/components/EditorLinterBanner";
 import { TranscriptionProgressBar } from "@/components/TranscriptionProgressBar";
 import { ValidationPanel } from "@/components/ValidationPanel";
 import {
@@ -29,10 +31,7 @@ import type { FacsimilePlacement, FolioSide, ManuscriptBlock, Token, WordOccurre
 import { formatRunningHeaderText } from "@/utils/metadataText";
 import { reconstructManuscriptFlow } from "@/utils/manuscriptParser";
 import { detectWitnessLanguage } from "@/utils/witnessLanguage";
-import { buildManuscriptExportPayload } from "@/utils/manuscriptExport";
-import { saveExportFile } from "@/utils/exportFile";
 import type { ManuscriptExportFormat } from "@/utils/exportFormats";
-import { exportToTEIXML } from "@/utils/teiExport";
 import { copyFigureIntoWorkspace } from "@/utils/figureAssetStorage";
 import { platformShadow } from "@/utils/platformShadow";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
@@ -69,7 +68,17 @@ import {
   Upload,
   Wand2,
 } from "lucide-react-native";
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  Suspense,
+  createContext,
+  lazy,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Alert,
   Platform,
@@ -84,6 +93,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+/** Optional studio panes — keep modernizedText / normalized synoptic out of eager entry. */
+const ModernLineSynopticSplit = lazy(() =>
+  import("@/components/ModernLineSynopticSplit").then((m) => ({ default: m.ModernLineSynopticSplit })),
+);
+const SynopticFolioSplit = lazy(() =>
+  import("@/components/SynopticFolioSplit").then((m) => ({ default: m.SynopticFolioSplit })),
+);
 
 const ReaderStateContext = createContext<{
   showExpanded: boolean;
@@ -637,6 +654,7 @@ export default function TranscriptionConniptionScreen() {
   );
 
   const exportTei = useCallback(async () => {
+    const { exportToTEIXML } = await import("@/utils/teiExport");
     const xml = exportToTEIXML(parsedManuscript);
     try {
       await Share.share({
@@ -649,8 +667,9 @@ export default function TranscriptionConniptionScreen() {
   }, [parsedManuscript]);
 
   const buildExportContents = useCallback(
-    (format: ManuscriptExportFormat) =>
-      buildManuscriptExportPayload(format, {
+    async (format: ManuscriptExportFormat) => {
+      const { buildManuscriptExportPayload } = await import("@/utils/manuscriptExport");
+      return buildManuscriptExportPayload(format, {
         parsed: parsedManuscript,
         sourceText: debouncedText,
         display: {
@@ -659,7 +678,8 @@ export default function TranscriptionConniptionScreen() {
           useNormalizedDiacritics: showNormalizedDiacritics,
           suppressOtioseMarks,
         },
-      }).contents,
+      }).contents;
+    },
     [
       parsedManuscript,
       debouncedText,
@@ -678,7 +698,9 @@ export default function TranscriptionConniptionScreen() {
       }
 
       try {
-        await saveExportFile(buildExportContents(format), {
+        const { saveExportFile } = await import("@/utils/exportFile");
+        const contents = await buildExportContents(format);
+        await saveExportFile(contents, {
           fileName,
           format,
           dialogTitle: `Export ${fileName}`,
@@ -1543,27 +1565,35 @@ function FolioPage({
           onSetFolioBackground={onSetFolioBackground}
         >
           {modernSynoptic ? (
-            <ModernLineSynopticSplit
-              folio={folio}
-              highlight={highlight}
-              diplomaticContent={content}
-              languageHint={languageHint}
-            />
+            <Suspense fallback={content}>
+              <ModernLineSynopticSplit
+                folio={folio}
+                highlight={highlight}
+                diplomaticContent={content}
+                languageHint={languageHint}
+              />
+            </Suspense>
           ) : synoptic ? (
-            <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
+            <Suspense fallback={content}>
+              <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
+            </Suspense>
           ) : (
             content
           )}
         </FolioFacsimileCanvas>
       ) : modernSynoptic ? (
-        <ModernLineSynopticSplit
-          folio={folio}
-          highlight={highlight}
-          diplomaticContent={content}
-          languageHint={languageHint}
-        />
+        <Suspense fallback={content}>
+          <ModernLineSynopticSplit
+            folio={folio}
+            highlight={highlight}
+            diplomaticContent={content}
+            languageHint={languageHint}
+          />
+        </Suspense>
       ) : synoptic ? (
-        <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
+        <Suspense fallback={content}>
+          <SynopticFolioSplit folio={folio} highlight={highlight} diplomatic={content} />
+        </Suspense>
       ) : (
         content
       )}

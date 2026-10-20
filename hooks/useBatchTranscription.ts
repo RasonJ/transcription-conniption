@@ -2,16 +2,18 @@
  * Live incremental PDF/image vision transcription.
  * Each completed folio updates React state immediately so the parchment can re-render
  * before the next Azure call (page-level streaming, not wait-for-all-25).
+ *
+ * The Azure pipeline (`batchTranscriptionService` → orchestrator) is loaded only when a
+ * batch starts (SPEC-LIGHTWEIGHT: keep eager entry free of Foundry/OpenAI client code).
  */
 import { useCallback, useMemo, useRef, useState } from "react";
-import {
-  mergeHsmsPages,
-  runHybridTranscriptionPipeline,
-  type BatchProgress,
-  type BatchTranscriptionInput,
-  type BatchTranscriptionResult,
-  type TranscribedFolio,
-} from "@/services/batchTranscriptionService";
+import { extractHsmsAsciiPayload } from "@/utils/hsmsAsciiPayload";
+import type {
+  BatchProgress,
+  BatchTranscriptionInput,
+  BatchTranscriptionResult,
+  TranscribedFolio,
+} from "@/services/batchTranscriptionTypes";
 
 export type { TranscribedFolio, BatchProgress };
 
@@ -26,6 +28,13 @@ export type UseBatchTranscriptionOptions = {
   /** Called with cumulative HSMS after each folio — typically `applyTranscription`. */
   onCumulativeHsms?: (hsms: string, meta: { folio: TranscribedFolio; pageCount: number }) => void;
 };
+
+function mergeCompletedHsms(pages: string[]): string {
+  return pages
+    .map((p) => extractHsmsAsciiPayload(p))
+    .filter((p) => p.length > 0)
+    .join("\n\n");
+}
 
 export function useBatchTranscription(options: UseBatchTranscriptionOptions = {}) {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -67,6 +76,9 @@ export function useBatchTranscription(options: UseBatchTranscriptionOptions = {}
       setProgress({ current: 0, total: 0, activeFolio: "", phase: "slicing" });
 
       try {
+        const { runHybridTranscriptionPipeline } = await import(
+          "@/services/batchTranscriptionService"
+        );
         const result = await runHybridTranscriptionPipeline({
           ...input,
           signal: controller.signal,
@@ -120,7 +132,7 @@ export function useBatchTranscription(options: UseBatchTranscriptionOptions = {}
   );
 
   const fullDocumentHsms = useMemo(
-    () => mergeHsmsPages(completedFolios.map((f) => f.hsmsAscii)),
+    () => mergeCompletedHsms(completedFolios.map((f) => f.hsmsAscii)),
     [completedFolios],
   );
 

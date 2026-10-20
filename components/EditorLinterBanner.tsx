@@ -2,10 +2,6 @@ import { scriptoriumTheme as t } from "@/constants/scriptoriumTheme";
 import type { ValidationError } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
 import { isAzureAgentConfigured } from "@/services/azureAgentConfig";
-import {
-  formatDiagnosticsForRepair,
-  runPassTwoRepair,
-} from "@/services/passTwoRepairService";
 import { localizeValidationMessage } from "@/utils/validationMessage";
 import { lintHsmsTranscription } from "@/utils/hsmsLinter";
 import { AlertTriangle, CheckCircle2, Sparkles, XCircle } from "lucide-react-native";
@@ -46,6 +42,10 @@ export function EditorLinterBanner({ transcriptionText, onJumpToLine, onRepaired
     }
     setRepairing(true);
     try {
+      // Lazy-load Pass 2 + Azure orchestrator (SPEC-LIGHTWEIGHT — keep out of eager entry).
+      const { formatDiagnosticsForRepair, runPassTwoRepair } = await import(
+        "@/services/passTwoRepairService"
+      );
       const diagnostics = formatDiagnosticsForRepair(report.criticalErrors);
       const repaired = await runPassTwoRepair(transcriptionText, diagnostics);
       if (!repaired.trim()) {

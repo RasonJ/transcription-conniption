@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-10-19T23:34:25.339Z",
+  "generatedAt": "2026-10-20T15:06:55.430Z",
   "description": "HSMS paleography + Proofer/linter rules for Azure Foundry agent memory. Deterministic enforcement remains on-device via lintHsmsTranscription.",
   "ruleCount": 59,
   "rules": [
