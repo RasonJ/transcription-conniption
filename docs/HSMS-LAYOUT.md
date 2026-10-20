@@ -311,7 +311,7 @@ On web viewports the facsimile uses **explicit pixel dimensions** inside HTML ro
 
 1. **Parchment shell** — fixed `CANVAS_W = 800` from `pageLayout.ts`; ruling lines and margins in SVG.
 2. **HTML body** — one flex/block row per physical line from `spatialAst.ts`.
-3. **Drop caps** — `{INn.}` tokens render through **`HtmlOrnateDropCap.tsx`** (web) or **`renderOrnateInitialSvg`** in `renderOrnateInitial.tsx` (native SVG): four seeded decorative matrices (vines, criblé stipple, ribbon interlace, damask tessellation) or a user-uploaded scan; box size is `depth × LH` where **`LH` (24 px) is exported from `tokenRendering.ts`**, not `pageLayout.ts`. Box width scales with grapheme count via `dropCapBoxWidth(capH, letterCount)`. Layout drivers call `stripDropCapPrefixFromSegs()` so the justified row never repeats the cap grapheme. Details: [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md).
+3. **Drop caps** — `{INn.}` tokens render through **`HtmlOrnateDropCap.tsx`** (web) or **`renderOrnateInitialSvg`** in `renderOrnateInitial.tsx` (native SVG). Both call `buildInitialScene` for the witness tradition (or a user-uploaded scan). Box size is `depth × LH` where **`LH` (24 px) is exported from `tokenRendering.ts`**, not `pageLayout.ts`. Box width scales with grapheme count via `dropCapBoxWidth(capH, letterCount)`. Layout drivers call `stripDropCapPrefixFromSegs()` so the justified row never repeats the cap grapheme. Details: [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md).
 4. **Cap gutter** — track `rowsLeft` and apply matching `paddingLeft` on the next *n − 1* lines after a multi-line initial.
 5. **Justification** — `text-align: justify` on prose rows; native kerning for expansions and diacritics.
 6. **Dynamic height** — `useLayoutEffect` / `ResizeObserver` measures content so the SVG parchment grows with the HTML body.
@@ -587,14 +587,15 @@ flowchart TB
 | `components/svgFacsimile/tokenRendering.ts` | `FS`, `LH`; `tokenToSegs`, `coalesceSegs`, `stripDropCapPrefixFromSegs` |
 | `utils/hsmsLexer.ts` | Paleographic bracket rules and sticky token order |
 | `components/svgFacsimile/HtmlOrnateDropCap.tsx` | Web ornate drop cap SVG (uses `LH` from `tokenRendering.ts`) |
-| `components/svgFacsimile/renderOrnateInitial.tsx` | Native ornate drop cap (`renderOrnateInitialSvg`) |
-| `components/svgFacsimile/dropInitialLetterform.ts` | Seeded themes and RNG shared with cap renderer |
+| `components/svgFacsimile/renderOrnateInitial.tsx` | Native adapter over `buildInitialScene` |
+| `utils/initials/scene.ts` | Shared initial scene (web, native, SVG, HTML) |
+| `components/svgFacsimile/dropInitialLetterform.ts` | Retired per-letter matrices; not called by the facsimile |
 | `utils/renderMarkupLeakage.ts` | Post-export HTML leakage scan (batch uses `skipLacunaChecks`) |
 | `components/SvgFacsimilePage.tsx` | Native SVG facsimile (baseline grid) |
 | `components/SvgFacsimilePage.web.tsx` | Web facsimile (SVG shell + HTML ForeignObject) |
 | `utils/structuralAssembly.ts` | Line tokenizer + environment stack |
 | `utils/dropInitial.ts` | `{INn.}` → single-grapheme `drop_initial` + body remainder |
-| `utils/htmlExport.ts` | Legacy HTML table export (float-left caps) |
+| `utils/htmlExport.ts` | HTML export; drop caps use `serializeInitialScene` |
 | `utils/svgDocumentExport.ts` | Standalone SVG document export |
 | `docs/ARCHITECTURE.md` | Full app architecture |
 | `docs/HSMS-EDITOR.md` | HSMS editor/builder workflows |

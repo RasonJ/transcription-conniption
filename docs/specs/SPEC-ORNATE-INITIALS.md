@@ -18,7 +18,9 @@ A drop initial in the page view should look like it belongs to the witness. A 15
 
 ---
 
-## 2. Findings (code at `41b6637d`, observed 2026-10-20)
+## 2. Findings (baseline at `41b6637d`, observed 2026-10-20)
+
+These rows describe the code before the scene builder. Current adapters are in §9.1a. I1 is closed: native, web, SVG export, and HTML export all call `buildInitialScene`.
 
 | # | Finding | Where |
 |---|---------|-------|
@@ -111,7 +113,7 @@ The letter is the single grapheme from `parseDropInitialPrefix()` (`utils/dropIn
 
 - **Alphabets (phase order):** Lombardic versals A–Z plus Ç, then woodcut Roman capitals A–Z, then Gothic textura capitals A–Z. Include I/J and U/V as separate forms.
 - **Format:** one SVG per glyph on a 1000-unit em, with metadata: advance width, cap height, overshoot, and **anchor points** for decoration: counter centres (`counter.0`, `counter.1`), stem tops and feet, bowl extremes, terminal points. Penwork and highlights attach to anchors, not to fixed box fractions.
-- **Build:** `scripts/build-initial-glyphs.mjs` compiles the SVGs into `utils/generated/initialGlyphs.ts` (paths + metrics + anchors). Lazy Tier 1 module, loaded with the facsimile chunk. Budget ≤ 35 KB gzip per alphabet.
+- **Build (not shipped):** `scripts/build-initial-glyphs.mjs` and `utils/generated/initialGlyphs.ts` are not in the repo. Letters are drawn inside `buildInitialScene`. When a drawn alphabet is added, that script should compile one SVG per glyph into a lazy Tier 1 module (paths + metrics + anchors), budget ≤ 35 KB gzip per alphabet.
 - **Review:** a paleographer signs off each alphabet against period exemplars before it ships (§9).
 
 ---
@@ -229,17 +231,27 @@ Settings live in the workspace record and are included in `.hsms` bundles. The s
 
 **Shipped:** `utils/initials/scene.ts` (`buildInitialScene`, `serializeInitialScene`, `PIGMENT_PALETTE`), `utils/initials/tradition.ts` (`deriveTraditionFromRmk`), `utils/initials/spec.ts` (`gradeFromDepth`). Native `renderOrnateInitialSvg`, web `HtmlOrnateDropCap`, SVG document export, and legacy HTML export all draw that scene. Studio sets `InitialTraditionContext` from the open transcription's `{RMK:}` imprint (Cromberger 1525 and Galharde 1537 → `print.woodcut`; year ≤ 1500 → `print.incunable`; MSS shelfmark or no printer date → `ms.penwork`).
 
-### 9.1a Adapter map (target)
+### 9.1a Adapter map (shipped)
 
 ```text
-utils/initials/                         (Tier 1, lazy with the facsimile)
-  spec.ts           resolveInitialSpec(token, witnessCtx, sequence) → InitialSpec   (§3)
-  tradition.ts      tradition resolution + medium heuristic                         (§3.2)
-  palette.ts        tokens                                                          (§6)
-  glyphs.ts         letter source selection; loads utils/generated/initialGlyphs    (§4)
-  treatments/       minor.ts penwork.ts illuminated.ts woodcut.ts historiated.ts unexecuted.ts supplied.ts
-  scene.ts          buildInitialScene(spec, box) → InitialScene
-  layout.ts         box metrics, margin allowance, overlap check                     (§8)
+utils/initials/                         (with the facsimile chunk)
+  spec.ts           resolveInitialSpec → InitialSpec
+  tradition.ts      deriveTraditionFromRmk
+  scene.ts          buildInitialScene, serializeInitialScene, PIGMENT_PALETTE
+  TraditionContext.tsx
+
+components/svgFacsimile/
+  renderOrnateInitial.tsx   native adapter (sceneItemsToNodes via UniversalInitial.tsx)
+  HtmlOrnateDropCap.tsx     web adapter (serializeInitialScene)
+  UniversalInitial.tsx      scene items → react-native-svg
+
+utils/svgDocumentExport.ts  serializeInitialScene
+utils/htmlExport.ts         renderDropInitial → the same serializer
+
+Not in the tree (do not cite as current paths):
+  palette.ts, glyphs.ts, treatments/, layout.ts
+  components/svgFacsimile/InitialSvg.tsx, initialPalette.ts
+  scripts/build-initial-glyphs.mjs, utils/generated/initialGlyphs.ts
 
 InitialScene = {
   box: Rect; overflow: Rect;              // box + marginal extent
@@ -254,14 +266,14 @@ InitialScene = {
 }
 ```
 
-| Adapter | Replaces |
-|---------|----------|
-| Native: `components/svgFacsimile/InitialSvg.tsx` (react-native-svg) | `renderOrnateInitialSvg()` |
-| Web: `HtmlOrnateDropCap` renders the scene as inline SVG | its call to `buildOrnateInitialGeometry()` |
-| SVG export: `serializeInitialScene()` | `serializeOrnateInitial()` |
-| HTML export: inline `<svg>` from the same serializer | the bordered `<span>` in `renderDropInitial()` |
+| Adapter | Entry |
+|---------|--------|
+| Native | `renderOrnateInitialSvg` in `renderOrnateInitial.tsx` |
+| Web | `HtmlOrnateDropCap` |
+| SVG export | `serializeInitialScene` |
+| HTML export | `renderDropInitial` in `utils/htmlExport.ts` |
 
-Delete `renderOrnateInitial.tsx`'s generator and the `matrixOrnaments()` / `pickLetterform()` code once the adapters ship. Regenerate `ornateInitialInventory.ts` from the new tradition list, or drop it if nothing reads it.
+`matrixOrnaments()` and `pickLetterform()` remain in `dropInitialLetterform.ts` and are not called by these adapters. `utils/generated/ornateInitialInventory.ts` still lists the old static SVG slots under `assets/mufi/ornate-initials/`.
 
 ### 9.2 Text glyphs in exports
 

@@ -18,21 +18,29 @@ const ptBr: PluralRule = (n) => {
   return "other";
 };
 
-/** Static CLDR-derived rules for locales whose runtime `Intl.PluralRules` data may be missing (e.g. Hermes). */
+/**
+ * Static CLDR rules used when `Intl.PluralRules` is missing or its `select` throws
+ * (Hermes and other bare runtimes). Iberian locales use `one` / `many` / `other` only;
+ * `few` and `two` are not categories for these languages.
+ */
 const FALLBACK_RULES: Record<string, PluralRule> = {
   en: oneOther,
   es: romanceOneManyOther,
   "es-ES": romanceOneManyOther,
   "es-419": romanceOneManyOther,
+  "es-MX": romanceOneManyOther,
+  "es-AR": romanceOneManyOther,
   pt: ptBr,
   "pt-BR": ptBr,
   "pt-PT": romanceOneManyOther,
   ca: romanceOneManyOther,
+  "ca-ES-valencia": romanceOneManyOther,
   gl: oneOther,
   eu: oneOther,
   ast: oneOther,
   an: oneOther,
   oc: romanceOneManyOther,
+  "oc-aranes": romanceOneManyOther,
   qu: oneOther,
   gn: oneOther,
   ay: oneOther,
@@ -63,6 +71,12 @@ export function pluralCategoryFallback(locale: string, n: number): PluralCategor
 
 export function pluralCategory(locale: string, n: number): PluralCategory {
   const rules = getIntlRules(locale);
-  if (rules) return rules.select(n) as PluralCategory;
+  if (rules) {
+    try {
+      return rules.select(n) as PluralCategory;
+    } catch {
+      // Incomplete PluralRules data (common on Hermes) must not surface as a throw.
+    }
+  }
   return pluralCategoryFallback(locale, n);
 }

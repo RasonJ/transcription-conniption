@@ -1,5 +1,6 @@
 import type { FolioSide } from "@/constants/manuscript";
 import { renderNormalizedBlock } from "@/utils/normalizedText";
+import { bcp47ForHsmsCode } from "@/utils/witnessLanguage";
 import { useT } from "@/i18n/runtime";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
@@ -17,6 +18,7 @@ type NormalizedRow = {
   lineNumber?: string;
   text: string;
   type: string;
+  language?: string;
 };
 
 export const SynopticPane = React.memo(function SynopticPane({
@@ -31,7 +33,7 @@ export const SynopticPane = React.memo(function SynopticPane({
       const block = folio.blocks[i];
       const text = renderNormalizedBlock(block);
       if (text.length > 0) {
-        lines.push({ lineNumber: block.lineNumber, text, type: block.type });
+        lines.push({ lineNumber: block.lineNumber, text, type: block.type, language: block.language });
       }
     }
     return lines;
@@ -55,11 +57,15 @@ export const SynopticPane = React.memo(function SynopticPane({
         return (
           <View key={`n-${idx}`} style={[styles.lineRow, isHit && styles.lineRowHighlight]}>
             {row.lineNumber ? (
-              <Text style={styles.lineNum}>{row.lineNumber}</Text>
+              <Text style={styles.lineNum} accessibilityElementsHidden importantForAccessibility="no">
+                {row.lineNumber}
+              </Text>
             ) : (
-              <View style={styles.lineNumSpacer} />
+              <View style={styles.lineNumSpacer} accessibilityElementsHidden importantForAccessibility="no" />
             )}
-            <Text style={textStyles}>{row.text}</Text>
+            <Text style={textStyles} accessibilityLanguage={bcp47ForHsmsCode(row.language)}>
+              {row.text}
+            </Text>
           </View>
         );
       })}

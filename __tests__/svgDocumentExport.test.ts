@@ -23,6 +23,24 @@ describe("svgDocumentExport", () => {
     expect(svg).toMatch(/<rect[^>]+fill="#1c1916"/);
   });
 
+  it("derives woodcut from parsed imprint when source text is omitted", () => {
+    const parsed = compileManuscriptTree(DEFAULT_DEMO);
+    const svg = exportToSvgDocument(parsed);
+    expect(svg).toMatch(/<rect[^>]+fill="#1c1916"/);
+  });
+
+  it("derives penwork from an MSS shelfmark", () => {
+    const source = `{RMK: Anon.}
+{RMK: Madrid | BNE | MSS/123}
+[fol. 1r]
+{CB1.
+1 {IN4.} Abcd
+}`;
+    const svg = exportToSvgDocument(compileManuscriptTree(source));
+    expect(svg).not.toMatch(/fill="#1c1916"/);
+    expect(svg).toContain(">A</text>");
+  });
+
   it("renders expansions as superscript-sized glyphs when expanded", () => {
     const parsed = compileManuscriptTree("1 {CB.} L<IBRO> test line.");
     const svg = exportToSvgDocument(parsed, { showExpanded: true });

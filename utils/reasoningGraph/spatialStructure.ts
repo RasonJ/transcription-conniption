@@ -7,6 +7,7 @@ import { computeReasoningDagHash } from "./hash";
 import type {
   BlockAttributes,
   ColumnAttributes,
+  DamageRegionAttributes,
   DropInitialAttributes,
   EditorialInterventionAttributes,
   ExpansionAttributes,
@@ -114,7 +115,51 @@ function isPunctuationToken(token: Token): PunctuationAttributes["type"] | null 
 }
 
 function looksLikeAbbreviation(raw: string): boolean {
-  return /<[^>]+>|@~|[@^]/.test(raw);
+  return /<[^>]{1,80}>|@~|[@^]/.test(raw);
+}
+
+const PRIMARY_HAND = /^(m1|hand1|h1|original|scribe1)$/i;
+
+function folioIdFromNode(node: ReasoningNode): string | undefined {
+  if (node.type === "Folio") {
+    return String(node.attributes.folioNumber ?? node.id.replace(/^FOLIO:/, ""));
+  }
+  const match = node.id.match(/^(?:TOKEN|LINE|BLOCK|COLUMN|DROP|DAMAGE|PUNCT|INT|EXP|FIGURE|HAND):([^:]+)/);
+  return match?.[1];
+}
+
+/** Stamp a navigation payload on every edge that lands on a folio, line, or token. */
+function stampNavigationActions(doc: ReasoningGraphDoc): void {
+  const navigable = new Set(["Folio", "Line", "Token", "DropInitial"]);
+  for (const edge of doc.edges) {
+    const target = doc.nodes.find((n) => n.id === edge.target);
+    if (!target || !navigable.has(target.type)) continue;
+    if (edge.properties?.do_action) continue;
+    const folioId = folioIdFromNode(target);
+    const line =
+      target.type === "Line"
+        ? String(target.attributes.lineNumber ?? "")
+        : typeof edge.properties?.line === "string"
+          ? edge.properties.line
+          : undefined;
+    let doAction = "JUMP_FOLIO";
+    if (edge.relation === "maps_to_lemma" || edge.relation === "has_variant_form") doAction = "OPEN_KWIC";
+    else if (
+      edge.relation === "has_intervention" ||
+      edge.relation === "exhibits_hand" ||
+      edge.relation === "clobbers_text"
+    ) {
+      doAction = edge.relation === "clobbers_text" ? "JUMP_FOLIO" : "OPEN_VALIDATION";
+    } else if (target.type === "DropInitial" || edge.relation === "has_drop_initial_hit" || edge.relation === "indents") {
+      doAction = "ZOOM_INITIAL";
+    }
+    edge.properties = {
+      ...edge.properties,
+      do_action: doAction,
+      ...(folioId ? { folioId } : {}),
+      ...(line ? { line } : {}),
+    };
+  }
 }
 
 export type SpatialSeedMode = "shallow" | "deep";
@@ -165,6 +210,7 @@ export function seedSpatialStructure(
   }
 
   let prevFolioId: string | null = null;
+  let prevCatchwordId: string | null = null;
   parsed.folios.forEach((folio, folioIdx) => {
     const folioNodeId = `FOLIO:${folio.id}`;
     const { folioNumber, side } = parseFolioSide(folio.id);
@@ -180,7 +226,16 @@ export function seedSpatialStructure(
     upsertEdge(doc, manuscriptId, folioNodeId, "has_folio", { sequenceIndex: folioIdx });
 
     if (prevFolioId) {
-      upsertEdge(doc, prevFolioId, folioNodeId, "next_folio", {});
+      upsertEdge(doc, prevFolioId, folioNodeId, "next_folio", {
+        do_action: "JUMP_FOLIO",
+        folioId: folio.id,
+      });
+      if (prevCatchwordId) {
+        upsertEdge(doc, prevCatchwordId, folioNodeId, "next_folio", {
+          do_action: "JUMP_FOLIO",
+          folioId: folio.id,
+        });
+      }
     }
     prevFolioId = folioNodeId;
 
@@ -197,7 +252,14 @@ export function seedSpatialStructure(
           tokenType: "catchword",
         } satisfies TokenAttributes,
       });
-      upsertEdge(doc, folioNodeId, cwId, "has_footer", { footerKind: "catchword" });
+      upsertEdge(doc, folioNodeId, cwId, "has_footer", {
+        footerKind: "catchword",
+        do_action: "JUMP_FOLIO",
+        folioId: folio.id,
+      });
+      prevCatchwordId = cwId;
+    } else {
+      prevCatchwordId = null;
     }
     if (folio.signature) {
       const sigId = `TOKEN:${folio.id}:signature`;
@@ -305,7 +367,12 @@ export function seedSpatialStructure(
           upsertNode(doc, { id: dropId, type: "DropInitial", attributes: dropAttrs });
           activeDropInitialId = dropId;
           dropIndentRemaining = depth;
-          upsertEdge(doc, dropId, lineId, "indents", { remainingDepth: depth });
+          upsertEdge(doc, dropId, lineId, "indents", { remainingDepth: depth, do_action: "ZOOM_INITIAL", folioId: folio.id, line: lineNumber });
+          upsertEdge(doc, dropId, manuscriptId, "has_drop_initial_hit", {
+            folioId: folio.id,
+            line: lineNumber,
+            do_action: "ZOOM_INITIAL",
+          });
         }
 
         const punctKind = isPunctuationToken(token);
@@ -327,7 +394,41 @@ export function seedSpatialStructure(
           hand: token.hand,
         };
         upsertNode(doc, { id: tokenId, type: "Token", attributes: tokAttrs });
-        upsertEdge(doc, lineId, tokenId, "contains_token", { sequenceIndex: ti });
+        upsertEdge(doc, lineId, tokenId, "contains_token", {
+          sequenceIndex: ti,
+          do_action: "JUMP_FOLIO",
+          folioId: folio.id,
+          line: lineNumber,
+        });
+
+        if (token.type === "illegible_text" || token.type === "missing_fragment" || token.type === "blank_space") {
+          const damageId = `DAMAGE:${folio.id}:${blockIdx}:${ti}`;
+          const damageAttrs: DamageRegionAttributes = {
+            id: damageId,
+            damage_type: token.type === "illegible_text" ? "water_stain" : "lacuna",
+            severity: 0.8,
+          };
+          upsertNode(doc, { id: damageId, type: "DamageRegion", attributes: damageAttrs });
+          upsertEdge(doc, damageId, tokenId, "clobbers_text", {
+            do_action: "JUMP_FOLIO",
+            folioId: folio.id,
+            line: lineNumber,
+          });
+        }
+
+        if (token.hand && !PRIMARY_HAND.test(token.hand)) {
+          const handId = `HAND:${token.hand}`;
+          upsertNode(doc, {
+            id: handId,
+            type: "Hand",
+            attributes: { id: handId, label: token.hand, hand: token.hand },
+          });
+          upsertEdge(doc, handId, tokenId, "exhibits_hand", {
+            do_action: "OPEN_VALIDATION",
+            folioId: folio.id,
+            line: lineNumber,
+          });
+        }
 
         if (token.type === "figure_anchor" || token.figureId || token.figureType) {
           const figId = `FIGURE:${token.figureId ?? `${folio.id}_${blockIdx}_${ti}`}`;
@@ -395,7 +496,21 @@ export function seedSpatialStructure(
     });
   });
 
+  stampNavigationActions(doc);
   return finalize(doc);
+}
+
+/**
+ * Lazy micro-philology load for one leaf (or the whole witness when folioId is omitted).
+ * Shallow folio nodes stay in place; tokens, damage, and hands are added on demand.
+ */
+export function loadMicroPhilology(
+  graphDoc: ReasoningGraphDoc,
+  parsed: ParsedManuscript,
+  folioId?: string,
+): ReasoningGraphDoc {
+  const folios = folioId ? parsed.folios.filter((f) => f.id === folioId) : parsed.folios;
+  return seedSpatialStructure(graphDoc, { ...parsed, folios }, { mode: "deep" });
 }
 
 /** Lines indented by a given drop-initial letter (Cypher INDENTS analogue). */

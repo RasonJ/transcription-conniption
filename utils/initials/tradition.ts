@@ -59,3 +59,28 @@ export function deriveTraditionFromRmk(transcriptionText: string): InitialTradit
   }
   return "print.woodcut";
 }
+
+type TraditionMetadata = {
+  imprint?: { city?: string; printer?: string; date?: string };
+  witness?: { city?: string; library?: string; shelfmark?: string };
+};
+
+/**
+ * Tradition for HTML/SVG export. Raw `{RMK:}` wins; otherwise the parsed imprint
+ * and shelfmark are replayed through the same RMK rules.
+ */
+export function traditionForWitness(metadata: TraditionMetadata, sourceText?: string): InitialTradition {
+  if (sourceText && /\{RMK\s*:/i.test(sourceText)) {
+    return deriveTraditionFromRmk(sourceText);
+  }
+  const lines: string[] = [];
+  const imprint = metadata.imprint;
+  const imprintLine = [imprint?.city, imprint?.printer, imprint?.date].filter(Boolean).join(" | ");
+  if (imprintLine) lines.push(`{RMK: ${imprintLine}}`);
+  const witness = metadata.witness;
+  if (witness?.shelfmark) lines.push(`{RMK: ${witness.shelfmark}}`);
+  else if (witness?.city && witness.library) {
+    lines.push(`{RMK: ${witness.city} | ${witness.library}}`);
+  }
+  return deriveTraditionFromRmk(lines.length ? lines.join("\n") : (sourceText ?? ""));
+}

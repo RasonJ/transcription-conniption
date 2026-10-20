@@ -12,8 +12,19 @@ export function CompilationOverlay({ visible, message }: Props) {
   }
 
   return (
-    <View style={styles.backdrop} accessibilityRole="progressbar" accessibilityLabel={message}>
-      <View style={styles.card}>
+    <View
+      style={styles.backdrop}
+      accessibilityRole="progressbar"
+      accessibilityLabel={message}
+      accessibilityLiveRegion="polite"
+      accessibilityState={{ busy: true }}
+      accessibilityValue={{ min: 0, max: 100, text: message }}
+    >
+      <View
+        style={styles.card}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
         <ActivityIndicator size="large" color="#ffd36e" />
         <Text style={styles.message}>{message}</Text>
       </View>

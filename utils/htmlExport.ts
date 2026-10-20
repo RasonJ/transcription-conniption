@@ -1,6 +1,8 @@
 import type { ParsedManuscript, Token } from "../constants/manuscript";
+import type { InitialTradition } from "./initials/scene";
 import { buildInitialScene, serializeInitialScene } from "./initials/scene";
 import { resolveInitialSpec } from "./initials/spec";
+import { traditionForWitness } from "./initials/tradition";
 import { convertHsmsToMufiGlyphs } from "./mufiCharacterMap";
 import { formatRunningHeaderText } from "./metadataText";
 import { buildSpatialFolio, zipColumnBlockRows, type SpatialLine } from "./spatialAst";
@@ -20,9 +22,11 @@ export type LegacyHtmlExportOptions = {
   usePuaFont?: boolean;
   /** Scholarly line numbers in a left gutter (not prepended into body text). */
   showLineNumbers?: boolean;
+  /** Raw HSMS. Drop initials follow `{RMK:}` imprint when this is set. */
+  sourceText?: string;
 };
 
-const DEFAULT_OPTIONS: Required<LegacyHtmlExportOptions> = {
+const DEFAULT_OPTIONS: Required<Omit<LegacyHtmlExportOptions, "sourceText">> = {
   showExpanded: true,
   showDeletions: true,
   useNormalizedDiacritics: true,
@@ -40,7 +44,7 @@ function escapeHtml(text: string): string {
     .replace(/"/g, "&quot;");
 }
 
-function displayTokenValue(token: Token, options: Required<LegacyHtmlExportOptions>): string {
+function displayTokenValue(token: Token, options: Required<Omit<LegacyHtmlExportOptions, "sourceText">>): string {
   let val = token.value ?? "";
   if (token.type === "text" && token.normalized && options.useNormalizedDiacritics) {
     val = token.normalized;
@@ -59,7 +63,7 @@ function displayTokenValue(token: Token, options: Required<LegacyHtmlExportOptio
 function renderTokensToHtml(
   tokens: Token[],
   blockType: string,
-  options: Required<LegacyHtmlExportOptions>,
+  options: Required<Omit<LegacyHtmlExportOptions, "sourceText">>,
 ): string {
   const pieces: string[] = [];
 
@@ -175,7 +179,8 @@ function renderTokensToHtml(
 
 function renderDropInitial(
   token: Token,
-  options: Required<LegacyHtmlExportOptions>,
+  options: Required<Omit<LegacyHtmlExportOptions, "sourceText">>,
+  tradition: InitialTradition,
 ): string {
   const depth = token.initialDepth ?? 3;
   let letter = token.value ?? "";
@@ -186,7 +191,7 @@ function renderDropInitial(
     resolveInitialSpec({
       letter: letter || "?",
       depth,
-      tradition: "print.woodcut",
+      tradition,
       sequence: 0,
       seed: letter,
     }),
@@ -236,7 +241,11 @@ function trimDropCapFromBodyTokens(tokens: Token[], capGrapheme: string): Token[
   return out.filter((t) => t.type !== "text" || (t.value ?? "").length > 0);
 }
 
-function renderSpatialLine(line: SpatialLine, options: Required<LegacyHtmlExportOptions>): string {
+function renderSpatialLine(
+  line: SpatialLine,
+  options: Required<Omit<LegacyHtmlExportOptions, "sourceText">>,
+  tradition: InitialTradition,
+): string {
   const block = line.block;
   if (block.type === "diagram") {
     return `<div style="border: 1px dashed #9b2217; background-color: #faf6eb; padding: 16px; text-align: center; margin: 12px 0; color: #5a2317; font-style: italic; font-family: Georgia, serif;">[Esquema / Diagrama Manuscrito]</div>`;
@@ -283,7 +292,7 @@ function renderSpatialLine(line: SpatialLine, options: Required<LegacyHtmlExport
   html += `<div class="${cellClass} main-text-column" style="text-align: ${block.type === "rubric" || block.type === "heading" ? "center" : "justify"};">`;
 
   if (dropInitial) {
-    html += renderDropInitial(dropInitial, options);
+    html += renderDropInitial(dropInitial, options, tradition);
   }
 
   html += renderTokensToHtml(bodyTokens, block.type, options);
@@ -305,6 +314,7 @@ export function exportToLegacyHTML(
   options: LegacyHtmlExportOptions = {},
 ): string {
   const opts = { ...DEFAULT_OPTIONS, ...options };
+  const tradition = traditionForWitness(parsed.metadata, options.sourceText);
   const title = escapeHtml(parsed.metadata.title || "Transcription Conniption");
   const author = escapeHtml(parsed.metadata.author || "");
 
@@ -422,15 +432,15 @@ export function exportToLegacyHTML(
       if (cb.layout === 1) {
         for (let li = 0; li < rows.length; li++) {
           if (rows[li].left) {
-            html += `          ${renderSpatialLine(rows[li].left!, opts)}\n`;
+            html += `          ${renderSpatialLine(rows[li].left!, opts, tradition)}\n`;
           }
         }
       } else {
         for (let ri = 0; ri < rows.length; ri++) {
           const row = rows[ri];
           html += `          <div class="column-layout-split">`;
-          html += `<div class="column-track-frame">${row.left ? renderSpatialLine(row.left, opts) : ""}</div>`;
-          html += `<div class="column-track-frame">${row.right ? renderSpatialLine(row.right, opts) : ""}</div>`;
+          html += `<div class="column-track-frame">${row.left ? renderSpatialLine(row.left, opts, tradition) : ""}</div>`;
+          html += `<div class="column-track-frame">${row.right ? renderSpatialLine(row.right, opts, tradition) : ""}</div>`;
           html += `</div>\n`;
         }
       }

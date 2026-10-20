@@ -43,8 +43,10 @@ function IssueRow({
       accessibilityLabel={`${severityWord(t, err.severity)}. ${location}. ${message}`}
       style={styles.row}
     >
-      <Text style={styles.icon}>{icon}</Text>
-      <View style={styles.body}>
+      <Text style={styles.icon} accessibilityElementsHidden importantForAccessibility="no">
+        {icon}
+      </Text>
+      <View style={styles.body} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
         <Text style={styles.meta}>
           {severityWord(t, err.severity)} · {location}
         </Text>
@@ -61,7 +63,11 @@ export function IssuesPanel({ errors, onJumpToLine, variant = "sheet", stale = f
   const collapsed = variant === "strip" && !open;
 
   return (
-    <View style={[styles.panel, stale && styles.stale]} accessibilityRole="summary">
+    <View
+      style={[styles.panel, stale && styles.stale]}
+      accessibilityRole="summary"
+      accessibilityLiveRegion="polite"
+    >
       {variant === "strip" ? (
         <Pressable
           onPress={() => setOpen((value) => !value)}

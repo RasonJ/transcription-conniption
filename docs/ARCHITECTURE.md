@@ -140,9 +140,9 @@ components/
     pageLayout.ts         # CANVAS_W=800, MARGIN, gutter, column width helpers (shared web/native)
     folioGroups.ts        # buildSpatialFolio → column-block layout groups
     tokenRendering.ts     # LH, FS; token → styled segments; MUFI display hooks
-    HtmlOrnateDropCap.tsx   # Web ornate drop cap (SVG inside HTML facsimile rows)
-    renderOrnateInitial.tsx # Native ornate drop cap (four seeded style matrices)
-    dropInitialLetterform.ts # Seeded RNG, illuminated themes, geometry helpers
+    HtmlOrnateDropCap.tsx   # Web adapter over utils/initials/scene.ts
+    renderOrnateInitial.tsx # Native adapter (renderOrnateInitialSvg) over the same scene
+    dropInitialLetterform.ts # Retired matrix geometry; not on the render path
   ConcordanceDrawer.tsx   # Virtualized KWIC drawer (memoized entry rows)
   ManuscriptChatbotDrawer.tsx # Local Ask: folio jump + hash-embed passage search
   ValidationPanel.tsx     # Editor-mode diagnostics
@@ -348,7 +348,7 @@ When **SVG canvas** is enabled in the advanced editor, each folio renders throug
 2. `groupFolioLayout()` (`components/svgFacsimile/folioGroups.ts`) calls `buildSpatialFolio()` and emits `column-block` → `single` / `two-col` groups.
 3. **Shared layout** (`components/svgFacsimile/pageLayout.ts`) — fixed `CANVAS_W = 800`, margins, gutter, and column width helpers; both renderers sit in a horizontal `ScrollView` on narrow viewports.
 4. **Web** (`SvgFacsimilePage.web.tsx`): SVG parchment shell (ruling lines, margins) plus HTML rows inside `<ForeignObject>` — `HtmlOrnateDropCap` for `{INn.}` caps (ornate SVG or uploaded scan), micro-tracking justification, cap gutter via `HtmlCapState`, `%2` wrap-back overlay. After `blockToSegs`, `stripDropCapPrefixFromSegs()` removes any duplicated cap grapheme from the first body segment before justification. Line height `LH` comes from `tokenRendering.ts` (not `pageLayout.ts`). `useEffect` + `ResizeObserver` measure dynamic parchment height.
-5. **Native** (`SvgFacsimilePage.tsx`): one ruled baseline row per `ManuscriptBlock`; auto-flowing `<TSpan>` siblings inside a single `<SvgText>` (no manual `dx`/`dy`); `%2` suffix painted at measured main-text width; same `stripDropCapPrefixFromSegs` guard as web. Drop caps use `renderOrnateInitialSvg` (four seeded style matrices — vines, criblé, ribbon, damask — or uploaded scan); see [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md).
+5. **Native** (`SvgFacsimilePage.tsx`): one ruled baseline row per `ManuscriptBlock`; auto-flowing `<TSpan>` siblings inside a single `<SvgText>` (no manual `dx`/`dy`); `%2` suffix painted at measured main-text width; same `stripDropCapPrefixFromSegs` guard as web. Drop caps use `renderOrnateInitialSvg`, which draws the same `buildInitialScene` as web (witness tradition, or an uploaded scan); see [HSMS-TYPOGRAPHY.md](HSMS-TYPOGRAPHY.md).
 6. Token styling is shared via `components/svgFacsimile/tokenRendering.ts` (`tokenToSegs`, `coalesceSegs`, `blockToSegs`, `stripDropCapPrefixFromSegs` — rubric segments cloned, not mutated in place). Optional `useMufiGraphemes` / `usePuaFont` rewrite segment text through `formatTokenDisplayGrapheme` / `convertHsmsToMufiGlyphs` without changing the parsed AST.
 
 Cap state (`{INn.}` depth) persists across consecutive single-column lines until the next initial or column change. Multi-letter cap boxes widen via `dropCapBoxWidth(capH, letterCount)` when needed. Two-column `{CB2.}` blocks zip left/right rows at equal index (not all-left-then-all-right). Full divergence notes (drop caps, `%2` wrap-back, `coalesceSegs`): [HSMS-LAYOUT.md §6.5](HSMS-LAYOUT.md).
@@ -441,7 +441,7 @@ Concordance and validation rows call scroll navigation via `ScrollAnchorProvider
 | Layer | Role |
 |-------|------|
 | `utils/copilot/facetIndex.ts` | Lazy per-witness facets (token types, hands, languages, initials) |
-| `utils/copilot/catalog` + `executors/tierA.ts` | Deterministic Tier A recipes (deletions, glosses, damage, …) |
+| `utils/copilot/catalog/index.ts` + `utils/copilot/executors/tierA.ts` | Deterministic Tier A recipes (deletions, glosses, damage, …) |
 | `utils/copilot/executors/voyant.ts` | Distant-reading recipes: `corpus.term_frequency`, `corpus.ngrams`, `corpus.vocab_density` |
 | `utils/copilot/router.ts` / `ask.ts` | Folio + DSL fast paths → **precompiled intent chains** (Tier‑1) → recipe cosine routing → answer cards |
 | `utils/copilot/precompiledChains.ts` | Offline graph subgraphs → flat recipes; deterministic match in `askCopilot` |

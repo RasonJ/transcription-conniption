@@ -1,5 +1,5 @@
 import type { InitialTradition } from "@/utils/initials/scene";
-import { deriveTraditionFromRmk } from "@/utils/initials/tradition";
+import { traditionForWitness } from "@/utils/initials/tradition";
 import { buildInitialScene, serializeInitialScene } from "@/utils/initials/scene";
 import { resolveInitialSpec } from "@/utils/initials/spec";
 import { renderJustifiedSvgLine } from "@/components/svgFacsimile/justifiedSvgLine";
@@ -252,7 +252,7 @@ function paintBlockRow(
 export function exportToSvgDocument(parsed: ParsedManuscript, options: SvgExportOptions = {}): string {
   const opts: ResolvedOpts = { ...DEFAULT_OPTS, ...options };
   const settings = displaySettings(opts);
-  const tradition = options.sourceText ? deriveTraditionFromRmk(options.sourceText) : "print.woodcut";
+  const tradition = traditionForWitness(parsed.metadata, options.sourceText);
   const innerW = innerCanvasWidth();
   const colW = columnWidth();
   const leftColX = MARGIN;

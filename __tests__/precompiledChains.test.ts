@@ -17,6 +17,10 @@ describe("precompiled intent chains", () => {
         "analyze:controversy:explain",
         "validate:barrier:repair_flow",
         "learn:prerequisite:pathway",
+        "analyze:paleography:drop_initials",
+        "analyze:scribal_hands:non_original",
+        "validate:codex:nonsequitur",
+        "analyze:damage:clobbered_claims",
       ]),
     );
   });
@@ -46,6 +50,12 @@ describe("precompiled intent chains", () => {
     expect(
       matchPrecompiledIntent("what should I read before studying paleography")?.chain.intentId,
     ).toBe("learn:prerequisite:pathway");
+    expect(matchPrecompiledIntent("text clobbered by damage on folio 2r")?.chain.intentId).toBe(
+      "analyze:damage:clobbered_claims",
+    );
+    expect(matchPrecompiledIntent("show drop initials on folio 3r")?.chain.intentId).toBe(
+      "analyze:paleography:drop_initials",
+    );
   });
 
   it("precompiles bound chains from a reasoning graph", () => {

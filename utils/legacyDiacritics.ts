@@ -11,21 +11,21 @@ export const VOWELS_EXTENDED = "aeiouAEIOUáàâãéêíóôõú";
 export const NASAL_GRAPHEME_CLUSTER_SOURCE = `[${VOWELS_EXTENDED}nN]~`;
 export const CEDILLA_GRAPHEME_CLUSTER_SOURCE = `${CONSONANT}${PRIME_CLASS}`;
 
-export const DIACRITIC_CLUSTER_SOURCE = `(?:[Cc]${PRIME_CLASS}[aoeiouAEIOU]~|[Cc]${PRIME_CLASS}|${CONSONANT}?(?:<[^>]+>)?${VOWEL_MARK}(?:<[^>]+>)?@?\\^|${CONSONANT}?(?:<[^>]+>)?${VOWEL_MARK}(?:<[^>]+>)?@?${PRIME_OR_TILDE_CLASS}|${CONSONANT}${VOWEL_MARK}~|[A-Za-zÀ-ÿ]~)`;
+export const DIACRITIC_CLUSTER_SOURCE = `(?:[Cc]${PRIME_CLASS}[aoeiouAEIOU]~|[Cc]${PRIME_CLASS}|${CONSONANT}?(?:<[^>]{1,80}>)?${VOWEL_MARK}(?:<[^>]{1,80}>)?@?\\^|${CONSONANT}?(?:<[^>]{1,80}>)?${VOWEL_MARK}(?:<[^>]{1,80}>)?@?${PRIME_OR_TILDE_CLASS}|${CONSONANT}${VOWEL_MARK}~|[A-Za-zÀ-ÿ]~)`;
 /** Tail is alphanumeric only so `[` starts a separate paleographic token. */
 export const EMBEDDED_DIACRITIC_WORD_SOURCE = `[A-Za-z0-9]*(?:${DIACRITIC_CLUSTER_SOURCE})[A-Za-z0-9]*`;
-export const DIACRITIC_WITH_TAIL_EXPANSIONS_SOURCE = `${DIACRITIC_CLUSTER_SOURCE}(?:<[^>]+>)+[a-zA-Z]*`;
+export const DIACRITIC_WITH_TAIL_EXPANSIONS_SOURCE = `${DIACRITIC_CLUSTER_SOURCE}(?:<[^>]{1,80}>)+[a-zA-Z]*`;
 
 const DIACRITIC_MAP: Record<string, string> = HSMS_DIACRITIC_MAP;
 const RE_GLOBAL_AT = /@/g;
 const RE_PRIME_VARIANTS = /[\u2018\u2019\u0060]/g;
 
-const RE_BRACKET_CHECK = /<[^>]+>/;
+const RE_BRACKET_CHECK = /<[^>]{1,80}>/;
 const RE_EXPANSION_STRIP = /<([^>]+)>/g;
-const RE_TAG_STRIP = /<[^>]+>/g;
+const RE_TAG_STRIP = /<[^>]{1,80}>/g;
 const RE_SEGMENT_CLEAN = new RegExp(`(${VOWEL_MARK})@?([~'\`^])`, "g");
 const RE_CLUSTER_STATIC = new RegExp(DIACRITIC_CLUSTER_SOURCE, "g");
-const RE_TAIL_EXPANSION = new RegExp(`^(${DIACRITIC_CLUSTER_SOURCE})((?:<[^>]+>)+[a-zA-Z]*)`);
+const RE_TAIL_EXPANSION = new RegExp(`^(${DIACRITIC_CLUSTER_SOURCE})((?:<[^>]{1,80}>)+[a-zA-Z]*)`);
 
 const COMPOUND_DIACRITIC_MAP: Record<string, string> = {
   "c'o~": "çõ",

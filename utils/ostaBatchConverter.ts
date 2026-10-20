@@ -295,6 +295,7 @@ export function processOstaTranscription(
       showDeletions: true,
       useNormalizedDiacritics: true,
       suppressOtioseMarks: false,
+      sourceText: rawText,
     });
 
     const renderIssues = toFileIssues(
@@ -745,7 +746,7 @@ export function runOstaBatchConvertWithFs(
       parseWarningCount: processed.parseWarningCount,
       renderErrorCount: processed.renderErrorCount,
       renderWarningCount: processed.renderWarningCount,
-      issues: processed.issues,
+      issues: [],
       outputs: {
         html: htmlPath,
         nativeTs: nativePath,

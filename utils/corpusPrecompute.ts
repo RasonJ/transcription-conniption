@@ -125,7 +125,9 @@ export type CorpusPrecomputeArtifacts = {
 function catalogLabel(value: unknown): string {
   if (typeof value === "number" && Number.isFinite(value)) return String(value);
   if (typeof value !== "string") return "";
-  return value.trim();
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "null" || trimmed === "undefined") return "";
+  return trimmed;
 }
 
 function slugEntity(kind: string, label: string): string {
@@ -389,7 +391,7 @@ export function buildLibraryGraph(
     addNode({ id: msId, type: "manuscript", label: entry.title || entry.baseName });
 
     const author = catalogLabel(entry.author);
-    if (author) {
+    if (author && !entry.authorUnknown) {
       const id = slugEntity("AUTHOR", author);
       addNode({ id, type: "author", label: author });
       edges.push({ source: msId, target: id, rel: "AUTHORED_BY" });

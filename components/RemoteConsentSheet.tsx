@@ -30,7 +30,12 @@ export function RemoteConsentSheet({ backendEnabled }: { backendEnabled: boolean
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={() => setRemoteConsent(false)}>
       <View style={styles.backdrop}>
-        <View style={styles.sheet} accessibilityViewIsModal nativeID="remote-consent-dialog">
+        <View
+          style={styles.sheet}
+          accessibilityViewIsModal
+          accessibilityLabel={t("consent.remoteTitle")}
+          nativeID="remote-consent-dialog"
+        >
           <Text nativeID={TITLE_ID} style={styles.title} accessibilityRole="header">
             {t("consent.remoteTitle")}
           </Text>

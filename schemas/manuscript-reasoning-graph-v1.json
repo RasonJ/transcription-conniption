@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://transcription-conniption.local/schemas/manuscript-reasoning-graph-v1.json",
   "title": "Manuscript Scholarly & Public Knowledge Reasoning Graph v1.0",
-  "description": "Multi-layer scholarly + philological reasoning graph. LOD tiers, non-overlapping node/edge attributes, relation-level source_type/target_type gates, explicit FAQ/Causal bindings. schema_version=1.0.",
+  "description": "Multi-layer scholarly + philological reasoning graph. LOD tiers, closed node attributes (additionalProperties false), GraphRAG embeddings, IIIF/SVG coordinate frames, precompiled intent chains, MUFI alignment. schema_version=1.0.",
   "type": "object",
   "required": [
     "schema_version",
@@ -241,9 +241,12 @@
           "items": {
             "type": "string"
           }
+        },
+        "id": {
+          "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "AuthorAttributes": {
       "type": "object",
@@ -335,9 +338,13 @@
           "items": {
             "type": "string"
           }
+        },
+        "name": {
+          "type": "string",
+          "description": "Deprecated alias of full_name. Builders still write it."
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "FrequentQuestionAttributes": {
       "type": "object",
@@ -369,6 +376,9 @@
             "medium",
             "low"
           ]
+        },
+        "embedding": {
+          "$ref": "#/$defs/DenseEmbedding"
         }
       },
       "additionalProperties": false
@@ -398,6 +408,9 @@
         },
         "verified_by_editor": {
           "type": "boolean"
+        },
+        "embedding": {
+          "$ref": "#/$defs/DenseEmbedding"
         }
       },
       "additionalProperties": false
@@ -427,9 +440,26 @@
         },
         "signature": {
           "type": "string"
+        },
+        "coordinate_system": {
+          "type": "string",
+          "enum": [
+            "normalized_1000",
+            "iiif_pixels",
+            "svg_user_units"
+          ],
+          "description": "Frame for bounding boxes and polygons on this folio. normalized_1000 is 0–1000 on each axis; iiif_pixels matches the IIIF canvas; svg_user_units matches the facsimile SVG."
+        },
+        "canvas_width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "canvas_height": {
+          "type": "number",
+          "exclusiveMinimum": 0
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "ColumnAttributes": {
       "type": "object",
@@ -445,7 +475,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "LineAttributes": {
       "type": "object",
@@ -478,7 +508,7 @@
           }
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "DropInitialAttributes": {
       "type": "object",
@@ -514,7 +544,7 @@
           }
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "FigureAnchorAttributes": {
       "type": "object",
@@ -541,7 +571,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "BlockAttributes": {
       "type": "object",
@@ -578,9 +608,21 @@
             "minItems": 2,
             "maxItems": 2
           }
+        },
+        "embedding": {
+          "$ref": "#/$defs/DenseEmbedding"
+        },
+        "folioId": {
+          "type": "string"
+        },
+        "lineNumber": {
+          "type": "string"
+        },
+        "excerpt": {
+          "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "TokenAttributes": {
       "type": "object",
@@ -605,9 +647,21 @@
         },
         "hand": {
           "type": "string"
+        },
+        "mufi_char": {
+          "type": "string",
+          "description": "MUFI character name or recommendation id for this grapheme."
+        },
+        "unicode_pua": {
+          "type": "string",
+          "description": "Unicode Private Use Area code point (for example U+F20D) when the glyph is not in Unicode."
+        },
+        "hsms_ascii_raw": {
+          "type": "string",
+          "description": "HSMS ASCII source for this token or variant, before MUFI display."
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "ExpansionAttributes": {
       "type": "object",
@@ -638,7 +692,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "EditorialInterventionAttributes": {
       "type": "object",
@@ -662,7 +716,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "PunctuationAttributes": {
       "type": "object",
@@ -682,7 +736,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "LemmaNodeAttributes": {
       "type": "object",
@@ -697,7 +751,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "ReasoningNodeType": {
       "type": "string",
@@ -740,7 +794,8 @@
         "Event",
         "DamageRegion",
         "PhysicalAnomaly",
-        "VariantForm"
+        "VariantForm",
+        "PrecompiledChain"
       ]
     },
     "WitnessStatsAttributes": {
@@ -786,7 +841,7 @@
           "type": "object"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "HandAttributes": {
       "type": "object",
@@ -799,9 +854,12 @@
         },
         "count": {
           "type": "integer"
+        },
+        "label": {
+          "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "LanguageSpanAttributes": {
       "type": "object",
@@ -822,7 +880,7 @@
           "type": "integer"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "AgentAttributes": {
       "type": "object",
@@ -880,7 +938,7 @@
           }
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "WorkAttributes": {
       "type": "object",
@@ -901,7 +959,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "ReasoningRelation": {
       "type": "string",
@@ -1008,7 +1066,11 @@
         "affected_target",
         "clobbers_text",
         "has_variant_form",
-        "standardized_to"
+        "standardized_to",
+        "semantically_similar_to",
+        "represented_on_canvas",
+        "written_by_hand",
+        "corrected_by"
       ]
     },
     "ReasoningNode": {
@@ -1039,7 +1101,15 @@
         },
         "attributes": {
           "type": "object",
-          "description": "Polymorphic bag; validated by allOf if/then on type (no catch-all)."
+          "description": "Closed per node type. Each if/then branch binds attributes to one $def with additionalProperties false."
+        },
+        "precompiled_execution_path": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Optional pin of an ordered node-id path next to subgraph. PrecompiledChain nodes store the same sequence in attributes."
         }
       },
       "allOf": [
@@ -1724,6 +1794,204 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Witness"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/WitnessAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Concept"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ConceptAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "LayExplanation"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/LayExplanationAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "AdministrativeBarrierNode"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/AdministrativeBarrierAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Question"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/QuestionAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Actor"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/ActorAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Journal_Venue"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/JournalVenueAttributes"
+              },
+              "lod_tier": {
+                "default": "MACRO_REASONING"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "Person"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/PersonAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "PrecompiledChain"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "attributes": {
+                "$ref": "#/$defs/PrecompiledChainAttributes"
+              },
+              "lod_tier": {
+                "default": "MESO_DISCOURSE"
+              }
+            }
+          }
         }
       ]
     },
@@ -1922,6 +2190,12 @@
             },
             "intervened_variable": {
               "type": "string"
+            },
+            "cosine_similarity": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1,
+              "description": "Weight on semantically_similar_to (cosine between the endpoint embeddings)."
             }
           },
           "additionalProperties": true
@@ -2646,6 +2920,87 @@
               }
             }
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "represented_on_canvas"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "DamageRegion",
+                  "FigureAnchor"
+                ]
+              },
+              "target_type": {
+                "enum": [
+                  "Folio"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "written_by_hand"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "Token",
+                  "Block"
+                ]
+              },
+              "target_type": {
+                "enum": [
+                  "Hand",
+                  "Agent"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "relation": {
+                "const": "corrected_by"
+              }
+            },
+            "required": [
+              "relation"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "EditorialIntervention"
+                ]
+              },
+              "target_type": {
+                "enum": [
+                  "Hand"
+                ]
+              }
+            }
+          }
         }
       ]
     },
@@ -2713,7 +3068,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "CausalVariableAttributes": {
       "type": "object",
@@ -2728,7 +3083,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "EventAttributes": {
       "type": "object",
@@ -2763,7 +3118,7 @@
           "type": "string"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "DamageRegionAttributes": {
       "type": "object",
@@ -2792,7 +3147,7 @@
           "type": "number"
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "VariantFormAttributes": {
       "type": "object",
@@ -2808,9 +3163,21 @@
         },
         "phonological_notes": {
           "type": "string"
+        },
+        "mufi_char": {
+          "type": "string",
+          "description": "MUFI character name or recommendation id for this grapheme."
+        },
+        "unicode_pua": {
+          "type": "string",
+          "description": "Unicode Private Use Area code point (for example U+F20D) when the glyph is not in Unicode."
+        },
+        "hsms_ascii_raw": {
+          "type": "string",
+          "description": "HSMS ASCII source for this token or variant, before MUFI display."
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "LodTier": {
       "type": "string",
@@ -2867,6 +3234,9 @@
         "is_lay_accessible": {
           "type": "boolean",
           "default": true
+        },
+        "embedding": {
+          "$ref": "#/$defs/DenseEmbedding"
         }
       }
     },
@@ -2914,6 +3284,179 @@
         },
         "methodology_type": {
           "type": "string"
+        },
+        "embedding": {
+          "$ref": "#/$defs/DenseEmbedding"
+        }
+      }
+    },
+    "DenseEmbedding": {
+      "type": "array",
+      "description": "Optional dense vector for hybrid GraphRAG. Common widths are 384 and 1536; any non-empty numeric array is accepted so the embedding model can change without a schema bump.",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 1
+    },
+    "WitnessAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        },
+        "witnessHash": {
+          "type": "string"
+        }
+      }
+    },
+    "ConceptAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canonical_name": {
+          "type": "string"
+        },
+        "field_code": {
+          "type": "string"
+        }
+      }
+    },
+    "LayExplanationAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "analogy_text": {
+          "type": "string"
+        },
+        "reading_level": {
+          "type": "string"
+        },
+        "verified_by_author_flag": {
+          "type": "boolean"
+        }
+      }
+    },
+    "AdministrativeBarrierAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "barrier_id": {
+          "type": "string"
+        },
+        "barrier_type": {
+          "type": "string"
+        },
+        "friction_index_delta": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "resolution_action": {
+          "type": "string"
+        },
+        "estimated_resolution_time_days": {
+          "type": "number",
+          "minimum": 0
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "OPEN",
+            "RESOLVED",
+            "BYPASSED",
+            "EXPIRED"
+          ]
+        },
+        "folio_id": {
+          "type": "string"
+        }
+      }
+    },
+    "QuestionAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "canonical_text": {
+          "type": "string"
+        }
+      }
+    },
+    "ActorAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "JournalVenueAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "PersonAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "PrecompiledChainAttributes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Offline recipe for a high-frequency intent. Lookup is a node read, not a multi-hop traversal.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "intent_id": {
+          "type": "string",
+          "description": "Taxonomy id such as analyze:controversy:explain or validate:barrier:repair_flow."
+        },
+        "recipe_id": {
+          "type": "string"
+        },
+        "serialized_subgraph": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Serialized execution subgraph. The object is open because recipe bodies differ by intent."
+        },
+        "precompiled_execution_path": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Ordered node ids forming the Tier-1 short-circuit response."
         }
       }
     }

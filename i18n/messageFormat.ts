@@ -15,10 +15,19 @@ type Node =
   | { type: "plural"; name: string; options: Record<string, Node[]> }
   | { type: "select"; name: string; options: Record<string, Node[]> };
 
+/** Cap parsed ICU trees so long editing sessions cannot grow this map without bound. */
+export const MESSAGE_FORMAT_CACHE_LIMIT = 500;
+/** Nested `{…}` beyond this is kept as text so a pathological message cannot blow the stack. */
+const MAX_BRACE_DEPTH = 32;
 const astCache = new Map<string, Node[]>();
+
+export function messageFormatCacheSize(): number {
+  return astCache.size;
+}
 
 class Parser {
   private pos = 0;
+  private depth = 0;
 
   constructor(private readonly src: string) {}
 
@@ -38,9 +47,19 @@ class Parser {
       const ch = this.src[this.pos];
       if (ch === "}" && inBraces) break;
       if (ch === "{") {
+        if (this.depth >= MAX_BRACE_DEPTH) {
+          text += ch;
+          this.pos++;
+          continue;
+        }
         flush();
         this.pos++;
-        nodes.push(this.parseArgument());
+        this.depth++;
+        try {
+          nodes.push(this.parseArgument());
+        } finally {
+          this.depth--;
+        }
         continue;
       }
       if (ch === "#" && inPlural) {
@@ -109,11 +128,19 @@ class Parser {
 }
 
 function parseMessage(message: string): Node[] {
-  let ast = astCache.get(message);
-  if (!ast) {
-    ast = new Parser(message).parse();
-    astCache.set(message, ast);
+  const cached = astCache.get(message);
+  if (cached) {
+    // Refresh insertion order so the next eviction drops the least recently used pattern.
+    astCache.delete(message);
+    astCache.set(message, cached);
+    return cached;
   }
+  if (astCache.size >= MESSAGE_FORMAT_CACHE_LIMIT) {
+    const oldest = astCache.keys().next().value;
+    if (oldest !== undefined) astCache.delete(oldest);
+  }
+  const ast = new Parser(message).parse();
+  astCache.set(message, ast);
   return ast;
 }
 

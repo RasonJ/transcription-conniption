@@ -82,6 +82,13 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     ReturnType<typeof buildLibraryAwareRouterIndex> | undefined
   >(undefined);
   const liveFacetsRef = useRef<FacetIndex | null>(null);
+  const facetBaseRef = useRef<string | null>(null);
+  const indexStampRef = useRef<{
+    manuscript: typeof parsedManuscript;
+    catalog: typeof catalog;
+    locale: string;
+  } | null>(null);
+  const overviewTextRef = useRef<string | null>(null);
   const visionAbortRef = useRef<AbortController | null>(null);
 
   const libraryHit = useMemo(
@@ -94,39 +101,47 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
     [catalog, activeFileName, workspace?.sourceFileName, parsedManuscript.metadata.title],
   );
 
-  // Prefer batch facet sidecars — avoid rebuilding FacetIndex when the drawer opens.
+  useEffect(() => {
+    liveFacetsRef.current = null;
+  }, [parsedManuscript]);
+
+  // Prefer batch facet sidecars — load once per library hit, not on every open.
   useEffect(() => {
     if (!visible) return;
-    let cancelled = false;
-    setPrecompiledFacets(null);
-    liveFacetsRef.current = null;
-
     const baseName = libraryHit?.baseName;
-    if (!baseName) return;
+    if (!baseName || facetBaseRef.current === baseName) return;
 
+    let cancelled = false;
     void loadPrecompiledFacets(baseName).then((facets) => {
-      if (!cancelled && facets) setPrecompiledFacets(facets);
+      if (cancelled) return;
+      facetBaseRef.current = baseName;
+      if (facets) setPrecompiledFacets(facets);
     });
 
     return () => {
       cancelled = true;
     };
-  }, [visible, libraryHit?.baseName, parsedManuscript]);
+  }, [visible, libraryHit?.baseName]);
 
   // Defer heavy index builds until the drawer slide animation finishes (60 FPS).
+  // Reopening with the same witness keeps the index already in state.
   useEffect(() => {
-    if (!visible) {
-      setVectorIndex(undefined);
-      setLibraryAwareRouter(undefined);
+    if (!visible) return;
+    const stamp = indexStampRef.current;
+    if (stamp && stamp.manuscript === parsedManuscript && stamp.catalog === catalog && stamp.locale === locale) {
       return;
     }
+    let cancelled = false;
     const task = InteractionManager.runAfterInteractions(() => {
+      if (cancelled) return;
       setVectorIndex(buildManuscriptVectorIndex(parsedManuscript));
       // Route over the UI locale ∪ English ∪ the witness language (SPEC-COPILOT §8.1).
       const witness = detectWitnessLanguage(parsedManuscript).language;
       setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog, routingLocales(locale, witness)));
+      indexStampRef.current = { manuscript: parsedManuscript, catalog, locale };
     });
     return () => {
+      cancelled = true;
       task.cancel();
     };
   }, [visible, parsedManuscript, catalog, locale]);
@@ -153,34 +168,54 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
   }, [parsedManuscript]);
 
   const witnessLanguage = useMemo(
-    () => (visible ? detectWitnessLanguage(parsedManuscript).language : undefined),
-    [visible, parsedManuscript],
+    () => detectWitnessLanguage(parsedManuscript).language,
+    [parsedManuscript],
   );
 
   // Overview answers persisted across sessions (SPEC-COPILOT §7.2): no FacetIndex rebuild on reopen.
   useEffect(() => {
     if (!visible) return;
+    const text = debouncedText ?? "";
+    if (overviewTextRef.current === text) return;
     let cancelled = false;
-    setPersistedOverview(undefined);
-    void loadPersistedOverview(debouncedText ?? "").then((entries) => {
-      if (!cancelled) setPersistedOverview(entries);
+    void loadPersistedOverview(text).then((entries) => {
+      if (cancelled) return;
+      overviewTextRef.current = text;
+      setPersistedOverview(entries);
     });
     return () => {
       cancelled = true;
     };
   }, [visible, debouncedText]);
 
+  const overviewCache = useRef<OverviewEntry[]>([]);
+  const eagerOverviewRef = useRef<{
+    manuscript: typeof parsedManuscript;
+    text: string;
+    entries: OverviewEntry[];
+  } | null>(null);
   const overview = useMemo(() => {
-    if (!visible) return [];
-    if (precompiledFacets) return overviewFromPrecompiled(precompiledFacets);
-    if (persistedOverview === undefined) return [];
-    if (persistedOverview) return persistedOverview;
-    // Non-library witnesses: build once for overview chips, then persist.
-    const computed = precomputeEager(parsedManuscript, resolveLiveFacets())
-      .filter((entry) => entry.count > 0)
-      .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel));
-    void persistOverview(debouncedText ?? "", computed);
-    return computed;
+    if (!visible) return overviewCache.current;
+    let next: OverviewEntry[];
+    if (precompiledFacets) next = overviewFromPrecompiled(precompiledFacets);
+    else if (persistedOverview === undefined) next = overviewCache.current;
+    else if (persistedOverview) next = persistedOverview;
+    else {
+      const text = debouncedText ?? "";
+      const cached = eagerOverviewRef.current;
+      if (cached && cached.manuscript === parsedManuscript && cached.text === text) {
+        next = cached.entries;
+      } else {
+        // Non-library witnesses: build once for overview chips, then persist.
+        next = precomputeEager(parsedManuscript, resolveLiveFacets())
+          .filter((entry) => entry.count > 0)
+          .sort((a, b) => a.chipLabel.localeCompare(b.chipLabel));
+        eagerOverviewRef.current = { manuscript: parsedManuscript, text, entries: next };
+        void persistOverview(text, next);
+      }
+    }
+    overviewCache.current = next;
+    return next;
   }, [visible, precompiledFacets, persistedOverview, parsedManuscript, resolveLiveFacets, debouncedText]);
 
   const askOptions = useMemo(

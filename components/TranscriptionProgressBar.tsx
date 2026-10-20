@@ -39,16 +39,25 @@ export function TranscriptionProgressBar({
       style={styles.container}
       accessibilityRole="progressbar"
       accessibilityLabel={display}
+      accessibilityLiveRegion="polite"
       accessibilityValue={{ min: 0, max: 100, now: percentage }}
     >
-      <View style={styles.row}>
+      <View
+        style={styles.row}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
         <ActivityIndicator size="small" color={theme.goldMuted} />
         <Text style={styles.label} numberOfLines={2}>
           {display}
         </Text>
         <Text style={styles.percentage}>{percentage}%</Text>
       </View>
-      <View style={styles.track}>
+      <View
+        style={styles.track}
+        accessibilityElementsHidden
+        importantForAccessibility="no-hide-descendants"
+      >
         <View style={[styles.fill, { width: `${percentage}%` }]} />
       </View>
     </View>

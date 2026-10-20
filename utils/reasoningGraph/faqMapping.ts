@@ -12,6 +12,7 @@ import type {
   ReasoningNode,
   ReasoningRelation,
 } from "./types";
+import { MACRO_QUERY_TIERS, projectLod } from "./lod";
 
 function utcNowIso(): string {
   return new Date().toISOString();
@@ -230,7 +231,7 @@ export function matchFrequentQuestions(
   const audience = options?.audience;
   const hits: FaqMatch[] = [];
 
-  for (const node of graphDoc.nodes) {
+  for (const node of projectLod(graphDoc, MACRO_QUERY_TIERS).nodes) {
     if (node.type !== "FrequentQuestion") continue;
     const attrs = node.attributes as FrequentQuestionAttributes;
     if (audience && audience !== "all" && attrs.target_audience && attrs.target_audience !== "all") {

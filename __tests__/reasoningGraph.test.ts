@@ -10,9 +10,15 @@ import {
   linkMentorship,
   linkRebuttal,
   linkReplyToRebuttal,
+  loadMicroPhilology,
+  MACRO_QUERY_TIERS,
+  projectLod,
   seedFromWitness,
 } from "../utils/reasoningGraph";
+import { compileManuscriptTree } from "../utils/compiler";
 import { parseCopilotSample } from "./copilotFixture";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 
 describe("reasoning graph Manuscript / Author anchors", () => {
   const parsed = parseCopilotSample();
@@ -188,5 +194,94 @@ describe("discourse & barrier surgery", () => {
     expect(g.edges.some((e) => e.relation === "bypasses_barrier")).toBe(true);
     const barrier = g.nodes.find((n) => n.type === "AdministrativeBarrierNode")!;
     expect(barrier.attributes.status).toBe("BYPASSED");
+  });
+});
+
+describe("LOD isolation and damage links", () => {
+  const source = `[fol. 1r]
+{CB1.
+1 texto [??] y [ ]
+2 {IN2.} Alinea
+}
+{CW. sigue}
+[fol. 1v]
+{CB1.
+1 sigue la linea
+}`;
+
+  it("keeps MICRO_PHILOLOGICAL nodes out of macro queries", () => {
+    const parsed = compileManuscriptTree(source);
+    const g = loadMicroPhilology(seedFromWitness(parsed, { witnessId: "W:lod2", spatial: "shallow" }), parsed);
+    expect(g.schema_version).toBe("1.0");
+    const macro = projectLod(g, MACRO_QUERY_TIERS);
+    expect(macro.nodes.some((n) => n.lod_tier === "MICRO_PHILOLOGICAL")).toBe(false);
+    expect(macro.schema_version).toBe("1.0");
+    const oneLeaf = projectLod(g, ["MICRO_PHILOLOGICAL"], { folioId: "1r" });
+    expect(oneLeaf.nodes.length).toBeGreaterThan(0);
+    expect(oneLeaf.nodes.every((n) => n.id.includes("1r") || String(n.attributes.folioNumber ?? "").includes("1r"))).toBe(
+      true,
+    );
+  });
+
+  it("links illegible text and lacunae to DamageRegion and stamps do_action", () => {
+    const parsed = compileManuscriptTree(source);
+    const g = loadMicroPhilology(seedFromWitness(parsed, { witnessId: "W:dmg", spatial: false }), parsed);
+    const clobbers = g.edges.filter((e) => e.relation === "clobbers_text");
+    expect(clobbers.length).toBeGreaterThanOrEqual(2);
+    expect(clobbers.every((e) => e.properties?.do_action === "JUMP_FOLIO")).toBe(true);
+    const landed = g.edges.filter((e) => e.target_type === "Folio" || e.target_type === "Line" || e.target_type === "Token");
+    expect(landed.length).toBeGreaterThan(0);
+    expect(landed.every((e) => typeof e.properties?.do_action === "string")).toBe(true);
+    expect(g.edges.some((e) => e.relation === "has_drop_initial_hit")).toBe(true);
+    expect(g.edges.some((e) => e.relation === "has_footer" && e.relation === "next_folio")).toBe(false);
+    expect(g.edges.some((e) => e.relation === "next_folio" && String(e.source).includes("catchword"))).toBe(true);
+  });
+});
+
+describe("reasoning graph schema v1 contract", () => {
+  const schema = JSON.parse(
+    readFileSync(join(__dirname, "../schemas/manuscript-reasoning-graph-v1.json"), "utf8"),
+  ) as {
+    properties: { schema_version: { const: string } };
+    $defs: {
+      ReasoningNodeType: { enum: string[] };
+      ReasoningRelation: { enum: string[] };
+      ReasoningNode: { allOf: Array<{ if: { properties: { type: { const: string } } } }> };
+      FolioAttributes: { properties: Record<string, { enum?: string[] }>; additionalProperties: boolean };
+      ClaimAttributes: { properties: Record<string, unknown>; additionalProperties: boolean };
+      TokenAttributes: { properties: Record<string, unknown>; additionalProperties: boolean };
+      PrecompiledChainAttributes: { properties: Record<string, unknown>; additionalProperties: boolean };
+    };
+  };
+
+  it("stays on schema_version 1.0", () => {
+    expect(schema.properties.schema_version.const).toBe("1.0");
+  });
+
+  it("closes every node type and the GraphRAG / facsimile / paleography fields", () => {
+    const defs = schema.$defs;
+    const covered = new Set(defs.ReasoningNode.allOf.map((entry) => entry.if.properties.type.const));
+    expect(defs.ReasoningNodeType.enum.filter((type) => !covered.has(type))).toEqual([]);
+    expect(defs.FolioAttributes.additionalProperties).toBe(false);
+    expect(defs.FolioAttributes.properties.coordinate_system.enum).toEqual([
+      "normalized_1000",
+      "iiif_pixels",
+      "svg_user_units",
+    ]);
+    expect(defs.ClaimAttributes.properties.embedding).toBeDefined();
+    expect(defs.ClaimAttributes.additionalProperties).toBe(false);
+    expect(defs.TokenAttributes.properties.mufi_char).toBeDefined();
+    expect(defs.TokenAttributes.properties.unicode_pua).toBeDefined();
+    expect(defs.TokenAttributes.properties.hsms_ascii_raw).toBeDefined();
+    expect(defs.PrecompiledChainAttributes.properties.precompiled_execution_path).toBeDefined();
+    expect(defs.PrecompiledChainAttributes.additionalProperties).toBe(false);
+    for (const relation of [
+      "semantically_similar_to",
+      "represented_on_canvas",
+      "written_by_hand",
+      "corrected_by",
+    ]) {
+      expect(defs.ReasoningRelation.enum).toContain(relation);
+    }
   });
 });

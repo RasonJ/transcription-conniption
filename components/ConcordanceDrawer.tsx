@@ -1,4 +1,4 @@
-import type { ConcordanceIndex, ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
+import type { ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
 import { useDialogFocusTrap } from "@/hooks/useDialogFocusTrap";
 import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
 import { foldForSearch } from "@/utils/witnessLanguage";
@@ -10,7 +10,7 @@ import {
 } from "@/utils/concordance";
 import { concordanceToCsv } from "@/utils/concordanceExport";
 import { Search, X } from "lucide-react-native";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { FlatList, Modal, Pressable, Share, StyleSheet, Text, TextInput, View } from "react-native";
 
 type ConcordanceEntry = { lemma: string; count: number; occurrences: WordOccurrence[] };
@@ -90,8 +90,6 @@ const ConcordanceEntryRow = React.memo(
 
 ConcordanceEntryRow.displayName = "ConcordanceEntryRow";
 
-const EMPTY_CONCORDANCE: ConcordanceIndex = {};
-
 const TITLE_ID = "concordance-drawer-title";
 
 export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSelectOccurrence }: Props) {
@@ -108,15 +106,29 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
   });
 
   const lemmas = useLemmaDictionary(visible);
-  const build = useMemo(
-    () =>
-      visible
-        ? getConcordanceBuildForManuscript(parsed, sourceText)
-        : { index: EMPTY_CONCORDANCE, meta: null },
-    // lemmas.generation: rebuild once the lazy dictionary arrives (surface forms until then).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [visible, parsed, sourceText, lemmas.generation],
-  );
+  const concordanceCache = useRef<{
+    parsed: ParsedManuscript;
+    sourceText: string | undefined;
+    generation: number;
+    build: ReturnType<typeof getConcordanceBuildForManuscript>;
+  } | null>(null);
+  const build = useMemo(() => {
+    const hit = concordanceCache.current;
+    if (
+      hit &&
+      hit.parsed === parsed &&
+      hit.sourceText === sourceText &&
+      hit.generation === lemmas.generation
+    ) {
+      return hit.build;
+    }
+    // Closed drawer keeps the last index so the slide-out is not an empty list
+    // and a later reopen does not rebuild unless the witness actually changed.
+    if (!visible && hit) return hit.build;
+    const next = getConcordanceBuildForManuscript(parsed, sourceText);
+    concordanceCache.current = { parsed, sourceText, generation: lemmas.generation, build: next };
+    return next;
+  }, [visible, parsed, sourceText, lemmas.generation]);
   const concordance = build.index;
   const methodLine = build.meta ? formatConcordanceMethodLine(build.meta) : "";
   const entries = useMemo(() => getConcordanceEntriesSorted(concordance), [concordance]);

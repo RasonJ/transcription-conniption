@@ -847,7 +847,8 @@ export function SvgFacsimilePage({
       // "ResizeObserver loop limit exceeded" during fast folio scrolls.
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        setContentH(Math.max(320, el.scrollHeight + PAGE_PAD_TOP + PAGE_PAD_BOT));
+        const next = Math.max(320, el.scrollHeight + PAGE_PAD_TOP + PAGE_PAD_BOT);
+        setContentH((prev) => (prev === next ? prev : next));
       });
     };
 

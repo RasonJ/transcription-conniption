@@ -24,8 +24,19 @@ Filter `MICRO_PHILOLOGICAL` out of high-level Neo4j / Memgraph traversals.
 ### Design rules
 
 - **Node vs edge attributes** — Claims hold `proposition_text` / `epistemic_status` / `certainty_degree`. Edges hold `confidence_score`, `consensus_status`, `relevance_score`, `do_action`.
-- **Discriminators** — `ReasoningNode` uses `allOf` + `if`/`then` on `type` (no catch-all object).
-- **Edge gates** — `source_type` / `target_type` constrained for rebuts, supports_claim, FAQ, causal relations, etc.
+- **Discriminators** — `ReasoningNode` uses `allOf` + `if`/`then` on `type`. Every node type, including `Witness`, `Concept`, `LayExplanation`, `AdministrativeBarrierNode`, and `PrecompiledChain`, binds `attributes` to a closed `$def` (`additionalProperties: false`).
+- **Edge gates** — `source_type` / `target_type` constrained for rebuts, supports_claim, FAQ, causal relations, `represented_on_canvas`, `written_by_hand`, and `corrected_by`.
+
+### Same-version extensions
+
+These fields are part of schema **1.0**. They do not bump `schema_version`.
+
+| Concern | Schema |
+|---------|--------|
+| GraphRAG | Optional `embedding` (number array; 384 and 1536 are the common widths) on Claim, Evidence, FrequentQuestion, AnswerSnippet, and Block. Edge `semantically_similar_to` carries `cosine_similarity`. |
+| Facsimile frame | Folio `coordinate_system` is `normalized_1000`, `iiif_pixels`, or `svg_user_units`, plus `canvas_width` / `canvas_height`. `represented_on_canvas` links DamageRegion or FigureAnchor to that Folio. |
+| Short-circuit | Node type `PrecompiledChain` stores `intent_id`, `serialized_subgraph`, and `precompiled_execution_path` (ordered node ids). The same path may be pinned on any node next to `subgraph`. |
+| Paleography | Token and VariantForm may carry `mufi_char`, `unicode_pua`, and `hsms_ascii_raw`. `written_by_hand` links Token or Block to Hand or Agent. `corrected_by` links EditorialIntervention to Hand. |
 
 ## Building a graph in code
 

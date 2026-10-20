@@ -50,7 +50,9 @@ export type ReasoningNodeType =
   | "DamageRegion"
   | "PhysicalAnomaly"
   // Orthographic variants
-  | "VariantForm";
+  | "VariantForm"
+  /** Offline Tier-1 recipe. Lookup does not traverse the graph. */
+  | "PrecompiledChain";
 
 export type EventSubtype =
   | "Production"
@@ -104,6 +106,7 @@ export const DEFAULT_LOD_BY_TYPE: Record<ReasoningNodeType, LodTier> = {
   DamageRegion: "MICRO_PHILOLOGICAL",
   PhysicalAnomaly: "MICRO_PHILOLOGICAL",
   VariantForm: "MICRO_PHILOLOGICAL",
+  PrecompiledChain: "MESO_DISCOURSE",
 };
 
 /** Intrinsic claim fields only — confidence / consensus live on edges. */
@@ -123,6 +126,8 @@ export interface ClaimAttributes {
     | "superseded";
   certainty_degree?: number;
   is_lay_accessible?: boolean;
+  /** Dense vector for GraphRAG. Typical widths are 384 or 1536. */
+  embedding?: number[];
 }
 
 export interface EvidenceAttributes {
@@ -143,6 +148,7 @@ export interface EvidenceAttributes {
   source_locator?: string;
   location_in_source?: string;
   methodology_type?: string;
+  embedding?: number[];
   [key: string]: unknown;
 }
 
@@ -200,6 +206,9 @@ export interface VariantFormAttributes {
   surface?: string;
   orthographic_class?: string;
   phonological_notes?: string;
+  mufi_char?: string;
+  unicode_pua?: string;
+  hsms_ascii_raw?: string;
   [key: string]: unknown;
 }
 
@@ -243,6 +252,7 @@ export interface FrequentQuestionAttributes {
   alternate_phrasings?: string[];
   target_audience?: "lay" | "scholar" | "all";
   search_frequency_tier?: "high" | "medium" | "low";
+  embedding?: number[];
   [key: string]: unknown;
 }
 
@@ -260,6 +270,7 @@ export interface AnswerSnippetAttributes {
     | "specialist";
   last_updated_date?: string;
   verified_by_editor?: boolean;
+  embedding?: number[];
 }
 
 /** Bibliographic + epistemic + lay accessibility for Manuscript / Witness anchors. */
@@ -336,6 +347,7 @@ export interface WitnessStatsAttributes {
 export interface HandAttributes {
   id?: string;
   hand?: string;
+  label?: string;
   count?: number;
   [key: string]: unknown;
 }
@@ -357,6 +369,10 @@ export interface FolioAttributes {
   sequenceIndex?: number;
   catchword?: string;
   signature?: string;
+  /** Frame for boxes and polygons on this leaf. */
+  coordinate_system?: "normalized_1000" | "iiif_pixels" | "svg_user_units";
+  canvas_width?: number;
+  canvas_height?: number;
   [key: string]: unknown;
 }
 
@@ -404,6 +420,10 @@ export interface BlockAttributes {
   columns?: number;
   boundingBox?: BoundingBox;
   polygon_coordinates?: Array<[number, number]>;
+  folioId?: string;
+  lineNumber?: string;
+  excerpt?: string;
+  embedding?: number[];
   [key: string]: unknown;
 }
 
@@ -415,6 +435,9 @@ export interface TokenAttributes {
   posTag?: string;
   tokenType?: string;
   hand?: string;
+  mufi_char?: string;
+  unicode_pua?: string;
+  hsms_ascii_raw?: string;
   [key: string]: unknown;
 }
 
@@ -607,7 +630,15 @@ export type ReasoningRelation =
   | "standardized_to"
   // HSMS operational
   | "stalled_by_barrier"
-  | "bypasses_barrier";
+  | "bypasses_barrier"
+  /** GraphRAG jump. Weight is properties.cosine_similarity. */
+  | "semantically_similar_to"
+  /** DamageRegion or FigureAnchor → Folio canvas. */
+  | "represented_on_canvas"
+  /** Token or Block → Hand or Agent (scribe). */
+  | "written_by_hand"
+  /** EditorialIntervention → Hand. */
+  | "corrected_by";
 
 export interface ReasoningEdgeProperties {
   created_at?: string;
@@ -667,6 +698,8 @@ export interface ReasoningEdgeProperties {
   /** Temporal validity (ISO-8601 or fuzzy century e.g. "s. XIV", "c. 1280"). */
   valid_from?: string;
   valid_until?: string;
+  /** Cosine between endpoint embeddings on semantically_similar_to. */
+  cosine_similarity?: number;
   [key: string]: unknown;
 }
 
@@ -679,6 +712,8 @@ export interface ReasoningNode {
   lod_tier?: LodTier;
   /** Optional document-structure / discourse subgraph id for LOD isolation. */
   subgraph?: string;
+  /** Ordered node ids for a Tier-1 short-circuit. Also stored on PrecompiledChain attributes. */
+  precompiled_execution_path?: string[];
   attributes: Record<string, unknown>;
 }
 

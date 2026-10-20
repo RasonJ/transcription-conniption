@@ -1,6 +1,7 @@
 import type { FolioSide } from "@/constants/manuscript";
 import { useT } from "@/i18n/runtime";
 import { modernizeFolioLines, type ModernLanguageHint } from "@/utils/modernizedText";
+import { bcp47ForHsmsCode } from "@/utils/witnessLanguage";
 import React, { useMemo } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
@@ -10,6 +11,19 @@ type Props = {
   highlight: { folioId: string; lineNumber?: string } | null;
   languageHint?: ModernLanguageHint;
 };
+
+const HSMS_LANG_ALIAS: Record<string, string> = {
+  POR: "PRT",
+  PT: "PRT",
+  SPA: "SPN",
+  ES: "SPN",
+  CAST: "SPN",
+};
+
+function aliasHsmsCode(hint: ModernLanguageHint): string {
+  const code = String(hint || "PRT").toUpperCase();
+  return HSMS_LANG_ALIAS[code] ?? code;
+}
 
 /**
  * Dual-pane leaf: diplomatic HSMS render (left) + synchronized modern orthography (right).
@@ -26,6 +40,7 @@ export function ModernLineSynopticSplit({
     () => modernizeFolioLines(folio.blocks, languageHint),
     [folio.blocks, languageHint],
   );
+  const readingLanguage = bcp47ForHsmsCode(aliasHsmsCode(languageHint));
 
   return (
     <View style={styles.container}>
@@ -48,12 +63,17 @@ export function ModernLineSynopticSplit({
                 key={`${item.lineNumber || "x"}_${idx}`}
                 style={[styles.lineRow, isHighlighted && styles.lineRowHighlighted]}
               >
-                <View style={styles.gutter}>
+                <View
+                  style={styles.gutter}
+                  accessibilityElementsHidden
+                  importantForAccessibility="no-hide-descendants"
+                >
                   <Text style={styles.lineNumber}>{item.lineNumber}</Text>
                 </View>
                 <Text
                   style={[styles.modernText, item.isRubric && styles.modernRubric]}
                   selectable
+                  accessibilityLanguage={readingLanguage}
                 >
                   {item.modernText}
                 </Text>

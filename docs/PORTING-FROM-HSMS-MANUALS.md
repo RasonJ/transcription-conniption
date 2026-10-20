@@ -149,8 +149,8 @@ We already ship a **read-only** lemma index from `assets/dic/hsms.src`. The buil
 
 | Appendix | Suggested artifact |
 |----------|-------------------|
-| `taxonomia.html` | `assets/library/taxonomy.json` |
-| `eagles.html` | `assets/library/eagles-tags.json` |
+| `taxonomia.html` | `assets/intent-taxonomy.json` (there is no `assets/library/taxonomy.json`) |
+| `eagles.html` | POS index from the dictionary generator: `public/dic/hsmsPosIndex.json` and `utils/generated/hsmsPosIndex.json` (there is no `assets/library/eagles-tags.json`) |
 | `produccion.html`, `copimpr.html`, `autor.html`, `traductor.html` | Seed / validate catalog + graph nodes |
 | `teclados.html` / `tecladosvirt.html` | Studio soft-keyboard component |
 

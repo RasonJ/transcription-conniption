@@ -1,4 +1,4 @@
-import { formatMessage } from "../i18n/messageFormat";
+import { formatMessage, MESSAGE_FORMAT_CACHE_LIMIT, messageFormatCacheSize } from "../i18n/messageFormat";
 import { pluralCategory, pluralCategoryFallback } from "../i18n/plural";
 import {
   FALLBACK_CHAINS,
@@ -85,6 +85,15 @@ describe("i18n translate", () => {
     expect(translate("es-419", "nope.missing" as never)).toBe("nope.missing");
   });
 
+  it("uses bundled English when the live English catalog has been replaced", () => {
+    registerCatalog("en", {});
+    try {
+      expect(translate("en", "common.close")).toBe("Close");
+    } finally {
+      registerCatalog("en", en);
+    }
+  });
+
   it("interpolates named params", () => {
     expect(translate("en", "studio.stat.lines", { count: 12 })).toBe("Lines: 12");
     expect(translate("es", "validation.UNCLOSED_ENV", { mnemonic: "{RUB.", line: 4 })).toBe(
@@ -135,15 +144,25 @@ describe("i18n plural formatting", () => {
     expect(formatMessage("Hi {name}")).toBe("Hi {name}");
   });
 
-  it("static fallback table covers Tier 1 locales", () => {
+  it("static fallback table covers Tier 1 and Tier 2 locales", () => {
     expect(pluralCategoryFallback("en", 1)).toBe("one");
     expect(pluralCategoryFallback("en", 2)).toBe("other");
     expect(pluralCategoryFallback("es-419", 1)).toBe("one");
+    expect(pluralCategoryFallback("es-MX", 1_000_000)).toBe("many");
+    expect(pluralCategoryFallback("es-AR", 2)).toBe("other");
     expect(pluralCategoryFallback("es-ES", 1_000_000)).toBe("many");
     expect(pluralCategoryFallback("pt-BR", 0)).toBe("one");
     expect(pluralCategoryFallback("pt-PT", 0)).toBe("other");
     expect(pluralCategoryFallback("ca", 2)).toBe("other");
+    expect(pluralCategoryFallback("ca-ES-valencia", 1_000_000)).toBe("many");
+    expect(pluralCategoryFallback("gl", 1_000_000)).toBe("other");
     expect(pluralCategoryFallback("eu", 1)).toBe("one");
+    expect(pluralCategoryFallback("ast", 2)).toBe("other");
+    expect(pluralCategoryFallback("an", 1)).toBe("one");
+    expect(pluralCategoryFallback("oc-aranes", 1_000_000)).toBe("many");
+    expect(pluralCategoryFallback("qu", 2)).toBe("other");
+    expect(pluralCategoryFallback("gn", 1)).toBe("one");
+    expect(pluralCategoryFallback("ay", 0)).toBe("other");
     expect(pluralCategoryFallback("xx", 1)).toBe("one");
   });
 
@@ -151,5 +170,15 @@ describe("i18n plural formatting", () => {
     for (const locale of SUPPORTED_LOCALES) {
       expect(["zero", "one", "two", "few", "many", "other"]).toContain(pluralCategory(locale, 1));
     }
+  });
+
+  it("caps the ICU parse cache and survives deep brace nesting", () => {
+    for (let i = 0; i < MESSAGE_FORMAT_CACHE_LIMIT + 100; i++) {
+      expect(formatMessage(`pattern ${i} {n}`, { n: i })).toBe(`pattern ${i} ${i}`);
+    }
+    expect(messageFormatCacheSize()).toBeLessThanOrEqual(MESSAGE_FORMAT_CACHE_LIMIT);
+    let nested = "leaf";
+    for (let i = 0; i < 64; i++) nested = `{n, plural, other {${nested}}}`;
+    expect(() => formatMessage(nested, { n: 2 }, { locale: "en" })).not.toThrow();
   });
 });

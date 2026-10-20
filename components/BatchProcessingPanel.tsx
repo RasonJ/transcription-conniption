@@ -46,23 +46,28 @@ export function BatchProcessingPanel({ onBatchComplete }: Props) {
 
       const readErrors: string[] = [];
       const preparedPayloads = (
-        await mapPool(result.assets, READ_CONCURRENCY, async (asset) => {
-          try {
-            const content = await FileSystem.readAsStringAsync(asset.uri, {
-              encoding: FileSystem.EncodingType.UTF8,
-            });
-            return {
-              name: asset.name ?? "unknown.txt",
-              content,
-              size: asset.size ?? content.length,
-            };
-          } catch (err) {
-            const label = asset.name ?? asset.uri;
-            readErrors.push(label);
-            console.warn("Failed to read batch asset", label, err);
-            return null;
-          }
-        })
+        await mapPool(
+          result.assets,
+          READ_CONCURRENCY,
+          async (asset) => {
+            try {
+              const content = await FileSystem.readAsStringAsync(asset.uri, {
+                encoding: FileSystem.EncodingType.UTF8,
+              });
+              return {
+                name: asset.name ?? "unknown.txt",
+                content,
+                size: asset.size ?? content.length,
+              };
+            } catch (err) {
+              const label = asset.name ?? asset.uri;
+              readErrors.push(label);
+              console.warn("Failed to read batch asset", label, err);
+              return null;
+            }
+          },
+        { yieldBetweenItems: true },
+      )
       ).filter((p): p is NonNullable<typeof p> => p != null);
 
       if (readErrors.length > 0) {

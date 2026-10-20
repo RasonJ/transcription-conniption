@@ -219,8 +219,8 @@ Release gate for any build with the backend flag off:
 | Concordance (F2) | On demand only | |
 | Dependencies (F3) | 4 unused packages removed earlier | |
 | Service worker (§4.5) | `public/sw.js` | |
-| `AnalysisProvider` (§5) | Local provider executes recipes; remote provider + composite routing behind the flag | Consent sheet not built |
+| `AnalysisProvider` (§5) | Local provider executes recipes; remote provider + composite routing behind the flag | `RemoteConsentSheet` in `app/_layout.tsx` when `EXPO_PUBLIC_ANALYSIS_BACKEND=1`; `ConsentGatedRemoteProvider` in `utils/analysis/getProvider.ts` |
 | Sidecar alignment | `touchWorkspace` realigns the machine-transcription sidecar on every text change (adds `sidecarAlign` ≈ 2.5 KB gzip to Tier 0) | |
 | Device budgets (§6) | Not measured on reference devices | |
 
-**Open items:** a build-output check that no `utils/copilot/` module lands in an eager chunk; device measurements for §6; consent sheet before the first remote request.
+**Open items:** a build-output check that no `utils/copilot/` module lands in an eager chunk; device measurements for §6. The consent sheet is `RemoteConsentSheet` (see the `AnalysisProvider` row).

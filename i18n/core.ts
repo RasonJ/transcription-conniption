@@ -109,6 +109,8 @@ const TERM_LOADERS: Record<string, () => Promise<{ default: Catalog }>> = {
 
 const catalogs: Partial<Record<Locale, Catalog>> = { en };
 const termCatalogs: Partial<Record<string, Catalog>> = { en: termsEn };
+/** Static English catalog. `translate` uses this after the chain so a missing async chunk cannot return a raw key. */
+const bundledEnglish = en as Catalog;
 const pending = new Map<string, Promise<void>>();
 
 const LATAM_REGIONS = new Set([
@@ -288,22 +290,31 @@ function resolveTermFor(chain: readonly Locale[], id: string): string | undefine
   return undefined;
 }
 
+function formatCatalogMessage(
+  message: string,
+  params: MessageParams | undefined,
+  locale: Locale,
+  chain: readonly Locale[],
+): string {
+  return formatMessage(message, params, {
+    locale: locale === PSEUDO_LOCALE ? "en" : locale,
+    resolveTerm: (id) => resolveTermFor(chain, id),
+  });
+}
+
 /**
- * Resolve a message through the locale's fallback chain. Catalogs not yet loaded are skipped,
- * so a message falls through to English rather than showing a raw key. Unknown keys return
- * the key itself.
+ * Resolve a message through the locale's fallback chain. Catalogs not yet loaded are skipped.
+ * English is statically bundled, so a key present in `en.json` is returned in English
+ * even when the active locale chunk is still loading. Unknown keys return the key itself.
  */
 export function translate(locale: Locale, key: MessageKey | (string & {}), params?: MessageParams): string {
   const chain = getFallbackChain(locale);
   for (const loc of chain) {
     const message = catalogs[loc]?.[key];
-    if (typeof message === "string") {
-      return formatMessage(message, params, {
-        locale: loc === PSEUDO_LOCALE ? "en" : loc,
-        resolveTerm: (id) => resolveTermFor(chain, id),
-      });
-    }
+    if (typeof message === "string") return formatCatalogMessage(message, params, loc, chain);
   }
+  const english = bundledEnglish[key];
+  if (typeof english === "string") return formatCatalogMessage(english, params, "en", chain);
   return key;
 }
 

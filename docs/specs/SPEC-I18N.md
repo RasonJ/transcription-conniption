@@ -257,12 +257,12 @@ These affect analysis, not the UI, and they ship with the i18n work because they
 
 ---
 
-## 13. Implementation status (2026-10-16)
+## 13. Implementation status (2026-10-20)
 
 | Item | Status |
 |------|--------|
 | Locales | Tier 1: en, es (+ es-ES, es-419, es-MX, es-AR), pt (+ pt-PT, pt-BR), ca (+ ca-ES-valencia), gl, eu. Tier 2: ast, an, oc-aranes, qu, gn, ay. Pseudo-locale en-XA |
-| Catalog size | 533 keys; `npm run i18n:check` passes (no missing Tier 1 keys, placeholders match, ICU parses, no unused keys except `studio.action.transcribeScan`, which the owner's in-progress Studio code no longer references) |
+| Catalog size | 645 keys in `i18n/generated/messageKeys.ts`; `npm run i18n:check` passes (no missing Tier 1 keys, placeholders match, ICU parses, no unused English keys). Display, export, and `studio.tool.issues` strings added after the 533-key snapshot are machine drafts pending review |
 | Release gate | `i18n:check --release` fails by design: machine-drafted strings in es/pt/ca/gl/eu (including all `copilot.recipe.*` templates and the vision-transcription strings) are listed in `i18n/review-status.json` until a fluent reviewer signs them off |
 | Numbers | `{var}` placeholders now format numbers in the message's locale (`38.484` in es; Spanish keeps 4-digit numbers ungrouped per CLDR) |
 | Instant switch | Catalogs load lazily per chain, prefetched at idle; switch test passes |

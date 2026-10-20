@@ -3,6 +3,7 @@
  * Matched deterministically (<1ms) without runtime GDB multi-hop traversal.
  */
 import type { ReasoningGraphDoc, ReasoningNodeType, ReasoningRelation } from "../reasoningGraph/types";
+import { MACRO_QUERY_TIERS, projectLod } from "../reasoningGraph/lod";
 import type { DoAction, ScriptoriumStage, TaxonomyIntent } from "./lifecycle";
 import { normalizeQuery } from "./router";
 import taxonomy from "../../assets/intent-taxonomy.json";
@@ -327,22 +328,23 @@ export function precompileChainsFromGraph(
   graph: ReasoningGraphDoc,
   opts?: { dagHash?: string },
 ): PrecompiledIntentChain[] {
+  const epistemic = projectLod(graph, MACRO_QUERY_TIERS);
   const out: PrecompiledIntentChain[] = [];
   const hash = opts?.dagHash ?? graph.dag_hash;
 
   // Pattern A: FrequentQuestion → answered_by → AnswerSnippet, + Manuscript refuted
-  for (const faq of graph.nodes.filter((n) => n.type === "FrequentQuestion")) {
-    const answers = neighbors(graph, faq.id, "answered_by", "OUTGOING");
+  for (const faq of epistemic.nodes.filter((n) => n.type === "FrequentQuestion")) {
+    const answers = neighbors(epistemic, faq.id, "answered_by", "OUTGOING");
     const answerNode = answers[0];
-    const manuscripts = graph.edges
+    const manuscripts = epistemic.edges
       .filter(
         (e) =>
           (e.relation === "supported_by_manuscript" || e.relation === "supports") &&
           (e.source === faq.id || e.source === answerNode),
       )
       .map((e) => e.target);
-    const primary = manuscripts[0] ?? graph.nodes.find((n) => n.type === "Manuscript")?.id;
-    const refutations = primary ? neighbors(graph, primary, "refuted", "OUTGOING") : [];
+    const primary = manuscripts[0] ?? epistemic.nodes.find((n) => n.type === "Manuscript")?.id;
+    const refutations = primary ? neighbors(epistemic, primary, "refuted", "OUTGOING") : [];
     if (!answerNode && !refutations.length) continue;
     const qText = String(faq.attributes.canonical_text ?? faq.id);
     out.push({
@@ -390,8 +392,8 @@ export function precompileChainsFromGraph(
   }
 
   // Pattern B: Manuscript → stalled_by_barrier → AdministrativeBarrierNode
-  for (const barrier of graph.nodes.filter((n) => n.type === "AdministrativeBarrierNode")) {
-    const stalled = graph.edges.filter(
+  for (const barrier of epistemic.nodes.filter((n) => n.type === "AdministrativeBarrierNode")) {
+    const stalled = epistemic.edges.filter(
       (e) => e.relation === "stalled_by_barrier" && e.target === barrier.id,
     );
     const msId = stalled[0]?.source;
@@ -436,11 +438,11 @@ export function precompileChainsFromGraph(
   }
 
   // Pattern C: Concept ← prerequisite_for ← Concept (+ FAQ mapped_to_concept)
-  for (const concept of graph.nodes.filter((n) => n.type === "Concept")) {
-    const prereqs = neighbors(graph, concept.id, "prerequisite_for", "INCOMING");
+  for (const concept of epistemic.nodes.filter((n) => n.type === "Concept")) {
+    const prereqs = neighbors(epistemic, concept.id, "prerequisite_for", "INCOMING");
     if (!prereqs.length) continue;
     const label = String(concept.attributes.canonical_name ?? concept.id.replace(/^CONCEPT:/, ""));
-    const lay = graph.nodes.find((n) => n.type === "LayExplanation")?.id;
+    const lay = epistemic.nodes.find((n) => n.type === "LayExplanation")?.id;
     out.push({
       intentId: "learn:prerequisite:pathway",
       recipeId: "learn.prerequisite_pathway",
@@ -475,6 +477,114 @@ export function precompileChainsFromGraph(
         },
       ],
       pattern_id: "concept_prerequisite_pathway",
+      source_graph_hash: hash,
+    });
+  }
+
+  const damage = graph.nodes.find((n) => n.type === "DamageRegion");
+  if (damage) {
+    const token = graph.edges.find((e) => e.source === damage.id && e.relation === "clobbers_text")?.target;
+    const folioId = String(damage.attributes.folioId ?? graph.edges.find((e) => e.source === damage.id)?.properties?.folioId ?? "");
+    out.push({
+      intentId: "analyze:damage:clobbered_claims",
+      recipeId: "damage.clobbered_text",
+      stage: "ANALYZE",
+      precompute: "on_demand",
+      doActions: ["JUMP_FOLIO", "OPEN_VALIDATION"],
+      slots: ["folio_id"],
+      examples: [
+        `text clobbered by damage on folio {folio_id|${folioId || "2r"}}`,
+        "show claims on damaged folios",
+      ],
+      precompiled_chain: [
+        { step: 1, action: "GET_DAMAGE_REGION", node_type: "DamageRegion", bound_node_id: damage.id },
+        {
+          step: 2,
+          action: "TRAVERSE_CLOBBERS",
+          relation: "clobbers_text",
+          target_type: "Token",
+          bound_node_id: token,
+          doAction: "JUMP_FOLIO",
+        },
+      ],
+      pattern_id: "damage_clobbers_token",
+      source_graph_hash: hash,
+    });
+  }
+
+  const hand = graph.nodes.find((n) => n.type === "Hand");
+  if (hand) {
+    const token = graph.edges.find((e) => e.source === hand.id && e.relation === "exhibits_hand")?.target;
+    out.push({
+      intentId: "analyze:scribal_hands:non_original",
+      recipeId: "hands.non_original",
+      stage: "ANALYZE",
+      precompute: "on_demand",
+      doActions: ["OPEN_VALIDATION", "JUMP_FOLIO"],
+      slots: ["folio_id"],
+      examples: ["show non-original hands", "scribal insertions by later hands"],
+      precompiled_chain: [
+        { step: 1, action: "GET_HAND", node_type: "Hand", bound_node_id: hand.id },
+        {
+          step: 2,
+          action: "TRAVERSE_EXHIBITS_HAND",
+          relation: "exhibits_hand",
+          target_type: "Token",
+          bound_node_id: token,
+          doAction: "OPEN_VALIDATION",
+        },
+      ],
+      pattern_id: "hand_exhibits_token_intervention",
+      source_graph_hash: hash,
+    });
+  }
+
+  const drop = graph.nodes.find((n) => n.type === "DropInitial");
+  if (drop) {
+    const stats =
+      graph.edges.find((e) => e.source === drop.id && e.relation === "has_drop_initial_hit")?.target ??
+      graph.nodes.find((n) => n.type === "WitnessStats" || n.type === "Manuscript")?.id;
+    out.push({
+      intentId: "analyze:paleography:drop_initials",
+      recipeId: "paleography.drop_initials",
+      stage: "ANALYZE",
+      precompute: "on_demand",
+      doActions: ["ZOOM_INITIAL", "JUMP_FOLIO"],
+      slots: ["folio_id"],
+      examples: ["show drop initials", "ornate initials in this witness"],
+      precompiled_chain: [
+        { step: 1, action: "GET_DROP_INITIAL", node_type: "DropInitial", bound_node_id: drop.id },
+        {
+          step: 2,
+          action: "TRAVERSE_DROP_HIT",
+          relation: "has_drop_initial_hit",
+          target_type: "Manuscript",
+          bound_node_id: stats,
+          doAction: "ZOOM_INITIAL",
+        },
+      ],
+      pattern_id: "drop_initial_has_hit",
+      source_graph_hash: hash,
+    });
+  }
+
+  const footer = graph.edges.find((e) => e.relation === "has_footer");
+  if (footer) {
+    const next = graph.edges.find((e) => e.source === footer.target && e.relation === "next_folio")?.target;
+    out.push({
+      intentId: "validate:codex:nonsequitur",
+      recipeId: "codex.nonsequitur_after_cw",
+      stage: "VALIDATE",
+      precompute: "on_demand",
+      doActions: ["JUMP_FOLIO"],
+      slots: ["folio_id"],
+      examples: ["check catchword sequence", "non sequitur after catchword"],
+      precompiled_chain: [
+        { step: 1, action: "GET_FOLIO", node_type: "Folio", bound_node_id: footer.source, doAction: "JUMP_FOLIO" },
+        { step: 2, action: "TRAVERSE_FOOTER", relation: "has_footer", target_type: "Token", bound_node_id: footer.target },
+        { step: 3, action: "TRAVERSE_NEXT_FOLIO", relation: "next_folio", target_type: "Folio", bound_node_id: next },
+      ],
+      pattern_id: "folio_catchword_next",
       source_graph_hash: hash,
     });
   }
@@ -579,5 +689,92 @@ export const SEED_PRECOMPILED_CHAINS: PrecompiledIntentChain[] = [
       { step: 3, action: "FETCH_LAY_EXPLANATION", node_type: "LayExplanation" },
     ],
     pattern_id: "concept_prerequisite_pathway",
+  },
+  {
+    intentId: "analyze:paleography:drop_initials",
+    recipeId: "paleography.drop_initials",
+    stage: "ANALYZE",
+    precompute: "on_demand",
+    doActions: ["ZOOM_INITIAL", "JUMP_FOLIO"],
+    slots: ["folio_id"],
+    examples: [
+      "show drop initials on folio {folio_id|3r}",
+      "ornate initials in this witness",
+      "iniciales decoradas del folio {folio_id|3r}",
+    ],
+    precompiled_chain: [
+      { step: 1, action: "GET_DROP_INITIAL", node_type: "DropInitial" },
+      { step: 2, action: "TRAVERSE_DROP_HIT", relation: "has_drop_initial_hit", target_type: "WitnessStats" },
+      { step: 3, action: "GET_PRIMARY_MANUSCRIPT", node_type: "Manuscript", doAction: "ZOOM_INITIAL" },
+    ],
+    pattern_id: "drop_initial_has_hit",
+  },
+  {
+    intentId: "analyze:scribal_hands:non_original",
+    recipeId: "hands.non_original",
+    stage: "ANALYZE",
+    precompute: "on_demand",
+    doActions: ["OPEN_VALIDATION", "JUMP_FOLIO"],
+    slots: ["folio_id"],
+    examples: [
+      "show non-original hands",
+      "scribal insertions by later hands on folio {folio_id|1r}",
+      "manos no originales",
+    ],
+    precompiled_chain: [
+      { step: 1, action: "GET_HAND", node_type: "Hand" },
+      { step: 2, action: "TRAVERSE_EXHIBITS_HAND", relation: "exhibits_hand", target_type: "Token" },
+      {
+        step: 3,
+        action: "TRAVERSE_INTERVENTION",
+        relation: "has_intervention",
+        target_type: "EditorialIntervention",
+        doAction: "OPEN_VALIDATION",
+      },
+    ],
+    pattern_id: "hand_exhibits_token_intervention",
+  },
+  {
+    intentId: "validate:codex:nonsequitur",
+    recipeId: "codex.nonsequitur_after_cw",
+    stage: "VALIDATE",
+    precompute: "on_demand",
+    doActions: ["JUMP_FOLIO"],
+    slots: ["folio_id"],
+    examples: [
+      "check catchword sequence",
+      "non sequitur after catchword on folio {folio_id|1v}",
+      "reclamo que no continúa",
+    ],
+    precompiled_chain: [
+      { step: 1, action: "GET_FOLIO", node_type: "Folio", slot: "folio_id" },
+      { step: 2, action: "TRAVERSE_FOOTER", relation: "has_footer", target_type: "Token" },
+      { step: 3, action: "TRAVERSE_NEXT_FOLIO", relation: "next_folio", target_type: "Folio", doAction: "JUMP_FOLIO" },
+    ],
+    pattern_id: "folio_catchword_next",
+  },
+  {
+    intentId: "analyze:damage:clobbered_claims",
+    recipeId: "damage.clobbered_text",
+    stage: "ANALYZE",
+    precompute: "on_demand",
+    doActions: ["JUMP_FOLIO", "OPEN_VALIDATION"],
+    slots: ["folio_id"],
+    examples: [
+      "show claims on damaged folios",
+      "text clobbered by damage on folio {folio_id|2r}",
+      "pasajes ilegibles por daño",
+    ],
+    precompiled_chain: [
+      { step: 1, action: "GET_DAMAGE_REGION", node_type: "DamageRegion" },
+      {
+        step: 2,
+        action: "TRAVERSE_CLOBBERS",
+        relation: "clobbers_text",
+        target_type: "Token",
+        doAction: "JUMP_FOLIO",
+      },
+    ],
+    pattern_id: "damage_clobbers_token",
   },
 ];

@@ -210,9 +210,9 @@ export function visibleTextFromHtmlFragment(fragment: string): string {
  */
 export function stripProcessedEditorialHtml(fragment: string): string {
   return fragment
-    .replace(/<span[^>]*class="drop-initial-cap"[^>]*>[\s\S]*?<\/span>/gi, " ")
-    .replace(/<span[^>]*>\[(?:[^\]]{0,120})\]<\/span>/gi, " ")
-    .replace(/<span[^>]*>\/[^/]*\/<\/span>/gi, " ")
+    .replace(/<span[^>]*class="drop-initial-cap"[^>]*>[\s\S]{0,8000}?<\/span>/gi, " ")
+    .replace(/<span[^>]*>\[(?:[^\]]{0,240})\]<\/span>/gi, " ")
+    .replace(/<span[^>]*>\/[^/]{0,240}\/<\/span>/gi, " ")
     .replace(/<i>[^<]{0,40}<\/i>/gi, (m) => m.slice(3, -4))
     .replace(/&#9633;&#9633;/gi, " ")
     .replace(/&hellip;/gi, " ");

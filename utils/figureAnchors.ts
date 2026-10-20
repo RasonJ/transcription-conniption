@@ -3,7 +3,7 @@ import type { FigureMnemonic } from "../constants/manuscript";
 export const FIGURE_MNEMONICS: FigureMnemonic[] = ["ILL", "MIN", "DIAG", "SYMB"];
 
 /** HSMS inline figure placeholders: {ILL. caption}, {DIAG. …}, etc. */
-export const FIGURE_ANCHOR_SOURCE = String.raw`\{(ILL|MIN|DIAG|SYMB)\.\s*([^}]*)\}`;
+export const FIGURE_ANCHOR_SOURCE = String.raw`\{(ILL|MIN|DIAG|SYMB)\.\s*([^}]{0,240})\}`;
 
 const RE_SAN_FOLIO = /[^\w.-]+/g;
 const RE_WHITESPACE = /\s+/g;

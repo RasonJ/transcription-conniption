@@ -25,7 +25,7 @@ export function buildManuscriptExportPayload(
     case "txt":
       return { kind: "text", contents: ctx.sourceText };
     case "html":
-      return { kind: "text", contents: exportToLegacyHTML(ctx.parsed, ctx.display) };
+      return { kind: "text", contents: exportToLegacyHTML(ctx.parsed, { ...ctx.display, sourceText: ctx.sourceText }) };
     case "svg":
       return { kind: "text", contents: exportToSvgDocument(ctx.parsed, { ...ctx.display, sourceText: ctx.sourceText }) };
     case "tei_xml":

@@ -442,10 +442,7 @@
       "examples": [
         "is there a debate about {topic|What are catchwords in a manuscript?}",
         "why do studies conflict on {topic|catchwords}",
-        "show contesting papers for {topic|scribal hands}",
-        "is there a debate about {topic|catchwords}",
-        "why do studies conflict on {topic|scribal hands}",
-        "show contesting papers for {topic|quire structure}"
+        "show contesting papers for {topic|scribal hands}"
       ],
       "precompiled_chain": [
         {
@@ -532,9 +529,7 @@
       "examples": [
         "what should I read before studying {concept|catchwords}",
         "prerequisites for understanding {concept|catchwords}",
-        "explain {concept|catchwords} in plain terms",
-        "prerequisites for understanding {concept|paleography}",
-        "explain {concept|drop initials} in plain terms"
+        "explain {concept|catchwords} in plain terms"
       ],
       "precompiled_chain": [
         {
@@ -555,6 +550,147 @@
           "action": "FETCH_LAY_EXPLANATION",
           "node_type": "LayExplanation",
           "bound_node_id": "LAY:catchwords"
+        }
+      ]
+    },
+    "analyze:paleography:drop_initials": {
+      "recipeId": "paleography.drop_initials",
+      "stage": "ANALYZE",
+      "doActions": [
+        "ZOOM_INITIAL",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "show drop initials on folio {folio_id|3r}",
+        "ornate initials in this witness",
+        "iniciales decoradas del folio {folio_id|3r}"
+      ],
+      "precompute": "on_demand",
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_DROP_INITIAL",
+          "node_type": "DropInitial"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_DROP_HIT",
+          "relation": "has_drop_initial_hit",
+          "target_type": "WitnessStats"
+        },
+        {
+          "step": 3,
+          "action": "GET_PRIMARY_MANUSCRIPT",
+          "node_type": "Manuscript",
+          "doAction": "ZOOM_INITIAL"
+        }
+      ]
+    },
+    "analyze:scribal_hands:non_original": {
+      "recipeId": "hands.non_original",
+      "stage": "ANALYZE",
+      "doActions": [
+        "OPEN_VALIDATION",
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "show non-original hands",
+        "scribal insertions by later hands on folio {folio_id|1r}",
+        "manos no originales"
+      ],
+      "precompute": "on_demand",
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_HAND",
+          "node_type": "Hand"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_EXHIBITS_HAND",
+          "relation": "exhibits_hand",
+          "target_type": "Token"
+        },
+        {
+          "step": 3,
+          "action": "TRAVERSE_INTERVENTION",
+          "relation": "has_intervention",
+          "target_type": "EditorialIntervention",
+          "doAction": "OPEN_VALIDATION"
+        }
+      ]
+    },
+    "validate:codex:nonsequitur": {
+      "recipeId": "codex.nonsequitur_after_cw",
+      "stage": "VALIDATE",
+      "doActions": [
+        "JUMP_FOLIO"
+      ],
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "check catchword sequence",
+        "non sequitur after catchword on folio {folio_id|1v}",
+        "reclamo que no continúa"
+      ],
+      "precompute": "on_demand",
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_FOLIO",
+          "node_type": "Folio",
+          "slot": "folio_id"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_FOOTER",
+          "relation": "has_footer",
+          "target_type": "Token"
+        },
+        {
+          "step": 3,
+          "action": "TRAVERSE_NEXT_FOLIO",
+          "relation": "next_folio",
+          "target_type": "Folio",
+          "doAction": "JUMP_FOLIO"
+        }
+      ]
+    },
+    "analyze:damage:clobbered_claims": {
+      "recipeId": "damage.clobbered_text",
+      "stage": "ANALYZE",
+      "doActions": [
+        "JUMP_FOLIO",
+        "OPEN_VALIDATION"
+      ],
+      "slots": [
+        "folio_id"
+      ],
+      "examples": [
+        "show claims on damaged folios",
+        "text clobbered by damage on folio {folio_id|2r}",
+        "pasajes ilegibles por daño"
+      ],
+      "precompute": "on_demand",
+      "precompiled_chain": [
+        {
+          "step": 1,
+          "action": "GET_DAMAGE_REGION",
+          "node_type": "DamageRegion"
+        },
+        {
+          "step": 2,
+          "action": "TRAVERSE_CLOBBERS",
+          "relation": "clobbers_text",
+          "target_type": "Token",
+          "doAction": "JUMP_FOLIO"
         }
       ]
     }

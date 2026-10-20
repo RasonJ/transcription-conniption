@@ -38,6 +38,7 @@ export function ResponsiveBatchShell({ visible, onClose, onBatchComplete }: Prop
           accessibilityRole="button"
           accessibilityState={{ expanded: !isCollapsed }}
           accessibilityLabel={t("batch.compilerTitle")}
+          hitSlop={{ top: 8, bottom: 8, left: 16, right: 12 }}
         >
           {isCollapsed ? (
             <ChevronLeft color="#f6d890" size={16} />
@@ -117,14 +118,14 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
-  closeButton: { padding: 4 },
+  closeButton: { minWidth: 44, minHeight: 44, alignItems: "center", justifyContent: "center" },
   collapseHandle: {
     position: "absolute",
     left: -14,
     top: "50%",
     marginTop: -20,
     width: 14,
-    height: 40,
+    height: 44,
     backgroundColor: "#5a2317",
     borderTopLeftRadius: 8,
     borderBottomLeftRadius: 8,
@@ -148,7 +149,14 @@ const styles = StyleSheet.create({
   },
   mobileTitleGroup: { flexDirection: "row", alignItems: "center", gap: 10 },
   mobileTitle: { color: "#fff4d2", fontSize: 18, fontWeight: "800" },
-  mobileCloseButton: { backgroundColor: "#f6d890", padding: 6, borderRadius: 10 },
+  mobileCloseButton: {
+    backgroundColor: "#f6d890",
+    minWidth: 44,
+    minHeight: 44,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   mobileBody: { flex: 1 },
   mobileContent: { padding: 16, gap: 16 },
   mobilePromptText: { color: "rgba(255, 244, 210, 0.75)", fontSize: 14, lineHeight: 20 },

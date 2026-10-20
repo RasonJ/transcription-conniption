@@ -45,7 +45,7 @@ export function LabeledSwitch({
         {helperText ? <Text style={styles.helper}>{helperText}</Text> : null}
       </View>
       {showStateText ? (
-        <Text style={styles.stateText} accessibilityElementsHidden>
+        <Text style={styles.stateText} accessibilityElementsHidden importantForAccessibility="no">
           {value ? "On" : "Off"}
         </Text>
       ) : null}

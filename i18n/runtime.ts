@@ -62,8 +62,11 @@ export function I18nProvider({
   }, [locale, ready]);
 
   useEffect(() => {
+    // Keep imperative `t()` on a loaded catalog. Until the chunk arrives, `translate`
+    // still resolves through the statically bundled English catalog.
+    if (!isLocaleLoaded(locale)) return;
     setActiveLocale(locale);
-  }, [locale]);
+  }, [locale, ready]);
 
   // A stored choice overrides device detection.
   useEffect(() => {

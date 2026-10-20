@@ -52,7 +52,13 @@ export function ActionButton({
       {...props}
     >
       {icon}
-      <Text style={[styles.textBase, styles[`${variant}Text` as const], textStyle]}>{label}</Text>
+      <Text
+        style={[styles.textBase, styles[`${variant}Text` as const], textStyle]}
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+      >
+        {label}
+      </Text>
     </Pressable>
   );
 }
@@ -80,8 +86,8 @@ const styles = StyleSheet.create({
     backgroundColor: "transparent",
   },
   chip: {
-    minHeight: 32,
-    paddingHorizontal: 10,
+    minHeight: 44,
+    paddingHorizontal: 12,
     borderRadius: 999,
     backgroundColor: "rgba(246, 216, 144, 0.1)",
     borderWidth: 1,

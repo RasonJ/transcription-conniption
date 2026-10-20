@@ -176,20 +176,15 @@ Drop caps are the hardest fusion of **typography** and **layout** because they v
 
 The historiated letter is **one grapheme** (`utils/dropInitial.ts`). Multi-letter cap strings in the box (e.g. `[AE]` editorial supply) widen via `dropCapBoxWidth(capH, letterCount)`.
 
-### 6.2 Ornate initial style matrices (native SVG)
+### 6.2 Ornate initials (one scene, four adapters)
 
-`renderOrnateInitialSvg` (`components/svgFacsimile/renderOrnateInitial.tsx`) picks a **deterministic** variant from `buildDropCapSeed(folioId, letter, blockIndex)` via `seededRng` (`dropInitialLetterform.ts`). Each witness location gets a stable combination of **field colour** (from `ILLUMINATED_THEMES`), **font stack**, and **background doodles** clipped to the inner panel (8% pad) so vines and hatch lines do not bleed into adjacent lines.
+Native `renderOrnateInitialSvg`, web `HtmlOrnateDropCap`, standalone SVG export, and legacy HTML export all draw the same scene from `buildInitialScene` (`utils/initials/scene.ts`) after `resolveInitialSpec` (`utils/initials/spec.ts`). The witness picks one tradition for the whole transcription (`deriveTraditionFromRmk` in `utils/initials/tradition.ts`, exposed as `InitialTraditionContext`): Cromberger 1525 and Galharde 1537 imprints use `print.woodcut` (square plate, no rounded corners); a printer year of 1500 or earlier uses `print.incunable`; a manuscript shelfmark or a witness with no printer date uses `ms.penwork`. `{ILL.}` / `{MIN.}` inside `{IN.}` raise the grade inside that tradition. See [SPEC-ORNATE-INITIALS.md](specs/SPEC-ORNATE-INITIALS.md).
+
+`components/svgFacsimile/dropInitialLetterform.ts` still holds the older per-letter matrices (vines, criblé, ribbon, damask). Nothing on the facsimile path calls `buildOrnateInitialGeometry`.
 
 **Preferred face:** [Andron Scriptor](https://mufi.info/q.php?p=mufi/fonts/fonts/53) (MUFI font id **53**, Andreas Stötzner) — the chart face for the MUFI recommendation. Font stacks are built by `utils/mufiFonts.ts` (`Andron Scriptor Web` → Junicode → Georgia). Optional static SVG overrides live under `assets/mufi/ornate-initials/{LETTER}/{style}.svg`; inventory: `utils/generated/ornateInitialInventory.ts`.
 
-| Style | Name | Background | Typography |
-|-------|------|------------|------------|
-| 0 | Historiated vines | Acanthus curves and leaf nodes | Andron-led Lombardic stack |
-| 1 | Geometrical criblé | Gold stipple on deep field | Andron-led heavy Gothic (`fontWeight: 900`) |
-| 2 | Renaissance ribbon | Double-ruled interlace bands | Andron → Palatino / Garamond |
-| 3 | Minstrel damask | Checkerboard or cross-hatch tessellation | Andron-led calligraphic stack |
-
-Tap the cap box to replace the procedural design with a **localized folio scan** (`uploadedUri`); border and hit target are preserved. Web facsimile rows use the parallel `HtmlOrnateDropCap` component inside HTML `ForeignObject` cells.
+Tap the cap box to replace the generated plate with a **localized folio scan** (`uploadedUri`); border and hit target are preserved.
 
 ### 6.3 Rendering checklist
 
@@ -301,9 +296,11 @@ Future work (see [ARCHITECTURE.md](ARCHITECTURE.md) roadmap): image pane in syno
 |------|-------------------------|
 | `components/svgFacsimile/tokenRendering.ts` | `FS`, `LH`, fills, `tokenToSegs`, MUFI display hooks |
 | `components/svgFacsimile/pageLayout.ts` | `PARCHMENT_BG`, margins, `dropCapBoxWidth` |
-| `components/svgFacsimile/HtmlOrnateDropCap.tsx` | Web historiated cap geometry |
-| `components/svgFacsimile/renderOrnateInitial.tsx` | Native historiated cap (`renderOrnateInitialSvg`) |
-| `components/svgFacsimile/dropInitialLetterform.ts` | `seededRng`, `ILLUMINATED_THEMES`, matrix fonts |
+| `components/svgFacsimile/HtmlOrnateDropCap.tsx` | Web adapter: `buildInitialScene` inside HTML facsimile rows |
+| `components/svgFacsimile/renderOrnateInitial.tsx` | Native adapter: `renderOrnateInitialSvg` over the same scene |
+| `utils/initials/scene.ts` | Scene builder, pigment palette, SVG serialization |
+| `utils/initials/tradition.ts` | `{RMK:}` → tradition (`print.woodcut`, `ms.penwork`, …) |
+| `components/svgFacsimile/dropInitialLetterform.ts` | Retired matrix geometry (`buildOrnateInitialGeometry`); not on the render path |
 | `utils/dropInitial.ts` | `{INn.}` grapheme peel |
 | `utils/mufiChars.ts` | MUFI catalog lookup + ornate inventory accessors |
 | `utils/mufiCharacterMap.ts` | Tier-2 paleographic map + `convertHsmsToMufiGlyphs` |
@@ -312,7 +309,7 @@ Future work (see [ARCHITECTURE.md](ARCHITECTURE.md) roadmap): image pane in syno
 | `utils/renderMarkupLeakage.ts` | Post-export HTML leakage (batch omits lacuna `[ ]` checks) |
 | `utils/hsmsLexer.ts` | Bracket and lacuna token boundaries |
 | `constants/scriptoriumTheme.ts` | App-wide vellum palette |
-| `utils/htmlExport.ts` | Legacy floated-cap HTML |
+| `utils/htmlExport.ts` | HTML export; drop caps use `serializeInitialScene` |
 | `assets/mufi/` | Catalog, overlays, fonts, ornate SVG slots |
 
 ---

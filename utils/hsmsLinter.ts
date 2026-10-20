@@ -37,14 +37,14 @@ const RE_FOLIO_MARKER = /^\[\s*fol(?:io)?\.?\s*([^\]]+)\]/i;
 /** Metadata / page chrome allowed outside column envelopes. */
 const RE_OUTSIDE_COLUMN_OK = /^\{(?:RMK|HD\d?|CW|SG|ILL|DIAG)\b/i;
 
-const RE_STRAY_CATCHWORD = /^\{CW\.\s*([^}]+)\}/i;
-const RE_STRAY_SIGNATURE = /^\{SG\.\s*([^}]+)\}/i;
-const RE_HEADER_LEAK = /^\{HD[12]?\.\s*([^}]+)\}/i;
+const RE_STRAY_CATCHWORD = /^\{CW\.\s*([^}]{1,240})\}/i;
+const RE_STRAY_SIGNATURE = /^\{SG\.\s*([^}]{1,240})\}/i;
+const RE_HEADER_LEAK = /^\{HD[12]?\.\s*([^}]{1,240})\}/i;
 /** Asterisk inside brackets but not in valid `[*text]` editorial reconstruction form. */
 const RE_MALFORMED_RECONSTRUCTION =
-  /\[\s*[^*\]][^\]]*\*[^\]]*\]|\[\s+\*[^\]]*\]|\[\*\s*\]|\*[^\]]*\]/;
+  /\[\s*[^*\]][^\]]{0,240}\*[^\]]{0,240}\]|\[\s+\*[^\]]{0,240}\]|\[\*\s*\]|\*[^\]]{0,240}\]/;
 /** Valid editorial reconstruction — exclude from MALFORMED_RECONSTRUCTION. */
-const RE_VALID_RECONSTRUCTION = /\[\s*\*[^\]]+\]/;
+const RE_VALID_RECONSTRUCTION = /\[\s*\*[^\]]{1,240}\]/;
 /** Multiple spaces after `{INn.}` collapse micro-tracking beside the cap box. */
 const RE_INITIAL_MULTI_SPACE = /^\{IN\d+\.\}\s{2,}/;
 /** Mechanical lacuna must be `[ ]` (interior space), not bare `[]`. */

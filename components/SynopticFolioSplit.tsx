@@ -1,7 +1,7 @@
 import type { FolioSide } from "@/constants/manuscript";
 import { SynopticPane } from "@/components/SynopticPane";
 import { useT } from "@/i18n/runtime";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -24,24 +24,33 @@ export function SynopticFolioSplit({ folio, highlight, diplomatic }: Props) {
   const t = useT();
   const leftScrollRef = useRef<ScrollView>(null);
   const rightScrollRef = useRef<ScrollView>(null);
-  const isScrolling = useRef(false);
+  const scrollLock = useRef<"left" | "right" | null>(null);
+  const releaseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [showDiplomaticPanel, setShowDiplomaticPanel] = useState(true);
   const [showNormalizedPanel, setShowNormalizedPanel] = useState(true);
 
+  useEffect(() => {
+    return () => {
+      if (releaseTimer.current) clearTimeout(releaseTimer.current);
+    };
+  }, []);
+
   const handleScroll = useCallback(
     (source: "left" | "right", event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!showDiplomaticPanel || !showNormalizedPanel) return;
-      if (isScrolling.current) return;
+      // Ignore the echo from the pane we just scrolled, and keep following the pane the reader is dragging.
+      if (scrollLock.current && scrollLock.current !== source) return;
 
-      isScrolling.current = true;
+      scrollLock.current = source;
       const yOffset = event.nativeEvent.contentOffset.y;
       const targetRef = source === "left" ? rightScrollRef : leftScrollRef;
-
       targetRef.current?.scrollTo({ y: yOffset, animated: false });
 
-      setTimeout(() => {
-        isScrolling.current = false;
+      if (releaseTimer.current) clearTimeout(releaseTimer.current);
+      releaseTimer.current = setTimeout(() => {
+        scrollLock.current = null;
+        releaseTimer.current = null;
       }, 20);
     },
     [showDiplomaticPanel, showNormalizedPanel],

@@ -416,7 +416,7 @@ On web (`npm run start:web`):
 
 - **Drag-and-drop** `.txt` anywhere on the Studio screen → same path as Upload & Convert
 - **SVG facsimile** resolves to `SvgFacsimilePage.web.tsx` (HTML rows inside an SVG parchment shell)
-- **Ornate drop caps** — one grapheme per `{INn.}` (e.g. `{IN4.} AO` → cap **A**, body **O…**); web: `HtmlOrnateDropCap`; native SVG facsimile: `renderOrnateInitialSvg` with four seeded style matrices (vines, criblé stipple, ribbon interlace, damask tessellation) and Andron-led stacks — see [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md); optional static SVG under `assets/mufi/ornate-initials/`; tap to replace with an uploaded folio scan
+- **Ornate drop caps** — one grapheme per `{INn.}` (e.g. `{IN4.} AO` → cap **A**, body **O…**); web `HtmlOrnateDropCap` and native `renderOrnateInitialSvg` both draw `buildInitialScene` for the witness tradition — see [HSMS-TYPOGRAPHY.md §6](HSMS-TYPOGRAPHY.md); optional static SVG under `assets/mufi/ornate-initials/`; tap to replace with an uploaded folio scan
 - **MUFI display** — optional parchment overlay (ASCII source unchanged); see [HSMS-TYPOGRAPHY.md §7](HSMS-TYPOGRAPHY.md)
 - Export uses browser download when the File System Access API is unavailable
 - UI card shadows use `utils/platformShadow.ts` (`boxShadow` on web) to avoid React Native Web deprecation warnings
