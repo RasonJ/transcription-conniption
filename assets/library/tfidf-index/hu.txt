@@ -1,0 +1,33 @@
+# TF-IDF index for hu. Documents: 146. Corpus tokens: 305. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (80 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (66 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 29
+#Term Tokens: 83
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	9	+	8.49	0.0295	egyértelműsítő
+2	9	+	8.49	0.0295	lap
+3	7	+	8.13	0.023	listája
+4	4	+	7.05	0.0131	the
+5	3	+	6.38	0.0098	az
+6	3	+	6.38	0.0098	mellékszereplőinek
+7	3	+	6.38	0.0098	odaát
+8	3	+	6.38	0.0098	török
+9	2	+	5.37	0.0066	antillai
+10	2	+	5.37	0.0066	bilaj
+11	2	+	5.37	0.0066	billegető
+12	2	+	5.37	0.0066	csillagkapu
+13	2	+	5.37	0.0066	fajok
+14	2	+	5.37	0.0066	fotometria
+15	2	+	5.37	0.0066	földi
+16	2	+	5.37	0.0066	get
+17	2	+	5.37	0.0066	konyha
+18	2	+	5.37	0.0066	lajhár
+19	2	+	5.37	0.0066	molekula
+20	2	+	5.37	0.0066	park
+21	2	+	5.37	0.0066	sap
+22	2	+	5.37	0.0066	sorozatokban
+23	2	+	5.37	0.0066	szereplő
+24	2	+	5.37	0.0066	tautológia
+25	2	+	5.37	0.0066	tour
+26	2	+	5.37	0.0066	virágdenevérek
+27	2	+	5.37	0.0066	wings
+28	2	+	5.37	0.0066	your
+29	2	+	5.37	0.0066	ókori

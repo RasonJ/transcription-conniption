@@ -1,0 +1,20 @@
+# TF-IDF index for zh. Documents: 268. Corpus tokens: 301. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (157 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (111 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 16
+#Term Tokens: 39
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	4	+	8.02	0.0133	载波侦听多路访问
+2	3	+	7.22	0.01	加利福尼亚州
+3	3	+	7.22	0.01	年h
+4	3	+	7.22	0.01	流感大流行各國疫情及反應
+5	3	+	7.22	0.01	消歧義
+6	3	+	7.22	0.01	磷的同素异形体
+7	2	+	6.04	0.0066	南北战争
+8	2	+	6.04	0.0066	文昌鱼
+9	2	+	6.04	0.0066	法蘭克福
+10	2	+	6.04	0.0066	泡沫紅茶
+11	2	+	6.04	0.0066	物理学史
+12	2	+	6.04	0.0066	硅烷
+13	2	+	6.04	0.0066	老挝人民军
+14	2	+	6.04	0.0066	落枕
+15	2	+	6.04	0.0066	里海怪物
+16	2	+	6.04	0.0066	鹏

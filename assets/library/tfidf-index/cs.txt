@@ -1,0 +1,38 @@
+# TF-IDF index for cs. Documents: 189. Corpus tokens: 381. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (90 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (99 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 34
+#Term Tokens: 125
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	17	+	9.70	0.0446	seznam
+2	13	+	9.52	0.0341	pásmo
+3	13	+	9.52	0.0341	časové
+4	10	+	9.23	0.0262	postav
+5	4	+	7.46	0.0105	nadace
+6	4	+	7.46	0.0105	planet
+7	4	+	7.46	0.0105	rozcestník
+8	4	+	7.46	0.0105	série
+9	4	+	7.46	0.0105	zeměplošských
+10	3	+	6.74	0.0079	na
+11	3	+	6.74	0.0079	vedlejších
+12	2	+	5.66	0.0052	bhávaná
+13	2	+	5.66	0.0052	brána
+14	2	+	5.66	0.0052	championships
+15	2	+	5.66	0.0052	céva
+16	2	+	5.66	0.0052	dolby
+17	2	+	5.66	0.0052	explorer
+18	2	+	5.66	0.0052	hvězdná
+19	2	+	5.66	0.0052	iix
+20	2	+	5.66	0.0052	internet
+21	2	+	5.66	0.0052	logic
+22	2	+	5.66	0.0052	matematika
+23	2	+	5.66	0.0052	matrixu
+24	2	+	5.66	0.0052	merkur
+25	2	+	5.66	0.0052	operace
+26	2	+	5.66	0.0052	pokémonů
+27	2	+	5.66	0.0052	pro
+28	2	+	5.66	0.0052	saturnin
+29	2	+	5.66	0.0052	seriálu
+30	2	+	5.66	0.0052	soustava
+31	2	+	5.66	0.0052	stavebnice
+32	2	+	5.66	0.0052	strana
+33	2	+	5.66	0.0052	suzuki
+34	2	+	5.66	0.0052	sx

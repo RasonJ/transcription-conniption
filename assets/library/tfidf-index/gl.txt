@@ -1,0 +1,33 @@
+# TF-IDF index for gl. Documents: 131. Corpus tokens: 447. Sources: Sentence pairs in Galician-Basque - 2026-10-20.tsv (1 docs); eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (102 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (28 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 29
+#Term Tokens: 98
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	22	+	8.90	0.0492	de
+2	8	+	8.10	0.0179	do
+3	6	+	7.66	0.0134	vigo
+4	5	+	7.33	0.0112	manuel
+5	4	+	7.24	0.0089	da
+6	4	+	6.88	0.0089	maría
+7	3	+	6.23	0.0067	barrio
+8	3	+	6.23	0.0067	lópez
+9	3	+	6.23	0.0067	tom
+10	2	+	5.26	0.0045	as
+11	2	+	5.26	0.0045	ben
+12	2	+	5.26	0.0045	bóveda
+13	2	+	5.26	0.0045	campos
+14	2	+	5.26	0.0045	carmen
+15	2	+	5.26	0.0045	castro
+16	2	+	5.26	0.0045	clancy
+17	2	+	5.26	0.0045	cruceiro
+18	2	+	5.26	0.0045	enrique
+19	2	+	5.26	0.0045	ferrari
+20	2	+	5.26	0.0045	gómez
+21	2	+	5.26	0.0045	josé
+22	2	+	5.26	0.0045	monte
+23	2	+	5.26	0.0045	pazo
+24	2	+	5.26	0.0045	rodríguez
+25	2	+	5.26	0.0045	serra
+26	2	+	5.26	0.0045	toscana
+27	2	+	5.26	0.0045	world
+28	2	+	5.26	0.0045	xavier
+29	2	+	5.26	0.0045	xulio

@@ -1,0 +1,17 @@
+# TF-IDF index for da. Documents: 76. Corpus tokens: 122. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (38 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (38 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 13
+#Term Tokens: 29
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	4	+	6.01	0.0328	skak
+2	3	+	5.49	0.0246	vm
+3	2	+	4.66	0.0164	blank
+4	2	+	4.66	0.0164	fliptricks
+5	2	+	4.66	0.0164	guitar
+6	2	+	4.66	0.0164	hedeby
+7	2	+	4.66	0.0164	jenny
+8	2	+	4.66	0.0164	lalr
+9	2	+	4.66	0.0164	parser
+10	2	+	4.66	0.0164	rené
+11	2	+	4.66	0.0164	resonator
+12	2	+	4.66	0.0164	stemme
+13	2	+	4.66	0.0164	stenene

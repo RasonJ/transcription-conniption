@@ -1,0 +1,18 @@
+# TF-IDF index for ar. Documents: 113. Corpus tokens: 228. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (54 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (59 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 14
+#Term Tokens: 30
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	3	+	6.03	0.0132	توضيح
+2	3	+	6.03	0.0132	علم
+3	2	+	5.09	0.0088	آمنة
+4	2	+	5.09	0.0088	التهاب
+5	2	+	5.09	0.0088	الدوري
+6	2	+	5.09	0.0088	العربية
+7	2	+	5.09	0.0088	اندريه
+8	2	+	5.09	0.0088	تي
+9	2	+	5.09	0.0088	دياز
+10	2	+	5.09	0.0088	صدفة
+11	2	+	5.09	0.0088	عرماء
+12	2	+	5.09	0.0088	علاج
+13	2	+	5.09	0.0088	قائمة
+14	2	+	5.09	0.0088	مديرية

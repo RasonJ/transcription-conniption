@@ -1,0 +1,53 @@
+root: C:\jason\dev\dev\gu\texts
+window_tokens: 200
+min_df: 2
+top: 500
+
+languages:
+  ar: 113 documents, 228 tokens, 14 index terms (min_df=2), summary ar.txt, index ar.index.tsv
+  ca: 17493 documents, 37439 tokens, 4176 index terms (min_df=2), summary ca.txt, index ca.index.tsv
+  cs: 189 documents, 381 tokens, 34 index terms (min_df=2), summary cs.txt, index cs.index.tsv
+  da: 76 documents, 122 tokens, 13 index terms (min_df=2), summary da.txt, index da.index.tsv
+  de: 33288 documents, 6076091 tokens, 168464 index terms (min_df=2), summary de.txt, index de.index.tsv
+  en: 219509 documents, 39431288 tokens, 102112 index terms (min_df=2), summary en.txt, index en.index.tsv
+  es: 1975570 documents, 300647275 tokens, 1298226 index terms (min_df=2), summary es.txt, index es.index.tsv
+  eu: 44 documents, 734 tokens, 79 index terms (min_df=2), summary eu.txt, index eu.index.tsv
+  fi: 372 documents, 674 tokens, 62 index terms (min_df=2), summary fi.txt, index fi.index.tsv
+  fr: 32980 documents, 5771181 tokens, 89941 index terms (min_df=2), summary fr.txt, index fr.index.tsv
+  gl: 131 documents, 447 tokens, 29 index terms (min_df=2), summary gl.txt, index gl.index.tsv
+  he: 298 documents, 622 tokens, 77 index terms (min_df=2), summary he.txt, index he.index.tsv
+  hu: 146 documents, 305 tokens, 29 index terms (min_df=2), summary hu.txt, index hu.index.tsv
+  it: 35781 documents, 5718009 tokens, 100373 index terms (min_df=2), summary it.txt, index it.index.tsv
+  ja: 620 documents, 779 tokens, 95 index terms (min_df=2), summary ja.txt, index ja.index.tsv
+  ko: 98 documents, 168 tokens, 11 index terms (min_df=2), summary ko.txt, index ko.index.tsv
+  la: 29 documents, 55 tokens, 3 index terms (min_df=2), summary la.txt, index la.index.tsv
+  nl: 31191 documents, 6105244 tokens, 114122 index terms (min_df=2), summary nl.txt, index nl.index.tsv
+  no: 240 documents, 438 tokens, 44 index terms (min_df=2), summary no.txt, index no.index.tsv
+  pl: 13432 documents, 2560906 tokens, 103673 index terms (min_df=2), summary pl.txt, index pl.index.tsv
+  pt: 1665009 documents, 225538536 tokens, 1004790 index terms (min_df=2), summary pt.txt, index pt.index.tsv
+  pt-BR: 67 documents, 11367 tokens, 1334 index terms (min_df=2), summary pt-BR.txt, index pt-BR.index.tsv
+  ro: 137 documents, 270 tokens, 13 index terms (min_df=2), summary ro.txt, index ro.index.tsv
+  ru: 29347 documents, 5579102 tokens, 219347 index terms (min_df=2), summary ru.txt, index ru.index.tsv
+  sv: 1181 documents, 1996 tokens, 187 index terms (min_df=2), summary sv.txt, index sv.index.tsv
+  tr: 179 documents, 270 tokens, 14 index terms (min_df=2), summary tr.txt, index tr.index.tsv
+  uk: 723 documents, 1615 tokens, 113 index terms (min_df=2), summary uk.txt, index uk.index.tsv
+  zh: 268 documents, 301 tokens, 16 index terms (min_df=2), summary zh.txt, index zh.index.tsv
+
+notes:
+  skipped 5462500.zip (not running text)
+  skipped 5462500/wikiner-preprint.pdf (not running text)
+  skipped aligned/ (same medical texts as TMX, or an existing keyword summary)
+  skipped keywords/ (same medical texts as TMX, or an existing keyword summary)
+  skipped parsed/ (same medical texts as TMX, or an existing keyword summary)
+  skipped variants/ (same medical texts as TMX, or an existing keyword summary)
+  skipped ew_final_dump/ew_final/tweets.bson.gz (not running text)
+  skipped ew_final_dump/ew_final/tweets.metadata.json.gz (not running text)
+  skipped ew_final_dump/ew_final/users.bson.gz (not running text)
+  skipped ew_final_dump/ew_final/users.metadata.json.gz (not running text)
+  no documents in Sentence pairs in Old Spanish-Basque - 2026-10-20.tsv
+
+corpus metadata:
+  documents: 4058511
+  tokens: 597485843
+  languages: ar, ca, cs, da, de, en, es, eu, fi, fr, gl, he, hu, it, ja, ko, la, nl, no, pl, pt, pt-BR, ro, ru, sv, tr, uk, zh
+  corpus-stats.json, corpus-tfidf.json, corpus-term-postings.json

@@ -1,0 +1,17 @@
+# TF-IDF index for ro. Documents: 137. Corpus tokens: 270. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (43 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (94 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 13
+#Term Tokens: 62
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	24	+	8.72	0.0889	buzău
+2	8	+	8.20	0.0296	prahova
+3	5	+	7.41	0.0185	dezambiguizare
+4	5	+	7.41	0.0185	reni
+5	4	+	6.95	0.0148	de
+6	2	+	5.30	0.0074	brăila
+7	2	+	5.30	0.0074	district
+8	2	+	5.30	0.0074	dâmbovița
+9	2	+	5.30	0.0074	mulțime
+10	2	+	5.30	0.0074	navigator
+11	2	+	5.30	0.0074	opera
+12	2	+	5.30	0.0074	saale
+13	2	+	5.30	0.0074	web

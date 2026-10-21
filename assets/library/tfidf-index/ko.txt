@@ -1,0 +1,15 @@
+# TF-IDF index for ko. Documents: 98. Corpus tokens: 168. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (55 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (43 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 11
+#Term Tokens: 22
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	2	+	4.94	0.0119	구역
+2	2	+	4.94	0.0119	내셔널
+3	2	+	4.94	0.0119	년
+4	2	+	4.94	0.0119	뇌혈관
+5	2	+	4.94	0.0119	불교
+6	2	+	4.94	0.0119	쌍용
+7	2	+	4.94	0.0119	용어
+8	2	+	4.94	0.0119	윈도
+9	2	+	4.94	0.0119	장애
+10	2	+	4.94	0.0119	지오그래픽
+11	2	+	4.94	0.0119	행정

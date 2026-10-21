@@ -1,0 +1,48 @@
+# TF-IDF index for no. Documents: 240. Corpus tokens: 438. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (132 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (108 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 44
+#Term Tokens: 166
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	17	+	10.39	0.0388	herskere
+2	17	+	10.39	0.0388	númenoreanske
+3	11	+	9.94	0.0251	liste
+4	11	+	9.94	0.0251	over
+5	10	+	9.80	0.0228	sorteringsalgoritme
+6	5	+	8.41	0.0114	om
+7	5	+	8.41	0.0114	slaget
+8	4	+	7.85	0.0091	funksjoner
+9	4	+	7.85	0.0091	kde
+10	4	+	7.85	0.0091	programmer
+11	4	+	7.85	0.0091	trigonometriske
+12	3	+	7.07	0.0068	draker
+13	3	+	7.07	0.0068	kommunistiske
+14	3	+	7.07	0.0068	parti
+15	3	+	7.07	0.0068	south
+16	3	+	7.07	0.0068	sovjetunionens
+17	3	+	7.07	0.0068	tolkiens
+18	3	+	7.07	0.0068	under
+19	3	+	7.07	0.0068	verden
+20	2	+	5.92	0.0046	adbusters
+21	2	+	5.92	0.0046	aktantmodellen
+22	2	+	5.92	0.0046	alexandria
+23	2	+	5.92	0.0046	amara
+24	2	+	5.92	0.0046	andrews
+25	2	+	5.92	0.0046	berlin
+26	2	+	5.92	0.0046	biblioteket
+27	2	+	5.92	0.0046	database
+28	2	+	5.92	0.0046	den
+29	2	+	5.92	0.0046	det
+30	2	+	5.92	0.0046	forente
+31	2	+	5.92	0.0046	høyadelstitler
+32	2	+	5.92	0.0046	kommuna
+33	2	+	5.92	0.0046	kongerike
+34	2	+	5.92	0.0046	links
+35	2	+	5.92	0.0046	narvik
+36	2	+	5.92	0.0046	ol
+37	2	+	5.92	0.0046	park
+38	2	+	5.92	0.0046	pianokonsert
+39	2	+	5.92	0.0046	ptychandra
+40	2	+	5.92	0.0046	regioner
+41	2	+	5.92	0.0046	servelat
+42	2	+	5.92	0.0046	sesong
+43	2	+	5.92	0.0046	st
+44	2	+	5.92	0.0046	wikileaks

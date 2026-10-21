@@ -1,0 +1,18 @@
+# TF-IDF index for tr. Documents: 179. Corpus tokens: 270. Sources: eswiki-2026-10-01-p5p4974889.xml/eswiki-2026-10-01-p5p4974889.xml (57 docs); ptwiki-2026-10-01-p220p5009602.xml/ptwiki-2026-10-01-p220p5009602.xml (122 docs). TF-IDF = idf * ln(1+frequency), idf = ln((N+1)/(df+1))+1. Effect is corpus relative frequency. TF-IDF(+/-) is + for terms kept in this positive-salience list.
+#Term Types: 14
+#Term Tokens: 101
+Rank	Freq Corpus	TF-IDF(+/-)	TF-IDF	Effect	Keyword
+1	69	+	8.26	0.2556	ngc
+2	4	+	7.38	0.0148	oral
+3	4	+	7.38	0.0148	seks
+4	3	+	6.66	0.0111	kara
+5	3	+	6.66	0.0111	the
+6	2	+	5.60	0.0074	amaro
+7	2	+	5.60	0.0074	anlam
+8	2	+	5.60	0.0074	atgiller
+9	2	+	5.60	0.0074	bileşen
+10	2	+	5.60	0.0074	bilgisayarı
+11	2	+	5.60	0.0074	cep
+12	2	+	5.60	0.0074	diyagramı
+13	2	+	5.60	0.0074	likör
+14	2	+	5.60	0.0074	savaşı
