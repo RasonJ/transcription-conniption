@@ -1,3 +1,4 @@
+import { JUSTIFY_MAX_GAP } from "../components/svgFacsimile/glyphMetrics";
 import { renderJustifiedSvgLine } from "../components/svgFacsimile/justifiedSvgLine";
 import { seg } from "../components/svgFacsimile/tokenRendering";
 import { PROSE_FILL } from "../components/svgFacsimile/tokenRendering";
@@ -21,9 +22,14 @@ describe("compact justified line export", () => {
     expect(xml).not.toMatch(/<tspan[^>]*>m<\/tspan>/);
     // Justification extras only — values must stay in the per-gap cap, not glyph widths.
     const dx = xml.match(/dx="([^"]+)"/);
-    if (dx) {
-      const vals = dx[1].split(/\s+/).map(Number);
-      expect(vals.every((v) => v <= 6)).toBe(true);
-    }
+    expect(dx).toBeTruthy();
+    const text = "muyto circum";
+    const vals = dx![1].split(/\s+/).map(Number);
+    expect(vals).toHaveLength(text.length);
+    expect(vals.every((v) => v >= 0 && v <= JUSTIFY_MAX_GAP)).toBe(true);
+    vals.forEach((v, i) => {
+      if (text[i] !== " ") expect(v).toBe(0);
+    });
+    expect(vals.some((v) => v > 0)).toBe(true);
   });
 });

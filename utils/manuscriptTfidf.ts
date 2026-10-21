@@ -1,6 +1,6 @@
 import type { WitnessLanguage } from "@/utils/witnessLanguage";
 import { stopwordsFor } from "@/utils/witnessLanguage";
-import { normalizeWord } from "@/utils/copilot/stats";
+import { normalizeWord } from "@/utils/normalizeWord";
 import { tokenizeString } from "@/utils/hsmsLexer";
 import { loadUploadCorpusStats, loadUploadCorpusTfidf } from "@/utils/librarySidecars";
 

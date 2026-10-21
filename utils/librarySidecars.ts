@@ -19,7 +19,7 @@ import {
   type CorpusTfidf,
   type LibraryGraph,
   type PrecompiledFacets,
-} from "@/utils/corpusPrecompute";
+} from "@/utils/corpusSidecarTypes";
 import { readZipJson } from "@/utils/zipEntry";
 
 const facetsCache = new Map<string, PrecompiledFacets>();
