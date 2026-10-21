@@ -39,6 +39,19 @@ describe("drop initial grapheme", () => {
     expect(parseDropInitialLetterCluster("{IN5.} EU el Rey")).toBe("E");
   });
 
+  it("strips the historiated D from Dzbo so the line starts at zbo", () => {
+    const glued = stripDropCapPrefixFromSegs(
+      [{ text: "Dzbo bem auenturado", fill: "#1a0a05", italic: false, bold: false, fs: 16, strike: false, underline: false, super: false }],
+      "D",
+    );
+    expect(glued[0]?.text).toBe("zbo bem auenturado");
+    const spaced = stripDropCapPrefixFromSegs(
+      [{ text: " Dzbo bem auenturado", fill: "#1a0a05", italic: false, bold: false, fs: 16, strike: false, underline: false, super: false }],
+      "D",
+    );
+    expect(spaced[0]?.text).toBe("zbo bem auenturado");
+  });
+
   it("strips a duplicated cap grapheme from layout segments", () => {
     const segs = stripDropCapPrefixFromSegs(
       [{ text: "AO muyto", fill: "#1a0a05", italic: false, bold: false, fs: 16, strike: false, underline: false, super: false }],

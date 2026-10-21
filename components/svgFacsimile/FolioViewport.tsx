@@ -7,6 +7,7 @@ import {
   belowLegibilityFloor,
   clampZoom,
   computeFitScale,
+  resolveDisplayFitScale,
   stepZoom,
 } from "@/utils/folioScale";
 import { useScrollAnchor } from "@/context/ScrollAnchorContext";
@@ -33,6 +34,11 @@ export interface FolioViewportProps {
 
 type ZoomMode = "fit" | "actual" | "custom";
 
+/** Web starts at 100% (16px body). Fit-to-width is still on the toolbar. */
+function preferredZoomMode(): ZoomMode {
+  return Platform.OS === "web" ? "actual" : "fit";
+}
+
 export function FolioViewport({
   pageWidth = CANVAS_W,
   pageHeight,
@@ -44,7 +50,7 @@ export function FolioViewport({
   const { setViewportScale } = useScrollAnchor();
   const [containerWidth, setContainerWidth] = useState(0);
   const [contentHeight, setContentHeight] = useState(pageHeight ?? 1);
-  const [mode, setMode] = useState<ZoomMode>("fit");
+  const [mode, setMode] = useState<ZoomMode>(preferredZoomMode);
   const [customScale, setCustomScale] = useState(1);
   const [legibilityDismissed, setLegibilityDismissed] = useState(false);
 
@@ -53,9 +59,17 @@ export function FolioViewport({
     if (width > 0) setContainerWidth(width);
   }, []);
 
-  const fitScale = useMemo(
+  const rawFitScale = useMemo(
     () => computeFitScale(containerWidth, pageWidth),
     [containerWidth, pageWidth],
+  );
+  const fitScale = useMemo(
+    () =>
+      resolveDisplayFitScale(rawFitScale, FS, {
+        web: Platform.OS === "web",
+        containerWidth,
+      }),
+    [containerWidth, rawFitScale],
   );
 
   const activeScale = mode === "fit" ? fitScale : mode === "actual" ? 1 : customScale;
@@ -64,7 +78,7 @@ export function FolioViewport({
   const layoutHeight = pageHeight ?? contentHeight;
 
   useEffect(() => {
-    setMode("fit");
+    setMode(preferredZoomMode());
     setCustomScale(1);
     setLegibilityDismissed(false);
   }, [resetKey]);

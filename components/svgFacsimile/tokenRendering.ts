@@ -222,21 +222,24 @@ export function stripDropCapPrefixFromSegs(segs: Seg[], capGrapheme: string): Se
   if (!capGrapheme || segs.length === 0) return segs;
 
   const cloned = segs.map((s) => ({ ...s }));
-  let toStrip = capGrapheme;
+  const toStrip = capGrapheme.trim();
 
-  for (let i = 0; i < cloned.length && toStrip.length > 0; i++) {
-    const text = cloned[i].text;
+  for (let i = 0; i < cloned.length; i++) {
+    const raw = cloned[i].text;
+    if (!raw) continue;
+    const lead = raw.match(/^\s*/u)?.[0] ?? "";
+    const text = raw.slice(lead.length);
     if (!text) continue;
+    // A margin index in its own segment is not the historiated letter.
+    if (/^\d+[.):]*$/u.test(text)) continue;
 
-    if (text.startsWith(toStrip)) {
-      cloned[i].text = text.slice(toStrip.length);
-      toStrip = "";
-      break;
+    const head = text.slice(0, toStrip.length);
+    if (head.toLowerCase() === toStrip.toLowerCase()) {
+      cloned[i].text = lead + text.slice(toStrip.length);
+    } else if (toStrip.toLowerCase().startsWith(text.toLowerCase())) {
+      cloned[i].text = lead;
     }
-    if (toStrip.startsWith(text)) {
-      toStrip = toStrip.slice(text.length);
-      cloned[i].text = "";
-    }
+    break;
   }
 
   const trimmed = cloned.filter((s) => s.text.length > 0);

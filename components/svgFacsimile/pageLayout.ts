@@ -6,6 +6,8 @@ export const CANVAS_W = 800;
 
 export const MARGIN = 48;
 export const GUTTER_WIDTH = 36;
+/** Scholarly line numbers sit in this left gutter and are not part of the prose. */
+export const LINE_NUM_W = 40;
 export const PAGE_PAD_TOP = 28;
 export const PAGE_PAD_BOT = 36;
 export const CAP_GUTTER = 4;

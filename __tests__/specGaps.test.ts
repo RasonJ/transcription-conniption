@@ -1,4 +1,4 @@
-import { clampZoom, computeFitScale, scaledAnchorOffset, stepZoom } from "../utils/folioScale";
+import { clampZoom, computeFitScale, resolveDisplayFitScale, scaledAnchorOffset, stepZoom } from "../utils/folioScale";
 import { pairBraces } from "../utils/editorTransforms";
 import { applyMnemonicCompletion, getMnemonicCompletions } from "../utils/mnemonicCompletions";
 import { concordanceToCsv } from "../utils/concordanceExport";
@@ -9,6 +9,14 @@ describe("folio scale", () => {
     expect(computeFitScale(320, 800, 16)).toBeCloseTo((320 - 32) / 800, 5);
     expect(computeFitScale(2000, 800, 16)).toBe(1);
     expect(computeFitScale(0, 800)).toBe(1);
+  });
+
+  it("keeps desktop web fit at 100% when the pane would shrink body text", () => {
+    const cramped = computeFitScale(640, 800, 16);
+    expect(cramped).toBeLessThan(0.85);
+    expect(resolveDisplayFitScale(cramped, 16, { web: true, containerWidth: 640 })).toBe(1);
+    expect(resolveDisplayFitScale(cramped, 16, { web: false, containerWidth: 640 })).toBe(cramped);
+    expect(resolveDisplayFitScale(1, 16, { web: true, containerWidth: 1200 })).toBe(1);
   });
 
   it("steps zoom inside 0.5×–3×", () => {

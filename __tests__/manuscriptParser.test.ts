@@ -1,4 +1,4 @@
-import { parseHsMsText, tokenizeString, extractLinePrefix, isPlausibleMarginLineNumber } from "../utils/manuscriptParser";
+import { parseHsMsText, tokenizeString, extractLinePrefix, isPlausibleMarginLineNumber, reconstructPageFlow } from "../utils/manuscriptParser";
 import { createFigureIdAllocator } from "../utils/figureAnchors";
 import { stripEnvironmentClose } from "../utils/figureAnchors";
 import { parseFolioMarker } from "../utils/folioMarkers";
@@ -87,6 +87,34 @@ describe("HSMS Parser Engine Core Tests", () => {
       lineNumber: "cxxx[ij].",
       line: "{RUB. test}",
     });
+  });
+
+  it("keeps margin line numbers out of hyphen-joined reading prose", () => {
+    const joined = reconstructPageFlow([
+      {
+        type: "prose",
+        columns: 1,
+        lineNumber: "1",
+        tokens: [
+          { type: "text", value: "1", raw: "1" },
+          { type: "text", value: " ", raw: " " },
+          { type: "text", value: "adela", raw: "adela" },
+          { type: "hyphen", value: "-", raw: "-" },
+        ],
+      },
+      {
+        type: "prose",
+        columns: 1,
+        lineNumber: "2",
+        tokens: [
+          { type: "text", value: "2", raw: "2" },
+          { type: "text", value: " ", raw: " " },
+          { type: "text", value: "ntar a cidade", raw: "ntar a cidade" },
+        ],
+      },
+    ]);
+    expect(joined).toBe("adelantar a cidade");
+    expect(joined).not.toMatch(/\d/);
   });
 
   it("parses folio 1v alvará without splicing hyphen-wrap words into margin refs", () => {

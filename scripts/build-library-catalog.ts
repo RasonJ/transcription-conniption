@@ -11,7 +11,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { runCorpusPrecomputeWithFs } from "../utils/corpusPrecompute";
+import { refreshPublishedCorpus } from "../utils/corpusPrecompute";
 import { DEFAULT_OSTA_PATHS } from "../utils/ostaBatchConverter";
 import {
   LIBRARY_ENTRY_FORMAT,
@@ -149,7 +149,7 @@ function main(): void {
     exists: (filePath: string) => fs.existsSync(path.normalize(filePath)),
   };
 
-  const result = runCorpusPrecomputeWithFs(
+  const result = refreshPublishedCorpus(
     {
       outputDir,
       catalog,

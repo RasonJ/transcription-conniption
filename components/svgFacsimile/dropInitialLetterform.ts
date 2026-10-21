@@ -1,6 +1,6 @@
 /** Deterministic illuminated drop-cap letterform generator (seeded PRNG). */
 
-import { mufiSerifStack } from "@/utils/mufiFonts";
+import { mufiSerifStack } from "@/utils/mufiFontStack";
 
 export type LetterformMatrix =
   | "romanesque"
@@ -185,15 +185,15 @@ function matrixGeometry(matrix: LetterformMatrix): Pick<
   }
 }
 
-export function pickLetterform(seed: string): LetterformSpec {
+export function pickLetterform(seed: string, matrix?: LetterformMatrix): LetterformSpec {
   const rng = seededRng(seed);
-  const matrix = MATRICES[Math.floor(rng() * MATRICES.length)];
-  const pool = MATRIX_THEME_POOLS[matrix];
+  const chosen = matrix ?? MATRICES[Math.floor(rng() * MATRICES.length)];
+  const pool = MATRIX_THEME_POOLS[chosen];
   const theme = ILLUMINATED_THEMES[pool[Math.floor(rng() * pool.length)]];
-  const fonts = MATRIX_FONTS[matrix];
+  const fonts = MATRIX_FONTS[chosen];
   const fontFamily = fonts[Math.floor(rng() * fonts.length)];
   const flourishVariant = Math.floor(rng() * 3);
-  return { matrix, theme, fontFamily, flourishVariant, ...matrixGeometry(matrix) };
+  return { matrix: chosen, theme, fontFamily, flourishVariant, ...matrixGeometry(chosen) };
 }
 
 // ── SVG path helpers ──────────────────────────────────────────────────────────
@@ -542,8 +542,9 @@ export function buildOrnateInitialGeometry(
   _capFS: number,
   seed: string,
   bkey: string,
+  options?: { matrix?: LetterformMatrix },
 ): OrnateInitialGeometry {
-  const spec = pickLetterform(seed);
+  const spec = pickLetterform(seed, options?.matrix);
   const pad = Math.min(capW, capH) * 0.065;
   const iX = cx + pad; const iY = cy + pad;
   const iW = capW - pad * 2; const iH = capH - pad * 2;

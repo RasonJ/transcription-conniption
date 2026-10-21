@@ -31,7 +31,7 @@ export function HtmlOrnateDropCap({
   tradition,
 }: HtmlOrnateDropCapProps) {
   const contextTradition = useContext(InitialTraditionContext);
-  const activeTradition = tradition ?? contextTradition;
+  const activeTradition = tradition ?? contextTradition ?? "print.woodcut";
   const depth = token.initialDepth ?? 3;
   const letter = token.value ?? "?";
   const scene = buildInitialScene(
@@ -39,6 +39,7 @@ export function HtmlOrnateDropCap({
       letter,
       depth,
       tradition: activeTradition,
+      illuminated: true,
       sequence: blockIndex,
       seed: `${folioId}|${letter}|${bkey}`,
     }),

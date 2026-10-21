@@ -2,6 +2,7 @@ import type { ParsedManuscript } from "@/constants/manuscript";
 import { compileManuscriptTree } from "@/utils/compiler";
 import { buildFacetIndex, type FacetIndex } from "@/utils/copilot/facetIndex";
 import { frequencyMap, normalizeWord, wordStats } from "@/utils/copilot/stats";
+import { lookupCorpusIdf, type CorpusLanguageIdf } from "@/utils/corpusTfidfScore";
 import type { LibraryCatalog, LibraryCatalogEntry } from "@/utils/libraryCatalog";
 import { LIBRARY_ENTRY_FORMAT, type LibraryEntryPayload } from "@/utils/libraryCatalog";
 import { renderNormalizedBlock } from "@/utils/normalizedText";
@@ -57,10 +58,12 @@ export type CorpusTfidf = {
   format: typeof CORPUS_TFIDF_FORMAT;
   generatedAt: string;
   totalDocuments: number;
-  /** IDF(t) = ln(|D| / (1 + df(t))) */
+  /** IDF(t) = ln(|D| / (1 + df(t))) for terms exported from the catalog build. */
   idf: Record<string, number>;
   /** Document frequency for each exported term. */
   df: Record<string, number>;
+  /** Same IDF table split by witness language code. Absent until a catalog build sees language codes. */
+  byLanguage?: Record<string, CorpusLanguageIdf & { df: Record<string, number> }>;
 };
 
 export type CorpusStats = {
@@ -111,6 +114,8 @@ export type CorpusTermPostings = {
   generatedAt: string;
   totalDocuments: number;
   postings: Record<string, Array<{ id: string; tf: number }>>;
+  /** Postings restricted to witnesses that carry each language code. */
+  postingsByLanguage?: Record<string, CorpusTermPostings["postings"]>;
 };
 
 export type CorpusPrecomputeArtifacts = {
@@ -254,16 +259,18 @@ export function isIndexableTerm(term: string): boolean {
   return term.length >= 3 && !/^\d+$/.test(term);
 }
 
-/** IDF(t, D) = ln(|D| / (1 + df(t))). */
+/** IDF(t, D) = ln(|D| / (1 + df(t))). Stored on catalog builds. Scoring falls back separately. */
 export function computeIdf(totalDocuments: number, documentFrequency: number): number {
   if (totalDocuments <= 0) return 0;
   return Math.log(totalDocuments / (1 + documentFrequency));
 }
 
-export function buildCorpusTfidf(
-  documentTermSets: Array<{ baseName: string; terms: Iterable<string> }>,
-  options?: { exportLimit?: number },
-): CorpusTfidf {
+type TermDocument = { baseName: string; terms: Iterable<string>; languageCodes?: readonly string[] };
+
+function idfTableFor(
+  documentTermSets: TermDocument[],
+  exportLimit: number,
+): { totalDocuments: number; idf: Record<string, number>; df: Record<string, number> } {
   const totalDocuments = documentTermSets.length;
   const df = new Map<string, number>();
 
@@ -277,7 +284,6 @@ export function buildCorpusTfidf(
     }
   }
 
-  const exportLimit = options?.exportLimit ?? IDF_EXPORT_LIMIT;
   const ranked = [...df.entries()]
     .sort((a, b) => {
       // Prefer mid-rarity discriminative terms, then alphabetical.
@@ -294,19 +300,59 @@ export function buildCorpusTfidf(
     idf[term] = Number(computeIdf(totalDocuments, count).toFixed(6));
   }
 
+  return { totalDocuments, idf, df: dfOut };
+}
+
+function languageCodesOf(codes: readonly string[] | undefined): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const code of codes ?? []) {
+    const lang = code.trim();
+    if (!lang || seen.has(lang)) continue;
+    seen.add(lang);
+    out.push(lang);
+  }
+  return out;
+}
+
+export function buildCorpusTfidf(
+  documentTermSets: TermDocument[],
+  options?: { exportLimit?: number },
+): CorpusTfidf {
+  const exportLimit = options?.exportLimit ?? IDF_EXPORT_LIMIT;
+  const global = idfTableFor(documentTermSets, exportLimit);
+  const byLang = new Map<string, TermDocument[]>();
+  for (const doc of documentTermSets) {
+    for (const lang of languageCodesOf(doc.languageCodes)) {
+      const list = byLang.get(lang);
+      if (list) list.push(doc);
+      else byLang.set(lang, [doc]);
+    }
+  }
+
+  const byLanguage: CorpusTfidf["byLanguage"] = {};
+  for (const [lang, docs] of byLang) {
+    byLanguage[lang] = idfTableFor(docs, exportLimit);
+  }
+
   return {
     format: CORPUS_TFIDF_FORMAT,
     generatedAt: new Date().toISOString(),
-    totalDocuments,
-    idf,
-    df: dfOut,
+    totalDocuments: global.totalDocuments,
+    idf: global.idf,
+    df: global.df,
+    ...(Object.keys(byLanguage).length > 0 ? { byLanguage } : {}),
   };
+}
+
+function facetLanguageCodes(facet: PrecompiledFacets): string[] {
+  return languageCodesOf(facet.facets.codeSwitching.map((entry) => entry.lang));
 }
 
 export function buildCorpusTermPostings(
   facets: PrecompiledFacets[],
   tfidf: CorpusTfidf,
-  options?: { termLimit?: number; topDocs?: number },
+  options?: { termLimit?: number; topDocs?: number; skipLanguageSlices?: boolean },
 ): CorpusTermPostings {
   const termLimit = options?.termLimit ?? POSTINGS_TERM_LIMIT;
   const topDocs = options?.topDocs ?? POSTINGS_TOP_DOCS;
@@ -331,11 +377,31 @@ export function buildCorpusTermPostings(
     postings[term] = list.slice(0, topDocs);
   }
 
+  const postingsByLanguage: NonNullable<CorpusTermPostings["postingsByLanguage"]> = {};
+  if (!options?.skipLanguageSlices && tfidf.byLanguage) {
+    for (const [lang, slice] of Object.entries(tfidf.byLanguage)) {
+      const langFacets = facets.filter((facet) => facetLanguageCodes(facet).includes(lang));
+      const sliceTfidf: CorpusTfidf = {
+        format: CORPUS_TFIDF_FORMAT,
+        generatedAt: tfidf.generatedAt,
+        totalDocuments: slice.totalDocuments,
+        idf: slice.idf,
+        df: slice.df,
+      };
+      postingsByLanguage[lang] = buildCorpusTermPostings(langFacets, sliceTfidf, {
+        termLimit,
+        topDocs,
+        skipLanguageSlices: true,
+      }).postings;
+    }
+  }
+
   return {
     format: CORPUS_POSTINGS_FORMAT,
     generatedAt: new Date().toISOString(),
     totalDocuments: facets.length,
     postings,
+    ...(Object.keys(postingsByLanguage).length > 0 ? { postingsByLanguage } : {}),
   };
 }
 
@@ -449,12 +515,26 @@ export function scoreWitnessTerm(
   term: string,
   termFreq: Record<string, number>,
   tfidf: CorpusTfidf,
+  wordCount?: number,
+  language?: string,
 ): number {
   const normalized = normalizeWord(term);
-  const tf = termFreq[normalized] ?? 0;
-  if (tf <= 0) return 0;
-  const idf = tfidf.idf[normalized] ?? computeIdf(tfidf.totalDocuments, tfidf.df[normalized] ?? 0);
-  return tf * idf;
+  const raw = termFreq[normalized] ?? 0;
+  if (raw <= 0) return 0;
+  const tf = wordCount && wordCount > 0 ? raw / wordCount : raw;
+  return tf * lookupCorpusIdf(normalized, tfidf, language);
+}
+
+/**
+ * Rebuild corpus sidecars after a catalog is published.
+ * Batch ingest and `npm run build:library` both call this once the catalog JSON is on disk.
+ */
+export function refreshPublishedCorpus(
+  options: Parameters<typeof runCorpusPrecomputeWithFs>[0],
+  fs: CorpusPrecomputeFs,
+  joinPath?: (...parts: string[]) => string,
+): CorpusPrecomputeArtifacts {
+  return runCorpusPrecomputeWithFs(options, fs, joinPath);
 }
 
 export interface CorpusPrecomputeFs {
@@ -496,7 +576,11 @@ export function runCorpusPrecomputeWithFs(
         const existing = JSON.parse(fs.readFile(facetsPath)) as PrecompiledFacets;
         if (existing.format === FACETS_FORMAT) {
           compiledFacets.push(existing);
-          docTerms.push({ baseName: entry.baseName, terms: Object.keys(existing.termFreq) });
+          docTerms.push({
+            baseName: entry.baseName,
+            terms: Object.keys(existing.termFreq),
+            languageCodes: facetLanguageCodes(existing),
+          });
           continue;
         }
       } catch {
@@ -525,7 +609,11 @@ export function runCorpusPrecomputeWithFs(
     });
     fs.writeFile(facetsPath, JSON.stringify(facets));
     compiledFacets.push(facets);
-    docTerms.push({ baseName: entry.baseName, terms: Object.keys(facets.termFreq) });
+    docTerms.push({
+      baseName: entry.baseName,
+      terms: Object.keys(facets.termFreq),
+      languageCodes: facetLanguageCodes(facets),
+    });
   }
 
   const corpusTfidf = buildCorpusTfidf(docTerms);

@@ -5,7 +5,9 @@ import {
   type LibraryGraph,
   type PrecompiledFacets,
 } from "@/utils/corpusPrecompute";
+import { lookupCorpusIdf } from "@/utils/corpusTfidfScore";
 import {
+  loadCorpusStats,
   loadCorpusTermPostings,
   loadCorpusTfidf,
   loadLibraryGraph,
@@ -38,17 +40,24 @@ export function rankFromPostings(
   postings: CorpusTermPostings,
   tfidf: CorpusTfidf,
   topK = 10,
+  wordCounts?: ReadonlyMap<string, number>,
+  language?: string,
 ): Array<{ baseName: string; score: number; tf: number; idf: number }> {
   const normalized = normalizeWord(term);
-  const idf = tfidf.idf[normalized] ?? 0;
-  const hits = postings.postings[normalized] ?? [];
+  const idf = lookupCorpusIdf(normalized, tfidf, language);
+  const table = language ? postings.postingsByLanguage?.[language] ?? postings.postings : postings.postings;
+  const hits = table[normalized] ?? [];
   return hits
-    .map((h) => ({
-      baseName: h.id,
-      tf: h.tf,
-      idf,
-      score: Number((h.tf * idf).toFixed(6)),
-    }))
+    .map((h) => {
+      const words = wordCounts?.get(h.id);
+      const weighted = words && words > 0 ? h.tf / words : h.tf;
+      return {
+        baseName: h.id,
+        tf: h.tf,
+        idf,
+        score: Number((weighted * idf).toFixed(6)),
+      };
+    })
     .sort((a, b) => b.score - a.score || a.baseName.localeCompare(b.baseName))
     .slice(0, Math.max(1, Math.min(50, topK)));
 }
@@ -59,9 +68,10 @@ export function rankWitnessesTfidf(
   facetsByBase: Map<string, PrecompiledFacets>,
   tfidf: CorpusTfidf,
   topK = 10,
+  language?: string,
 ): Array<{ baseName: string; score: number; tf: number; idf: number }> {
   const normalized = normalizeWord(term);
-  const idf = tfidf.idf[normalized] ?? 0;
+  const idf = lookupCorpusIdf(normalized, tfidf, language);
   const ranked: Array<{ baseName: string; score: number; tf: number; idf: number }> = [];
 
   facetsByBase.forEach((facets, baseName) => {
@@ -71,7 +81,7 @@ export function rankWitnessesTfidf(
       baseName,
       tf,
       idf,
-      score: Number(scoreWitnessTerm(normalized, facets.termFreq, tfidf).toFixed(6)),
+      score: Number(scoreWitnessTerm(normalized, facets.termFreq, tfidf, facets.wordCount, language).toFixed(6)),
     });
   });
 
@@ -148,7 +158,12 @@ export async function executeMcpSidecarTool(
         return { ok: false, tool: name, elapsedMs: now() - t0, error: "term required" };
       }
       const topK = typeof args.topK === "number" ? args.topK : 10;
-      const [tfidf, postings] = await Promise.all([loadCorpusTfidf(), loadCorpusTermPostings()]);
+      const language = typeof args.language === "string" ? args.language.trim() : undefined;
+      const [tfidf, postings, stats] = await Promise.all([
+        loadCorpusTfidf(),
+        loadCorpusTermPostings(),
+        loadCorpusStats(),
+      ]);
       if (!tfidf) {
         return {
           ok: false,
@@ -159,7 +174,10 @@ export async function executeMcpSidecarTool(
       }
 
       if (postings) {
-        const ranked = rankFromPostings(term, postings, tfidf, topK);
+        const wordCounts = stats
+          ? new Map(stats.witnesses.map((witness) => [witness.baseName, witness.wordCount]))
+          : undefined;
+        const ranked = rankFromPostings(term, postings, tfidf, topK, wordCounts, language);
         return {
           ok: true,
           tool: name,
@@ -179,7 +197,7 @@ export async function executeMcpSidecarTool(
         elapsedMs: now() - t0,
         data: {
           term: normalized,
-          idf: tfidf.idf[normalized] ?? null,
+          idf: lookupCorpusIdf(normalized, tfidf, language),
           df: tfidf.df[normalized] ?? 0,
           totalDocuments: tfidf.totalDocuments,
           ranked: [],

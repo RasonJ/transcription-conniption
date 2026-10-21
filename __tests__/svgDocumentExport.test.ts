@@ -19,14 +19,17 @@ describe("svgDocumentExport", () => {
     const svg = exportToSvgDocument(parsed, { sourceText: DEFAULT_DEMO });
 
     expect(svg).toContain("folio ");
-    // Nunes imprint (Lisboa | Galharde | 1537) is a woodcut plate, not a rounded page frame.
-    expect(svg).toMatch(/<rect[^>]+fill="#1c1916"/);
+    // Lisboa | Galharde | 1537 is a woodcut initial: field, inner panel, and ornament paths.
+    expect(svg).toContain(">S</text>");
+    expect((svg.match(/<path /g) ?? []).length).toBeGreaterThan(4);
+    expect(svg).toMatch(/<rect[^>]*rx="[1-9][^"]*"[^>]*fill="#[0-9a-fA-F]+"/);
   });
 
   it("derives woodcut from parsed imprint when source text is omitted", () => {
     const parsed = compileManuscriptTree(DEFAULT_DEMO);
     const svg = exportToSvgDocument(parsed);
-    expect(svg).toMatch(/<rect[^>]+fill="#1c1916"/);
+    expect(svg).toContain(">S</text>");
+    expect((svg.match(/<path /g) ?? []).length).toBeGreaterThan(4);
   });
 
   it("derives penwork from an MSS shelfmark", () => {
@@ -37,8 +40,9 @@ describe("svgDocumentExport", () => {
 1 {IN4.} Abcd
 }`;
     const svg = exportToSvgDocument(compileManuscriptTree(source));
-    expect(svg).not.toMatch(/fill="#1c1916"/);
     expect(svg).toContain(">A</text>");
+    expect((svg.match(/<path /g) ?? []).length).toBeGreaterThan(4);
+    expect(svg).not.toContain(">S</text>");
   });
 
   it("renders expansions as superscript-sized glyphs when expanded", () => {

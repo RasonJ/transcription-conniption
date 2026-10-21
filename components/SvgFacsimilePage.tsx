@@ -28,6 +28,7 @@ import {
   GUTTER_WIDTH,
   HEADING_GAP,
   innerCanvasWidth,
+  LINE_NUM_W,
   MARGIN,
   PAGE_PAD_BOT,
   PAGE_PAD_TOP,
@@ -244,6 +245,7 @@ function layoutBlock(
           letter: initialLetter,
           depth: initialDepth,
           tradition: initialTradition,
+          illuminated: true,
           sequence: blockIndex,
           seed: `${folioId}|${initialLetter}|${blockIndex}`,
         }),
@@ -282,17 +284,21 @@ function layoutBlock(
   }
 
   if (block.lineNumber && settings.showLineNumbers !== false) {
-    // Left margin gutter — outside the prose measure so body text stays copyable.
+    // Right edge of a LINE_NUM_W gutter, left of the column and of any drop cap.
     elems.push(
       <SvgText
         key={`${bkey}-ln`}
-        x={colX - 10}
+        x={colX - Math.min(8, LINE_NUM_W)}
         y={baselineY}
         fontFamily="monospace"
         fontSize={11}
         fontWeight="700"
         fill={FAINT_FILL}
         textAnchor="end"
+        accessible={false}
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+        pointerEvents="none"
       >
         {block.lineNumber}
       </SvgText>,

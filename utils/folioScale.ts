@@ -7,7 +7,28 @@ export const FIT_SCALE_MIN = 0.25;
 export const FIT_SCALE_MAX = 1;
 export const ZOOM_MIN = 0.5;
 export const ZOOM_MAX = 3;
-export const LEGIBILITY_FLOOR_PX = 11;
+export const LEGIBILITY_FLOOR_PX = 12;
+/** Desktop web panes at least this wide keep a fit scale of 0.85, or 100% if that still would not fit. */
+export const DESKTOP_VIEWPORT_MIN_PX = 600;
+export const DESKTOP_MIN_FIT_SCALE = 0.85;
+
+/**
+ * Fit width used for display. On the web, a fit that would draw body text below
+ * the legibility floor (or below 0.85 on a desktop pane) is replaced by 100%
+ * so the page scrolls instead of shrinking.
+ */
+export function resolveDisplayFitScale(
+  rawFit: number,
+  baseFontPx: number,
+  options: { web: boolean; containerWidth: number },
+): number {
+  if (!options.web || !Number.isFinite(rawFit) || rawFit <= 0) return rawFit;
+  const tooSmall = baseFontPx * rawFit < LEGIBILITY_FLOOR_PX;
+  const desktopCramped =
+    options.containerWidth >= DESKTOP_VIEWPORT_MIN_PX && rawFit < DESKTOP_MIN_FIT_SCALE;
+  if (tooSmall || desktopCramped) return 1;
+  return rawFit;
+}
 
 /** Fit width: scale the page into the container, never enlarging past 1. */
 export function computeFitScale(

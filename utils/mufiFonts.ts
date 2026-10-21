@@ -4,6 +4,9 @@
  * @see https://mufi.info/q.php?p=mufi/fonts/fonts/53
  */
 import { Platform } from "react-native";
+import { mufiSerifStack } from "@/utils/mufiFontStack";
+
+export { mufiSerifStack } from "@/utils/mufiFontStack";
 
 export type MufiFontRecord = {
   mufiFontId: number | null;
@@ -68,21 +71,6 @@ export const MUFI_FONT_REGISTRY = {
   preferredFontId: 53 as const,
   fonts: [ANDRON_SCRIPTOR, JUNICODE_FALLBACK],
 };
-
-const FALLBACK_SERIF = "Georgia, 'Times New Roman', serif";
-
-/** CSS / SVG font-family stack with Andron Scriptor first when available. */
-export function mufiSerifStack(extraFallbacks: string[] = []): string {
-  const andron = ANDRON_SCRIPTOR.cssFamily;
-  const parts = [
-    `'${andron}'`,
-    "'Andron Scriptor'",
-    "Junicode",
-    ...extraFallbacks.map((f) => (f.includes(",") ? f : f.includes(" ") ? `'${f}'` : f)),
-    FALLBACK_SERIF,
-  ];
-  return parts.join(", ");
-}
 
 /** Stacks used by ornate drop-cap style matrices (Andron-led). */
 export const MUFI_ORNATE_FONT_STACKS = {

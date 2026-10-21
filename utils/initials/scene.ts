@@ -1,7 +1,16 @@
 /**
  * Platform-agnostic decorated-initial scene graph (SPEC-ORNATE-INITIALS §9).
  * Web, native, SVG export, and HTML export all render this structure.
+ * Decorative grades are the multi-layer letterform from dropInitialLetterform
+ * (field, inner panel, penwork or foliage, gold frame, shadowed letter).
  */
+
+import {
+  buildOrnateInitialGeometry,
+  type LetterformMatrix,
+  type OrnateInitialGeometry,
+} from "@/components/svgFacsimile/dropInitialLetterform";
+import { mufiSerifStack } from "@/utils/mufiFontStack";
 
 export type InitialGrade =
   | "minor"
@@ -41,7 +50,7 @@ export type SceneItem =
       fill?: string;
       stroke?: string;
       strokeWidth?: number;
-      /** Kept for the type; production scenes leave this unset (square frames). */
+      opacity?: number;
       rx?: number;
     }
   | { kind: "path"; d: string; fill?: string; stroke?: string; strokeWidth?: number; opacity?: number }
@@ -52,8 +61,11 @@ export type SceneItem =
       y: number;
       fontFamily: string;
       fontSize: number;
-      fontWeight?: string;
+      fontWeight?: string | number;
       fill: string;
+      stroke?: string;
+      strokeWidth?: number;
+      opacity?: number;
       anchor?: "start" | "middle" | "end";
     }
   | { kind: "image"; href: string; x: number; y: number; w: number; h: number };
@@ -82,6 +94,116 @@ export const PIGMENT_PALETTE = {
 } as const;
 
 const PERIOD_FACE = "Junicode, Georgia, serif";
+const MODERN_FACE = /Impact|Arial Black|Courier New/i;
+
+function periodFace(fontFamily: string): string {
+  return MODERN_FACE.test(fontFamily) ? mufiSerifStack([]) : fontFamily;
+}
+
+/** Tradition picks the ornament family; the seed still picks pigment and flourish. */
+function matrixForTradition(tradition: InitialTradition, sequence: number): LetterformMatrix {
+  switch (tradition) {
+    case "ms.penwork":
+      return sequence % 2 === 0 ? "lombardic" : "diaper_ground";
+    case "ms.illuminated":
+      return sequence % 2 === 0 ? "diaper_ground" : "lombardic";
+    case "ms.romanesque":
+      return "romanesque";
+    case "ms.humanist":
+      return "renaissance_foliated";
+    case "print.incunable":
+      return "lombardic";
+    case "print.woodcut":
+      return sequence % 2 === 0 ? "gothic_textura" : "renaissance_foliated";
+  }
+}
+
+function geometryToItems(geom: OrnateInitialGeometry): SceneItem[] {
+  const items: SceneItem[] = [
+    {
+      kind: "rect",
+      x: geom.field.x,
+      y: geom.field.y,
+      w: geom.field.w,
+      h: geom.field.h,
+      rx: geom.field.rx,
+      fill: geom.field.fill,
+    },
+    {
+      kind: "rect",
+      x: geom.inner.x,
+      y: geom.inner.y,
+      w: geom.inner.w,
+      h: geom.inner.h,
+      rx: geom.inner.rx,
+      fill: geom.inner.fill,
+    },
+  ];
+  for (const path of geom.paths) {
+    items.push({
+      kind: "path",
+      d: path.d,
+      fill: path.fill,
+      stroke: path.stroke,
+      strokeWidth: path.strokeWidth,
+      opacity: path.opacity,
+    });
+  }
+  items.push(
+    {
+      kind: "rect",
+      x: geom.outerStroke.x,
+      y: geom.outerStroke.y,
+      w: geom.outerStroke.w,
+      h: geom.outerStroke.h,
+      rx: geom.outerStroke.rx,
+      fill: "none",
+      stroke: geom.outerStroke.stroke,
+      strokeWidth: geom.outerStroke.strokeWidth,
+    },
+    {
+      kind: "rect",
+      x: geom.innerStroke.x,
+      y: geom.innerStroke.y,
+      w: geom.innerStroke.w,
+      h: geom.innerStroke.h,
+      rx: geom.innerStroke.rx,
+      fill: "none",
+      stroke: geom.innerStroke.stroke,
+      strokeWidth: geom.innerStroke.strokeWidth,
+      opacity: geom.innerStroke.opacity,
+    },
+  );
+  if (geom.letterUnderlay) {
+    const under = geom.letterUnderlay;
+    items.push({
+      kind: "text",
+      text: under.text,
+      x: under.x,
+      y: under.y,
+      fontFamily: periodFace(under.fontFamily),
+      fontSize: under.fontSize,
+      fontWeight: under.fontWeight,
+      fill: under.fill,
+      opacity: under.opacity,
+      anchor: "middle",
+    });
+  }
+  items.push({
+    kind: "text",
+    text: geom.letter.text,
+    x: geom.letter.x,
+    y: geom.letter.y,
+    fontFamily: periodFace(geom.letter.fontFamily),
+    fontSize: geom.letter.fontSize,
+    fontWeight: geom.letter.fontWeight,
+    fill: geom.letter.fill,
+    stroke: geom.letter.stroke,
+    strokeWidth: geom.letter.strokeWidth,
+    anchor: "middle",
+  });
+  return items;
+}
 
 function letterAspect(letter: string): number {
   const ch = letter[0] ?? "A";
@@ -157,90 +279,18 @@ export function buildInitialScene(spec: InitialSpec, lineAdvance: number): Initi
     };
   }
 
-  const print = spec.tradition.startsWith("print");
-  if (print) {
-    items.push(
-      {
-        kind: "rect",
-        x: 0,
-        y: 0,
-        w: boxWidth,
-        h: boxHeight,
-        fill: PIGMENT_PALETTE.printerInk,
-        stroke: PIGMENT_PALETTE.printerInk,
-        strokeWidth: 1,
-      },
-      {
-        kind: "text",
-        text: letter,
-        x: boxWidth / 2,
-        y: boxHeight * 0.78,
-        fontFamily: PERIOD_FACE,
-        fontSize: boxHeight * 0.72,
-        fontWeight: "bold",
-        fill: PIGMENT_PALETTE.leadwhite,
-        anchor: "middle",
-      },
-    );
-  } else {
-    const primary =
-      spec.sequence % 2 === 0 ? PIGMENT_PALETTE.vermilion : PIGMENT_PALETTE.azurite;
-    const secondary =
-      spec.sequence % 2 === 0 ? PIGMENT_PALETTE.azurite : PIGMENT_PALETTE.vermilion;
-    const illuminated =
-      spec.grade === "illuminated" ||
-      spec.grade === "historiated" ||
-      spec.tradition === "ms.illuminated";
-
-    if (illuminated) {
-      items.push({
-        kind: "rect",
-        x: 0,
-        y: 0,
-        w: boxWidth,
-        h: boxHeight,
-        fill: PIGMENT_PALETTE.goldLeafHi,
-        stroke: PIGMENT_PALETTE.ironGall,
-        strokeWidth: 1,
-      });
-    } else if (spec.grade !== "minor") {
-      items.push({
-        kind: "rect",
-        x: 0,
-        y: 0,
-        w: boxWidth,
-        h: boxHeight,
-        fill: PIGMENT_PALETTE.parchmentBg,
-        stroke: secondary,
-        strokeWidth: 1,
-      });
-    }
-
-    items.push({
-      kind: "text",
-      text: letter,
-      x: boxWidth / 2,
-      y: boxHeight * 0.78,
-      fontFamily: PERIOD_FACE,
-      fontSize: boxHeight * 0.72,
-      fontWeight: "bold",
-      fill: primary,
-      anchor: "middle",
-    });
-
-    // Marginal penwork tail sits left of the box so it does not cross body text.
-    if (spec.tradition === "ms.penwork" && (spec.grade === "major" || spec.grade === "principal")) {
-      const tail = Math.round(boxHeight * (spec.grade === "principal" ? 0.55 : 0.28));
-      items.push({
-        kind: "path",
-        d: `M 1 ${boxHeight * 0.2} C -10 ${boxHeight * 0.45}, -12 ${boxHeight * 0.7}, -8 ${boxHeight + tail}`,
-        fill: "none",
-        stroke: secondary,
-        strokeWidth: 1,
-        opacity: 1,
-      });
-    }
-  }
+  const geom = buildOrnateInitialGeometry(
+    letter,
+    0,
+    0,
+    boxWidth,
+    boxHeight,
+    boxHeight * 0.72,
+    `${spec.tradition}|${spec.seed}`,
+    `init_${spec.seed}`,
+    { matrix: matrixForTradition(spec.tradition, spec.sequence) },
+  );
+  items.push(...geometryToItems(geom));
 
   return {
     boxWidth,
@@ -271,8 +321,10 @@ export function serializeInitialScene(scene: InitialScene, originX = 0, originY 
       const fill = item.fill ? ` fill="${item.fill}"` : ' fill="none"';
       const stroke = item.stroke ? ` stroke="${item.stroke}"` : "";
       const sw = item.strokeWidth != null ? ` stroke-width="${item.strokeWidth}"` : "";
+      const rx = item.rx != null ? ` rx="${item.rx}"` : "";
+      const op = item.opacity != null ? ` opacity="${item.opacity}"` : "";
       parts.push(
-        `<rect x="${x(item.x)}" y="${y(item.y)}" width="${item.w}" height="${item.h}"${fill}${stroke}${sw}/>`,
+        `<rect x="${x(item.x)}" y="${y(item.y)}" width="${item.w}" height="${item.h}"${rx}${fill}${stroke}${sw}${op}/>`,
       );
     } else if (item.kind === "path") {
       const fill = item.fill ? ` fill="${item.fill}"` : ' fill="none"';
@@ -282,9 +334,12 @@ export function serializeInitialScene(scene: InitialScene, originX = 0, originY 
       parts.push(`<path d="${escapeXml(item.d)}"${fill}${stroke}${sw}${op}/>`);
     } else if (item.kind === "text") {
       const anchor = item.anchor ?? "start";
-      const weight = item.fontWeight ? ` font-weight="${item.fontWeight}"` : "";
+      const weight = item.fontWeight != null ? ` font-weight="${item.fontWeight}"` : "";
+      const stroke = item.stroke && item.stroke !== "none" ? ` stroke="${item.stroke}"` : "";
+      const sw = item.strokeWidth ? ` stroke-width="${item.strokeWidth}"` : "";
+      const op = item.opacity != null ? ` opacity="${item.opacity}"` : "";
       parts.push(
-        `<text x="${x(item.x)}" y="${y(item.y)}" text-anchor="${anchor}" font-family="${escapeXml(item.fontFamily)}" font-size="${item.fontSize.toFixed(1)}" fill="${item.fill}"${weight}>${escapeXml(item.text)}</text>`,
+        `<text x="${x(item.x)}" y="${y(item.y)}" text-anchor="${anchor}" font-family="${escapeXml(item.fontFamily)}" font-size="${item.fontSize.toFixed(1)}" fill="${item.fill}"${weight}${stroke}${sw}${op}>${escapeXml(item.text)}</text>`,
       );
     } else if (item.kind === "image") {
       parts.push(

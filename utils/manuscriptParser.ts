@@ -142,7 +142,29 @@ export type ReadingStringOptions = {
   suppressOtioseMarks?: boolean;
   /** Use diplomatic diacritic forms (o~) instead of normalized Unicode (õ). */
   diplomaticDiacritics?: boolean;
+  /** Margin index already stored on the block; stripped if it also appears as a token. */
+  lineNumber?: string;
 };
+
+function isWhitespaceToken(token: Token): boolean {
+  return token.type === "text" && /^\s+$/.test(token.value);
+}
+
+/** Drop a leading margin index ("1", "1.", "cxxx[ij].") so it never enters the prose. */
+function withoutLeadingLineNumber(tokens: Token[], lineNumber?: string): Token[] {
+  let i = 0;
+  while (i < tokens.length && isWhitespaceToken(tokens[i])) i++;
+  const token = tokens[i];
+  if (!token || token.type !== "text") return tokens;
+  const recorded = lineNumber?.trim();
+  const bare = token.value.trim().replace(/[.):]+$/u, "");
+  const matchesRecorded = Boolean(recorded) && (token.value.trim() === recorded || bare === recorded?.replace(/[.):]+$/u, ""));
+  const marginIndex = isPlausibleMarginLineNumber(bare) && !RE_YEAR_LIKE.test(bare);
+  if (!matchesRecorded && !marginIndex) return tokens;
+  let next = i + 1;
+  if (next < tokens.length && isWhitespaceToken(tokens[next])) next++;
+  return tokens.slice(next);
+}
 
 function flushBlock(
   folio: FolioSide,
@@ -185,8 +207,9 @@ const SKIP_WORD_TYPES = new Set<TokenType>([
 
 export function tokensToReadingString(tokens: Token[], options: ReadingStringOptions = {}): string {
   const chunks: string[] = [];
-  for (let i = 0; i < tokens.length; i++) {
-    const token = tokens[i];
+  const source = withoutLeadingLineNumber(tokens, options.lineNumber);
+  for (let i = 0; i < source.length; i++) {
+    const token = source[i];
     if (token.type === "otiose_mark") {
       if (!options.suppressOtioseMarks) chunks.push("~");
       continue;
@@ -241,7 +264,10 @@ export function reconstructPageFlow(
     const block = blocks[i];
     if (!FLOW_BLOCK_TYPES.has(block.type)) continue;
 
-    let blockString = tokensToReadingString(block.tokens, options);
+    let blockString = tokensToReadingString(block.tokens, {
+      ...options,
+      lineNumber: block.lineNumber,
+    });
     if (pendingHyphenText) {
       blockString = pendingHyphenText + blockString;
       pendingHyphenText = "";
@@ -267,7 +293,10 @@ export function reconstructManuscriptFlow(
   let carryOverFraction = "";
 
   for (let fi = 0; fi < folios.length; fi++) {
-    let pageText = folios[fi].reconstructedFlow ?? reconstructPageFlow(folios[fi].blocks, options);
+    const pageTextSource = options
+      ? reconstructPageFlow(folios[fi].blocks, options)
+      : (folios[fi].reconstructedFlow ?? reconstructPageFlow(folios[fi].blocks));
+    let pageText = pageTextSource;
 
     if (carryOverFraction) {
       pageText = carryOverFraction + pageText;

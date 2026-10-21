@@ -45,10 +45,28 @@ describe("corpusPrecompute", () => {
     expect(tfidf.totalDocuments).toBe(3);
     // Rare "sphera" (df=1) outranks ubiquitous "fazer" (df=3).
     expect(tfidf.idf.sphera).toBeGreaterThan(tfidf.idf.fazer);
+    expect(tfidf.byLanguage).toBeUndefined();
 
     const scoreA = scoreWitnessTerm("sphera", { sphera: 4, fazer: 1 }, tfidf);
     const scoreB = scoreWitnessTerm("sphera", { fazer: 12 }, tfidf);
     expect(scoreA).toBeGreaterThan(scoreB);
+    const normalized = scoreWitnessTerm("sphera", { sphera: 4 }, tfidf, 100);
+    expect(normalized).toBeCloseTo((4 / 100) * tfidf.idf.sphera, 5);
+  });
+
+  it("splits IDF and keeps unlisted terms on the smooth fallback", () => {
+    const tfidf = buildCorpusTfidf([
+      { baseName: "TEXT.A", terms: ["sphera"], languageCodes: ["PRT"] },
+      { baseName: "TEXT.B", terms: ["fazer"], languageCodes: ["LAT"] },
+      { baseName: "TEXT.C", terms: ["livro"], languageCodes: ["PRT"] },
+      { baseName: "TEXT.D", terms: ["livro"], languageCodes: ["PRT"] },
+    ]);
+    expect(tfidf.totalDocuments).toBe(4);
+    expect(tfidf.byLanguage?.PRT.totalDocuments).toBe(3);
+    expect(tfidf.byLanguage?.LAT.totalDocuments).toBe(1);
+    expect(tfidf.byLanguage?.PRT.idf.sphera).toBeGreaterThan(tfidf.byLanguage?.PRT.idf.livro ?? 0);
+    const unseen = scoreWitnessTerm("zzzz", { zzzz: 2 }, tfidf, 50);
+    expect(unseen).toBeGreaterThan(0);
   });
 
   it("builds a codicological library graph from catalog + facets", () => {

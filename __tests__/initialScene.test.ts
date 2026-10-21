@@ -1,4 +1,5 @@
-import { buildInitialScene, PIGMENT_PALETTE } from "../utils/initials/scene";
+import { DEFAULT_DEMO } from "../constants/demoTranscriptions";
+import { buildInitialScene } from "../utils/initials/scene";
 import { gradeFromDepth, resolveInitialSpec } from "../utils/initials/spec";
 import { deriveTraditionFromRmk } from "../utils/initials/tradition";
 
@@ -22,6 +23,7 @@ describe("initial tradition from RMK", () => {
   it("selects woodcut for a 16th-century Iberian imprint", () => {
     expect(deriveTraditionFromRmk(CROMBERGER)).toBe("print.woodcut");
     expect(deriveTraditionFromRmk(NUNES)).toBe("print.woodcut");
+    expect(deriveTraditionFromRmk(DEFAULT_DEMO)).toBe("print.woodcut");
   });
 
   it("selects incunable at or before 1500", () => {
@@ -45,9 +47,11 @@ describe("buildInitialScene", () => {
     const a = buildInitialScene(spec, 18);
     const b = buildInitialScene(spec, 18);
     expect(a).toEqual(b);
-    expect(a.items.some((item) => item.kind === "rect" && item.rx)).toBe(false);
+    expect(a.items.filter((item) => item.kind === "path").length).toBeGreaterThan(4);
+    expect(a.items.some((item) => item.kind === "rect" && (item.rx ?? 0) > 0)).toBe(true);
+    expect(a.items.filter((item) => item.kind === "rect" && item.fill && item.fill !== "none").length).toBeGreaterThanOrEqual(2);
+    expect(a.items.some((item) => item.kind === "text" && item.text === "S")).toBe(true);
     expect(JSON.stringify(a)).not.toContain("Impact");
-    expect(JSON.stringify(a)).toContain(PIGMENT_PALETTE.printerInk);
   });
 
   it("gives I a narrower box than M", () => {
@@ -70,8 +74,8 @@ describe("buildInitialScene", () => {
     expect(gradeFromDepth(3, { unexecuted: true })).toBe("unexecuted");
   });
 
-  it("alternates vermilion and azurite by sequence", () => {
-    const even = buildInitialScene(
+  it("gives penwork scrolls and a different ground from an illuminated initial", () => {
+    const pen = buildInitialScene(
       resolveInitialSpec({
         letter: "A",
         depth: 4,
@@ -81,18 +85,21 @@ describe("buildInitialScene", () => {
       }),
       18,
     );
-    const odd = buildInitialScene(
+    const illuminated = buildInitialScene(
       resolveInitialSpec({
         letter: "A",
         depth: 4,
-        tradition: "ms.penwork",
-        sequence: 1,
+        tradition: "ms.illuminated",
+        sequence: 0,
         seed: "a",
       }),
       18,
     );
-    expect(JSON.stringify(even)).toContain(PIGMENT_PALETTE.vermilion);
-    expect(JSON.stringify(odd)).toContain(PIGMENT_PALETTE.azurite);
-    expect(even.marginOverflowLeft).toBeGreaterThan(0);
+    expect(pen.marginOverflowLeft).toBeGreaterThan(0);
+    const field = pen.items.find((item) => item.kind === "rect" && item.fill && item.fill !== "none");
+    expect(field && field.kind === "rect" ? field.fill : "").not.toMatch(/f0e6cc|f5f0e8|e8dcc0/i);
+    expect(pen.items.some((item) => item.kind === "path")).toBe(true);
+    expect(illuminated.items.some((item) => item.kind === "path")).toBe(true);
+    expect(JSON.stringify(pen)).not.toEqual(JSON.stringify(illuminated));
   });
 });

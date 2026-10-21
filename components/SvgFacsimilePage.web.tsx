@@ -3,10 +3,10 @@ import { FigureImageContext } from "@/components/FigurePlaceholder";
 import {
   CANVAS_W,
   CAP_GUTTER,
-  dropCapBoxWidth,
   columnWidth,
   GUTTER_WIDTH,
   innerCanvasWidth,
+  LINE_NUM_W,
   MARGIN,
   PAGE_PAD_BOT,
   PAGE_PAD_TOP,
@@ -29,6 +29,9 @@ import {
 } from "@/components/svgFacsimile/tokenRendering";
 import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import { HtmlOrnateDropCap } from "@/components/svgFacsimile/HtmlOrnateDropCap";
+import { buildInitialScene, type InitialTradition } from "@/utils/initials/scene";
+import { resolveInitialSpec } from "@/utils/initials/spec";
+import { InitialTraditionContext } from "@/utils/initials/TraditionContext";
 import type { FolioSide, ManuscriptBlock, Token } from "@/constants/manuscript";
 import { blockIsMetadataLeak } from "@/utils/metadataBlocks";
 import { formatRunningHeaderText } from "@/utils/metadataText";
@@ -41,9 +44,6 @@ import {
 import React, { createElement, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Svg, { ForeignObject, Line as SvgLine, Rect } from "react-native-svg";
-
-/** Fixed left gutter for scholarly line numbers (outside copyable body text). */
-const LINE_NUM_W = 40;
 
 /** HSMS {GLL.}/{GLR.} (and AD*) → which margin rail to use. */
 function glossMarginSide(block: ManuscriptBlock): "left" | "right" | null {
@@ -85,9 +85,13 @@ function LineNumberGutter(props: {
   return (
     <span style={htmlStyles.leftLineGutter} aria-hidden>
       {props.glossLabel ? (
-        <span style={htmlStyles.marginaliaLabel}>{props.glossLabel}</span>
+        <span style={htmlStyles.marginaliaLabel} aria-hidden>
+          {props.glossLabel}
+        </span>
       ) : null}
-      <span style={htmlStyles.gutterLineNum}>{props.lineNumber ?? ""}</span>
+      <span style={htmlStyles.gutterLineNum} aria-hidden>
+        {props.lineNumber ?? ""}
+      </span>
     </span>
   );
 }
@@ -164,6 +168,28 @@ function renderJustifiedCharacters(
   );
 }
 
+function ornateCapBox(
+  letter: string,
+  depth: number,
+  tradition: InitialTradition,
+  folioId: string,
+  blockIndex: number,
+  bkey: string,
+): { boxWidth: number; boxHeight: number } {
+  const scene = buildInitialScene(
+    resolveInitialSpec({
+      letter,
+      depth,
+      tradition,
+      illuminated: true,
+      sequence: blockIndex,
+      seed: `${folioId}|${letter}|${bkey}`,
+    }),
+    LH,
+  );
+  return { boxWidth: scene.boxWidth, boxHeight: scene.boxHeight };
+}
+
 function HtmlLineRow({
   line,
   settings,
@@ -173,6 +199,7 @@ function HtmlLineRow({
   isLastLine,
   folioId,
   triggerPick,
+  tradition,
 }: {
   line?: SpatialLine;
   settings: DisplaySettings;
@@ -182,6 +209,7 @@ function HtmlLineRow({
   isLastLine: boolean;
   folioId: string;
   triggerPick?: (id: string) => void;
+  tradition: InitialTradition;
 }): { node: React.ReactNode | null; nextCap: HtmlCapState } {
   if (!line) return { node: null, nextCap: capState };
 
@@ -244,8 +272,8 @@ function HtmlLineRow({
     if (depth <= 1) {
       lineSegs.unshift(seg({ text: dropTok.value, fill: RUBRIC_FILL, bold: true, fs: FS * 1.4 }));
     } else {
-      const boxH = depth * LH;
-      const boxW = dropCapBoxWidth(boxH, Math.max(1, dropTok.value.length));
+      const capBox = ornateCapBox(dropTok.value || "?", depth, tradition, folioId, line.bi, bkey);
+      const boxW = capBox.boxWidth;
       dropCapNode = (
         <HtmlOrnateDropCap
           token={dropTok}
@@ -254,6 +282,7 @@ function HtmlLineRow({
           bkey={bkey}
           imageUri={uploadedImages[dropcapId]}
           onPress={triggerPick ? () => void triggerPick(dropcapId) : undefined}
+          tradition={tradition}
         />
       );
       lineIndent = 0;
@@ -381,14 +410,21 @@ function renderDropCapSection(
   folioId: string,
   blockIdx: number,
   triggerPick?: (id: string) => void,
+  tradition: InitialTradition = "print.woodcut",
 ): React.ReactNode {
   const depth = dropTok.initialDepth ?? 3;
-  const boxH = depth * LH;
-  const boxW = dropCapBoxWidth(boxH, Math.max(1, dropTok.value.length));
-  const bodyW = trackW - boxW - CAP_GUTTER;
   const firstLine = lines[0];
+  const capBox = ornateCapBox(
+    dropTok.value || "?",
+    depth,
+    tradition,
+    folioId,
+    firstLine.bi,
+    `b${firstLine.bi}`,
+  );
+  const boxW = capBox.boxWidth;
+  const bodyW = trackW - boxW - CAP_GUTTER;
   const dropcapId = `dc_b${firstLine.bi}`;
-
   const showNums = settings.showLineNumbers !== false;
 
   const gutterColumn = (
@@ -476,6 +512,7 @@ function renderDropCapSection(
             bkey={`b${firstLine.bi}`}
             imageUri={uploadedImages[dropcapId]}
             onPress={triggerPick ? () => void triggerPick(dropcapId) : undefined}
+            tradition={tradition}
           />
         </Div>
         <Div style={{ display: "flex", flexDirection: "column" }}>{bodyLineNodes}</Div>
@@ -498,13 +535,21 @@ function renderDropCapSection2Col(
   folioId: string,
   blockIdx: number,
   triggerPick?: (id: string) => void,
+  tradition: InitialTradition = "print.woodcut",
 ): React.ReactNode {
   const depth = dropTok.initialDepth ?? 3;
-  const boxH = depth * LH;
-  const boxW = dropCapBoxWidth(boxH, Math.max(1, dropTok.value.length));
+  const firstLine = capLines[0];
+  const capBox = ornateCapBox(
+    dropTok.value || "?",
+    depth,
+    tradition,
+    folioId,
+    firstLine.bi,
+    `b${firstLine.bi}`,
+  );
+  const boxW = capBox.boxWidth;
   const effectiveColW = colW - LINE_NUM_W;
   const bodyW = effectiveColW - boxW - CAP_GUTTER;
-  const firstLine = capLines[0];
   const dropcapId = `dc_b${firstLine.bi}`;
 
   const leftBodyNodes = capLines.map((line, di) => {
@@ -562,6 +607,7 @@ function renderDropCapSection2Col(
       isLastLine: di === rightLines.length - 1,
       folioId,
       triggerPick,
+      tradition,
     });
     rightCapState = result.nextCap;
     return result.node;
@@ -594,6 +640,7 @@ function renderDropCapSection2Col(
                 bkey={`b${firstLine.bi}`}
                 imageUri={uploadedImages[dropcapId]}
                 onPress={triggerPick ? () => void triggerPick(dropcapId) : undefined}
+                tradition={tradition}
               />
             </Div>
             <Div style={{ display: "flex", flexDirection: "column" }}>{leftBodyNodes}</Div>
@@ -616,6 +663,7 @@ function renderColumnBlock(
   colW: number,
   folioId: string,
   triggerPick?: (id: string) => void,
+  tradition: InitialTradition = "print.woodcut",
 ): React.ReactNode {
   const rows = zipColumnBlockRows(cb);
   let capState = defaultCapState();
@@ -641,7 +689,7 @@ function renderColumnBlock(
         rowNodes.push(
           renderDropCapSection(
             capLines, dropTok, settings, uploadedImages,
-            innerW - LINE_NUM_W, folioId, blockIdx, triggerPick,
+            innerW - LINE_NUM_W, folioId, blockIdx, triggerPick, tradition,
           ),
         );
         rowIdx += capLines.length - 1;
@@ -657,6 +705,7 @@ function renderColumnBlock(
         isLastLine,
         folioId,
         triggerPick,
+        tradition,
       });
       capState = result.nextCap;
       if (result.node) rowNodes.push(result.node);
@@ -676,7 +725,7 @@ function renderColumnBlock(
         rowNodes.push(
           renderDropCapSection2Col(
             capLines, rightLines, dropTok2, settings, uploadedImages,
-            colW, folioId, blockIdx, triggerPick,
+            colW, folioId, blockIdx, triggerPick, tradition,
           ),
         );
         rowIdx += capLines.length - 1;
@@ -692,6 +741,7 @@ function renderColumnBlock(
         isLastLine,
         folioId,
         triggerPick,
+        tradition,
       });
       leftCap = leftResult.nextCap;
 
@@ -704,6 +754,7 @@ function renderColumnBlock(
         isLastLine,
         folioId,
         triggerPick,
+        tradition,
       });
       rightCap = rightResult.nextCap;
 
@@ -737,6 +788,7 @@ export function SvgFacsimilePage({
   showLineNumbers = true,
 }: SvgFacsimilePageProps) {
   const t = useT();
+  const initialTradition = useContext(InitialTraditionContext);
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
   const contentRef = useRef<HTMLDivElement>(null);
   const [contentH, setContentH] = useState(480);
@@ -814,7 +866,17 @@ export function SvgFacsimilePage({
 
     spatialFolio.columnBlocks.forEach((cb, blockIdx) => {
       rows.push(
-        renderColumnBlock(cb, blockIdx, settings, folioImages, innerW, colW, folio.id, triggerImagePick),
+        renderColumnBlock(
+          cb,
+          blockIdx,
+          settings,
+          folioImages,
+          innerW,
+          colW,
+          folio.id,
+          triggerImagePick,
+          initialTradition,
+        ),
       );
     });
 
@@ -835,7 +897,7 @@ export function SvgFacsimilePage({
 
     return rows;
     // t: rebuild rows (diagram label, catchword/signature) when the UI locale changes.
-  }, [folio, spatialFolio, settings, folioImages, innerW, colW, triggerImagePick, t]);
+  }, [folio, spatialFolio, settings, folioImages, innerW, colW, triggerImagePick, t, initialTradition]);
 
   useEffect(() => {
     const el = contentRef.current;
@@ -970,6 +1032,7 @@ const htmlStyles: Record<string, React.CSSProperties> = {
     fontWeight: 700,
     textAlign: "right",
     userSelect: "none",
+    WebkitUserSelect: "none",
   },
   marginaliaLabel: {
     writingMode: "vertical-rl",

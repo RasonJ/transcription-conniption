@@ -28,7 +28,8 @@ export function renderOrnateInitialSvg(
   const spec = resolveInitialSpec({
     letter,
     depth,
-    tradition: options?.tradition ?? "ms.penwork",
+    tradition: options?.tradition ?? "print.woodcut",
+    illuminated: true,
     sequence: blockIndex,
     seed: `${folioId}|${letter}|${blockIndex}`,
   });

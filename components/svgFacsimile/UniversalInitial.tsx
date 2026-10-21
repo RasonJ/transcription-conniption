@@ -39,6 +39,8 @@ export function sceneItemsToNodes(
                 fill={item.fill ?? "none"}
                 stroke={item.stroke}
                 strokeWidth={item.strokeWidth}
+                opacity={item.opacity}
+                rx={item.rx}
               />
             );
           case "path":
@@ -62,6 +64,9 @@ export function sceneItemsToNodes(
                 fontSize={item.fontSize}
                 fontWeight={item.fontWeight}
                 fill={item.fill}
+                stroke={item.stroke}
+                strokeWidth={item.strokeWidth}
+                opacity={item.opacity}
                 textAnchor={item.anchor ?? "start"}
               >
                 {item.text}

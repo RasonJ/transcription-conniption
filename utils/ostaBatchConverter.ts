@@ -8,7 +8,7 @@ import { inferManuscriptTitle } from "@/utils/manuscriptTitle";
 import type { OstaFileIssue, OstaIssueSource } from "@/utils/ostaIssueReport";
 import {
   buildPrecompiledFacets,
-  runCorpusPrecomputeWithFs,
+  refreshPublishedCorpus,
 } from "@/utils/corpusPrecompute";
 import {
   buildLibraryCatalog,
@@ -764,7 +764,7 @@ export function runOstaBatchConvertWithFs(
 
   // Global TF-IDF, corpus stats, and codicological graph (uses sidecars; fills missing facets).
   try {
-    runCorpusPrecomputeWithFs(
+    refreshPublishedCorpus(
       {
         outputDir: options.outputDir,
         catalog,
