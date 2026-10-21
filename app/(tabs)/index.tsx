@@ -34,6 +34,8 @@ import type { FacsimilePlacement, FolioSide, ManuscriptBlock, Token, WordOccurre
 import { formatRunningHeaderText } from "@/utils/metadataText";
 import { reconstructManuscriptFlow } from "@/utils/manuscriptParser";
 import { detectWitnessLanguage } from "@/utils/witnessLanguage";
+import { loadCorpusTfidf, loadUploadCorpusTfidf } from "@/utils/librarySidecars";
+import { indexLangForWitness } from "@/utils/manuscriptTfidf";
 import type { ManuscriptExportFormat } from "@/utils/exportFormats";
 import { deriveTraditionFromRmk } from "@/utils/initials/tradition";
 import { InitialTraditionContext } from "@/utils/initials/TraditionContext";
@@ -114,6 +116,10 @@ const ReaderStateContext = createContext<{
   useMufiGraphemes: boolean;
   usePuaFont: boolean;
   showLineNumbers: boolean;
+  highlightSalientTerms: boolean;
+  salientQuery: string;
+  salientIdf: Record<string, number> | null;
+  salientLang: string;
   initialTradition: InitialTradition;
 }>({
   showExpanded: true,
@@ -123,6 +129,10 @@ const ReaderStateContext = createContext<{
   useMufiGraphemes: false,
   usePuaFont: true,
   showLineNumbers: true,
+  highlightSalientTerms: false,
+  salientQuery: "",
+  salientIdf: null,
+  salientLang: "es",
   initialTradition: "ms.penwork",
 });
 
@@ -221,6 +231,9 @@ export default function TranscriptionConniptionScreen() {
   const [useMufiGraphemes, setUseMufiGraphemes] = useState(false);
   const [usePuaFont, setUsePuaFont] = useState(true);
   const [showLineNumbers, setShowLineNumbers] = useState(true);
+  const [highlightSalientTerms, setHighlightSalientTerms] = useState(false);
+  const [salientQuery, setSalientQuery] = useState("");
+  const [salientIdf, setSalientIdf] = useState<Record<string, number> | null>(null);
   const [suppressOtioseMarks, setSuppressOtioseMarks] = useState(false);
   const [showSynoptic, setShowSynoptic] = useState(false);
   const [showModernSynoptic, setShowModernSynoptic] = useState(false);
@@ -252,6 +265,18 @@ export default function TranscriptionConniptionScreen() {
     () => detectWitnessLanguage(parsedManuscript).language,
     [parsedManuscript],
   );
+  const salientLang = indexLangForWitness(witnessLanguageHint);
+  useEffect(() => {
+    if (!highlightSalientTerms) return;
+    let cancelled = false;
+    void Promise.all([loadUploadCorpusTfidf(), loadCorpusTfidf()]).then(([upload, catalog]) => {
+      if (cancelled) return;
+      setSalientIdf(upload ?? catalog?.idf ?? null);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [highlightSalientTerms]);
   const initialTradition = useMemo(() => deriveTraditionFromRmk(debouncedText), [debouncedText]);
 
   const {
@@ -793,6 +818,10 @@ export default function TranscriptionConniptionScreen() {
             useMufiGraphemes,
             usePuaFont,
             showLineNumbers,
+            highlightSalientTerms,
+            salientQuery,
+            salientIdf,
+            salientLang,
             initialTradition,
           }}
         >
@@ -1304,6 +1333,7 @@ export default function TranscriptionConniptionScreen() {
               parsed={parsedManuscript}
               sourceText={debouncedText}
               onSelectOccurrence={handleConcordanceJump}
+              onFilterQueryChange={setSalientQuery}
             />
             <ManuscriptChatbotDrawer
               visible={assistantOpen}
@@ -1338,6 +1368,7 @@ export default function TranscriptionConniptionScreen() {
               usePuaFont,
               suppressOtioseMarks,
               showLineNumbers,
+              highlightSalientTerms,
               showReadingFlow,
               facsimileCanvasEnabled,
               placementMode,
@@ -1353,6 +1384,7 @@ export default function TranscriptionConniptionScreen() {
               setUsePuaFont,
               setSuppressOtioseMarks,
               setShowLineNumbers,
+              setHighlightSalientTerms,
               setShowReadingFlow,
               setFacsimileCanvasEnabled,
               setPlacementMode,
@@ -1432,7 +1464,16 @@ function FolioPage({
 }) {
   const t = useT();
   const folioRef = useRef<View>(null);
-  const { showExpanded, showDeletions, suppressOtioseMarks, initialTradition } = useContext(ReaderStateContext);
+  const {
+    showExpanded,
+    showDeletions,
+    suppressOtioseMarks,
+    initialTradition,
+    highlightSalientTerms,
+    salientQuery,
+    salientIdf,
+    salientLang,
+  } = useContext(ReaderStateContext);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1513,6 +1554,10 @@ function FolioPage({
         useMufiGraphemes={useMufiGraphemes}
         usePuaFont={usePuaFont}
         showLineNumbers={showLineNumbers !== false}
+        highlightSalientTerms={highlightSalientTerms}
+        salientQuery={salientQuery}
+        salientIdf={salientIdf}
+        salientLang={salientLang}
         initialTradition={initialTradition}
       />
     </FolioViewport>

@@ -126,6 +126,16 @@ for (const entry of catalog.entries) {
   }
 }
 
+const uploadIndexDir = path.join(projectRoot, "assets", "library", "tfidf-index");
+const uploadIndexPublic = path.join(publicDir, "library", "tfidf-index");
+for (const name of ["corpus-stats.json", "corpus-tfidf.json.zip"] as const) {
+  const src = path.join(uploadIndexDir, name);
+  if (!fs.existsSync(src)) continue;
+  atomicCopyFile(src, path.join(uploadIndexPublic, name));
+}
+const staleUploadTfidf = path.join(uploadIndexPublic, "corpus-tfidf.json");
+if (fs.existsSync(staleUploadTfidf)) fs.rmSync(staleUploadTfidf);
+
 console.log(
   `Synced library catalog (${catalog.entryCount} entries, ${synced} payloads, ${facetsSynced} facets, ${corpusSynced} corpus indexes) to public/ and assets/library/`,
 );

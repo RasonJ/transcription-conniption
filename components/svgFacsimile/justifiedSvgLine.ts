@@ -1,4 +1,4 @@
-import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
+import { JUSTIFY_MAX_GAP, wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import type { Seg } from "@/components/svgFacsimile/tokenRendering";
 import { coalesceSegs, FS } from "@/components/svgFacsimile/tokenRendering";
 
@@ -32,9 +32,9 @@ export function renderJustifiedSvgLine(
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return "";
 
-  const gapExtra = wordGapExtra(visible, targetWidth, isLastLine, skipJustify);
+  const gapExtra = wordGapExtra(visible, targetWidth, isLastLine, skipJustify, JUSTIFY_MAX_GAP);
   // Skip dx allocations for sub-pixel micro-jitter (long folios / export SVG).
-  const applyJustify = gapExtra > 0.05;
+  const applyJustify = gapExtra > 0.01;
   const parts: string[] = [];
   let baselineShift = 0;
 

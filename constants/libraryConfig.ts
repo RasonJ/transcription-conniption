@@ -63,3 +63,18 @@ export function getLibraryGraphUrl(): string {
 export function getCorpusPostingsUrl(): string {
   return publicUrl(CORPUS_POSTINGS_FILENAME);
 }
+
+/** External lang:term IDF index under assets/library/tfidf-index, published to public/. */
+export const UPLOAD_TFIDF_INDEX_DIR = "library/tfidf-index";
+
+/** Wikipedia-scale IDF table, stored compressed. The HSMS catalog sidecar stays plain JSON. */
+export const UPLOAD_CORPUS_TFIDF_ZIP = "corpus-tfidf.json.zip";
+export const UPLOAD_CORPUS_TFIDF_ENTRY = "corpus-tfidf.json";
+
+export function getUploadCorpusTfidfUrl(): string {
+  return publicUrl(`${UPLOAD_TFIDF_INDEX_DIR}/${UPLOAD_CORPUS_TFIDF_ZIP}`);
+}
+
+export function getUploadCorpusStatsUrl(): string {
+  return publicUrl(`${UPLOAD_TFIDF_INDEX_DIR}/corpus-stats.json`);
+}

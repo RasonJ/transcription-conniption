@@ -8,6 +8,8 @@ import { DEFAULT_DEMO } from "@/constants/demoTranscriptions";
 import { BLANK_SCRIPTORIUM_TEMPLATE } from "@/constants/workspaceTemplates";
 import type { BatchProcessResult } from "@/utils/batchProcessor";
 import { compileManuscriptTree } from "@/utils/compiler";
+import { scoreManuscriptUpload, type ScoredTerm } from "@/utils/manuscriptTfidf";
+import { detectWitnessLanguage } from "@/utils/witnessLanguage";
 import { t as tNow } from "@/i18n/core";
 import { copyFigureIntoWorkspace, copyFolioBackgroundIntoWorkspace } from "@/utils/figureAssetStorage";
 import { exportHsmsBundleToFile, importHsmsBundleFromUri } from "@/utils/hsmsBundle";
@@ -146,10 +148,25 @@ export function ScriptoriumProvider({
     [],
   );
 
-  const parsedManuscript = useMemo(
-    () => (debouncedText ? compileManuscriptTree(debouncedText) : EMPTY_PARSED),
-    [debouncedText],
-  );
+  const [termTfidf, setTermTfidf] = useState<ScoredTerm[] | null>(null);
+  const scoredFor = useRef<string | null>(null);
+
+  const seedUploadScores = useCallback((rawText: string) => {
+    const lang = detectWitnessLanguage(compileManuscriptTree(rawText)).language;
+    const key = `${lang}:${rawText.length}:${rawText.slice(0, 48)}`;
+    scoredFor.current = key;
+    setTermTfidf(null);
+    void scoreManuscriptUpload(rawText, lang).then((scores) => {
+      if (scoredFor.current !== key) return;
+      setTermTfidf(scores);
+    });
+  }, []);
+
+  const parsedManuscript = useMemo(() => {
+    const parsed = debouncedText ? compileManuscriptTree(debouncedText) : EMPTY_PARSED;
+    if (!termTfidf?.length) return parsed;
+    return { ...parsed, stats: { ...parsed.stats, termTfidf } };
+  }, [debouncedText, termTfidf]);
 
   const syncRegistryEntry = useCallback(
     (fileName: string, rawText: string, images: Record<string, string>) => {
@@ -215,8 +232,9 @@ export function ScriptoriumProvider({
       setWorkspace(updated);
       setWorkspaceTitle(updated.manuscriptTitle);
       void persistWorkspace(updated);
+      if (options?.machineTranscription) seedUploadScores(source);
     },
-    [workspace, uploadedImages, syncRegistryEntry],
+    [workspace, uploadedImages, syncRegistryEntry, seedUploadScores],
   );
 
   const updateActiveText = useCallback(
@@ -432,6 +450,7 @@ export function ScriptoriumProvider({
         manuscriptTitle: inferManuscriptTitle(fileText, fileName),
       });
       hydrateFromWorkspace(ws);
+      seedUploadScores(fileText);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("Document import failed", error);
@@ -440,7 +459,7 @@ export function ScriptoriumProvider({
       setIsCompiling(false);
       setCompilationStatus("");
     }
-  }, [hydrateFromWorkspace, yieldToUi]);
+  }, [hydrateFromWorkspace, yieldToUi, seedUploadScores]);
 
   const loadSample = useCallback(
     async (sample: string, sampleName: string) => {
@@ -492,6 +511,7 @@ export function ScriptoriumProvider({
       setCompilationStatus("Loading witness registry…");
       await yieldToUi();
       hydrateFromWorkspace(ws);
+      seedUploadScores(ws.transcriptionText);
       await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } catch (error) {
       console.warn("HSMS bundle import failed", error);
@@ -500,7 +520,7 @@ export function ScriptoriumProvider({
       setIsCompiling(false);
       setCompilationStatus("");
     }
-  }, [hydrateFromWorkspace, yieldToUi]);
+  }, [hydrateFromWorkspace, yieldToUi, seedUploadScores]);
 
   const addFreePlacement = useCallback(
     async (placement: FacsimilePlacement) => {

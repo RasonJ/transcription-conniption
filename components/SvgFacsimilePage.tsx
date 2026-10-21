@@ -279,6 +279,7 @@ function layoutBlock(
       lineSegs = stripDropCapPrefixFromSegs(lineSegs, initialLetter);
     }
   } else if (nextCapState.rowsLeft > 0) {
+    // Lines still beside the initial use the same box + gutter inset as line 1.
     textX = nextCapState.textX;
     nextCapState = { ...nextCapState, rowsLeft: nextCapState.rowsLeft - 1 };
   }
@@ -307,7 +308,8 @@ function layoutBlock(
 
   const isRubric = block.type === "rubric";
   const isHeading = block.type === "heading";
-  const isGloss = block.type === "gloss";
+  const isGloss = block.type === "gloss" || block.type === "addendum";
+  // Prose measure stops at the right rule: full column, or column minus the cap box and gutter.
   const trackWidth = colW - (textX - colX);
 
   if (isRubric || isHeading || isGloss) {
@@ -394,10 +396,9 @@ function layoutBlock(
     });
   }
 
+  // One row. A multi-line initial paints downward; the next rows keep the cap inset
+  // and sit beside the box instead of starting below it.
   let h = LH;
-  if (dropTok && (dropTok.initialDepth ?? 3) > 1) {
-    h = Math.max(h, (dropTok.initialDepth ?? 3) * LH);
-  }
   if (figToks.length > 0) {
     h += 60 + LH;
   }
@@ -416,6 +417,10 @@ export interface SvgFacsimilePageProps {
   usePuaFont?: boolean;
   /** Left-gutter scholarly line numbers (default true). */
   showLineNumbers?: boolean;
+  highlightSalientTerms?: boolean;
+  salientQuery?: string;
+  salientIdf?: Record<string, number> | null;
+  salientLang?: string;
   /** Witness-level decorated-initial tradition (from {RMK:}). */
   initialTradition?: InitialTradition;
 }
@@ -429,6 +434,10 @@ export function SvgFacsimilePage({
   useMufiGraphemes = false,
   usePuaFont = true,
   showLineNumbers = true,
+  highlightSalientTerms = false,
+  salientQuery = "",
+  salientIdf = null,
+  salientLang = "es",
   initialTradition = "ms.penwork",
 }: SvgFacsimilePageProps) {
   const { uploadedImages, triggerImagePick } = useContext(FigureImageContext);
@@ -474,6 +483,10 @@ export function SvgFacsimilePage({
       useMufiGraphemes,
       usePuaFont,
       showLineNumbers,
+      highlightSalientTerms,
+      salientQuery,
+      salientIdf,
+      salientLang,
     }),
     [
       showExpanded,
@@ -483,6 +496,10 @@ export function SvgFacsimilePage({
       useMufiGraphemes,
       usePuaFont,
       showLineNumbers,
+      highlightSalientTerms,
+      salientQuery,
+      salientIdf,
+      salientLang,
     ],
   );
 
@@ -521,10 +538,12 @@ export function SvgFacsimilePage({
   }
 
   // ── Render groups ─────────────────────────────────────────────────────────
-  const gapAfter = (block: ManuscriptBlock) =>
-    block.tokens.some((t) => t.type === "drop_initial")
-      ? BLOCK_GAP_AFTER_INITIAL
-      : BLOCK_GAP;
+  const gapAfter = (block: ManuscriptBlock) => {
+    const drop = block.tokens.find((t) => t.type === "drop_initial");
+    // Inline initials (depth 1) close the block. Taller initials continue on the next rows.
+    if (drop && (drop.initialDepth ?? 3) <= 1) return BLOCK_GAP_AFTER_INITIAL;
+    return BLOCK_GAP;
+  };
 
   let proseCap = defaultCapState(MARGIN);
 

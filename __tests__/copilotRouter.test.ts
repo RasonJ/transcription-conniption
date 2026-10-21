@@ -1,4 +1,14 @@
-import { buildRouterIndex, normalizeQuery, rankRecipes, routeQuery } from "../utils/copilot/router";
+import {
+  EMBED_DIRECT_THRESHOLD,
+  EMBED_SUGGEST_THRESHOLD,
+  buildRouterIndex,
+  embeddingBand,
+  normalizeQuery,
+  rankRecipes,
+  resolveEmbeddingIntent,
+  routeQuery,
+} from "../utils/copilot/router";
+import { askCopilot } from "../utils/copilot/ask";
 import { parseCopilotSample } from "./copilotFixture";
 
 describe("copilot router", () => {
@@ -52,5 +62,31 @@ describe("copilot router", () => {
     expect(hit.kind === "recipe" && hit.top?.recipeId).toBe("x.only");
     const miss = routeQuery("alpha delta", parsed, router);
     expect(miss.kind === "recipe" && miss.top).toBeNull();
+  });
+
+  it("splits hash-embedding cosine into execute, suggest, and fallback", () => {
+    expect(embeddingBand(EMBED_DIRECT_THRESHOLD)).toBe("execute");
+    expect(embeddingBand(0.75)).toBe("suggest");
+    expect(embeddingBand(EMBED_SUGGEST_THRESHOLD - 0.001)).toBe("fallback");
+  });
+
+  it("dispatches an exact catalog trigger from the embedding index", () => {
+    const hit = resolveEmbeddingIntent("show scribal deletions versus editorial deletions", "en");
+    expect(hit.type).toBe("execute");
+    if (hit.type === "execute") {
+      expect(hit.recipeId).toBe("corr.deletions_scribal_vs_editorial");
+      expect(hit.confidence).toBeGreaterThanOrEqual(EMBED_DIRECT_THRESHOLD);
+    }
+  });
+
+  it("runs the embedding match when the sparse router stays below its threshold", () => {
+    const router = buildRouterIndex(
+      [{ id: "x.only", triggers: { en: ["alpha beta gamma"] } }],
+      ["en"],
+      0.99,
+    );
+    const answer = askCopilot("show scribal deletions versus editorial deletions", parsed, { router });
+    expect(answer.recipeId).toBe("corr.deletions_scribal_vs_editorial");
+    expect(answer.confidence).toBeGreaterThanOrEqual(EMBED_DIRECT_THRESHOLD);
   });
 });

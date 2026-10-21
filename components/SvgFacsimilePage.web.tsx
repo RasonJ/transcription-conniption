@@ -22,9 +22,11 @@ import {
   FS,
   LH,
   FAINT_FILL,
+  HIT_HIGHLIGHT_FILL,
   RUBRIC_FILL,
   PROSE_FILL,
   GLOSS_FILL,
+  SALIENT_CONTEXT_FILL,
   seg,
 } from "@/components/svgFacsimile/tokenRendering";
 import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
@@ -106,6 +108,10 @@ export interface SvgFacsimilePageProps {
   usePuaFont?: boolean;
   /** Left-gutter scholarly line numbers (default true). */
   showLineNumbers?: boolean;
+  highlightSalientTerms?: boolean;
+  salientQuery?: string;
+  salientIdf?: Record<string, number> | null;
+  salientLang?: string;
 }
 
 interface HtmlCapState {
@@ -128,12 +134,42 @@ function charSpanStyle(s: Seg, useMufiFont?: boolean): React.CSSProperties {
     fontSize: `${s.fs}px`,
     lineHeight: `${LH}px`,
     textDecoration: s.strike ? "line-through" : s.underline ? "underline" : undefined,
+    backgroundColor:
+      s.fill === HIT_HIGHLIGHT_FILL
+        ? "rgba(246, 216, 144, 0.28)"
+        : s.fill === SALIENT_CONTEXT_FILL
+          ? "rgba(224, 160, 80, 0.22)"
+          : undefined,
+    borderRadius: s.fill === HIT_HIGHLIGHT_FILL || s.fill === SALIENT_CONTEXT_FILL ? 2 : undefined,
     position: "relative",
     top: s.super ? "-0.35em" : undefined,
     // Inline — never flex/grid items; those stretch glyphs under justify.
     display: "inline",
     whiteSpace: "pre-wrap",
   };
+}
+
+function proseColumnAlign(
+  isRubric: boolean,
+  isHeading: boolean,
+  isLastLine: boolean,
+  skipJustify: boolean,
+  _segs: Seg[],
+  _targetWidth: number,
+): {
+  textAlign: React.CSSProperties["textAlign"];
+  textAlignLast: React.CSSProperties["textAlignLast"];
+  cssJustify: boolean;
+} {
+  if (isRubric || isHeading) {
+    return { textAlign: "center", textAlignLast: "center", cssJustify: false };
+  }
+  // Non-final prose fills the measure, including lines beside a drop cap.
+  // The browser uses the real glyph widths (superscript expansions included).
+  if (!isLastLine && !skipJustify) {
+    return { textAlign: "justify", textAlignLast: "left", cssJustify: true };
+  }
+  return { textAlign: "left", textAlignLast: "left", cssJustify: false };
 }
 
 function renderJustifiedCharacters(
@@ -295,13 +331,23 @@ function HtmlLineRow({
     nextCap = { ...nextCap, rowsLeft: nextCap.rowsLeft - 1 };
   }
 
+  const columnAlign = proseColumnAlign(
+    isRubric,
+    isHeading,
+    isLastLine,
+    skipJustify,
+    lineSegs,
+    currentLineWidth,
+  );
+
   const textStyle: React.CSSProperties = {
     fontFamily: "Georgia, 'Times New Roman', serif",
     fontSize: `${isHeading ? FS * 1.1 : FS}px`,
     lineHeight: `${isHeading ? LH * 1.2 : LH}px`,
     color: PROSE_FILL,
     display: "block",
-    textAlign: isRubric || isHeading ? "center" : glossSide === "right" ? "left" : "left",
+    textAlign: columnAlign.textAlign,
+    textAlignLast: columnAlign.textAlignLast,
     marginLeft: glossSide === "right" ? "auto" : lineIndent > 0 ? `${lineIndent}px` : undefined,
     marginRight: glossSide === "left" ? "auto" : undefined,
     width: `${isHeading ? trackWidth : currentLineWidth}px`,
@@ -330,7 +376,7 @@ function HtmlLineRow({
         lineSegs,
         currentLineWidth,
         isLastLine,
-        skipJustify,
+        skipJustify || columnAlign.cssJustify,
         bkey,
         settings.useMufiGraphemes,
       )}
@@ -411,6 +457,7 @@ function renderDropCapSection(
   blockIdx: number,
   triggerPick?: (id: string) => void,
   tradition: InitialTradition = "print.woodcut",
+  bandEndsColumn = false,
 ): React.ReactNode {
   const depth = dropTok.initialDepth ?? 3;
   const firstLine = lines[0];
@@ -444,14 +491,17 @@ function renderDropCapSection(
     const block = line.block;
     if (blockIsMetadataLeak(block)) return null;
 
-    const isLast = di === lines.length - 1;
+    const isLast = Boolean(bandEndsColumn) && di === lines.length - 1;
     const isRubric = block.type === "rubric";
     const isHeading = block.type === "heading";
-    const isGloss = block.type === "gloss";
+    const isGloss = block.type === "gloss" || block.type === "addendum";
     const figToks = block.tokens.filter((t) => t.type === "figure_anchor");
 
     let lineSegs = blockToSegs(block, settings);
     if (di === 0) lineSegs = stripDropCapPrefixFromSegs(lineSegs, dropTok.value);
+
+    const skipJustify = isRubric || isHeading || isGloss;
+    const columnAlign = proseColumnAlign(isRubric, isHeading, isLast, skipJustify, lineSegs, bodyW);
 
     const lineStyle: React.CSSProperties = {
       fontFamily: "Georgia, 'Times New Roman', serif",
@@ -461,7 +511,8 @@ function renderDropCapSection(
       fontWeight: isRubric || isHeading ? "bold" : "normal",
       fontStyle: isGloss ? "italic" : "normal",
       display: "block",
-      textAlign: isRubric || isHeading ? "center" : "left",
+      textAlign: columnAlign.textAlign,
+      textAlignLast: columnAlign.textAlignLast,
       width: `${bodyW}px`,
       minHeight: `${LH}px`,
       boxSizing: "border-box",
@@ -474,7 +525,7 @@ function renderDropCapSection(
           lineSegs,
           bodyW,
           isLast,
-          isRubric || isHeading || isGloss,
+          skipJustify || columnAlign.cssJustify,
           `b${line.bi}`,
           settings.useMufiGraphemes,
         )}
@@ -536,6 +587,7 @@ function renderDropCapSection2Col(
   blockIdx: number,
   triggerPick?: (id: string) => void,
   tradition: InitialTradition = "print.woodcut",
+  bandEndsColumn = false,
 ): React.ReactNode {
   const depth = dropTok.initialDepth ?? 3;
   const firstLine = capLines[0];
@@ -555,13 +607,15 @@ function renderDropCapSection2Col(
   const leftBodyNodes = capLines.map((line, di) => {
     const block = line.block;
     if (blockIsMetadataLeak(block)) return null;
-    const isLast = di === capLines.length - 1;
+    const isLast = bandEndsColumn && di === capLines.length - 1;
     const isRubric = block.type === "rubric";
     const isHeading = block.type === "heading";
-    const isGloss = block.type === "gloss";
+    const isGloss = block.type === "gloss" || block.type === "addendum";
     const figToks = block.tokens.filter((t) => t.type === "figure_anchor");
     let lineSegs = blockToSegs(block, settings);
     if (di === 0) lineSegs = stripDropCapPrefixFromSegs(lineSegs, dropTok.value);
+    const skipJustify = isRubric || isHeading || isGloss;
+    const columnAlign = proseColumnAlign(isRubric, isHeading, isLast, skipJustify, lineSegs, bodyW);
     return (
       <Div
         key={`b${line.bi}`}
@@ -573,7 +627,8 @@ function renderDropCapSection2Col(
           fontWeight: isRubric || isHeading ? "bold" : "normal",
           fontStyle: isGloss ? "italic" : "normal",
           display: "block",
-          textAlign: isRubric || isHeading ? "center" : "left",
+          textAlign: columnAlign.textAlign,
+          textAlignLast: columnAlign.textAlignLast,
           width: `${bodyW}px`,
           minHeight: `${LH}px`,
           boxSizing: "border-box",
@@ -583,7 +638,7 @@ function renderDropCapSection2Col(
           lineSegs,
           bodyW,
           isLast,
-          isRubric || isHeading || isGloss,
+          skipJustify || columnAlign.cssJustify,
           `b${line.bi}`,
           settings.useMufiGraphemes,
         )}
@@ -604,7 +659,7 @@ function renderDropCapSection2Col(
       capState: rightCapState,
       trackWidth: effectiveColW,
       uploadedImages,
-      isLastLine: di === rightLines.length - 1,
+      isLastLine: bandEndsColumn && di === rightLines.length - 1,
       folioId,
       triggerPick,
       tradition,
@@ -690,6 +745,7 @@ function renderColumnBlock(
           renderDropCapSection(
             capLines, dropTok, settings, uploadedImages,
             innerW - LINE_NUM_W, folioId, blockIdx, triggerPick, tradition,
+            rowIdx + capLines.length >= rows.length,
           ),
         );
         rowIdx += capLines.length - 1;
@@ -726,6 +782,7 @@ function renderColumnBlock(
           renderDropCapSection2Col(
             capLines, rightLines, dropTok2, settings, uploadedImages,
             colW, folioId, blockIdx, triggerPick, tradition,
+            rowIdx + capLines.length >= rows.length,
           ),
         );
         rowIdx += capLines.length - 1;
@@ -786,6 +843,10 @@ export function SvgFacsimilePage({
   useMufiGraphemes = false,
   usePuaFont = true,
   showLineNumbers = true,
+  highlightSalientTerms = false,
+  salientQuery = "",
+  salientIdf = null,
+  salientLang = "es",
 }: SvgFacsimilePageProps) {
   const t = useT();
   const initialTradition = useContext(InitialTraditionContext);
@@ -833,6 +894,10 @@ export function SvgFacsimilePage({
       useMufiGraphemes,
       usePuaFont,
       showLineNumbers,
+      highlightSalientTerms,
+      salientQuery,
+      salientIdf,
+      salientLang,
     }),
     [
       showExpanded,
@@ -842,6 +907,10 @@ export function SvgFacsimilePage({
       useMufiGraphemes,
       usePuaFont,
       showLineNumbers,
+      highlightSalientTerms,
+      salientQuery,
+      salientIdf,
+      salientLang,
     ],
   );
 

@@ -2,7 +2,8 @@ import type { ParsedManuscript, WordOccurrence } from "@/constants/manuscript";
 import { useDialogFocusTrap } from "@/hooks/useDialogFocusTrap";
 import { useLemmaDictionary } from "@/hooks/useLemmaDictionary";
 import { detectWitnessLanguage, foldForSearch } from "@/utils/witnessLanguage";
-import { loadCorpusTfidf } from "@/utils/librarySidecars";
+import { loadCorpusTfidf, loadUploadCorpusStats, loadUploadCorpusTfidf } from "@/utils/librarySidecars";
+import { concordanceIndexTfidf, indexLangForWitness } from "@/utils/manuscriptTfidf";
 import type { CorpusTfidf } from "@/utils/corpusPrecompute";
 import { formatNumber, useLocale, useT } from "@/i18n/runtime";
 import {
@@ -13,7 +14,10 @@ import {
 import { concordanceToCsv } from "@/utils/concordanceExport";
 import {
   compareConcordanceEntries,
+  contextTokenSalient,
   formatRelativeImportance,
+  getMostCommonForm,
+  getSortedOccurrences,
   initialSortDirection,
   nextTranslationLang,
   relativeImportance,
@@ -25,7 +29,17 @@ import {
 } from "@/utils/concordanceView";
 import { ArrowDown, ArrowUp, ArrowUpDown, Globe, Search, X } from "lucide-react-native";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FlatList, Modal, Pressable, Share, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  FlatList,
+  InteractionManager,
+  Modal,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
 type ConcordanceEntry = {
   lemma: string;
@@ -38,24 +52,38 @@ type EnrichedEntry = ConcordanceEntry & {
   mostCommonForm: string;
   translation: string;
   tfidf: number;
+  foldedLemma: string;
+  foldedForm: string;
+  foldedTranslation: string;
 };
 
-/** Most frequent diplomatic surface form stored on the entry, else the keyword sample. */
-function getMostCommonForm(entry: ConcordanceEntry): string {
-  const variants = entry.variants;
-  if (variants) {
-    let top = "";
-    let max = 0;
-    for (const form of Object.keys(variants)) {
-      const count = variants[form] ?? 0;
-      if (count > max || (count === max && (top === "" || form.localeCompare(top) < 0))) {
-        max = count;
-        top = form;
-      }
-    }
-    if (top) return top;
-  }
-  return entry.occurrences[0]?.keyword ?? "";
+function KwicContext({
+  text,
+  query,
+  idfTable,
+  lang,
+  style,
+}: {
+  text: string;
+  query: string;
+  idfTable: Record<string, number> | null;
+  lang: string;
+  style: object;
+}) {
+  const parts = text.split(/(\s+)/);
+  return (
+    <Text style={style} numberOfLines={2}>
+      {parts.map((part, index) => {
+        if (!part || /^\s+$/.test(part)) return part;
+        if (!contextTokenSalient(part, query, idfTable, lang)) return part;
+        return (
+          <Text key={`${part}_${index}`} style={styles.kwicSalient}>
+            {part}
+          </Text>
+        );
+      })}
+    </Text>
+  );
 }
 
 type Props = {
@@ -64,6 +92,7 @@ type Props = {
   parsed: ParsedManuscript;
   sourceText?: string;
   onSelectOccurrence: (occurrence: WordOccurrence) => void;
+  onFilterQueryChange?: (query: string) => void;
 };
 
 const ConcordanceEntryRow = React.memo(
@@ -73,9 +102,12 @@ const ConcordanceEntryRow = React.memo(
     translation,
     tfidf,
     expanded,
-    onToggle,
+    onToggleLemma,
     onSelectOccurrence,
     onClose,
+    idfTable,
+    lang,
+    query,
     t,
   }: {
     t: ReturnType<typeof useT>;
@@ -84,17 +116,25 @@ const ConcordanceEntryRow = React.memo(
     translation: string;
     tfidf: number;
     expanded: boolean;
-    onToggle: () => void;
+    onToggleLemma: (lemma: string) => void;
     onSelectOccurrence: (occurrence: WordOccurrence) => void;
     onClose: () => void;
+    idfTable: Record<string, number> | null;
+    lang: string;
+    query: string;
   }) => {
+    const sortedOccurrences = useMemo(
+      () => (expanded ? getSortedOccurrences(entry.occurrences, idfTable, lang, query) : entry.occurrences),
+      [expanded, entry.occurrences, idfTable, lang, query],
+    );
     return (
       <View style={styles.entry}>
         <Pressable
-          onPress={onToggle}
+          onPress={() => onToggleLemma(entry.lemma)}
           style={styles.entryHeader}
           accessibilityRole="button"
           accessibilityState={{ expanded }}
+          accessibilityHint={t("concordance.expandHint")}
         >
           <Text style={styles.colLemma} numberOfLines={1}>
             {entry.lemma}
@@ -112,7 +152,7 @@ const ConcordanceEntryRow = React.memo(
         </Pressable>
         {expanded ? (
           <View style={styles.occurrencesContainer}>
-            {entry.occurrences.map((occ, idx) => (
+            {sortedOccurrences.map((occ, idx) => (
               <Pressable
                 key={`${occ.folioId}-${occ.lineNumber}-${idx}`}
                 onPress={() => {
@@ -133,13 +173,23 @@ const ConcordanceEntryRow = React.memo(
                     : t("concordance.occurrence.folio", { folio: occ.folioId })}
                 </Text>
                 <View style={styles.kwicColumns}>
-                  <Text style={styles.kwicPre} numberOfLines={2}>
-                    {occ.preContext}
+                  <KwicContext
+                    text={occ.preContext}
+                    query={query}
+                    idfTable={idfTable}
+                    lang={lang}
+                    style={styles.kwicPre}
+                  />
+                  <Text style={query && foldForSearch(occ.keyword) === foldForSearch(query) ? styles.kwicHitHighlight : styles.kwicHit}>
+                    {occ.keyword}
                   </Text>
-                  <Text style={styles.kwicHit}>{occ.keyword}</Text>
-                  <Text style={styles.kwicPost} numberOfLines={2}>
-                    {occ.postContext}
-                  </Text>
+                  <KwicContext
+                    text={occ.postContext}
+                    query={query}
+                    idfTable={idfTable}
+                    lang={lang}
+                    style={styles.kwicPost}
+                  />
                 </View>
               </Pressable>
             ))}
@@ -155,7 +205,11 @@ const ConcordanceEntryRow = React.memo(
     prevProps.tfidf === nextProps.tfidf &&
     prevProps.expanded === nextProps.expanded &&
     prevProps.entry.count === nextProps.entry.count &&
+    prevProps.idfTable === nextProps.idfTable &&
+    prevProps.lang === nextProps.lang &&
+    prevProps.query === nextProps.query &&
     prevProps.t === nextProps.t &&
+    prevProps.onToggleLemma === nextProps.onToggleLemma &&
     prevProps.onSelectOccurrence === nextProps.onSelectOccurrence &&
     prevProps.onClose === nextProps.onClose,
 );
@@ -163,17 +217,32 @@ const ConcordanceEntryRow = React.memo(
 ConcordanceEntryRow.displayName = "ConcordanceEntryRow";
 
 const TITLE_ID = "concordance-drawer-title";
+const EMPTY_CONCORDANCE = {} as NonNullable<
+  ReturnType<typeof getConcordanceBuildForManuscript>["index"]
+>;
 
-export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSelectOccurrence }: Props) {
+export function ConcordanceDrawer({
+  visible,
+  onClose,
+  parsed,
+  sourceText,
+  onSelectOccurrence,
+  onFilterQueryChange,
+}: Props) {
   const t = useT();
   const { locale } = useLocale();
   const [query, setQuery] = useState("");
+  useEffect(() => {
+    onFilterQueryChange?.(query);
+  }, [query, onFilterQueryChange]);
   const [expandedLemma, setExpandedLemma] = useState<string | null>(null);
   const [sortColumn, setSortColumn] = useState<ConcordanceSortColumn>("default");
   const [sortDirection, setSortDirection] = useState<ConcordanceSortDirection>("desc");
   const defaultTransLang = useMemo(() => translationLangForLocale(locale), [locale]);
   const [transLang, setTransLang] = useState<TranslationLang>(defaultTransLang);
   const [corpusIdf, setCorpusIdf] = useState<CorpusTfidf | null>(null);
+  const [uploadIdf, setUploadIdf] = useState<Record<string, number> | null>(null);
+  const [uploadDocs, setUploadDocs] = useState(1);
 
   useEffect(() => {
     setTransLang(defaultTransLang);
@@ -185,15 +254,18 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
     void loadCorpusTfidf().then((next) => {
       if (!cancelled) setCorpusIdf(next);
     });
+    void Promise.all([loadUploadCorpusTfidf(), loadUploadCorpusStats()]).then(([idf, stats]) => {
+      if (cancelled) return;
+      setUploadIdf(idf);
+      setUploadDocs(stats?.totalDocuments ?? 1);
+    });
     return () => {
       cancelled = true;
     };
   }, [visible]);
 
-  const witnessLanguage = useMemo(
-    () => (sourceText ? detectWitnessLanguage(sourceText).language : undefined),
-    [sourceText],
-  );
+  const witnessLanguage = useMemo(() => detectWitnessLanguage(parsed).language, [parsed]);
+  const indexLang = indexLangForWitness(witnessLanguage);
 
   useDialogFocusTrap({
     active: visible,
@@ -209,7 +281,11 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
     generation: number;
     build: ReturnType<typeof getConcordanceBuildForManuscript>;
   } | null>(null);
-  const build = useMemo(() => {
+  const [build, setBuild] = useState<ReturnType<typeof getConcordanceBuildForManuscript> | null>(null);
+
+  // Rebuild after the drawer slide finishes so lemmatization does not block the animation.
+  // A cached index for this witness is reused immediately, including while the drawer is closed.
+  useEffect(() => {
     const hit = concordanceCache.current;
     if (
       hit &&
@@ -217,17 +293,25 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
       hit.sourceText === sourceText &&
       hit.generation === lemmas.generation
     ) {
-      return hit.build;
+      setBuild(hit.build);
+      return;
     }
-    // Closed drawer keeps the last index so the slide-out is not an empty list
-    // and a later reopen does not rebuild unless the witness actually changed.
-    if (!visible && hit) return hit.build;
-    const next = getConcordanceBuildForManuscript(parsed, sourceText);
-    concordanceCache.current = { parsed, sourceText, generation: lemmas.generation, build: next };
-    return next;
+    if (!visible) return;
+    let cancelled = false;
+    const task = InteractionManager.runAfterInteractions(() => {
+      if (cancelled) return;
+      const next = getConcordanceBuildForManuscript(parsed, sourceText);
+      concordanceCache.current = { parsed, sourceText, generation: lemmas.generation, build: next };
+      setBuild(next);
+    });
+    return () => {
+      cancelled = true;
+      task.cancel();
+    };
   }, [visible, parsed, sourceText, lemmas.generation]);
-  const concordance = build.index;
-  const methodLine = build.meta ? formatConcordanceMethodLine(build.meta) : "";
+
+  const concordance = build?.index ?? EMPTY_CONCORDANCE;
+  const methodLine = build?.meta ? formatConcordanceMethodLine(build.meta) : "";
   const entries = useMemo(() => getConcordanceEntriesSorted(concordance), [concordance]);
   const totalDocWords = useMemo(
     () => parsed.stats.totalWords || entries.reduce((acc, entry) => acc + entry.count, 0) || 1,
@@ -237,34 +321,41 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
     () =>
       entries.map((entry) => {
         const mostCommonForm = getMostCommonForm(entry);
+        const translation = resolveLemmaTranslation(entry.lemma, transLang);
         return {
           ...entry,
           mostCommonForm,
-          translation: resolveLemmaTranslation(entry.lemma, transLang),
-          tfidf: relativeImportance(
-            entry.count,
-            totalDocWords,
-            corpusIdf,
-            entry.lemma,
-            mostCommonForm,
-            witnessLanguage,
-          ),
+          translation,
+          foldedLemma: foldForSearch(entry.lemma),
+          foldedForm: foldForSearch(mostCommonForm),
+          foldedTranslation: foldForSearch(translation),
+          tfidf: uploadIdf
+            ? concordanceIndexTfidf(entry.count, entry.lemma, mostCommonForm, uploadIdf, indexLang, uploadDocs)
+            : relativeImportance(
+                entry.count,
+                totalDocWords,
+                corpusIdf,
+                entry.lemma,
+                mostCommonForm,
+                witnessLanguage,
+              ),
         };
       }),
-    [entries, totalDocWords, transLang, corpusIdf, witnessLanguage],
+    [entries, totalDocWords, transLang, corpusIdf, witnessLanguage, uploadIdf, uploadDocs, indexLang],
   );
+  const idfTable = uploadIdf ?? corpusIdf?.idf ?? null;
   const filtered = useMemo(() => {
     // Accent-insensitive: "rubricas" matches "rúbricas" (SPEC-I18N §8).
     const q = foldForSearch(query.trim());
     const list = q
       ? enrichedEntries.filter(
           (entry) =>
-            foldForSearch(entry.lemma).includes(q) ||
-            foldForSearch(entry.mostCommonForm).includes(q) ||
-            foldForSearch(entry.translation).includes(q),
+            entry.foldedLemma.includes(q) ||
+            entry.foldedForm.includes(q) ||
+            entry.foldedTranslation.includes(q),
         )
       : enrichedEntries;
-    return [...list].sort((a, b) => compareConcordanceEntries(a, b, sortColumn, sortDirection, locale));
+    return [...list].sort((a, b) => compareConcordanceEntries(a, b, sortColumn, sortDirection, locale, query));
   }, [enrichedEntries, query, sortColumn, sortDirection, locale]);
 
   const toggleSort = useCallback(
@@ -295,13 +386,16 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
         translation={item.translation}
         tfidf={item.tfidf}
         expanded={expandedLemma === item.lemma}
-        onToggle={() => toggleLemma(item.lemma)}
+        onToggleLemma={toggleLemma}
         onSelectOccurrence={onSelectOccurrence}
         onClose={onClose}
+        idfTable={idfTable}
+        lang={indexLang}
+        query={query}
         t={t}
       />
     ),
-    [expandedLemma, onSelectOccurrence, onClose, t, toggleLemma],
+    [expandedLemma, onSelectOccurrence, onClose, t, toggleLemma, idfTable, indexLang, query],
   );
 
   const keyExtractor = useCallback(
@@ -459,6 +553,8 @@ export function ConcordanceDrawer({ visible, onClose, parsed, sourceText, onSele
             data={filtered}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
+            extraData={{ query, expandedLemma }}
+            accessibilityLabel={t("concordance.listLabel")}
             style={styles.list}
             keyboardShouldPersistTaps="handled"
             maxToRenderPerBatch={15}
@@ -618,5 +714,7 @@ const styles = StyleSheet.create({
   kwicColumns: { flexDirection: "row", gap: 8, alignItems: "flex-start" },
   kwicPre: { flex: 1, color: "rgba(223,203,165,0.7)", fontSize: 13, textAlign: "right" },
   kwicHit: { color: "#f6d890", fontWeight: "800", fontSize: 13 },
+  kwicHitHighlight: { color: "#fff4d2", fontWeight: "800", fontSize: 13 },
+  kwicSalient: { color: "#fff4d2", fontWeight: "800" },
   kwicPost: { flex: 1, color: "rgba(223,203,165,0.7)", fontSize: 13 },
 });

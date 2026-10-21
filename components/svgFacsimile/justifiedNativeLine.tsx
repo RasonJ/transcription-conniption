@@ -1,4 +1,4 @@
-import { wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
+import { JUSTIFY_MAX_GAP, wordGapExtra } from "@/components/svgFacsimile/glyphMetrics";
 import type { Seg } from "@/components/svgFacsimile/tokenRendering";
 import { coalesceSegs, FS } from "@/components/svgFacsimile/tokenRendering";
 import React from "react";
@@ -18,7 +18,8 @@ export type JustifiedNativeLineProps = {
 
 /**
  * Renders one line using one {@link TSpan} per segment with a compact `dx`
- * array. Extra advance applies only to word spaces.
+ * array. Extra advance applies only to word spaces. Salient words arrive with
+ * a new fill only, so this gap math still lands on the right rule.
  */
 export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): React.ReactNode | null {
   const {
@@ -36,9 +37,9 @@ export function renderJustifiedNativeLine(props: JustifiedNativeLineProps): Reac
   const visible = coalesceSegs(segs.filter((s) => s.text));
   if (visible.length === 0) return null;
 
-  const gapExtra = wordGapExtra(visible, trackWidth, isLastLine, skipJustify);
+  const gapExtra = wordGapExtra(visible, trackWidth, isLastLine, skipJustify, JUSTIFY_MAX_GAP);
   // Skip dx allocations for sub-pixel micro-jitter (long folios / low-end devices).
-  const applyJustify = gapExtra > 0.05;
+  const applyJustify = gapExtra > 0.01;
 
   const tspans: React.ReactNode[] = [];
   let baselineShift = 0;

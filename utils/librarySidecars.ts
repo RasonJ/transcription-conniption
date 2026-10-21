@@ -4,6 +4,9 @@ import {
   getCorpusTfidfUrl,
   getLibraryFacetsUrl,
   getLibraryGraphUrl,
+  getUploadCorpusStatsUrl,
+  getUploadCorpusTfidfUrl,
+  UPLOAD_CORPUS_TFIDF_ENTRY,
 } from "@/constants/libraryConfig";
 import {
   CORPUS_POSTINGS_FORMAT,
@@ -17,12 +20,22 @@ import {
   type LibraryGraph,
   type PrecompiledFacets,
 } from "@/utils/corpusPrecompute";
+import { readZipJson } from "@/utils/zipEntry";
 
 const facetsCache = new Map<string, PrecompiledFacets>();
 let tfidfCache: CorpusTfidf | null = null;
 let statsCache: CorpusStats | null = null;
 let graphCache: LibraryGraph | null = null;
 let postingsCache: CorpusTermPostings | null = null;
+let uploadTfidfCache: Record<string, number> | null = null;
+let uploadStatsCache: UploadCorpusStats | null = null;
+
+/** Flat `lang:term` → IDF table from assets/library/tfidf-index (not the HSMS catalog sidecar). */
+export type UploadCorpusStats = {
+  totalDocuments: number;
+  totalWords: number;
+  languageCodes?: string[];
+};
 
 async function fetchJson<T>(url: string): Promise<T> {
   const response = await fetch(url, { cache: "force-cache" });
@@ -30,6 +43,15 @@ async function fetchJson<T>(url: string): Promise<T> {
     throw new Error(`HTTP ${response.status} for ${url}`);
   }
   return (await response.json()) as T;
+}
+
+/** Fetch a zip and parse one JSON entry. The archive is not written out expanded. */
+async function fetchZipJson<T>(url: string, entryName: string): Promise<T> {
+  const response = await fetch(url, { cache: "force-cache" });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status} for ${url}`);
+  }
+  return readZipJson<T>(await response.arrayBuffer(), entryName);
 }
 
 export function isPrecompiledFacets(value: unknown): value is PrecompiledFacets {
@@ -146,12 +168,62 @@ export async function loadCorpusTermPostings(): Promise<CorpusTermPostings | nul
 }
 
 /** @internal test helper */
+function isUploadStats(value: unknown): value is UploadCorpusStats {
+  if (!value || typeof value !== "object") return false;
+  return typeof (value as UploadCorpusStats).totalDocuments === "number";
+}
+
+function isUploadIdfTable(value: unknown): value is Record<string, number> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return false;
+  const record = value as Record<string, unknown>;
+  for (const key in record) {
+    return typeof record[key] === "number";
+  }
+  return false;
+}
+
+/** Precomputed `lang:term` IDF values. Does not replace the HSMS catalog corpus-tfidf.json. */
+export async function loadUploadCorpusTfidf(): Promise<Record<string, number> | null> {
+  if (uploadTfidfCache) return uploadTfidfCache;
+  try {
+    const remote = await fetchZipJson<unknown>(getUploadCorpusTfidfUrl(), UPLOAD_CORPUS_TFIDF_ENTRY);
+    if (isUploadIdfTable(remote)) {
+      uploadTfidfCache = remote;
+      return remote;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+export async function loadUploadCorpusStats(): Promise<UploadCorpusStats | null> {
+  if (uploadStatsCache) return uploadStatsCache;
+  try {
+    const remote = await fetchJson<unknown>(getUploadCorpusStatsUrl());
+    if (isUploadStats(remote)) {
+      uploadStatsCache = remote;
+      return remote;
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
+
+export function seedUploadCorpusTfidf(idf: Record<string, number>, stats?: UploadCorpusStats): void {
+  uploadTfidfCache = idf;
+  if (stats) uploadStatsCache = stats;
+}
+
 export function clearLibrarySidecarCaches(): void {
   facetsCache.clear();
   tfidfCache = null;
   statsCache = null;
   graphCache = null;
   postingsCache = null;
+  uploadTfidfCache = null;
+  uploadStatsCache = null;
 }
 
 /** Inject a facets sidecar (tests / offline MCP). */

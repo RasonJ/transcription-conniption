@@ -1,6 +1,6 @@
 # Spec: Authentic Decorated Initials
 
-**Status:** Approved (scene graph + RMK tradition) · **Owner:** Lead Engineer · **Last updated:** 2026-10-20
+**Status:** Approved (scene graph + RMK tradition shipped; period profile §3.2.0 not yet implemented) · **Owner:** Lead Engineer · **Last updated:** 2026-10-20
 **Related:** [USABILITY-REMEDIATION.md](USABILITY-REMEDIATION.md) · [SPEC-FOLIO-VIEWPORT.md](SPEC-FOLIO-VIEWPORT.md) · [SPEC-VALIDATION.md](SPEC-VALIDATION.md) §4.2 (mnemonic registry) · [SPEC-ACCESSIBILITY.md](SPEC-ACCESSIBILITY.md) A11Y-8 · [SPEC-LIGHTWEIGHT.md](SPEC-LIGHTWEIGHT.md) · [../HSMS-TYPOGRAPHY.md](../HSMS-TYPOGRAPHY.md) §6 · [../HSMS-LAYOUT.md](../HSMS-LAYOUT.md) §2.3
 **Authority:** HSMS manual §3.232 (Initials), §3.233 (Illumination), §3.234 (Miniature)
 
@@ -66,9 +66,54 @@ InitialSpec = f(
 
 The depth thresholds are defaults, overridable per workspace (§7), because some books use deep penwork Lombards throughout.
 
-### 3.2 Tradition (from the witness)
+### 3.2 Tradition (from the witness's period profile)
 
-One tradition per witness. It is chosen in this order: workspace override → library catalog `medium` + `year` ([SPEC-LIBRARY.md](SPEC-LIBRARY.md) LIB-1) → `{RMK:}` identification heuristic (§3.2.1) → default.
+HSMS transcriptions open with identification remarks (manual §0.1): author, title, `City | Printer | Date` (printed texts only), and `City | Library | Shelfmark`. These are enough to place most witnesses in time and, for prints, in space. The app builds a **period profile** from them, and the profile chooses the tradition (this section) and the page's wider aesthetics (§3.5).
+
+#### 3.2.0 Period profile
+
+```ts
+interface PeriodProfile {
+  medium: "manuscript" | "print";
+  date: { earliest: number; latest: number; label: string; confidence: "exact" | "range" | "century" | "unknown" };
+  productionPlace?: { name: string; region: Region };  // from the imprint line only
+  holdingPlace?: string;                               // 4th line; never used for style
+  author?: string;
+  source: "override" | "catalog" | "rmk" | "default";
+}
+type Region = "portugal" | "castile" | "crown_of_aragon" | "navarre" | "italy" | "france" | "low_countries" | "other";
+```
+
+| Field | Derived from | Rules |
+|-------|--------------|-------|
+| `medium` | Presence of the imprint line (`City \| Printer \| Date`, §0.1: "imprint information for printed texts only"); else `{SG.}` signatures (§4.4–4.5); else catalog `medium` | Imprint line present → `print` |
+| `date` | Imprint date; else catalog date; else any `{RMK:}` date | Parse `1537`, `1490-1500`, `ca. 1480` / `c. 1480`, `1480?`, `s. XV` / `siglo XV` / `XV` / `15th c.`, `14xx`. A century becomes a range (1401–1500) with `confidence: "century"`. Extend the existing `extractYearFromImprintDate()` / `extractYearFromRmkLines()` (`utils/libraryCatalog.ts`) instead of adding a second parser. |
+| `productionPlace` | City field of the imprint line only | Map through a small gazetteer (`constants/placeRegions.ts`): Lisboa/Porto/Coimbra → portugal; Sevilla, Toledo, Burgos, Salamanca, Valladolid, Alcalá → castile; Zaragoza, Barcelona, Valencia → crown_of_aragon; Pamplona → navarre; Roma, Venezia → italy; Lyon, Paris → france; Amberes/Antwerpen → low_countries. Unknown → `other`. |
+| `holdingPlace` | 4th line (`City \| Library \| Shelfmark`) | Shown on the witness card. **Never** used for style: it is where the book is now, not where it was made. |
+
+Manuscripts rarely carry a place of production in the header, so manuscript region stays unknown unless the catalog or the user supplies it.
+
+The witness card shows the profile and lets the user correct any field: "Printed · Lisboa (Portugal) · 1537 · Initials: woodcut ▾". Corrections are saved as the workspace override. The profile is also available to the copilot (for example, date-aware method notes).
+
+**Current code:** `deriveTraditionFromRmk()` (`utils/initials/tradition.ts`) already covers medium and the ≤ 1500 date threshold. OI-PP replaces it with `buildPeriodProfile()` and keeps its behaviour for the cases it handles today (Cromberger 1525, Galharde 1537 → `print.woodcut`).
+
+**Pedro Nunes sample:** `{RMK: Lisboa | Germa~o Galharde | 1537.}` → print, 1537 (exact), Lisboa → portugal → `print.woodcut`.
+
+#### 3.2.0a Choosing the tradition from the profile
+
+One tradition per witness. It is chosen in this order: workspace override → period profile (table below) → default (manuscript → `ms.penwork`, print → `print.woodcut`).
+
+| Medium | Date (latest bound) | Tradition |
+|--------|---------------------|-----------|
+| manuscript | ≤ 1200 | `ms.romanesque` (from OI-P5; until then `ms.penwork`) |
+| manuscript | 1201–1460 | `ms.penwork` (`ms.illuminated` for `{ILL.}` / `{MIN.}` grades) |
+| manuscript | 1461–1550, humanist script recorded in catalog | `ms.humanist` (OI-P5) |
+| manuscript | 1461–1600, otherwise | `ms.penwork` |
+| print | ≤ 1500 | `print.incunable` |
+| print | 1501–1600 | `print.woodcut` |
+| any | unknown | medium default |
+
+Region does not change the tradition in v1. It selects a **regional variant table** (palette weighting, motif set, Roman vs Gothic capital for prints), which starts empty and is filled only with entries a paleographer signs off (§10). Until then all regions use the base variant. This keeps the app from presenting invented regional "styles" as fact.
 
 | Tradition id | Witness | Period cue | Defining features |
 |--------------|---------|-----------|-------------------|
@@ -79,11 +124,11 @@ One tradition per witness. It is chosen in this order: workspace override → li
 | `print.woodcut` | Printed | 1500–1600 (default for prints) | Black ink; white Roman capital on black ground with foliage, or black letter on criblé; square block with a ruled border |
 | `print.incunable` | Printed | ≤ 1500 | Gothic or Lombardic capital; criblé (dotted) ground or open outline for hand colouring; sometimes red-printed |
 
-#### 3.2.1 Medium heuristic (when no metadata says)
+#### 3.2.1 When the header is missing or ambiguous
 
-- Treat the witness as a **print** when the third identification line (manual §0.1: place | printer | date) has three fields and the date is ≥ 1450, or when any `{SG.}` (signature, a print feature per §4.4–4.5) appears.
-- Otherwise treat it as a **manuscript**.
-- Show the result on the witness card as "Initials: printed (woodcut) ▾" so the user can correct it with one tap. The Pedro Nunes sample resolves to `print.woodcut` (Lisboa | Germão Galharde | 1537).
+- No identification lines at all: medium from `{SG.}` presence, else manuscript; date unknown; default tradition.
+- A three-field line whose middle field looks like a library ("Biblioteca", "BNE", "Library", "Archivo") is the holding line, not an imprint, even if it is the only one.
+- Dates that conflict between header and catalog: the catalog wins, and the witness card shows both.
 
 ### 3.3 Sequence and alternation
 
@@ -92,6 +137,20 @@ One tradition per witness. It is chosen in this order: workspace override → li
 ### 3.4 Letter
 
 The letter is the single grapheme from `parseDropInitialPrefix()` (`utils/dropInitial.ts`), uppercased. Supplied letters (`[L]`) and corrected letters (`(l)[L]`, §3.232e(3)) render the **editor's** letter in the Supplied style, never decorated as if the scribe had painted it.
+
+### 3.5 Period profile beyond initials
+
+The same profile can tune the rest of the page so it matches the period. Each item is opt-in behind the "Period styling" display setting (§7), default on, and every value is a calibrated token, not a free choice per witness.
+
+| Aspect | Manuscript | Print | Source today |
+|--------|-----------|-------|--------------|
+| Page ground | Parchment tone (warmer, slightly mottled via deterministic tint only) | Rag paper (paler, cooler) | `PARCHMENT_BG` (`pageLayout.ts`) |
+| Body ink | Iron-gall brown-black; older date → browner | Printer's black | `PROSE_FILL` (`tokenRendering.ts`) |
+| Rubric colour | Vermilion / red lead | Red printing ink | `RUBRIC_FILL` |
+| Ruling | Faint drypoint or lead ruling lines (optional) | None | — |
+| Body face | Unchanged in v1 (the transcription face stays the reading face) | Unchanged in v1 | MUFI stack |
+
+Not in scope: changing the body typeface by period. A Gothic display face for body text would hurt reading and isn't faithful to anything specific. It can be revisited as a separate spec.
 
 ---
 
@@ -207,6 +266,8 @@ Define these in `components/svgFacsimile/initialPalette.ts` as named tokens. The
 | **Decoration style** | Witness card, "Initials: … ▾" | Automatic (from witness) · Manuscript — penwork · Manuscript — illuminated · Printed — woodcut · Printed — incunable |
 | **Grade thresholds** | Witness settings (advanced) | Minor ≤ 2, Major 3–5, Principal ≥ 6 |
 | **Hand-coloured woodcuts** | Witness settings (prints only) | Off · On |
+| **Period styling** (§3.5) | Display ▾ → Layout group | On · Off |
+| **Period profile** fields (medium, date, place) | Witness card | Derived; each field editable |
 
 Settings live in the workspace record and are included in `.hsms` bundles. The seed is `witnessHash` + `sequence`, so two researchers opening the same witness see the same initials.
 
@@ -309,11 +370,13 @@ When the letter comes from a font (MUFI or Junicode), the SVG and HTML exports r
 | Phase | Scope | Exit |
 |-------|-------|------|
 | **OI-0** | MUFI font inventory and licence check (§4.1); choose the letter source per tradition | Registry updated; decision recorded in this spec |
+| **OI-PP** | Period profile parser + gazetteer + witness-card display and override (§3.2.0); golden tests: Nunes → print/1537/portugal; `s. XV` → 1401–1500 century; holding line never sets region | Profile shown for every Library witness |
 | **OI-P1** | One scene builder + 4 adapters; remove shadows, rounded corners, system fonts; palette tokens; grade mapping from markup; Supplied and Unexecuted states; layout rule OI-L5 | Renderer parity test green; I1, I3–I7, I10 closed |
 | **OI-P2** | `ms.penwork`: Lombardic drawn set (or MUFI capitals if OI-0 finds them), penwork infill, marginal tails with overlap check, alternation; OI-L1–L4 | Paleographer sign-off for penwork |
 | **OI-P3** | `print.woodcut` and `print.incunable` + medium heuristic; Pedro Nunes renders as a woodcut | Sign-off for print traditions |
 | **OI-P4** | `ms.illuminated` (gold, white highlights, ivy sprays) and Historiated panel | Sign-off for illuminated |
 | **OI-P5** | `ms.romanesque`, `ms.humanist`; settings polish; inventory regeneration | Sign-off |
+| **OI-P6** | Period styling beyond initials (§3.5): page ground, ink and rubric tokens per medium and date | Paleographer sign-off on token values |
 
 ## 12. Open questions
 

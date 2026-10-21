@@ -204,6 +204,11 @@ export interface ParsedManuscript {
     totalLines: number;
     rubricCount: number;
     glossCount: number;
+    /**
+     * Top terms scored at upload/scan time from the precomputed lang:term IDF index.
+     * TF is sublinear: 1 + ln(count).
+     */
+    termTfidf?: Array<{ term: string; count: number; idf: number; tfidf: number }>;
   };
   /** Full manuscript reading flow with hyphen continuity resolved. */
   reconstructedFlow?: string;

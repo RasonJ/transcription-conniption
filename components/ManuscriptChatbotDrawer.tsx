@@ -14,7 +14,7 @@ import {
 import { loadPersistedOverview, persistOverview } from "@/utils/copilot/persistentOverview";
 import { precomputeEager, type OverviewEntry } from "@/utils/copilot/precompute";
 import { answerToDelimited, presentAnswer, presentChip } from "@/utils/copilot/present";
-import { routingLocales, ROUTER_THRESHOLD } from "@/utils/copilot/router";
+import { routingLocales, ROUTER_THRESHOLD, warmEmbeddingIntentIndex } from "@/utils/copilot/router";
 import { overviewFromPrecompiled } from "@/utils/copilot/sidecarRecipes";
 import type { CopilotAnswer, EvidenceRow } from "@/utils/copilot/types";
 import type { PrecompiledFacets } from "@/utils/corpusPrecompute";
@@ -137,7 +137,9 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
       setVectorIndex(buildManuscriptVectorIndex(parsedManuscript));
       // Route over the UI locale ∪ English ∪ the witness language (SPEC-COPILOT §8.1).
       const witness = detectWitnessLanguage(parsedManuscript).language;
-      setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog, routingLocales(locale, witness)));
+      const locales = routingLocales(locale, witness);
+      warmEmbeddingIntentIndex(locales);
+      setLibraryAwareRouter(buildLibraryAwareRouterIndex(catalog, locales));
       indexStampRef.current = { manuscript: parsedManuscript, catalog, locale };
     });
     return () => {
@@ -226,8 +228,9 @@ export function ManuscriptChatbotDrawer({ visible, onClose, onApplyHsms }: Props
       router: libraryAwareRouter,
       witnessLanguage,
       sidecar: workspace?.facsSidecar,
+      locale,
     }),
-    [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter, witnessLanguage, workspace?.facsSidecar],
+    [precompiledFacets, resolveLiveFacets, vectorIndex, libraryAwareRouter, witnessLanguage, workspace?.facsSidecar, locale],
   );
 
   const fmt = useCallback(

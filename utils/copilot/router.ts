@@ -1,4 +1,5 @@
 import type { ParsedManuscript } from "../../constants/manuscript";
+import { DEFAULT_DIM, hashEmbed, hashEmbedInto } from "../embeddings/hashEmbed";
 import { resolveFolioJump } from "../manuscriptSearch";
 import { RECIPES } from "./catalog";
 import type { CopilotLocale, Recipe } from "./types";
@@ -60,6 +61,12 @@ const OUT_OF_SCOPE: Partial<Record<CopilotLocale, string[]>> = {
 export const ROUTER_THRESHOLD = 0.3;
 /** Alternatives below this score are not worth offering. */
 export const ALTERNATIVE_FLOOR = 0.15;
+/**
+ * Hash-embedding cosine bands for the close-enough tier.
+ * These are not on the same scale as {@link ROUTER_THRESHOLD}.
+ */
+export const EMBED_DIRECT_THRESHOLD = 0.82;
+export const EMBED_SUGGEST_THRESHOLD = 0.68;
 const MAX_ALTERNATIVES = 3;
 const DIM = 1 << 16;
 
@@ -199,6 +206,8 @@ export type RouteResult =
       alternatives: RouteMatch[];
       /** Best score regardless of threshold. */
       bestScore: number;
+      /** The out-of-scope prototype won, so embedding dispatch must not guess a recipe. */
+      outOfScope: boolean;
     };
 
 const routerCache = new Map<string, RouterIndex>();
@@ -314,5 +323,109 @@ export function routeQuery(
     top,
     alternatives: rest.filter((m) => m.score >= ALTERNATIVE_FLOOR),
     bestScore: ranked[0]?.score ?? 0,
+    outOfScope,
   };
+}
+
+export type EmbeddingIntent =
+  | { type: "fallback"; confidence: number }
+  | { type: "execute"; recipeId: string; trigger: string; confidence: number }
+  | { type: "suggest"; recipeId: string; trigger: string; confidence: number };
+
+type TriggerEmbedIndex = {
+  recipeIds: string[];
+  triggers: string[];
+  matrix: Float32Array;
+  dim: number;
+};
+
+const triggerEmbedCache = new Map<string, TriggerEmbedIndex>();
+
+function localeList(locale: string | readonly string[]): CopilotLocale[] {
+  const known: CopilotLocale[] = ["en", "es", "pt", "ca", "gl", "eu"];
+  const raw = typeof locale === "string" ? [locale, "en"] : locale;
+  const out: CopilotLocale[] = [];
+  for (const item of raw) {
+    const base = item.split("-")[0];
+    if ((known as string[]).includes(base) && !out.includes(base as CopilotLocale)) {
+      out.push(base as CopilotLocale);
+    }
+  }
+  if (out.length === 0) out.push("en");
+  return out;
+}
+
+/**
+ * One row per catalog trigger phrase. Built once per locale set from `RECIPES`
+ * (the source compiled into `COPILOT_CATALOG`), so a query is one embed plus dots.
+ */
+export function warmEmbeddingIntentIndex(locale: string | readonly string[] = "es"): TriggerEmbedIndex {
+  const locales = localeList(locale);
+  const key = locales.join(",");
+  const cached = triggerEmbedCache.get(key);
+  if (cached) return cached;
+
+  const recipeIds: string[] = [];
+  const triggers: string[] = [];
+  for (const recipe of RECIPES) {
+    const seen = new Set<string>();
+    for (const loc of locales) {
+      for (const trigger of recipe.triggers[loc] ?? []) {
+        const norm = trigger.trim().toLowerCase();
+        if (!norm || seen.has(norm)) continue;
+        seen.add(norm);
+        recipeIds.push(recipe.id);
+        triggers.push(norm);
+      }
+    }
+  }
+
+  const dim = DEFAULT_DIM;
+  const matrix = new Float32Array(triggers.length * dim);
+  for (let i = 0; i < triggers.length; i++) {
+    hashEmbedInto(triggers[i], matrix, i * dim, dim, true);
+  }
+  const built = { recipeIds, triggers, matrix, dim };
+  triggerEmbedCache.set(key, built);
+  return built;
+}
+
+/** Map a cosine onto direct dispatch, a suggestion chip, or passage-search fallback. */
+export function embeddingBand(similarity: number): EmbeddingIntent["type"] {
+  if (!(similarity >= EMBED_SUGGEST_THRESHOLD)) return "fallback";
+  if (similarity >= EMBED_DIRECT_THRESHOLD) return "execute";
+  return "suggest";
+}
+
+/**
+ * Close-enough intent match. High cosine dispatches the recipe; the middle band
+ * only names it; anything weaker leaves the query for passage search.
+ */
+export function resolveEmbeddingIntent(query: string, locale: string | readonly string[] = "es"): EmbeddingIntent {
+  const q = query.trim();
+  if (!q) return { type: "fallback", confidence: 0 };
+  const index = warmEmbeddingIntentIndex(locale);
+  if (index.recipeIds.length === 0) return { type: "fallback", confidence: 0 };
+
+  const qVec = hashEmbed(q, index.dim);
+  let maxSim = -1;
+  let best = -1;
+  for (let i = 0; i < index.recipeIds.length; i++) {
+    const offset = i * index.dim;
+    let sim = 0;
+    for (let j = 0; j < index.dim; j++) sim += qVec[j] * index.matrix[offset + j];
+    if (sim > maxSim) {
+      maxSim = sim;
+      best = i;
+    }
+  }
+
+  const confidence = maxSim > 0 ? maxSim : 0;
+  const band = embeddingBand(maxSim);
+  if (band === "fallback" || best < 0) return { type: "fallback", confidence };
+  const recipeId = index.recipeIds[best];
+  const trigger = index.triggers[best];
+  return band === "execute"
+    ? { type: "execute", recipeId, trigger, confidence }
+    : { type: "suggest", recipeId, trigger, confidence };
 }

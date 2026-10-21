@@ -1,4 +1,4 @@
-import { lintHsmsTranscription } from "../utils/hsmsLinter";
+import { isCatchwordInsideColumn, lintHsmsTranscription } from "../utils/hsmsLinter";
 import { validateTranscription } from "../utils/validation";
 
 describe("lintHsmsTranscription", () => {
@@ -98,5 +98,30 @@ line}`;
     const linted = lintHsmsTranscription(raw).issues;
     const validated = validateTranscription(raw);
     expect(validated.length).toBe(linted.length);
+  });
+});
+
+describe("column placement", () => {
+  it("treats a catchword line as an error only while a column is open", () => {
+    expect(isCatchwordInsideColumn("{CW. e}", true)).toBe(true);
+    expect(isCatchwordInsideColumn("{CW. e}", false)).toBe(false);
+    expect(isCatchwordInsideColumn("1 palabra", true)).toBe(false);
+  });
+
+  it("flags a catchword inside a column", () => {
+    const inside = lintHsmsTranscription("[fol. 1r]\n{CB1.\n1 palabra\n{CW. e}\n}");
+    expect(inside.issues.some((issue) => issue.code === "HSMS-E-CW-PLACEMENT")).toBe(true);
+  });
+
+  it("accepts a catchword after the column closes", () => {
+    const outside = lintHsmsTranscription("[fol. 1r]\n{CB1.\n1 palabra\n}\n{CW. e}");
+    expect(outside.issues.some((issue) => issue.code === "HSMS-E-CW-PLACEMENT")).toBe(false);
+  });
+
+  it("records {GLR.} as an info extension", () => {
+    const report = lintHsmsTranscription("[fol. 1r]\n{CB1.\n1 {GLR. [^nota]}\n}");
+    const info = report.issues.filter((issue) => issue.code === "HSMS-I-EXTENSION");
+    expect(info).toHaveLength(1);
+    expect(info[0]?.severity).toBe("info");
   });
 });

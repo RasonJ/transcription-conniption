@@ -13,12 +13,16 @@ export function gw(ch: string, fs: number): number {
   return fs * 0.53;
 }
 
+/** Superscript shorthands (q^ue, p^or) paint at 80% of the segment's font size. */
+export const SUPER_WIDTH_SCALE = 0.8;
+
 export function segsLineWidth(segs: Seg[]): number {
   let w = 0;
   for (let i = 0; i < segs.length; i++) {
     const s = segs[i];
+    const effectiveFs = s.super ? s.fs * SUPER_WIDTH_SCALE : s.fs;
     for (let j = 0; j < s.text.length; j++) {
-      w += gw(s.text[j], s.fs);
+      w += gw(s.text[j], effectiveFs);
     }
   }
   return w;
@@ -37,17 +41,24 @@ export function countWordGaps(segs: Seg[]): number {
 }
 
 /**
+ * Widest extra advance per word space. Wide enough for a line of superscript
+ * expansions (q[ue], p[or]) to reach the right ruling, without opening a river
+ * on a sparse line.
+ */
+export const JUSTIFY_MAX_GAP = 32;
+
+/**
  * Extra pixels to add to each inter-word space so the line fills `targetWidth`.
  *
- * Uses **word spaces only** (never letter-spacing). Caps expansion so short
- * lines beside drop caps cannot blow out into character rivers.
+ * Uses **word spaces only** (never letter-spacing). Final lines, headings, and
+ * rubrics pass `isLastLine` or `skipJustify` and stay unstretched.
  */
 export function wordGapExtra(
   segs: Seg[],
   targetWidth: number,
   isLastLine: boolean,
   skipJustify: boolean,
-  maxPerGap: number = 6,
+  maxPerGap: number = JUSTIFY_MAX_GAP,
 ): number {
   if (skipJustify || isLastLine) return 0;
 
@@ -58,6 +69,26 @@ export function wordGapExtra(
   if (remainder <= 0) return 0;
 
   return Math.min(remainder / gaps, maxPerGap);
+}
+
+/**
+ * True when CSS `text-align: justify` can fill the measure without opening a
+ * gap wider than `maxPerGap`. Sparse lines return false so the pixel cap applies
+ * instead of an unbounded river.
+ */
+export function lineFitsJustifyCap(
+  segs: Seg[],
+  targetWidth: number,
+  isLastLine: boolean,
+  skipJustify: boolean,
+  maxPerGap: number = JUSTIFY_MAX_GAP,
+): boolean {
+  if (skipJustify || isLastLine) return false;
+  const gaps = countWordGaps(segs);
+  if (gaps <= 0) return false;
+  const remainder = targetWidth - segsLineWidth(segs);
+  if (remainder <= 0) return false;
+  return remainder / gaps <= maxPerGap;
 }
 
 /**

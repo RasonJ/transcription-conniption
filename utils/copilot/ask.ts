@@ -8,7 +8,7 @@ import { DSL_VERSION, executeDsl, formatDsl, parseDsl } from "./dsl";
 import { formatRecipeExpression, parseRecipeExpression } from "./dslRecipes";
 import { buildFacetIndex, type FacetIndex } from "./facetIndex";
 import { runCached } from "./precompute";
-import { routeQuery, type RouterIndex } from "./router";
+import { resolveEmbeddingIntent, routeQuery, type RouterIndex } from "./router";
 import { canServeEagerFromPrecompiled, runEagerFromPrecompiled } from "./sidecarRecipes";
 import { decideAutoDispatch } from "./calibratedThresholds";
 import { canonicalizeJargon } from "./jargonLexicon";
@@ -39,6 +39,8 @@ export interface AskOptions {
   sidecar?: HsmsFacsSidecar;
   /** Optional reasoning graph for bound precompiled-chain execution. */
   reasoningGraph?: ReasoningGraphDoc;
+  /** UI locale used to pick trigger-phrase embeddings when the router has no locale list. */
+  locale?: string;
 }
 
 const FALLBACK_ID = "search.passages";
@@ -298,6 +300,45 @@ export function askCopilot(query: string, parsed: ParsedManuscript, options: Ask
         { confidence: route.top.score, slotPrompt: missing[0], ...jargonExtra },
         params,
       );
+    }
+  }
+
+  if (route.kind === "recipe" && !route.outOfScope) {
+    const locales = options.router?.locales ?? (options.locale ? [options.locale] : ["en", "es"]);
+    const embed = resolveEmbeddingIntent(q, locales);
+    if (embed.type === "execute") {
+      const recipe = getRecipe(embed.recipeId);
+      if (recipe) {
+        const params = extractSlots(q, recipe);
+        const missing = missingSlots(recipe, params);
+        const result = runRecipe(recipe, parsed, options, params);
+        return toAnswer(
+          recipe,
+          result,
+          t0,
+          { confidence: embed.confidence, slotPrompt: missing[0], ...jargonExtra },
+          params,
+        );
+      }
+    }
+    if (embed.type === "suggest") {
+      const recipe = getRecipe(embed.recipeId);
+      if (recipe) {
+        return {
+          recipeId: "none",
+          recipeVersion: 0,
+          tier: "A",
+          headline: `Did you mean: ${recipe.present.chipLabel}?`,
+          params: { action: recipe.present.chipLabel },
+          messageKey: "embeddingSuggest",
+          rows: [],
+          method: "Hash-embedding cosine is in the suggestion band, so the recipe was not run.",
+          elapsedMs: now() - t0,
+          confidence: embed.confidence,
+          alternatives: [{ recipeId: recipe.id, score: embed.confidence, chipLabel: recipe.present.chipLabel }],
+          ...jargonExtra,
+        };
+      }
     }
   }
 

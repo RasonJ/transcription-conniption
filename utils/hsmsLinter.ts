@@ -176,6 +176,11 @@ export type LintHsmsOptions = {
  * Use before facsimile render, in the editor, or from `npm run lint:hsms`.
  * Includes Proofer-style incident flags by default ("señala; el editor decide").
  */
+/** Catchwords belong after the column closes, never on a line inside `{CBn.`. */
+export function isCatchwordInsideColumn(line: string, inColumnBlock: boolean): boolean {
+  return inColumnBlock && /^\{CW\./i.test(line.trim());
+}
+
 export function lintHsmsTranscription(
   rawText: string,
   options?: LintHsmsOptions,
@@ -262,7 +267,7 @@ export function lintHsmsTranscription(
     runPaleographicContextChecks(line, i, linesSinceFolio, issues);
 
     const trimmedLine = line.trim();
-    if (inColumnBlock && /^\{CW\./i.test(trimmedLine)) {
+    if (isCatchwordInsideColumn(trimmedLine, inColumnBlock)) {
       pushLintIssue(
         issues,
         "error",

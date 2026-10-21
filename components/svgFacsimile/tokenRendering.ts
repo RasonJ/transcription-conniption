@@ -1,6 +1,7 @@
 import type { ManuscriptBlock, Token } from "@/constants/manuscript";
 import { formatTokenDisplayGrapheme } from "@/utils/formatTokenDisplayGrapheme";
 import { normalizeDisplayDiacritics } from "@/utils/legacyDiacritics";
+import { foldForSearch } from "@/utils/witnessLanguage";
 import {
   convertHsmsToMufiGlyphs,
   MUFI_PALEOGRAPHIC_MAP,
@@ -32,6 +33,72 @@ export interface DisplaySettings {
    * Defaults to true when omitted.
    */
   showLineNumbers?: boolean;
+  /**
+   * Color the search hit and rare context words. Fill only — weight and size
+   * stay put so word-gap justification still meets the right rule.
+   */
+  highlightSalientTerms?: boolean;
+  salientQuery?: string;
+  salientIdf?: Record<string, number> | null;
+  /** Index language for `lang:term` IDF keys. Defaults to Spanish. */
+  salientLang?: string;
+}
+
+/** Exact search hit on the parchment. */
+export const HIT_HIGHLIGHT_FILL = "#f6d890";
+/** High-IDF neighbor. */
+export const SALIENT_CONTEXT_FILL = "#e0a050";
+/** Context words above this catalog/index IDF are amber. */
+export const SALIENT_CONTEXT_IDF = 5;
+
+const RE_EDGE_PUNCT = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
+
+function prominenceKey(text: string): string {
+  return foldForSearch(text).replace(RE_EDGE_PUNCT, "");
+}
+
+function prominenceFill(
+  word: string,
+  queryKey: string,
+  idfTable: Record<string, number> | null | undefined,
+  lang: string,
+): string | null {
+  const key = prominenceKey(word);
+  if (!key) return null;
+  if (queryKey && key === queryKey) return HIT_HIGHLIGHT_FILL;
+  if (!idfTable) return null;
+  const idf = idfTable[`${lang}:${key}`] ?? idfTable[key];
+  if (idf != null && idf > SALIENT_CONTEXT_IDF) return SALIENT_CONTEXT_FILL;
+  return null;
+}
+
+/**
+ * Recolors whole words. Does not set bold or change font size: either would
+ * change real glyph widths under CSS justify and the native width estimator.
+ */
+export function applyProminenceToSegs(
+  segs: Seg[],
+  query?: string,
+  idfTable?: Record<string, number> | null,
+  lang = "es",
+): Seg[] {
+  const queryKey = query ? prominenceKey(query) : "";
+  if (!queryKey && !idfTable) return segs;
+  const out: Seg[] = [];
+  for (const s of segs) {
+    const parts = s.text.split(/(\s+)/);
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^\s+$/.test(part)) {
+        out.push(parts.length === 1 ? s : { ...s, text: part });
+        continue;
+      }
+      const fill = prominenceFill(part, queryKey, idfTable, lang);
+      const next = fill ? { ...s, text: part, fill } : parts.length === 1 ? s : { ...s, text: part };
+      out.push(next);
+    }
+  }
+  return out;
 }
 
 export interface Seg {
@@ -287,13 +354,21 @@ export function blockToSegs(block: ManuscriptBlock, settings: DisplaySettings): 
     i += 1;
   }
 
+  let styled = lineSegs;
   if (block.type === "rubric") {
-    return lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true }));
+    styled = lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true }));
+  } else if (block.type === "heading") {
+    styled = lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true, fs: FS * 1.15 }));
   }
-  if (block.type === "heading") {
-    return lineSegs.map((s) => ({ ...s, fill: RUBRIC_FILL, bold: true, fs: FS * 1.15 }));
+  if (settings.highlightSalientTerms) {
+    return applyProminenceToSegs(
+      styled,
+      settings.salientQuery,
+      settings.salientIdf,
+      settings.salientLang ?? "es",
+    );
   }
-  return lineSegs;
+  return styled;
 }
 
 /** Re-export for callers / tests that convert whole HSMS lines for canvas display. */

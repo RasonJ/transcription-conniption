@@ -54,6 +54,15 @@ reports/
 # OSTA batch conversion artifacts (npm run batch:osta)
 out/
 
+# Published copy of the external lang:term IDF index (source is assets/library/tfidf-index)
+public/library/tfidf-index/
+
+# Uncompressed Wikipedia-scale indexes. The committed copies are the *.zip archives.
+assets/library/tfidf-index/corpus-term-postings.json
+assets/library/tfidf-index/corpus-tfidf.json
+assets/library/tfidf-index/es.index.tsv
+assets/library/tfidf-index/pt.index.tsv
+
 # Regenerate from scripts/ (optional — committed copies may exist)
 # utils/generated/hsmsLemmaIndex.json
 

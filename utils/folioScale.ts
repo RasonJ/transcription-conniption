@@ -53,6 +53,20 @@ export function stepZoom(scale: number, direction: 1 | -1): number {
   return clampZoom(Math.round(next * 100) / 100);
 }
 
+export type ZoomMode = "fit" | "actual" | "custom";
+
+/** Double-tap and the toolbar cycle: fit width, then 100%, then back to fit. */
+export function cycleZoomMode(mode: ZoomMode): ZoomMode {
+  return mode === "fit" ? "actual" : "fit";
+}
+
+/** Pinch scale is relative to the scale when the fingers landed. */
+export function scaleFromPinch(startScale: number, gestureScale: number): number {
+  if (!Number.isFinite(startScale) || startScale <= 0) return 1;
+  if (!Number.isFinite(gestureScale) || gestureScale <= 0) return clampZoom(startScale);
+  return clampZoom(startScale * gestureScale);
+}
+
 /** Scroll offsets measured on the unscaled page, applied at the current scale. */
 export function scaledAnchorOffset(y: number, scale: number): number {
   const s = Number.isFinite(scale) && scale > 0 ? scale : 1;

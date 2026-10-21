@@ -12,6 +12,7 @@ describe("svgDocumentExport", () => {
     expect(svg).toContain(`fill="#f4ebd0"`);
     expect(svg).toMatch(/<text x="[\d.]+" y="[\d.]+"/);
     expect(svg).not.toContain('text-anchor="justify"');
+    expect(svg).toMatchSnapshot();
   });
 
   it("uses spatial column layout and ornate drop-cap rects", () => {

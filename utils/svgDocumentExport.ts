@@ -7,7 +7,6 @@ import { segsLineWidth } from "@/components/svgFacsimile/glyphMetrics";
 import {
   CANVAS_W,
   CAP_GUTTER,
-  dropCapBoxWidth,
   columnWidth,
   GUTTER_WIDTH,
   innerCanvasWidth,
@@ -184,12 +183,20 @@ function paintBlockRow(
     if (depth <= 1) {
       lineSegs.unshift(seg({ text: letter, fill: RUBRIC_FILL, bold: true, fs: FS * 1.4 }));
     } else {
-      const capH = depth * LH;
-      const letterCount = Math.max(1, letter.length);
-      const capW = dropCapBoxWidth(capH, letterCount);
-      const capFS =
-        Math.min(dropCapFontSize(depth), capH * 0.78) /
-        (letterCount > 1 ? 1 + 0.22 * (letterCount - 1) : 1);
+      const scene = buildInitialScene(
+        resolveInitialSpec({
+          letter,
+          depth,
+          tradition,
+          illuminated: true,
+          sequence: blockIndex,
+          seed: `${folioId}|${letter}|${blockIndex}`,
+        }),
+        LH,
+      );
+      const capH = scene.boxHeight;
+      const capW = scene.boxWidth;
+      const capFS = Math.min(dropCapFontSize(depth), capH * 0.72);
       const capTopY = baselineY - FS;
       elements.push(
         ...serializeOrnateInitial(

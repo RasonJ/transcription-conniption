@@ -17,6 +17,7 @@ export type DisplaySettingsValues = {
   usePuaFont: boolean;
   suppressOtioseMarks: boolean;
   showLineNumbers: boolean;
+  highlightSalientTerms: boolean;
   showReadingFlow: boolean;
   facsimileCanvasEnabled: boolean;
   placementMode: boolean;
@@ -33,6 +34,7 @@ export type DisplaySettingsHandlers = {
   setUsePuaFont: (v: boolean) => void;
   setSuppressOtioseMarks: (v: boolean) => void;
   setShowLineNumbers: (v: boolean) => void;
+  setHighlightSalientTerms: (v: boolean) => void;
   setShowReadingFlow: (v: boolean) => void;
   setFacsimileCanvasEnabled: (v: boolean) => void;
   setPlacementMode: (v: boolean) => void;
@@ -122,6 +124,12 @@ export function DisplaySettingsPopover({ visible, onClose, values, handlers }: P
               label={t("editor.toggle.lineNumbers")}
               value={values.showLineNumbers}
               onValueChange={handlers.setShowLineNumbers}
+            />
+            <LabeledSwitch
+              label={t("display.highlightSalientTerms")}
+              helperText={t("display.help.highlightSalientTerms")}
+              value={values.highlightSalientTerms}
+              onValueChange={handlers.setHighlightSalientTerms}
             />
             <LabeledSwitch
               label={t("editor.toggle.readingFlow")}
